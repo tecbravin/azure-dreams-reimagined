@@ -50,7 +50,9 @@ MonoBehaviour:
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 7d2adf6ab37f497b882514d5a85d7114, type: 3}
   residentCells:
-  - {x: 16, y: 11}
+  - {x: 16, y: 12}
+  residentOffsets:
+  - {x: 0, y: 0, z: 0.7}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

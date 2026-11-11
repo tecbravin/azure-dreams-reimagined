@@ -142,7 +142,7 @@ namespace AzureDreamsReimagined
                     var target = _creatures[adjacent].Actor;
                     damage = WithItemCombatEffects(_playerActor, PlayerWeaponDamage(), target, origin, front, element,
                         type == Mixture.Sword ? level : 0);
-                    QueueCreatureDamage(_playerActor, adjacent, damage, wand);
+                    QueueCreatureDamage(_playerActor, adjacent, damage, wand, element);
                     if (type == Mixture.Blade && damage > 0 && element != Element.Water)
                     {
                         sbyte status = element == Element.Wind ? StatusId.PARALYSIS : StatusId.BLIND;
@@ -216,7 +216,7 @@ namespace AzureDreamsReimagined
             if (creature.Health <= 0 || IsSacredTile(creature.Cell)) return;
             int damage = SpellOrImpactDamage(creature.Actor, power, level, element, _playerActor);
             QueueCreatureDamage(_playerActor, enemy, ScaleElevationDamage(damage,
-                TowerTileHeight(origin), TowerTileHeight(creature.Cell)));
+                TowerTileHeight(origin), TowerTileHeight(creature.Cell)), element: element);
         }
 
         private static (Color Color, string Impact) MixtureArt(int element) => element switch
@@ -280,7 +280,7 @@ namespace AzureDreamsReimagined
                 5 or 7 or 8 or 9 or 16 => "FX_Water",
                 11 => "FX_Lightning",
                 <= 3 when element == Element.Fire => "FX_Fire",
-                _ => "FX_Magic"
+                _ => null
             };
             var from = CellPosition(origin) + Vector3.up * 0.3f;
             var to = CellPosition(destination) + Vector3.up * 0.3f;
@@ -331,7 +331,7 @@ namespace AzureDreamsReimagined
                     if (t >= 0.5f && !cue.ReflectionShown)
                     {
                         cue.ReflectionShown = true;
-                        SpawnFx(_fxMagic, mirror);
+                        PresentImpactBurst(mirror, 0);
                     }
                 }
                 else if (cue.Family == 1) position.y -= 0.35f;
@@ -354,7 +354,7 @@ namespace AzureDreamsReimagined
                 {
                     cue.HitShown = true;
                     if (cue.FireWall) PresentFireWall(cue.To);
-                    else SpawnFx(Resources.Load<GameObject>("FX/" + cue.Impact), cue.To);
+                    else if (cue.Impact != null) SpawnFx(Resources.Load<GameObject>("FX/" + cue.Impact), cue.To);
                 }
             }
             if (waiting) return false;
@@ -467,6 +467,51 @@ namespace AzureDreamsReimagined
             for (int frame = 0; frame < frames; frame++)
                 _swordMixtureFrames[palette, frame] = Sprite.Create(_swordMixtureAtlas,
                     new Rect(frame * size, palette * size, size, size), Vector2.one * 0.5f, size, 0, SpriteMeshType.FullRect);
+        }
+
+        private void PresentImpactBurst(Vector3 center, int element)
+        {
+            Color color = element switch
+            {
+                Element.Fire or Element.Water or Element.Wind => MixtureArt(element).Color,
+                _ => new Color(1f, 0.94f, 0.78f)
+            };
+            StartCoroutine(AnimateImpactBurst(center, color));
+        }
+
+        private System.Collections.IEnumerator AnimateImpactBurst(Vector3 center, Color color)
+        {
+            const int count = 5;
+            var puffs = new SpriteRenderer[count];
+            var right = _gameCamera ? _gameCamera.transform.right : Vector3.right;
+            var up = _gameCamera ? _gameCamera.transform.up : Vector3.up;
+            for (int i = 0; i < count; i++)
+            {
+                puffs[i] = CreateSpellOrb(color);
+                puffs[i].name = "Hit puff";
+                puffs[i].sortingOrder = 4;
+            }
+
+            const float duration = 0.24f;
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
+            {
+                if (!puffs[0]) yield break;
+                float progress = elapsed / duration;
+                float spread = Mathf.Lerp(0.035f, 0.25f, Mathf.Sin(progress * Mathf.PI * 0.5f));
+                color.a = 1f - progress;
+                for (int i = 0; i < count; i++)
+                {
+                    float angle = i * Mathf.PI * 2f / count;
+                    var puff = puffs[i];
+                    puff.transform.position = center + spread * (right * Mathf.Cos(angle) + up * Mathf.Sin(angle));
+                    puff.transform.localScale = Vector3.one * Mathf.Lerp(0.19f, 0.10f, progress);
+                    puff.color = color;
+                }
+                yield return null;
+            }
+
+            foreach (var puff in puffs)
+                if (puff) RemoveGenerated(puff.gameObject);
         }
 
         private SpriteRenderer CreateSpellOrb(Color color)

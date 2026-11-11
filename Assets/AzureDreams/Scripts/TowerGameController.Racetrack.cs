@@ -8,6 +8,7 @@ namespace AzureDreamsReimagined
     {
         private const string RaceLobby = "Interior_0a_racetrack_entrance";
         private const string RaceCourse = "Interior_37_racetrack_course";
+        private const string RaceCourseMusicCue = "MonsterRaceCourse.mp3";
         private const string RaceTicketPair = "racetrack.ticket_pair";
         private const string RaceTicketCount = "racetrack.ticket_count";
         private const string RaceTicketOdds = "racetrack.ticket_odds";
@@ -117,6 +118,7 @@ namespace AzureDreamsReimagined
                 if (Time.unscaledTime >= _raceStartTime)
                 {
                     _raceScreen = RaceScreen.Racing;
+                    PlayAreaMusic("MonsterRacing.mp3");
                     PlayRetailSound(RetailSfx.Confirm);
                 }
                 return true;
@@ -317,6 +319,7 @@ namespace AzureDreamsReimagined
             if (tickets > 0) TownSaveVariables.SetInt(RaceTicketCount, 0);
             PersistTownProgress();
             _raceScreen = RaceScreen.Results;
+            PlayAreaMusic(RaceCourseMusicCue);
         }
 
         private void ReturnFromRace()

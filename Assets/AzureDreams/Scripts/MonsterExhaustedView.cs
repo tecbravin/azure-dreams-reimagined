@@ -2,6 +2,11 @@ using UnityEngine;
 
 namespace AzureDreamsReimagined
 {
+    internal static class TowerStatusColors
+    {
+        internal static readonly Color Paralysis = new Color(0.26f, 0.62f, 1f, 1f);
+    }
+
     [DefaultExecutionOrder(110)]
     internal sealed class MonsterExhaustedView : MonoBehaviour
     {
@@ -11,14 +16,18 @@ namespace AzureDreamsReimagined
         private float _collapsedAt;
         private bool _sourceWasHidden;
         private bool _exhausted;
+        private bool _asleep, _paralyzed;
+        private Color? _standingColor;
+        private MeshRenderer _mesh;
+        private MaterialPropertyBlock _meshColorBeforeParalysis;
 
-        public void Present(bool sleeping, bool exhausted)
+        public void Present(bool sleeping, bool exhausted, bool paralyzed)
         {
             _exhausted = exhausted;
-            if (enabled == sleeping && (!sleeping || _sleeping)) return;
-            enabled = sleeping;
-            if (!sleeping) return;
-            _collapsedAt = Time.unscaledTime;
+            _paralyzed = paralyzed;
+            if (sleeping && !_asleep) _collapsedAt = Time.unscaledTime;
+            _asleep = sleeping;
+            enabled = sleeping || paralyzed;
         }
 
         private void LateUpdate()
@@ -26,8 +35,21 @@ namespace AzureDreamsReimagined
             if (!_standing)
             {
                 _standing = GetComponentInChildren<SpriteRenderer>();
-                if (!_standing || !_standing.sprite) return;
+                if (!_standing)
+                {
+                    PresentMeshParalysis();
+                    return;
+                }
             }
+            if (!_standing.sprite) return;
+            if (!_asleep)
+            {
+                RestoreStandingPose();
+                _standingColor ??= _standing.color;
+                _standing.color = _standingColor.Value * TowerStatusColors.Paralysis;
+                return;
+            }
+            RestoreStandingColor();
             if (!_sleeping)
             {
                 var child = new GameObject("Sleeping pose");
@@ -61,17 +83,60 @@ namespace AzureDreamsReimagined
                 sourceScale.y / Mathf.Max(0.001f, parentScale.y) * breath,
                 sourceScale.z / Mathf.Max(0.001f, parentScale.z));
             var original = _standing.color;
-            _sleeping.color = _exhausted
+            _sleeping.color = _paralyzed ? original * TowerStatusColors.Paralysis : _exhausted
                 ? Color.Lerp(original, new Color(0.28f, 0.55f, 1f, original.a),
                     0.48f + 0.45f * Mathf.Sin(elapsed * 12f))
                 : original;
         }
 
-        private void OnDisable()
+        private void PresentMeshParalysis()
+        {
+            if (!_paralyzed)
+            {
+                RestoreMeshColor();
+                return;
+            }
+            if (_meshColorBeforeParalysis != null) return;
+            if (!_mesh) _mesh = GetComponentInChildren<MeshRenderer>();
+            if (!_mesh || !_mesh.sharedMaterial) return;
+            var material = _mesh.sharedMaterial;
+            string colorProperty = material.HasProperty("_BaseColor") ? "_BaseColor" : "_Color";
+            if (!material.HasProperty(colorProperty)) return;
+            _meshColorBeforeParalysis = new MaterialPropertyBlock();
+            _mesh.GetPropertyBlock(_meshColorBeforeParalysis);
+            var tinted = new MaterialPropertyBlock();
+            _mesh.GetPropertyBlock(tinted);
+            var color = tinted.HasColor(colorProperty) ? tinted.GetColor(colorProperty) : material.GetColor(colorProperty);
+            var blue = TowerStatusColors.Paralysis;
+            blue.a = color.a;
+            tinted.SetColor(colorProperty, blue);
+            _mesh.SetPropertyBlock(tinted);
+        }
+
+        private void RestoreMeshColor()
+        {
+            if (_mesh && _meshColorBeforeParalysis != null) _mesh.SetPropertyBlock(_meshColorBeforeParalysis);
+            _meshColorBeforeParalysis = null;
+        }
+
+        private void RestoreStandingColor()
+        {
+            if (_standing && _standingColor is { } color) _standing.color = color;
+            _standingColor = null;
+        }
+
+        private void RestoreStandingPose()
         {
             if (_standing && _sourceHidden) _standing.forceRenderingOff = _sourceWasHidden;
             _sourceHidden = false;
             if (_sleeping) _sleeping.enabled = false;
+        }
+
+        private void OnDisable()
+        {
+            RestoreStandingPose();
+            RestoreStandingColor();
+            RestoreMeshColor();
         }
     }
 }

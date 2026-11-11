@@ -134,6 +134,7 @@ namespace AzureDreamsReimagined
             _visitorReply = _visitorHasAnswered = false;
             _visitorTime = 0f;
             _visitorStage = VisitorStage.Approach;
+            if (_towerEventSelfi) PlayAreaMusic(SelfiMusicCue);
             ShowVisitorLine();
             return true;
         }
@@ -233,6 +234,7 @@ namespace AzureDreamsReimagined
                     _selfiVisitorStory = story;
                     _selfiEncounterMonster = storyMonster;
                     CompleteSelfiVisitor();
+                    if (_playingMusicCue == SelfiMusicCue) PlayAreaMusic(TowerMusicCue(_floor));
                 }
             }
         }

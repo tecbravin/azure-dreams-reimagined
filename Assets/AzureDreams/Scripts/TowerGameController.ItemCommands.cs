@@ -515,7 +515,7 @@ namespace AzureDreamsReimagined
         {
             if (!_townDroppedItems.TryGetValue(_playerCell, out var drop) ||
                 (drop.item.Kind != ItemKind.Coin && !_townInventory.HasSpace())) return false;
-            PlayRetailSound(RetailSfx.Pickup);
+            PlayRetailSound(drop.item.Kind == ItemKind.Coin ? RetailSfx.CoinPickup : RetailSfx.Pickup);
             _townDroppedItems.Remove(_playerCell);
             var item = drop.item.Kind == MonsterEgg.Kind ? MonsterEgg.Identify(drop.item) : drop.item;
             if (!CreditCoinPickup(item))

@@ -115,14 +115,18 @@ namespace AzureDreamsReimagined
 
         internal void PresentAction(float progress) => _progress = progress;
 
-        internal bool PresentSleep(bool sleeping, bool exhausted)
+        internal bool PresentStatus(bool sleeping, bool exhausted, bool paralyzed)
         {
-            if (_frames == null || _columns <= SleepColumn) return false;
+            bool canPresent = _frames != null && (!sleeping || _columns > SleepColumn + 1);
+            _paralyzed = canPresent && paralyzed;
+            if (!canPresent) return false;
             if (sleeping && !_sleeping) _sleepStartedAt = AnimationTime;
             _sleeping = sleeping;
             _exhausted = exhausted;
             return true;
         }
+
+        private bool _paralyzed;
 
         private void LateUpdate()
         {
@@ -134,12 +138,14 @@ namespace AzureDreamsReimagined
             int row = Mathf.Abs(4 - octant);
             _renderer.flipX = octant is >= 1 and <= 3;
             float sleepTime = AnimationTime - _sleepStartedAt;
-            if (_exhausted && !_tinted)
+            if ((_exhausted || _paralyzed) && !_tinted)
             {
                 _awakeColor = _renderer.color;
                 _tinted = true;
             }
-            if (_exhausted)
+            if (_paralyzed)
+                _renderer.color = _awakeColor * TowerStatusColors.Paralysis;
+            else if (_exhausted)
                 _renderer.color = Color.Lerp(_awakeColor, new Color(0.28f, 0.55f, 1f, _awakeColor.a),
                     0.48f + 0.45f * Mathf.Sin(sleepTime * 12f));
             else if (_tinted)

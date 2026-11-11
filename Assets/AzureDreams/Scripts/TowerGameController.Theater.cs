@@ -14,6 +14,10 @@ namespace AzureDreamsReimagined
         private Vector3 _theaterHome, _theaterStage, _theaterPlayerHome;
         private Vector2 _theaterPlayerFacing;
         private Action _afterTheaterDance;
+        private const string TheaterMusicCue = "Theatre.mp3";
+        private const string VivianDanceMusicCue = "DanceAtPub.mp3";
+        private const string ComedyMusicCue = "EntranceOfComedians.mp3";
+        private const string ComedyExitMusicCue = "ExitComedians.mp3";
         private bool _theaterOnStage;
         private bool _theaterAnswerReady, _comedyFinished;
         private static readonly (string En, string Pt, bool Agree)[] ComedyLines =
@@ -73,6 +77,8 @@ namespace AzureDreamsReimagined
             _theaterPlayerFacing = _townFacing;
             _theaterOnStage = true;
             _afterTheaterDance = afterDance;
+            if (act == TheaterAct.Dance) PlayAreaMusic(VivianDanceMusicCue);
+            else if (act == TheaterAct.Comedy) PlayAreaMusic(ComedyMusicCue);
             performer.transform.position = _theaterStage;
             if (act == TheaterAct.Comedy)
             {
@@ -95,7 +101,8 @@ namespace AzureDreamsReimagined
             if (_theaterAct == TheaterAct.None) return false;
             if (StoryRoom != TheaterRoom || !_theaterPerformer)
             {
-                _theaterAct = TheaterAct.None;
+                if (StoryRoom == TheaterRoom) EndTheaterAct();
+                else _theaterAct = TheaterAct.None;
                 return false;
             }
             bool confirm = _interact?.WasPressedThisFrame() == true;
@@ -133,6 +140,7 @@ namespace AzureDreamsReimagined
                 if (_comedyFinished)
                 {
                     _theaterAct = TheaterAct.Results;
+                    PlayAreaMusic(ComedyExitMusicCue, loop: false);
                     return true;
                 }
                 _theaterAnswerReady = true;
@@ -180,6 +188,8 @@ namespace AzureDreamsReimagined
             }
             _theaterOnStage = false;
             _afterTheaterDance = null;
+            if (_playingMusicCue is VivianDanceMusicCue or ComedyMusicCue or ComedyExitMusicCue)
+                PlayAreaMusic(TheaterMusicCue);
             _theaterPerformer = null;
             _theaterAct = TheaterAct.None;
         }

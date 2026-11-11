@@ -161,7 +161,7 @@ namespace AzureDreamsReimagined
             if (_sleeping == sleeping) return;
             _sleeping = sleeping;
             if (!sleeping || _retailFrames == null) return;
-            _sleepStartedAt = Time.unscaledTime - (alreadyLying ? 0.5f : 0f);
+            _sleepStartedAt = Time.unscaledTime - (alreadyLying ? 1f : 0f);
             if (_sleepFrames != null) return;
             var asset = Resources.Load<TextAsset>("Tower/koh-retail-sleep");
             if (!asset) return;
@@ -189,12 +189,12 @@ namespace AzureDreamsReimagined
 
         private static int SleepFrameAt(int tick)
         {
-            // Play the collapse once, then loop the four lying-down frames.
+            // Play the collapse once and hold the final pose until waking.
             if (tick < 2) return 0;
             if (tick < 4) return 1;
             if (tick < 8) return 2;
             if (tick < 14) return 3;
-            return 4 + (tick - 14) / 2 % 4;
+            return Mathf.Min(SleepColumns - 1, 4 + (tick - 14) / 2);
         }
 
         internal void SetAirborne(bool airborne) => _airborne = airborne;
@@ -230,7 +230,7 @@ namespace AzureDreamsReimagined
             if (direction.sqrMagnitude > 0.0001f) _facing = direction;
         }
         private SpriteRenderer _renderer;
-        private Color? _colorBeforeStatusFlash;
+        private Color? _colorBeforeStatusTint;
         private ActorLocomotionView _locomotion;
         private float _clock;
         private int _clockFrame = -1;
@@ -333,19 +333,20 @@ namespace AzureDreamsReimagined
             }
             _renderer.sprite = _frames[0];
         }
-        internal void PresentGreenStatusFlash(bool flashing)
+        internal void PresentStatusTint(bool paralyzed, bool greenFlash)
         {
             if (!_renderer) return;
-            if (flashing)
+            if (paralyzed || greenFlash)
             {
-                Color normal = _colorBeforeStatusFlash ??= _renderer.color;
+                Color normal = _colorBeforeStatusTint ??= _renderer.color;
                 float phase = Mathf.Repeat(Time.unscaledTime * 4f, 1f);
-                _renderer.color = phase < 0.5f ? normal * new Color(0.45f, 1f, 0.42f, 1f) : normal;
+                _renderer.color = paralyzed ? normal * TowerStatusColors.Paralysis :
+                    phase < 0.5f ? normal * new Color(0.45f, 1f, 0.42f, 1f) : normal;
             }
-            else if (_colorBeforeStatusFlash is { } original)
+            else if (_colorBeforeStatusTint is { } original)
             {
                 _renderer.color = original;
-                _colorBeforeStatusFlash = null;
+                _colorBeforeStatusTint = null;
             }
         }
 
@@ -445,7 +446,7 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private void OnDisable() => PresentGreenStatusFlash(false);
+        private void OnDisable() => PresentStatusTint(false, false);
 
         private void LateUpdate()
         {
@@ -492,6 +493,18 @@ namespace AzureDreamsReimagined
 
         private void PresentBody(int octant, bool walking, bool running)
         {
+            if (_sleeping && _sleepFrames != null)
+            {
+                int tick = Mathf.FloorToInt((Time.unscaledTime - _sleepStartedAt) * 30f);
+                int direction = octant & 7;
+                int index = AtlasRowByOctant[direction] * SleepColumns + SleepFrameAt(tick);
+                if ((uint)index < (uint)_sleepFrames.Length)
+                {
+                    _renderer.flipX = direction is >= 1 and <= 3;
+                    _renderer.sprite = _sleepFrames[index];
+                }
+                return;
+            }
             float hit = _locomotion ? _locomotion.HitProgress : 1f;
             if (hit < 1f)
             {
@@ -511,18 +524,6 @@ namespace AzureDreamsReimagined
                 int pose = _levelUpProgress >= 0.9f ? 0 : 1 + (int)(_levelUpProgress * 24f) % FramesPerCycle;
                 _renderer.flipX = octant is >= 1 and <= 3;
                 _renderer.sprite = _retailFrames[AtlasRowByOctant[octant] * AtlasColumns + pose];
-                return;
-            }
-            if (_sleeping && _sleepFrames != null)
-            {
-                int tick = Mathf.FloorToInt((Time.unscaledTime - _sleepStartedAt) * 30f);
-                int direction = octant & 7;
-                int index = AtlasRowByOctant[direction] * SleepColumns + SleepFrameAt(tick);
-                if ((uint)index < (uint)_sleepFrames.Length)
-                {
-                    _renderer.flipX = direction is >= 1 and <= 3;
-                    _renderer.sprite = _sleepFrames[index];
-                }
                 return;
             }
             if (_bagPose && _retailFrames != null)

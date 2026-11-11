@@ -20,9 +20,15 @@ namespace AzureDreamsReimagined
         public bool IsActive { get; private set; } = true;
         public bool FirstTime { get; private set; } = true;
         internal TowerTrapEffect Effect { get; set; }
+        internal bool IsRevealedOnMinimap => IsRevealed && !_minimapRevealDeferred;
         private bool _discoveryAwarded;
+        private bool _minimapRevealDeferred;
 
-        internal void Reveal() => IsRevealed = true;
+        internal void Reveal()
+        {
+            IsRevealed = true;
+            _minimapRevealDeferred = false;
+        }
 
         internal bool Discover()
         {
@@ -32,10 +38,15 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        internal bool Spring()
+        internal bool Spring(bool deferMinimapReveal = false)
         {
             if (!IsActive) return false;
-            Reveal();
+            if (!deferMinimapReveal) Reveal();
+            else if (!IsRevealed)
+            {
+                IsRevealed = true;
+                _minimapRevealDeferred = true;
+            }
             IsActive = false;
             FirstTime = false;
             return true;
@@ -321,9 +332,11 @@ namespace AzureDreamsReimagined
         /// Trigger the trap on the given cell if present and not already triggered.
         /// Returns true if a trap was triggered.
         /// </summary>
-        public bool TryTriggerTrap(Vector2Int cell)
+        public bool TryTriggerTrap(Vector2Int cell) => TryTriggerTrap(cell, deferMinimapReveal: false);
+
+        internal bool TryTriggerTrap(Vector2Int cell, bool deferMinimapReveal)
         {
-            if (TrapAt(cell)?.Spring() != true) return false;
+            if (TrapAt(cell)?.Spring(deferMinimapReveal) != true) return false;
             _triggeredTraps.Add(cell);
             _floor.Dungeon.Grid[cell.y, cell.x] = _trapTerrain.TryGetValue(cell, out var original)
                 ? original : CoreDungeon.TileType.Floor;
@@ -409,7 +422,7 @@ namespace AzureDreamsReimagined
             return _rareLootRng.Next(5000) switch
             {
                 0 => CreateTowerEquipment(CoreItems.Kind.Sword, 15, _rareLootRng.Next(100)), // Bow Gun
-                1 => CreateTowerEquipment(CoreItems.Kind.Sword, 9, _rareLootRng.Next(100)), // Dark Sword
+                1 => CreateTowerEquipment(CoreItems.Kind.Sword, TowerGameController.DarkSword, _rareLootRng.Next(100)),
                 2 => CreateTowerEquipment(CoreItems.Kind.Sword, 10, _rareLootRng.Next(100)), // Holy Sword
                 3 => CoreItems.CreateFloorItem(7, CoreItems.Kind.Fruit, 0), // Roche Fruit
                 4 => CreateTowerEquipment(CoreItems.Kind.Wand, 2, _rareLootRng.Next(100)), // Trained Wand

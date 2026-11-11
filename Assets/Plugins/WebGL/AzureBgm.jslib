@@ -36,13 +36,13 @@ mergeInto(LibraryManager.library, {
     }
   },
   AzureBgmPlay__deps: ['$AzureBgm'],
-  AzureBgmPlay: function (url, volume) {
+  AzureBgmPlay: function (url, volume, loop) {
     AzureBgm.stop();
     var audio = new Audio();
     AzureBgm.audio = audio;
     AzureBgm.paused = false;
     audio.preload = 'none';
-    audio.loop = true;
+    audio.loop = !!loop;
     audio.volume = Math.min(1, Math.max(0, volume));
     audio.src = UTF8ToString(url);
     AzureBgm.resume();

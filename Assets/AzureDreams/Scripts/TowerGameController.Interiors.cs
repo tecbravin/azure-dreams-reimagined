@@ -84,6 +84,27 @@ namespace AzureDreamsReimagined
             bool returningFromHut = InHomeHut;
             ClearGenerated();
             _interior = room;
+            if (_prologue == Prologue.Off)
+                PlayAreaMusic(room.interiorId switch
+                {
+                    NicoHouse => "NicoTheme.mp3",
+                    GeneralStoreInterior => "FurTheme.mp3",
+                    RhodesHouse => "GhoshTheme.mp3",
+                    CherrlHouse => "CherrlTheme.mp3",
+                    BarRoom => "VivianTheme.mp3",
+                    RestaurantRoom => "PattyTheme.mp3",
+                    LibraryRoom => "MiaTheme.mp3",
+                    BlacksmithInterior => "ArmShop.mp3",
+                    MonsterShopScene => "MonsterShop.mp3",
+                    CasinoRoom or CasinoSlotsRoom => "Casino.mp3",
+                    RaceLobby or RaceCourse => RaceCourseMusicCue,
+                    TheaterRoom => TheaterMusicCue,
+                    PoolClosedRoom or PoolOpenRoom => "SwimmingPool.mp3",
+                    BowlingInterior => "Playroom.mp3",
+                    "Interior_11_temple" or "Interior_12_temple_2" => "Temple1.mp3",
+                    _ when HouseIndex >= 0 || InHomeHut => "KohHouseTheme.mp3",
+                    _ => "Town"
+                });
             _townHeights = room.heights.bytes;
             if (room.furnitureFootprints != null) _townBuildings.AddRange(room.furnitureFootprints);
             Vector3 entry = InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(room);

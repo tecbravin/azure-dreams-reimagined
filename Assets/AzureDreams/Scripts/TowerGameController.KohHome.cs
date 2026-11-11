@@ -183,7 +183,7 @@ namespace AzureDreamsReimagined
             {
                 PlaceHomeMarker("Bath passage", CellPosition(BathDoors[index]), _accentMaterial);
                 PlaceHomeMarker("Monster hut passage", HutLinks[index], _accentMaterial);
-                _message = T("Koh's house. M: floor plan. E: use marked locations.", "Casa do Koh. M: planta. E: interagir nos pontos marcados.");
+                _message = string.Empty;
             }
             else if (InHomeHut)
             {
@@ -282,7 +282,7 @@ namespace AzureDreamsReimagined
             var keys = Keyboard.current;
             if (_homePanel != 0 && keys != null && keys.escapeKey.wasPressedThisFrame)
             { _homePanel = 0; return true; }
-            if (keys != null && keys.mKey.wasPressedThisFrame && !_activeTownNpc && !_interiorMenu)
+            if (InHomeHut && keys != null && keys.mKey.wasPressedThisFrame && !_activeTownNpc && !_interiorMenu)
             { _homePanel = _homePanel == 1 ? 0 : 1; return true; }
             return _homePanel != 0;
         }
@@ -461,28 +461,17 @@ namespace AzureDreamsReimagined
             if (Event.current.type != EventType.Repaint || _townHeights == null) return;
             var bounds = new Rect(108, 80, 424, 310);
             DrawHudPanel(bounds);
-            GUI.Label(new Rect(125, 91, 390, 25), InHomeHut ? T("Monster hut - floor plan", "Planta do alojamento") : T("Koh's house - floor plan", "Planta da casa do Koh"));
+            GUI.Label(new Rect(125, 91, 390, 25), T("Monster hut - floor plan", "Planta do alojamento"));
             var mapBounds = _homeMapBounds;
             float scale = Mathf.Min(386f / mapBounds.width, 200f / mapBounds.height);
             Vector2 origin = new(320f - mapBounds.width * scale * 0.5f, 226f - mapBounds.height * scale * 0.5f);
             Rect Tile(Vector2Int p, float inset) => new(origin.x + (mapBounds.xMax - 1 - p.x) * scale + inset,
                 origin.y + (p.y - mapBounds.yMin) * scale + inset, scale - 2f * inset, scale - 2f * inset);
             foreach (var tile in _homeMapCells) DrawHudFill(Tile(tile, 0.15f), new Color(0.38f, 0.31f, 0.23f));
-            int index = HouseIndex;
-            if (index >= 0)
-            {
-                DrawHudFill(Tile(BathDoors[index], 0f), Color.cyan);
-                DrawHudFill(Tile(Beds[index], 0f), new Color(0.4f, 0.65f, 1f));
-                DrawHudFill(Tile(HomeMapCell(HutLinks[index]), 0f), Color.magenta);
-                DrawHudFill(Tile(HomeExitMapCell(), 0f), Color.yellow);
-            }
-            else
-            {
-                foreach (var pad in HutPadLayouts[HutIndex]) DrawHudFill(Tile(pad, 0f), Color.magenta);
-                DrawHudFill(Tile(HomeExitMapCell(), 0f), Color.yellow);
-            }
+            foreach (var pad in HutPadLayouts[HutIndex]) DrawHudFill(Tile(pad, 0f), Color.magenta);
+            DrawHudFill(Tile(HomeExitMapCell(), 0f), Color.yellow);
             DrawHudFill(Tile(_playerCell, scale * 0.19f), Color.red);
-            GUI.Label(new Rect(125, 352, 400, 24), T("Red: Koh  Yellow: exit  Cyan: bath  Blue: bed  Purple: hut", "Vermelho: Koh  Amarelo: saída  Ciano: banho  Azul: cama  Roxo: alojamento"));
+            GUI.Label(new Rect(125, 352, 400, 24), T("Red: Koh  Yellow: exit  Purple: storage slot", "Vermelho: Koh  Amarelo: saída  Roxo: vaga"));
         }
 
         private Vector2Int HomeExitMapCell() => HomeMapCell(HomeEntry(_interior));
@@ -507,7 +496,7 @@ namespace AzureDreamsReimagined
         private void CacheHomeFloorPlan()
         {
             _homeMapCells.Clear();
-            if (HouseIndex < 0 && !InHomeHut) return;
+            if (!InHomeHut) return;
             var min = Vector2Int.one * RetailTownSize;
             var max = Vector2Int.zero;
             for (int z = 0; z < RetailTownSize; z++)

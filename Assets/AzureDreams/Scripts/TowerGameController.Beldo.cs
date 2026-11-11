@@ -5,6 +5,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
+        private const string BeldoDuelMusicCue = "BeldoDuel.mp3";
         private const string BeldoClearedKey = "tower.beldo_defeated";
         private enum BeldoScene { None, Introduction, Rescue, Victory }
         private BeldoScene _beldoScene;
@@ -51,6 +52,8 @@ namespace AzureDreamsReimagined
 
         private void StartBeldoEnding(bool rescued)
         {
+            if (rescued) PlayAreaMusic("HeroFinale.mp3");
+            else if (_playingMusicCue == BeldoDuelMusicCue) PlayAreaMusic(TowerMusicCue(_floor));
             _beldoScene = rescued ? BeldoScene.Rescue : BeldoScene.Victory;
             _beldoDialoguePage = 0;
             if (rescued)
@@ -75,6 +78,7 @@ namespace AzureDreamsReimagined
             if (_beldoScene == BeldoScene.Introduction)
             {
                 _beldoScene = BeldoScene.None;
+                PlayAreaMusic(BeldoDuelMusicCue);
                 return;
             }
             CompleteBeldoVictory();

@@ -84,6 +84,12 @@ namespace AzureDreamsReimagined
             return instance;
         }
 
+        private static bool IsRandomTowerEggSpecies(int species) =>
+            (MonsterSpecies)species is not (MonsterSpecies.FROG or MonsterSpecies.HIKEWNE or
+                MonsterSpecies.IFRIT or MonsterSpecies.DEATH or MonsterSpecies.GRINEUT or
+                MonsterSpecies.UNIVERN or MonsterSpecies.ASHRA or MonsterSpecies.SABER or
+                MonsterSpecies.METAL or MonsterSpecies.BATTNEL or MonsterSpecies.DRAGON);
+
         private void PlaceGeneratedEgg()
         {
             if (!TowerFloorRules.AllowsRandomMonsters(_floor)) return;
@@ -92,7 +98,7 @@ namespace AzureDreamsReimagined
             if (choices == null || choices.Length == 0) return;
             int total = 0;
             foreach (var choice in choices)
-                if (choice.species != (int)MonsterSpecies.FROG) total += Mathf.Max(0, choice.weight);
+                if (IsRandomTowerEggSpecies(choice.species)) total += Mathf.Max(0, choice.weight);
             if (total <= 0) return;
             var candidates = new List<Vector2Int>();
             foreach (var cell in _towerFloorLayout.OpenCells)
@@ -106,7 +112,7 @@ namespace AzureDreamsReimagined
             int roll = RollSpawnRange(total);
             foreach (var choice in choices)
             {
-                if (choice.species == (int)MonsterSpecies.FROG) continue;
+                if (!IsRandomTowerEggSpecies(choice.species)) continue;
                 roll -= Mathf.Max(0, choice.weight);
                 if (roll >= 0) continue;
                 _towerItemTraps.TryPlaceItem(candidates[RollSpawnRange(candidates.Count)],

@@ -163,7 +163,7 @@ namespace AzureDreamsReimagined
             if (item == null || !CheckGroundItemBagSpace(item)) return;
             item = _towerItemTraps.TryPickup(cell);
             if (item == null) return;
-            PlayRetailSound(RetailSfx.Pickup);
+            PlayRetailSound(item.Kind == ItemKind.Coin ? RetailSfx.CoinPickup : RetailSfx.Pickup);
             if (IsBlueCollar(item))
             {
                 TownSaveVariables.SetBool(BlueCollarKey, true);

@@ -8,9 +8,6 @@ Unity 6.6+ WebGL project reverse-engineered from the PlayStation 1 title *Azure 
   - Town VRAM portraits (12 textures) extracted via the ad_resources_dumper format port
   - ISO9660 raw extraction with pycdlib
 - **Editable prefabs** for the three actor kinds
-  - `Wanderer.prefab` — Player
-  - `Mira.prefab` — Townsperson (NPC)
-  - `Mossling.prefab` — Tower creature (monster)
 - **ScriptableObject-driven stats** (`ActorDefinition`) so health, attack, move delay, tint, and albedo texture are all Inspector-editable
 - **WebGL player settings** pre-configured (960×600, WASM 2023, memory growth mode)
 
@@ -121,4 +118,3 @@ Unity web documentation verified the 6.3 LTS manual family; the Unity Editor ava
 2. Write a TIM texture importer for dungeon walls/floors
 3. Write a TMD model importer for dungeon creatures
 4. Hook up dungeon spawner in `TowerGameController`
-5. Extract VAG audio and add to `Audio/` folder

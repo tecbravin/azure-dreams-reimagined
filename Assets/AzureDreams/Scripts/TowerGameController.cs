@@ -242,7 +242,7 @@ namespace AzureDreamsReimagined
             RestoreBlindnessView();
             if (_kohSprite)
             {
-                _kohSprite.PresentGreenStatusFlash(false);
+                _kohSprite.PresentStatusTint(false, false);
                 _kohSprite.PresentParalysis(false);
                 _kohSprite.PresentSleep(false);
             }

@@ -16,7 +16,7 @@ namespace AzureDreamsReimagined
         private Texture2D _frameAtlas, _actionFrameAtlas, _retailFrameAtlas;
         private Sprite[] _retailActions;
         private float _castProgress = 1f;
-        private bool _sleeping, _exhausted;
+        private bool _sleeping, _exhausted, _paralyzed;
 
         internal void PresentCast(Vector2 direction, float progress)
         {
@@ -24,9 +24,11 @@ namespace AzureDreamsReimagined
             _castProgress = progress;
         }
 
-        internal bool PresentSleep(bool sleeping, bool exhausted)
+        internal bool PresentStatus(bool sleeping, bool exhausted, bool paralyzed)
         {
-            if (_retailActions == null) return false;
+            bool canPresent = _frames != null && (!sleeping || _retailActions != null);
+            _paralyzed = canPresent && paralyzed;
+            if (!canPresent) return false;
             _sleeping = sleeping;
             _exhausted = exhausted;
             return true;
@@ -151,7 +153,8 @@ namespace AzureDreamsReimagined
                     + _facing.normalized * lunge * 0.32f + Vector3.up * (lunge * (0.12f + attackRise) + idleBob)
                     + (_locomotion ? _locomotion.HitOffset : Vector3.zero);
             int row = Rows[octant];
-            _renderer.color = !_townFlight && !_carried && _exhausted
+            _renderer.color = !_townFlight && _paralyzed ? TowerStatusColors.Paralysis :
+                !_townFlight && !_carried && _exhausted
                 ? Color.Lerp(Color.white, new Color(0.28f, 0.55f, 1f), 0.48f + 0.45f * Mathf.Sin(AnimationTime * 12f))
                 : Color.white;
             float hit = _locomotion ? _locomotion.HitProgress : 1f;

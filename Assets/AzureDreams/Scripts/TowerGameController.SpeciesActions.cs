@@ -285,7 +285,7 @@ namespace AzureDreamsReimagined
                 foreach (var floor in floors)
                     if (floor.choices != null)
                         foreach (var choice in floor.choices)
-                            if (choice.weight > 0 && choice.species != (int)MonsterSpecies.FROG)
+                            if (choice.weight > 0 && IsRandomTowerEggSpecies(choice.species))
                                 species.Add(choice.species);
                 foreach (int id in species) choices.Add((MonsterEgg.Kind, (byte)id));
             }

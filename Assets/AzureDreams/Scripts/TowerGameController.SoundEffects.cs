@@ -10,9 +10,11 @@ namespace AzureDreamsReimagined
         {
             Cursor = 0x502,
             Confirm = 0x503,
+            Pickup = 0x505,
             Equip = 0x508,
             Eat = 0x509,
             Cancel = 0x515,
+            CoinPickup = 0x516,
             FeedFamiliar = 0x51E,
             Hit = 0x601,
             WeaponSwing = 0x605,
@@ -27,7 +29,6 @@ namespace AzureDreamsReimagined
             MonsterAttack = 0x804,
             MonsterDefeat = 0x805,
             Spell = 0x816,
-            Pickup = 0x817,
             TerrainShift = 0x818
         }
 
@@ -38,7 +39,7 @@ namespace AzureDreamsReimagined
         private void PreloadCommonSounds()
         {
             foreach (var sound in new[] { RetailSfx.Cursor, RetailSfx.Confirm, RetailSfx.Cancel,
-                         RetailSfx.Hit, RetailSfx.WeaponSwing, RetailSfx.MonsterAttack, RetailSfx.Pickup })
+                         RetailSfx.Hit, RetailSfx.WeaponSwing, RetailSfx.MonsterAttack, RetailSfx.Pickup, RetailSfx.CoinPickup })
             {
                 var clip = Resources.Load<AudioClip>($"Sfx/Retail/{(int)sound:X3}");
                 if (!clip) continue;

@@ -10,13 +10,14 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
+        private const string SelfiMusicCue = "SelfiTheme.mp3";
         private AudioSource _backgroundMusic;
         private AudioSource _levelUpMusic;
         private bool _levelUpMusicActive;
         private string _playingMusicCue;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")] private static extern void AzureBgmPlay(string url, float volume);
+        [DllImport("__Internal")] private static extern void AzureBgmPlay(string url, float volume, int loop);
         [DllImport("__Internal")] private static extern void AzureBgmSetVolume(float volume);
         [DllImport("__Internal")] private static extern void AzureBgmPause(int pause);
         [DllImport("__Internal")] private static extern void AzureBgmStop();
@@ -27,30 +28,33 @@ namespace AzureDreamsReimagined
 
         private static string TowerMusicCue(int floor)
         {
-            if (floor >= 40) return "TowerFinale";
+            if (floor >= TowerFloorRules.BeldoFloor) return "VeiledGenuine.mp3";
             // Retail selects the normal music bank using integer division by five.
             return $"Tower{Mathf.Clamp(floor / 5, 0, 7) + 1}";
         }
 
-        private void PlayAreaMusic(string cue)
+        private void PlayAreaMusic(string cue, bool loop = true)
         {
             if (_playingMusicCue == cue) return;
             StopLevelUpMusic(resumeBackground: false);
             _playingMusicCue = cue;
-            string url = StreamedMediaUrl($"Music/{cue}.ogg");
+            bool mp3 = cue.EndsWith(".mp3", System.StringComparison.Ordinal);
+            string file = mp3 ? cue : $"{cue}.ogg";
+            string url = StreamedMediaUrl($"Music/{file}");
 #if UNITY_WEBGL && !UNITY_EDITOR
-            AzureBgmPlay(url, DefaultMusicVolume * _bgmVolume);
+            AzureBgmPlay(url, DefaultMusicVolume * _bgmVolume, loop ? 1 : 0);
 #else
             CancelMusicLoad();
             ReleaseMusicClip();
-            _musicLoad = StartCoroutine(LoadAreaMusic(url, cue));
+            _musicLoad = StartCoroutine(LoadAreaMusic(url, cue, mp3, loop));
 #endif
         }
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-        private IEnumerator LoadAreaMusic(string url, string cue)
+        private IEnumerator LoadAreaMusic(string url, string cue, bool mp3, bool loop)
         {
-            var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS);
+            var audioType = mp3 ? AudioType.MPEG : AudioType.OGGVORBIS;
+            var request = UnityWebRequestMultimedia.GetAudioClip(url, audioType);
             _musicRequest = request;
             request.timeout = 20;
             ((DownloadHandlerAudioClip)request.downloadHandler).streamAudio = true;
@@ -61,10 +65,11 @@ namespace AzureDreamsReimagined
                 {
                     _backgroundMusic = gameObject.AddComponent<AudioSource>();
                     _backgroundMusic.playOnAwake = false;
-                    _backgroundMusic.loop = true;
+                    _backgroundMusic.loop = loop;
                     _backgroundMusic.spatialBlend = 0f;
                 }
                 _backgroundMusic.volume = DefaultMusicVolume * _bgmVolume;
+                _backgroundMusic.loop = loop;
                 _backgroundMusic.clip = DownloadHandlerAudioClip.GetContent(request);
                 _backgroundMusic.Play();
                 if (_levelUpMusicActive || _fusionPlaying) _backgroundMusic.Pause();
@@ -132,20 +137,21 @@ namespace AzureDreamsReimagined
 
         private void PrepareLevelUpMusic()
         {
+            if (_levelUpMusic) return;
             var clip = Resources.Load<AudioClip>("Music/LevelUp");
-            if (!clip || _levelUpMusic) return;
+            if (!clip) return;
             _levelUpMusic = gameObject.AddComponent<AudioSource>();
             _levelUpMusic.playOnAwake = false;
             _levelUpMusic.spatialBlend = 0f;
             _levelUpMusic.clip = clip;
-            clip.LoadAudioData();
+            if (clip.loadState == AudioDataLoadState.Unloaded) clip.LoadAudioData();
         }
 
         private void PlayLevelUpMusic()
         {
             if (_area != Area.Tower || _levelUpMusicActive) return;
             if (!_levelUpMusic) PrepareLevelUpMusic();
-            if (!_levelUpMusic) return;
+            if (!_levelUpMusic || _levelUpMusic.clip.loadState != AudioDataLoadState.Loaded) return;
             _levelUpMusic.volume = DefaultMusicVolume * _bgmVolume;
             SetAreaMusicPaused(true);
             _levelUpMusicActive = true;

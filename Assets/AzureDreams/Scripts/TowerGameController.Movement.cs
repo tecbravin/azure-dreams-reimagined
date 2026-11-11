@@ -33,7 +33,7 @@ namespace AzureDreamsReimagined
         private readonly TowerDamageLedger _creatureDamage = new TowerDamageLedger();
         private readonly List<(CoreActor Attacker, int TargetIndex, int Damage, byte Wand)> _creatureHits = new();
         private readonly Dictionary<CoreActor, (CoreActor Actor, byte Wand)> _finishingBlows = new();
-        private readonly List<(CoreActor target, string line, bool needsActiveFamiliar, bool isAttack, CoreActor source)> _turnDamageMessages = new();
+        private readonly List<(CoreActor target, string line, bool needsActiveFamiliar, bool isAttack, CoreActor source, int element)> _turnDamageMessages = new();
         private readonly List<Vector3> _creatureFroms = new List<Vector3>();
         private PsxSpriteRenderer _playerAnimation, _familiarAnimation;
         private bool _townWasMoving;
@@ -378,14 +378,15 @@ namespace AzureDreamsReimagined
                     }
                     int damage = SpellOrImpactDamage(reflected ? cs.Actor : target, spellPower,
                         EffectiveSpellLevel(cs.Actor, cs.Actor.Level), UnitElement(cs.Actor), cs.Actor);
-                    if (reflected) QueueCreatureDamage(target, ci, damage);
+                    if (reflected) QueueCreatureDamage(target, ci, damage, element: UnitElement(cs.Actor));
                     else
                     {
                         if (ActiveCombatShield(target)?.Subtype == LiveShield) ApplyLiveShield(target, cs.Actor, damage);
                         if (targetBlue) _pendingBlueCollarDamage += damage;
                         else if (targetFamiliar) _pendingFamiliarDamage += damage;
                         else _pendingPlayerDamage += damage;
-                        RecordTowerHit(cs.Actor, target, damage, needsActiveFamiliar: targetFamiliar && !targetBlue);
+                        RecordTowerHit(cs.Actor, target, damage, needsActiveFamiliar: targetFamiliar && !targetBlue,
+                            element: UnitElement(cs.Actor));
                     }
                 }
                 else if (attack)
@@ -514,7 +515,7 @@ namespace AzureDreamsReimagined
 
         private (int Power, sbyte Status, int Spell) PrepareMonsterSpell(CoreActor actor, Vector2Int from, Vector2Int target)
         {
-            if (!CanCastMagic(actor)) return default;
+            if (IsTroll(actor) || !CanCastMagic(actor)) return default;
             var unit = UnitProfile(actor.Species);
             int native = unit?.nativeSpellId ?? 0;
             int spell = native != 0 ? native : unit?.hiddenSpellId ?? 0;
@@ -827,7 +828,7 @@ namespace AzureDreamsReimagined
             {
                 var creature = _creatures[i];
                 if (creature.Health <= 0 || !EnteredTowerCell(_creatureFroms[i], creature.Cell)) continue;
-                TriggerTrapFor(creature.Cell, creature.Actor);
+                TriggerTrapFor(creature.Cell, creature.Actor, enemy: true);
                 creature.Actor.Hp = StatByte(_creatures[i].Health);
             }
             if (_pushedEggAlly != null && _pushedEggAlly != _blueCollarAlly && EnteredTowerCell(_pushedEggFrom, _pushedEggAlly.Cell))
@@ -939,11 +940,11 @@ namespace AzureDreamsReimagined
             QueueCreatureDamage(_playerActor, targetIndex, damage, wand);
         }
 
-        private void QueueCreatureDamage(CoreActor attacker, int targetIndex, int damage, byte wand = 0)
+        private void QueueCreatureDamage(CoreActor attacker, int targetIndex, int damage, byte wand = 0, int? element = null)
         {
             _creatureDamage.Add(targetIndex, damage);
             if (damage > 0) _creatureHits.Add((attacker, targetIndex, damage, wand));
-            RecordTowerHit(attacker, _creatures[targetIndex].Actor, damage);
+            RecordTowerHit(attacker, _creatures[targetIndex].Actor, damage, element: element);
         }
 
         private string TowerCombatName(CoreActor actor)
@@ -956,13 +957,15 @@ namespace AzureDreamsReimagined
             return FindEggSpecies(actor.Species)?.name ?? ((AzureDreams.Core.MonsterSpecies)actor.Species).ToString();
         }
 
-        private void RecordTowerHit(CoreActor attacker, CoreActor target, int damage, bool needsActiveFamiliar = false)
+        private void RecordTowerHit(CoreActor attacker, CoreActor target, int damage, bool needsActiveFamiliar = false, int? element = null)
         {
             if (damage <= 0) return;
             string source = TowerCombatName(attacker);
             string name = TowerCombatName(target);
             _turnDamageMessages.Add((target, T($"{source} hit {name} for {damage} damage.",
-                $"{source} atingiu {name} e causou {damage} de dano."), needsActiveFamiliar, true, attacker));
+                $"{source} atingiu {name} e causou {damage} de dano."), needsActiveFamiliar, true, attacker,
+                element ?? (GearElement(CombatGear(attacker, false)) is var weaponElement && weaponElement != 0
+                    ? weaponElement : UnitElement(attacker))));
         }
 
         private void RecordTowerHazard(CoreActor target, int damage, string sourceEn, string sourcePt)
@@ -970,7 +973,7 @@ namespace AzureDreamsReimagined
             if (damage <= 0) return;
             string name = TowerCombatName(target);
             _turnDamageMessages.Add((target, T($"{name} took {damage} damage from {sourceEn}.",
-                $"{name} sofreu {damage} de dano por {sourcePt}."), false, false, null));
+                $"{name} sofreu {damage} de dano por {sourcePt}."), false, false, null, 0));
         }
 
         private void ResolveMonsterWakeUps()
@@ -990,14 +993,14 @@ namespace AzureDreamsReimagined
                 if (hit.target == _playerActor && _testInvulnerable) continue;
                 if (hit.needsActiveFamiliar && !_familiar) continue;
                 if (hit.isAttack) PlayRetailSound(RetailSfx.Hit);
-                PresentTowerHit(hit.target, hit.source);
+                PresentTowerHit(hit.target, hit.source, hit.element);
                 report = JoinTowerMessages(report, hit.line);
             }
             _turnDamageMessages.Clear();
             return report;
         }
 
-        private void PresentTowerHit(CoreActor target, CoreActor source)
+        private void PresentTowerHit(CoreActor target, CoreActor source, int element)
         {
             GameObject view;
             if (target == _playerActor) view = _player;
@@ -1014,6 +1017,7 @@ namespace AzureDreamsReimagined
             if (!view.TryGetComponent<ActorLocomotionView>(out var locomotion))
                 locomotion = ConfigureLocomotion(view);
             locomotion.PresentHit(away);
+            PresentImpactBurst(view.transform.position + Vector3.up * 0.3f, element);
         }
 
         private void RetireTowerHitView(GameObject view)

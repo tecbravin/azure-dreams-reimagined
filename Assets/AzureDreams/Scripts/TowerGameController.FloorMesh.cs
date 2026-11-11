@@ -168,6 +168,8 @@ namespace AzureDreamsReimagined
                 foreach (var sprite in _summoningFrames) if (sprite) Destroy(sprite);
             if (_pullBagFrames != null)
                 foreach (var sprite in _pullBagFrames) if (sprite) Destroy(sprite);
+            if (_closeBagFrames != null)
+                foreach (var sprite in _closeBagFrames) if (sprite) Destroy(sprite);
             if (_elevatorSide) Destroy(_elevatorSide);
             if (_elevatorCrystalMesh) Destroy(_elevatorCrystalMesh);
             if (_elevatorFrames != null)
@@ -200,11 +202,13 @@ namespace AzureDreamsReimagined
             {
                 float x = cell.x, z = cell.y;
                 float y = TowerGroundY(cell);
+                float floorSurface = cell == _towerFloorLayout.StairsUpCell && HasRetailElevatorArt && _floor != TowerFloorRules.BeldoFloor
+                    ? y - 0.035f : y;
                 bool corridor = _towerItemTraps.IsCorridor(cell);
                 bool openCorridorEdge = corridor && _floor != 2 && !InTowerTutorial;
                 AppendFloorQuad(floorVertices, floorIndices, floorUvs,
-                    new Vector3(x - 0.5f, y, z - 0.5f), new Vector3(x - 0.5f, y, z + 0.5f),
-                    new Vector3(x + 0.5f, y, z + 0.5f), new Vector3(x + 0.5f, y, z - 0.5f));
+                    new Vector3(x - 0.5f, floorSurface, z - 0.5f), new Vector3(x - 0.5f, floorSurface, z + 0.5f),
+                    new Vector3(x + 0.5f, floorSurface, z + 0.5f), new Vector3(x + 0.5f, floorSurface, z - 0.5f));
                 if (retail)
                 {
                     bool alternate = ((cell.x + cell.y) & 1) != 0;

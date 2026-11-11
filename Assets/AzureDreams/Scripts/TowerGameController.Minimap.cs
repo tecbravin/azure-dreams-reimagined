@@ -104,6 +104,9 @@ namespace AzureDreamsReimagined
                 ? _towerFloorLayout.IsWalkable(cell.x, cell.y)
                 : InsideMap(cell) && !_walls.Contains(cell);
 
+        private bool IsInKohsTrapRoom(Vector2Int cell, int kohRoom) =>
+            cell == _playerCell || (kohRoom >= 0 && BellRoomAt(cell) == kohRoom);
+
         private void UpdateMinimapTerrain()
         {
             if (_area != Area.Tower || !_player || KohIsBlind) return;
@@ -128,10 +131,16 @@ namespace AzureDreamsReimagined
                     _mapTexture.Apply(false, true);
                 }
             }
-            if (fullFloor || _mapLastPlayerCell == _playerCell) return;
+            if (_mapLastPlayerCell == _playerCell) return;
             _mapLastPlayerCell = _playerCell;
 
             int roomIndex = UsesManagedTowerLayout ? BellRoomAt(_playerCell) : -1;
+            foreach (var cell in _trapMarkers.Keys)
+                if (TrapAt(cell) is { IsRevealed: true, IsRevealedOnMinimap: false } trap &&
+                    IsInKohsTrapRoom(cell, roomIndex))
+                    trap.Reveal();
+            if (fullFloor) return;
+
             if (roomIndex >= 0 && _revealedMapRooms.Add(roomIndex))
             {
                 var room = _towerFloorLayout.Dungeon.Rooms[roomIndex];
@@ -215,7 +224,7 @@ namespace AzureDreamsReimagined
                 new Color(1f, 1f, 1f, opacity), 0f, 0f);
             DrawVisibleMapItems(map, opacity);
             foreach (var cell in _trapMarkers.Keys)
-                if (TrapAt(cell) is { IsRevealed: true } trap)
+                if (TrapAt(cell) is { IsRevealedOnMinimap: true } trap)
                     DrawMinimapMarker(map, cell, new Color(1f, 0.9f, 0.15f, opacity * (trap.IsActive ? 0.5f : 1f)));
             if (_seeMonsters)
                 foreach (var enemy in _creatures) DrawMinimapMarker(map, enemy.Cell, new Color(0.9f, 0.2f, 0.7f, opacity));

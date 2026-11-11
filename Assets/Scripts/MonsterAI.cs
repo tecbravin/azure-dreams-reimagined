@@ -1,4 +1,5 @@
 using UnityEngine;
+using AzureDreams.Core;
 
 namespace AzureDreamsReimagined
 {
@@ -169,28 +170,78 @@ namespace AzureDreamsReimagined
 
         private void UpdateAttack()
         {
-            if (_player == null)
+            // Find the nearest target: either the player or a Familiar (for kidnap)
+            Transform target = _player;
+            float bestDist = float.MaxValue;
+
+            // Check for familiars in range for kidnap
+            if (_stats != null && _stats.isActive)
             {
-                _state = MonsterState.Patrol;
-                return;
+                var familiars = GameObject.FindGameObjectsWithTag("Familiar");
+                foreach (var familiar in familiars)
+                {
+                    float familiarDist = Vector3.Distance(transform.position, familiar.transform.position);
+                    if (familiarDist <= attackRange * 1.5f && familiarDist < bestDist)
+                    {
+                        bestDist = familiarDist;
+                        target = familiar.transform;
+                    }
+                }
             }
 
-            float dist = Vector3.Distance(transform.position, _player.position);
+            // If no familiar found nearby, target the player
+            if (target == null)
+            {
+                target = _player;
+            }
+
+            float dist = Vector3.Distance(transform.position, target.position);
             if (dist > attackRange * 1.2f)
             {
                 _state = MonsterState.Chase;
                 return;
             }
 
-            transform.LookAt(_player.position);
+            transform.LookAt(target.position);
 
             _attackTimer -= Time.deltaTime;
             if (_attackTimer <= 0f)
             {
                 _attackTimer = attackCooldown;
-                if (_player.TryGetComponent(out CharacterStats playerStats))
+                if (target.TryGetComponent(out CharacterStats targetStats))
                 {
-                    playerStats.TakeDamage(attackDamage);
+                    // Check if the target is a Familiar
+                    var definition = target.GetComponent<ActorDefinition>();
+                    bool isFamiliar = definition != null && definition.Kind == ActorKind.Familiar;
+
+                    if (isFamiliar)
+                    {
+                        // Use "kidnap" move on familiars
+                        ApplyKidnap(targetStats);
+                    }
+                    else
+                    {
+                        // Normal damage for non-familiar targets (player, other monsters)
+                        targetStats.TakeDamage(attackDamage);
+                    }
+                }
+            }
+        }
+
+        private void ApplyKidnap(CharacterStats targetStats)
+        {
+            // Apply "kidnap" status to the familiar
+            // This reduces their control/movement for a few turns
+            if (_stats != null && _stats.isActive)
+            {
+                var definition = targetStats.GetComponent<ActorDefinition>();
+                if (definition != null && definition.Kind == ActorKind.Familiar)
+                {
+                    Debug.Log($"Balloon kidnapped {targetStats.displayName}");
+                    // In full implementation, this would:
+                    // - Reduce the familiar's MoveSpeed
+                    // - Prevent them from obeying commands
+                    // - Possibly carry them away to a "kidnapped" location
                 }
             }
         }

@@ -65,13 +65,15 @@ namespace AzureDreamsReimagined
         private const float ElevatorAscentDuration = 1.15f;
         private static readonly Vector2Int[] ElevatorColors =
         {
-            new(0, 0), new(33, 0), new(66, 0), new(99, 0), new(132, 0),
-            new(33, 33), new(66, 33), new(99, 33), new(132, 33), new(33, 66)
+            new(1, 1), new(67, 1), new(133, 1), new(199, 1), new(265, 1),
+            new(67, 67), new(133, 67), new(199, 67), new(265, 67), new(67, 133)
         };
+
+        private bool HasRetailElevatorArt => _elevatorSheet && _elevatorSheet.width >= 329 && _elevatorSheet.height >= 197;
 
         private void CreateTowerElevator()
         {
-            if (!_elevatorSheet || _elevatorSheet.width < 164 || _elevatorSheet.height < 98)
+            if (!HasRetailElevatorArt)
             {
                 _elevatorPlatform = CreateMarker(_stairCell, "Tower Stairs", _accentMaterial, PrimitiveType.Cylinder, 0.7f).transform;
                 return;
@@ -83,8 +85,8 @@ namespace AzureDreamsReimagined
                 {
                     var cell = ElevatorColors[i];
                     _elevatorFrames[i] = Sprite.Create(_elevatorSheet,
-                        new Rect(cell.x, _elevatorSheet.height - cell.y - 32, 32, 32),
-                        Vector2.one * 0.5f, 32f, 0, SpriteMeshType.FullRect);
+                        new Rect(cell.x, _elevatorSheet.height - cell.y - 64, 64, 64),
+                        Vector2.one * 0.5f, 64f, 0, SpriteMeshType.FullRect);
                 }
             }
             var root = new GameObject("Tower Stairs");
@@ -176,8 +178,8 @@ namespace AzureDreamsReimagined
         private void AddElevatorBlockSides(Transform root)
         {
             if (!_elevatorSide)
-                _elevatorSide = Sprite.Create(_elevatorSheet, new Rect(0f, _elevatorSheet.height - 98f, 32f, 65f),
-                    new Vector2(0.5f, 1f), 32f, 0, SpriteMeshType.FullRect);
+                _elevatorSide = Sprite.Create(_elevatorSheet, new Rect(1f, _elevatorSheet.height - 197f, 64f, 130f),
+                    new Vector2(0.5f, 1f), 64f, 0, SpriteMeshType.FullRect);
             for (int i = 0; i < 4; i++)
             {
                 var face = new GameObject("Elevator block face");
@@ -256,6 +258,7 @@ namespace AzureDreamsReimagined
             layer.transform.SetParent(parent, false);
             layer.transform.localPosition = Vector3.up * height;
             layer.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            layer.transform.localScale = Vector3.one * (2f * ElevatorBlockHalfWidth);
             var renderer = layer.AddComponent<SpriteRenderer>();
             renderer.sortingOrder = sorting;
             return renderer;

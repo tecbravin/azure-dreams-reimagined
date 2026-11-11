@@ -117,7 +117,12 @@ namespace AzureDreamsReimagined
             if (_area != Area.Tower) return;
             PresentFrogForm(_player, _playerActor);
             if (_player && _frogViews.TryGetValue(_player, out var form) && form.Sprite)
+            {
                 form.Sprite.Face(_towerFacing);
+                form.Sprite.PresentStatus(false, false, KohIsParalyzed);
+            }
+            else if (_player && !_kohSprite)
+                PresentFallbackMonsterStatus(_player, false, false, KohIsParalyzed);
             foreach (var creature in _creatures) PresentMonsterExhaustion(creature.View, creature.Actor);
             if (_familiar) PresentMonsterExhaustion(_familiar, _familiarActor);
             if (_carriedFamiliar) PresentMonsterExhaustion(_carriedView, _familiarActor, carried: true);
@@ -131,19 +136,28 @@ namespace AzureDreamsReimagined
             PresentFrogForm(view, actor);
             bool exhausted = !carried && MonsterExhausted(actor);
             bool sleeping = exhausted || (!carried && actor != null && Combat.HasStatus(actor, StatusId.SLEEP));
-            if (view.GetComponentInChildren<MonsterTurnSpriteView>()?.PresentSleep(sleeping, exhausted) == true ||
-                view.GetComponent<KewneSpriteView>()?.PresentSleep(sleeping, exhausted) == true)
+            bool paralyzed = actor != null && Combat.HasStatus(actor, StatusId.PARALYSIS);
+            var sprite = _frogViews.TryGetValue(view, out var form)
+                ? form.Sprite : view.GetComponentInChildren<MonsterTurnSpriteView>();
+            if (sprite?.PresentStatus(sleeping, exhausted, paralyzed) == true ||
+                view.GetComponent<KewneSpriteView>()?.PresentStatus(sleeping, exhausted, paralyzed) == true)
             {
-                if (_exhaustedViews.TryGetValue(view, out var fallback)) fallback.Present(false, false);
+                if (_exhaustedViews.TryGetValue(view, out var fallback)) fallback.Present(false, false, false);
                 return;
             }
+
+            PresentFallbackMonsterStatus(view, sleeping, exhausted, paralyzed);
+        }
+
+        private void PresentFallbackMonsterStatus(GameObject view, bool sleeping, bool exhausted, bool paralyzed)
+        {
             if (!_exhaustedViews.TryGetValue(view, out var effect))
             {
-                if (!sleeping) return;
+                if (!sleeping && !paralyzed) return;
                 effect = view.AddComponent<MonsterExhaustedView>();
                 _exhaustedViews.Add(view, effect);
             }
-            effect.Present(sleeping, exhausted);
+            effect.Present(sleeping, exhausted, paralyzed);
         }
     }
 }

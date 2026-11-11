@@ -108,11 +108,13 @@ namespace AzureDreamsReimagined
             _message = T("Koh reveals a trap and gains 2 XP.", "Koh revela uma armadilha e ganha 2 XP.");
         }
 
-        private void TriggerTrapFor(Vector2Int cell, ActorRecord actor)
+        private void TriggerTrapFor(Vector2Int cell, ActorRecord actor, bool enemy = false)
         {
             if (IsSubmerged(actor)) return;
+            bool deferMinimapReveal = enemy && !IsInKohsTrapRoom(cell, BellRoomAt(_playerCell));
             bool sprung = _towerItemTraps != null
-                ? _towerItemTraps.TryTriggerTrap(cell) : TrapAt(cell)?.Spring() == true;
+                ? _towerItemTraps.TryTriggerTrap(cell, deferMinimapReveal)
+                : TrapAt(cell)?.Spring(deferMinimapReveal) == true;
             if (!sprung) return;
             RefreshTrapMarker(cell);
             var effect = TrapAt(cell).Effect;

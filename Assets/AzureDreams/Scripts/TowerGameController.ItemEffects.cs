@@ -1196,7 +1196,7 @@ namespace AzureDreamsReimagined
             if (creature >= 0 && _creatures[creature].Health > 0 && damage >= _creatures[creature].Health)
                 _finishingBlows[target] = (caster, 0);
             AdjustItemHealth(target, -damage);
-            RecordTowerHit(caster, target, damage);
+            RecordTowerHit(caster, target, damage, element: element);
             if (target != caster && ActiveCombatShield(target)?.Subtype == LiveShield)
                 ApplyLiveShield(target, caster, damage);
         }

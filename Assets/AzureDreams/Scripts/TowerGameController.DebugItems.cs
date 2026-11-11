@@ -113,6 +113,8 @@ namespace AzureDreamsReimagined
                 : ItemSystem.CreateFloorItem(id, kind, kind == ItemSystem.Kind.Ball ? (sbyte)5 : (sbyte)0);
             if (_area == Area.Tower && kind is ItemSystem.Kind.Sword or ItemSystem.Kind.Shield)
                 item = TowerItemTrapManager.CreateTowerEquipment(kind, id, Random.Range(0, 100));
+            else if (kind == ItemSystem.Kind.Sword && id == DarkSword)
+                item.Flags |= Inventory.CursedEquipmentFlag;
 
             if (!PlaceInventoryItem(_playerCell, item))
             {

@@ -108,8 +108,9 @@ namespace AzureDreamsReimagined
             {
                 bool greenFlash = _area == Area.Tower &&
                     (KohIsConfused || Combat.HasStatus(_playerActor, StatusId.POISON));
-                _kohSprite.PresentGreenStatusFlash(greenFlash);
-                _kohSprite.PresentParalysis(_area == Area.Tower && KohIsParalyzed);
+                bool paralyzed = _area == Area.Tower && KohIsParalyzed;
+                _kohSprite.PresentStatusTint(paralyzed, greenFlash);
+                _kohSprite.PresentParalysis(paralyzed);
                 _kohSprite.PresentSleep(_wakingInBed || (_area == Area.Tower && KohIsAsleep));
                 var visibleEquipment = _area == Area.Tower && !IsFrog(_playerActor) ? _runInventory : null;
                 var weapon = visibleEquipment?.EquippedItem(PlayerEquipped, false);
