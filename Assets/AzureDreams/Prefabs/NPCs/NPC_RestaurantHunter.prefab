@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5151358256163527516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 11315843541565772}
+  - component: {fileID: 1123943941396580955}
+  - component: {fileID: 1085751856712418880}
+  - component: {fileID: 7108393835339038485}
+  - component: {fileID: 219945623700259782}
+  - component: {fileID: 800000000000000001}
+  m_Layer: 0
+  m_Name: Hunter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &11315843541565772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1123943941396580955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43fa3240af6669945a044c60947555f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.CharacterStats
+  characterId: restaurant_hunter
+  displayName: Hunter
+  moveSpeed: 1.35
+  rotationSpeed: 360
+  currentHealth: 20
+  maxHealth: 20
+  attackPower: 10
+  defense: 5
+  currentMana: 0
+  maxMana: 0
+  portraitTexture: {fileID: 0}
+  characterMaterial: {fileID: 0}
+  isActive: 1
+  interactionLayer:
+    serializedVersion: 2
+    m_Bits: 4294967291
+--- !u!114 &1085751856712418880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18c1da7181b9be478564aee170cb779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.TownMovementController
+  _speed: 1.35
+  _collisionRadius: 0.45
+--- !u!114 &7108393835339038485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93b0cb990e5ec14e823c789c00ab9e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.NPCController
+  npcId: restaurant_hunter
+  dialogue: {fileID: 0}
+  dialogueLines: []
+  loopDialogue: 0
+  patrolWaypoints: []
+  waypointWaitTime: 2
+  patrolSpeed: 1.5
+--- !u!114 &219945623700259782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad03c8383aa6f14281da996d7bd90be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.ActorLocomotionView
+--- !u!114 &800000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5151358256163527516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90e4b97d40d4898aafabb33daee6634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sheet: {fileID: 2800000, guid: 46ecfc2a84104046961547fcd91d13b4, type: 3}
+  _material: {fileID: 0}
+  _pixelsPerUnit: 47.0588
+  _parts:
+  - rectangle: {x: 0, y: 0, width: 33, height: 40}
+    offset: {x: 0, y: 0}

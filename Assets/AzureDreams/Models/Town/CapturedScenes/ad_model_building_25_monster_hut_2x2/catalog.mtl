@@ -1,0 +1,60 @@
+newmtl page_10_clut_30082
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_10_clut_30082.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_10_clut_30082.png
+
+newmtl page_13_clut_30080
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_13_clut_30080.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_13_clut_30080.png
+
+newmtl page_13_clut_30082
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_13_clut_30082.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_13_clut_30082.png
+
+newmtl page_21_clut_29765
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29765.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29765.png
+
+newmtl page_21_clut_29767
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29767.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29767.png
+
+newmtl page_21_clut_29769
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29769.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29769.png
+
+newmtl page_21_clut_29774
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29774.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29774.png
+
+newmtl page_21_clut_29775
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29775.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_21_clut_29775.png
+
+newmtl page_22_clut_29775
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_22_clut_29775.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_22_clut_29775.png
+
+newmtl page_149_clut_29696
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_149_clut_29696.png
+map_d ../../../../Textures/Town/CapturedScenes/ad_model_building_25_monster_hut_2x2/textures/page_149_clut_29696.png
+

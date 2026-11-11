@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Casino 1
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_2b_casino_1
+  displayName: Casino 1
+  geometry: {fileID: 4900000, guid: 0a1b8cc11dae4c0ebd5c146d64e875e4, type: 3}
+  heights: {fileID: 4900000, guid: 0697febcd2b146c5b1ff0b2ff47e7554, type: 3}
+  materials:
+  - {fileID: 2100000, guid: d8baf7b9b1254b96813ebb3dff824d2b, type: 2}
+  - {fileID: 2100000, guid: ebbb757db2294c3da2b43f826f29b08d, type: 2}
+  - {fileID: 2100000, guid: c7171c6b067c44ebaa6ecb390e53ab40, type: 2}
+  - {fileID: 2100000, guid: d2fa9f8be2e441b084297b1492cac00a, type: 2}
+  - {fileID: 2100000, guid: d20e18101fc343128cd143cef7e4f19b, type: 2}
+  - {fileID: 2100000, guid: 138f71c9fe5442b1aea04e9e0ded8fed, type: 2}
+  - {fileID: 2100000, guid: 302584d663cf4942a85b39ee17a4329d, type: 2}
+  - {fileID: 2100000, guid: c32a5c3434a144d39547914723a8f472, type: 2}
+  - {fileID: 2100000, guid: 73acc29b3d414af3b964c644a847dbec, type: 2}
+  - {fileID: 2100000, guid: c5650f30e6d74424b03bd14501aa0d9e, type: 2}
+  - {fileID: 2100000, guid: fe2b0ccb9e4c4c4fb71e30d344671503, type: 2}
+  - {fileID: 2100000, guid: f6b3d3cb5ecd4500afd494f8488e426b, type: 2}
+  - {fileID: 2100000, guid: 7c3d993ae86e425b9662abdbc119776c, type: 2}
+  - {fileID: 2100000, guid: 98647c2b59ef40bb83dc90d48f6db3ae, type: 2}
+  - {fileID: 2100000, guid: 0c14a07d46944306b1f50f454b732eb5, type: 2}
+  - {fileID: 2100000, guid: bba3f92c56aa443c8d81a9b34f5750b0, type: 2}
+  - {fileID: 2100000, guid: 5113ad81160b4ba49744a35efe9637ce, type: 2}
+  - {fileID: 2100000, guid: 2c792a2b2ad242d597e4d80fa40f75e9, type: 2}
+  - {fileID: 2100000, guid: 8445046f750e4064884e9d5c627a0a5e, type: 2}
+  - {fileID: 2100000, guid: 90f0aad12f64491c969178d8b2acda35, type: 2}
+  - {fileID: 2100000, guid: e07de4a3f2ff46ffb67e4ab06e4e302a, type: 2}
+  - {fileID: 2100000, guid: bfaeca45294047bda6167869a5b228ff, type: 2}
+  - {fileID: 2100000, guid: 72259742ee234beb8b195ca3d2ed344b, type: 2}
+  - {fileID: 2100000, guid: e2450b8215044f89a4e6e7faebf61bfc, type: 2}
+  - {fileID: 2100000, guid: 1269005ca04649dea9abf2e4c9dae2aa, type: 2}
+  - {fileID: 2100000, guid: 7cd550f52b2e4d4f95126e98dfeadc6f, type: 2}
+  - {fileID: 2100000, guid: 33f8608b90334761aee6339b62e8d199, type: 2}
+  - {fileID: 2100000, guid: 02436507c927438fa0b96ee9003ff7c1, type: 2}
+  - {fileID: 2100000, guid: 70ef2274cade49b289c678e0438e75e8, type: 2}
+  entryPosition: {x: 16, y: 0, z: 16}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
+  - {fileID: 5151358256163527516, guid: 6f7e72650bb34971a25a19ffe2410ba1, type: 3}
+  residentCells:
+  - {x: 19, y: 10}
+  - {x: 11, y: 15}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

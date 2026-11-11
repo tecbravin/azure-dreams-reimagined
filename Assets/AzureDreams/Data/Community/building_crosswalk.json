@@ -1,0 +1,451 @@
+[
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 2,
+      "building_id": 2,
+      "building_id_hex": "0x02",
+      "name": "Koh's house LV 1",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 2,
+      "file_offset": "0x54f24",
+      "raw_hex": "1c0105080c0e0103010000000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_01_koh_house_1",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_01_koh_house_1/catalog.obj",
+        "capture_id": 1,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 3,
+      "building_id": 3,
+      "building_id_hex": "0x03",
+      "name": "Koh's house LV 2",
+      "score": 2,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 3,
+      "file_offset": "0x54f44",
+      "raw_hex": "1d0209080c0e0200010000000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_02_koh_house_2",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_02_koh_house_2/catalog.obj",
+        "capture_id": 2,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 4,
+      "building_id": 5,
+      "building_id_hex": "0x05",
+      "name": "Founain",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 5,
+      "file_offset": "0x54f84",
+      "raw_hex": "0101050412120400000000000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 5,
+      "building_id": 6,
+      "building_id_hex": "0x06",
+      "name": "Casino",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 6,
+      "file_offset": "0x54fa4",
+      "raw_hex": "11010101100e0000c71200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_06_casino_2",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_06_casino_2/catalog.obj",
+        "capture_id": 6,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      },
+      {
+        "capture": "ad_model_building_2b_casino_1",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_2b_casino_1/catalog.obj",
+        "capture_id": 43,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 6,
+      "building_id": 7,
+      "building_id_hex": "0x07",
+      "name": "Library",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 7,
+      "file_offset": "0x54fc4",
+      "raw_hex": "160101010c080000c01200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_07_library",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_07_library/catalog.obj",
+        "capture_id": 7,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 7,
+      "building_id": 8,
+      "building_id_hex": "0x08",
+      "name": "Gym",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 8,
+      "file_offset": "0x54fe4",
+      "raw_hex": "17010101100e0000c81200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_08_gym",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_08_gym/catalog.obj",
+        "capture_id": 8,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 8,
+      "building_id": 9,
+      "building_id_hex": "0x09",
+      "name": "Arcade",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 9,
+      "file_offset": "0x55004",
+      "raw_hex": "18010101100e0000c91200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_09_arcade_1",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_09_arcade_1/catalog.obj",
+        "capture_id": 9,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      },
+      {
+        "capture": "ad_model_building_2a_arcade_2",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_2a_arcade_2/catalog.obj",
+        "capture_id": 42,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 9,
+      "building_id": 10,
+      "building_id_hex": "0x0a",
+      "name": "Racetrack",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 10,
+      "file_offset": "0x55024",
+      "raw_hex": "1901050410122c00310b00000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_0a_racetrack_entrance",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_0a_racetrack_entrance/catalog.obj",
+        "capture_id": 10,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 10,
+      "building_id": 11,
+      "building_id_hex": "0x0b",
+      "name": "Theater",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 11,
+      "file_offset": "0x55044",
+      "raw_hex": "1a010101100e0000c21200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_0b_theater",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_0b_theater/catalog.obj",
+        "capture_id": 11,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 11,
+      "building_id": 12,
+      "building_id_hex": "0x0c",
+      "name": "Alley",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 12,
+      "file_offset": "0x55064",
+      "raw_hex": "1f010101100e0000ca1200000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_0c_alley",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_0c_alley/catalog.obj",
+        "capture_id": 12,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 12,
+      "building_id": 16,
+      "building_id_hex": "0x10",
+      "name": "Hospital",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 16,
+      "file_offset": "0x550e4",
+      "raw_hex": "150105040c080f00000000000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_0f_hospital",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_0f_hospital/catalog.obj",
+        "capture_id": 15,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      },
+      {
+        "capture": "ad_model_building_10_hospital_2",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_10_hospital_2/catalog.obj",
+        "capture_id": 16,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 13,
+      "building_id": 18,
+      "building_id_hex": "0x12",
+      "name": "Temple",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 18,
+      "file_offset": "0x55124",
+      "raw_hex": "1e010504100e1100000000000000000000000000000400040000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_11_temple",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_11_temple/catalog.obj",
+        "capture_id": 17,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      },
+      {
+        "capture": "ad_model_building_12_temple_2",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_12_temple_2/catalog.obj",
+        "capture_id": 18,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 14,
+      "building_id": 38,
+      "building_id_hex": "0x26",
+      "name": "Monster hut LV 1",
+      "score": 1,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 38,
+      "file_offset": "0x553a4",
+      "raw_hex": "0001051000002527010000000000000000000000000000000000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_26_monster_hut_3x3",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_26_monster_hut_3x3/catalog.obj",
+        "capture_id": 38,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 15,
+      "building_id": 39,
+      "building_id_hex": "0x27",
+      "name": "Monster hut LV 2",
+      "score": 2,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 39,
+      "file_offset": "0x553c4",
+      "raw_hex": "0002091000002628010000000000000000000000000000000000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_27_monster_hut_4x4",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_27_monster_hut_4x4/catalog.obj",
+        "capture_id": 39,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 16,
+      "building_id": 40,
+      "building_id_hex": "0x28",
+      "name": "Monster hut LV 3",
+      "score": 2,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 40,
+      "file_offset": "0x553e4",
+      "raw_hex": "0003111000002729010000000000000000000000000000000000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_28_monster_hut_6x6",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_28_monster_hut_6x6/catalog.obj",
+        "capture_id": 40,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  },
+  {
+    "community_record": {
+      "source_sheet": "Buildings score",
+      "source_row": 17,
+      "building_id": 41,
+      "building_id_hex": "0x29",
+      "name": "Monster hut LV 4",
+      "score": 3,
+      "validation": "community_reference_not_retail_verified"
+    },
+    "retail_record": {
+      "record_id": 41,
+      "file_offset": "0x55404",
+      "raw_hex": "0004211000002800010000000000000000000000000000000000000000000000",
+      "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+      "semantic_identity": "not_proven_by_numeric_id"
+    },
+    "capture_candidates": [
+      {
+        "capture": "ad_model_building_29_monster_hut_8x8",
+        "model_asset": "Assets/AzureDreams/Models/Town/CapturedScenes/ad_model_building_29_monster_hut_8x8/catalog.obj",
+        "capture_id": 41,
+        "match_basis": "supplied names; upgrade/size correspondence requires retail verification"
+      }
+    ],
+    "validation": "reference_crosswalk_only_not_runtime_binding"
+  }
+]

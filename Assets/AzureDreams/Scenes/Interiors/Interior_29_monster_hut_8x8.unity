@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Monster Hut 8X8
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_29_monster_hut_8x8
+  displayName: Monster Hut 8X8
+  geometry: {fileID: 4900000, guid: a56040d073e54d95b19debda31ae40fc, type: 3}
+  heights: {fileID: 4900000, guid: 5d4526182b744d0f882f6664ef3ae31d, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 41668e36277747d3ae2941064233d465, type: 2}
+  - {fileID: 2100000, guid: 4f9c4abbd0324ec79a82c83ebdd3bfb7, type: 2}
+  - {fileID: 2100000, guid: 19f9bb84553f4e169f5fdf0fe3f49426, type: 2}
+  - {fileID: 2100000, guid: 5cf4df6f71904488a2f3b1e3e052090c, type: 2}
+  - {fileID: 2100000, guid: d0d4f351cdcc4ace9c31c45438932aa7, type: 2}
+  - {fileID: 2100000, guid: d8d65b5d4e5d438c90298dc000dc58a3, type: 2}
+  - {fileID: 2100000, guid: 919771705d09488a826a762fa75692ec, type: 2}
+  - {fileID: 2100000, guid: 30cc42a5464549c3a3848b36a7ff803e, type: 2}
+  - {fileID: 2100000, guid: a2d57f67a9be411691e795fec9c1420a, type: 2}
+  - {fileID: 2100000, guid: 62a779f58ebb4fb3bdc59e04fe518c15, type: 2}
+  entryPosition: {x: 21, y: 0, z: 21}
+  residentPrefabs: []
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

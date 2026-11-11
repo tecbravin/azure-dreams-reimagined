@@ -1,0 +1,332 @@
+{
+  "source": "TOWN.BIN 0x603D37-0x6051C0; Monster Shop RAM capture egg category 0x80073414 + 0x12*20, records at 0x8002CA68",
+  "buy": "I must apologize, we haven’t had enough top monster hunters around, so our stock of monsters is extremely low. As soon as we do get a monster, they sell immediately. At this rate, It’ll likely be like this for years to come. Come again if you get some more.",
+  "greeting": "Koh. Have you come again to bother me? Go home, go home!",
+  "customer": "Huh? You’re here as a customer?",
+  "sellPrompt": "What kind of monster is it? Is it an egg?",
+  "thanks": "Thanks. Come again.",
+  "hunters": [
+    {
+      "lines": [
+        "Any monster can live in the\nmonster tower, as long as it’s\na monster.",
+        "You see, I even saw fish-like\nmonsters swimming through the\nair or quietly hiding along\nthe ground.",
+        "I’m not kidding ya."
+      ],
+      "ptBr": [
+        "Qualquer monstro pode viver na Torre dos Monstros.",
+        "Já vi monstros parecidos com peixes nadando no ar ou se escondendo junto ao chão.",
+        "Não estou brincando."
+      ]
+    },
+    {
+      "lines": [
+        "There’s this clever monster\ncalled a Troll, who can handle\na number of weapons\nsimultaneously.",
+        "There are three specialized\nweapons this monster’s good\nwith."
+      ],
+      "ptBr": [
+        "O Troll é um monstro esperto que sabe manejar várias armas.",
+        "Há três armas especiais que ele sabe usar."
+      ]
+    },
+    {
+      "lines": [
+        "Do you know of the Picket\nmonster?\nThat thief, he stole my lunch.",
+        "Well, I did beat him up and\nmade him throw up the food.",
+        "What’s that?  Did I eat the\nfood he threw up?  Of course!"
+      ],
+      "ptBr": [
+        "Conhece o Picket? Aquele ladrão roubou meu almoço.",
+        "Eu bati nele até ele devolver a comida.",
+        "Se eu comi depois disso? Claro!"
+      ]
+    }
+  ],
+  "eggs": [
+    {
+      "id": 1,
+      "name": "Ultimate",
+      "sell": 50000
+    },
+    {
+      "id": 2,
+      "name": "KEWNE",
+      "sell": 100
+    },
+    {
+      "id": 3,
+      "name": "DRAGON",
+      "sell": 10000
+    },
+    {
+      "id": 4,
+      "name": "KID",
+      "sell": 15000
+    },
+    {
+      "id": 5,
+      "name": "IFRIT",
+      "sell": 100
+    },
+    {
+      "id": 6,
+      "name": "FLAME",
+      "sell": 600
+    },
+    {
+      "id": 7,
+      "name": "GRINEUT",
+      "sell": 100
+    },
+    {
+      "id": 8,
+      "name": "GRIFFON",
+      "sell": 2000
+    },
+    {
+      "id": 9,
+      "name": "SABER",
+      "sell": 100
+    },
+    {
+      "id": 10,
+      "name": "SNOWMAN",
+      "sell": 6000
+    },
+    {
+      "id": 11,
+      "name": "ASHRA",
+      "sell": 100
+    },
+    {
+      "id": 12,
+      "name": "ARACHNE",
+      "sell": 2400
+    },
+    {
+      "id": 13,
+      "name": "BATTNEL",
+      "sell": 100
+    },
+    {
+      "id": 14,
+      "name": "NYUEL",
+      "sell": 1800
+    },
+    {
+      "id": 15,
+      "name": "DEATH",
+      "sell": 100
+    },
+    {
+      "id": 16,
+      "name": "CLOWN",
+      "sell": 1000
+    },
+    {
+      "id": 17,
+      "name": "UNIVERN",
+      "sell": 100
+    },
+    {
+      "id": 18,
+      "name": "UNICORN",
+      "sell": 3200
+    },
+    {
+      "id": 19,
+      "name": "METAL",
+      "sell": 100
+    },
+    {
+      "id": 20,
+      "name": "BLOCK",
+      "sell": 4000
+    },
+    {
+      "id": 21,
+      "name": "PULUNPA",
+      "sell": 400
+    },
+    {
+      "id": 22,
+      "name": "TROLL",
+      "sell": 800
+    },
+    {
+      "id": 23,
+      "name": "NOISE",
+      "sell": 600
+    },
+    {
+      "id": 24,
+      "name": "U-BOAT",
+      "sell": 1200
+    },
+    {
+      "id": 25,
+      "name": "BALOON",
+      "sell": 1000
+    },
+    {
+      "id": 26,
+      "name": "DREAMIN",
+      "sell": 1300
+    },
+    {
+      "id": 27,
+      "name": "BLUME",
+      "sell": 800
+    },
+    {
+      "id": 28,
+      "name": "VOLCANO",
+      "sell": 1600
+    },
+    {
+      "id": 29,
+      "name": "CYCLONE",
+      "sell": 800
+    },
+    {
+      "id": 30,
+      "name": "MANOEVA",
+      "sell": 800
+    },
+    {
+      "id": 31,
+      "name": "BARONG",
+      "sell": 8000
+    },
+    {
+      "id": 32,
+      "name": "PICKET",
+      "sell": 2400
+    },
+    {
+      "id": 33,
+      "name": "KRAKEN",
+      "sell": 2200
+    },
+    {
+      "id": 34,
+      "name": "WEADOG",
+      "sell": 3000
+    },
+    {
+      "id": 35,
+      "name": "STEALTH",
+      "sell": 3600
+    },
+    {
+      "id": 36,
+      "name": "VIPER",
+      "sell": 4500
+    },
+    {
+      "id": 37,
+      "name": "NAPLASS",
+      "sell": 7600
+    },
+    {
+      "id": 38,
+      "name": "ZU",
+      "sell": 5000
+    },
+    {
+      "id": 39,
+      "name": "MANDARA",
+      "sell": 5000
+    },
+    {
+      "id": 40,
+      "name": "KILLER",
+      "sell": 8000
+    },
+    {
+      "id": 41,
+      "name": "GARUDA",
+      "sell": 2400
+    },
+    {
+      "id": 42,
+      "name": "GLACIER",
+      "sell": 12000
+    },
+    {
+      "id": 43,
+      "name": "TYRANT",
+      "sell": 10000
+    },
+    {
+      "id": 44,
+      "name": "GOLEM",
+      "sell": 23000
+    },
+    {
+      "id": 45,
+      "name": "MAXIMUM",
+      "sell": 35000
+    },
+    {
+      "id": 46,
+      "name": "FROG",
+      "sell": 100
+    },
+    {
+      "id": 47,
+      "name": "Salaman",
+      "sell": 100
+    },
+    {
+      "id": 48,
+      "name": "Guy",
+      "sell": 100
+    },
+    {
+      "id": 49,
+      "name": "Ghosh",
+      "sell": 100
+    },
+    {
+      "id": 50,
+      "name": "Selfi",
+      "sell": 100
+    },
+    {
+      "id": 51,
+      "name": "fire wall",
+      "sell": 100
+    },
+    {
+      "id": 52,
+      "name": "ice wall",
+      "sell": 100
+    },
+    {
+      "id": 53,
+      "name": "storm wall",
+      "sell": 100
+    },
+    {
+      "id": 54,
+      "name": "rock",
+      "sell": 100
+    },
+    {
+      "id": 55,
+      "name": "Beldo",
+      "sell": 100
+    },
+    {
+      "id": 56,
+      "name": "Beldo",
+      "sell": 100
+    }
+  ],
+  "sourceLanguage": "en",
+  "translationLanguage": "pt-BR",
+  "greetingPtBr": "Koh. Veio me incomodar de novo? Vá para casa!",
+  "customerPtBr": "Hã? Você veio como cliente?",
+  "sellPromptPtBr": "Que tipo de monstro é? É um ovo?",
+  "thanksPtBr": "Obrigado. Volte sempre."
+}

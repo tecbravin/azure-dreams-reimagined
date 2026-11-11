@@ -1,0 +1,944 @@
+{
+  "source": "Azure Dreams Items List, Incossee v1.1 (local GameFAQs archive)",
+  "items": [
+    {
+      "key": "wand.wooden",
+      "name": "Wooden",
+      "category": "wand",
+      "resale_gp": 10,
+      "attack": 1
+    },
+    {
+      "key": "wand.paralyze",
+      "name": "Paralyze",
+      "category": "wand",
+      "resale_gp": 100,
+      "attack": 1
+    },
+    {
+      "key": "wand.gulf",
+      "name": "Gulf",
+      "category": "wand",
+      "resale_gp": 150,
+      "attack": 1
+    },
+    {
+      "key": "wand.scarlet",
+      "name": "Scarlet",
+      "category": "wand",
+      "resale_gp": 150,
+      "attack": 1
+    },
+    {
+      "key": "wand.stream",
+      "name": "Stream",
+      "category": "wand",
+      "resale_gp": 150,
+      "attack": 1
+    },
+    {
+      "key": "wand.seal",
+      "name": "Seal",
+      "category": "wand",
+      "resale_gp": 500,
+      "attack": 1
+    },
+    {
+      "key": "wand.life",
+      "name": "Life",
+      "category": "wand",
+      "resale_gp": 1000,
+      "attack": 1,
+      "rarity": "rare"
+    },
+    {
+      "key": "wand.money",
+      "name": "Money",
+      "category": "wand",
+      "resale_gp": 1000,
+      "attack": 1,
+      "rarity": "rare"
+    },
+    {
+      "key": "wand.trained",
+      "name": "Trained",
+      "category": "wand",
+      "resale_gp": 5000,
+      "attack": 1,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "sword.gold",
+      "name": "Gold",
+      "category": "sword",
+      "resale_gp": 1000,
+      "attack": 1
+    },
+    {
+      "key": "sword.copper",
+      "name": "Copper",
+      "category": "sword",
+      "resale_gp": 50,
+      "attack": 2
+    },
+    {
+      "key": "sword.iron",
+      "name": "Iron",
+      "category": "sword",
+      "resale_gp": 100,
+      "attack": 3
+    },
+    {
+      "key": "sword.steel",
+      "name": "Steel",
+      "category": "sword",
+      "resale_gp": 150,
+      "attack": 4
+    },
+    {
+      "key": "sword.blizzard",
+      "name": "Blizzard",
+      "category": "sword",
+      "resale_gp": 400,
+      "attack": 5
+    },
+    {
+      "key": "sword.fire",
+      "name": "Fire",
+      "category": "sword",
+      "resale_gp": 400,
+      "attack": 5
+    },
+    {
+      "key": "sword.gulfwind",
+      "name": "Gulfwind",
+      "category": "sword",
+      "resale_gp": 400,
+      "attack": 5
+    },
+    {
+      "key": "sword.vital",
+      "name": "Vital",
+      "category": "sword",
+      "resale_gp": 800,
+      "attack": 5,
+      "rarity": "rare"
+    },
+    {
+      "key": "sword.holy",
+      "name": "Holy",
+      "category": "sword",
+      "resale_gp": 10000,
+      "attack": 7,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "sword.seraphim",
+      "name": "Seraphim",
+      "category": "sword",
+      "resale_gp": 1000,
+      "attack": 8,
+      "unique": true
+    },
+    {
+      "key": "sword.dark",
+      "name": "Dark",
+      "category": "sword",
+      "resale_gp": 10000,
+      "attack": 10,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "troll_weapon.hammer",
+      "name": "Hammer",
+      "category": "troll_weapon",
+      "resale_gp": 1000
+    },
+    {
+      "key": "troll_weapon.sword",
+      "name": "Sword",
+      "category": "troll_weapon",
+      "resale_gp": 1000
+    },
+    {
+      "key": "troll_weapon.bow_gun",
+      "name": "Bow Gun",
+      "category": "troll_weapon",
+      "resale_gp": 4000,
+      "rarity": "rare"
+    },
+    {
+      "key": "shield.leather",
+      "name": "Leather",
+      "category": "shield",
+      "resale_gp": 30,
+      "defense": 1
+    },
+    {
+      "key": "shield.wood",
+      "name": "Wood",
+      "category": "shield",
+      "resale_gp": 50,
+      "defense": 2
+    },
+    {
+      "key": "shield.mirror",
+      "name": "Mirror",
+      "category": "shield",
+      "resale_gp": 1000,
+      "defense": 3,
+      "rarity": "rare"
+    },
+    {
+      "key": "shield.copper",
+      "name": "Copper",
+      "category": "shield",
+      "resale_gp": 100,
+      "defense": 4
+    },
+    {
+      "key": "shield.iron",
+      "name": "Iron",
+      "category": "shield",
+      "resale_gp": 150,
+      "defense": 5
+    },
+    {
+      "key": "shield.earth",
+      "name": "Earth",
+      "category": "shield",
+      "resale_gp": 600,
+      "defense": 5
+    },
+    {
+      "key": "shield.ice",
+      "name": "Ice",
+      "category": "shield",
+      "resale_gp": 600,
+      "defense": 5
+    },
+    {
+      "key": "shield.scorch",
+      "name": "Scorch",
+      "category": "shield",
+      "resale_gp": 600,
+      "defense": 5
+    },
+    {
+      "key": "shield.live",
+      "name": "Live",
+      "category": "shield",
+      "resale_gp": 600,
+      "defense": 5,
+      "rarity": "rare"
+    },
+    {
+      "key": "shield.steel",
+      "name": "Steel",
+      "category": "shield",
+      "resale_gp": 300,
+      "defense": 6
+    },
+    {
+      "key": "shield.diamond",
+      "name": "Diamond",
+      "category": "shield",
+      "resale_gp": 1500,
+      "defense": 7,
+      "rarity": "rare"
+    },
+    {
+      "key": "crystal.fire",
+      "name": "Fire",
+      "category": "crystal",
+      "resale_gp": 400
+    },
+    {
+      "key": "crystal.water",
+      "name": "Water",
+      "category": "crystal",
+      "resale_gp": 400
+    },
+    {
+      "key": "crystal.wind",
+      "name": "Wind",
+      "category": "crystal",
+      "resale_gp": 200
+    },
+    {
+      "key": "fruit.big_pita",
+      "name": "Big Pita",
+      "category": "fruit",
+      "resale_gp": 10,
+      "rarity": "rare"
+    },
+    {
+      "key": "fruit.geropita",
+      "name": "Geropita",
+      "category": "fruit",
+      "resale_gp": 100,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "fruit.laev",
+      "name": "Laev",
+      "category": "fruit",
+      "resale_gp": 20
+    },
+    {
+      "key": "fruit.leva",
+      "name": "Leva",
+      "category": "fruit",
+      "resale_gp": 20
+    },
+    {
+      "key": "fruit.leolam",
+      "name": "Leolam",
+      "category": "fruit",
+      "resale_gp": 100,
+      "rarity": "rare"
+    },
+    {
+      "key": "fruit.limit",
+      "name": "Limit",
+      "category": "fruit",
+      "resale_gp": 100
+    },
+    {
+      "key": "fruit.pita",
+      "name": "Pita",
+      "category": "fruit",
+      "resale_gp": 5
+    },
+    {
+      "key": "fruit.roche",
+      "name": "Roche",
+      "category": "fruit",
+      "resale_gp": 5000,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "fruit.tumna",
+      "name": "Tumna",
+      "category": "fruit",
+      "resale_gp": 20
+    },
+    {
+      "key": "fruit.oleem",
+      "name": "Oleem",
+      "category": "fruit",
+      "resale_gp": 100
+    },
+    {
+      "key": "herb.antichaos",
+      "name": "Antichaos",
+      "category": "herb",
+      "resale_gp": 20
+    },
+    {
+      "key": "herb.antidote",
+      "name": "Antidote",
+      "category": "herb",
+      "resale_gp": 15
+    },
+    {
+      "key": "herb.cure_all",
+      "name": "Cure-all",
+      "category": "herb",
+      "resale_gp": 200,
+      "rarity": "rare"
+    },
+    {
+      "key": "herb.harash",
+      "name": "Harash",
+      "category": "herb",
+      "resale_gp": 10,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "herb.hazak",
+      "name": "Hazak",
+      "category": "herb",
+      "resale_gp": 80
+    },
+    {
+      "key": "herb.healing",
+      "name": "Healing",
+      "category": "herb",
+      "resale_gp": null,
+      "unique": true
+    },
+    {
+      "key": "herb.medicinal",
+      "name": "Medicinal",
+      "category": "herb",
+      "resale_gp": 7
+    },
+    {
+      "key": "herb.paralyze",
+      "name": "Paralyze",
+      "category": "herb",
+      "resale_gp": 10,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "herb.roeam",
+      "name": "Roeam",
+      "category": "herb",
+      "resale_gp": 20
+    },
+    {
+      "key": "herb.poison",
+      "name": "Poison",
+      "category": "herb",
+      "resale_gp": 5,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "herb.shomuro",
+      "name": "Shomuro",
+      "category": "herb",
+      "resale_gp": 80,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "herb.wake_up",
+      "name": "Wake-up",
+      "category": "herb",
+      "resale_gp": 20
+    },
+    {
+      "key": "seed.hazak",
+      "name": "Hazak",
+      "category": "seed",
+      "resale_gp": 500,
+      "rarity": "rare"
+    },
+    {
+      "key": "seed.lar",
+      "name": "Lar",
+      "category": "seed",
+      "resale_gp": 50,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "seed.light",
+      "name": "Light",
+      "category": "seed",
+      "resale_gp": 150
+    },
+    {
+      "key": "seed.mahell",
+      "name": "Mahell",
+      "category": "seed",
+      "resale_gp": 50
+    },
+    {
+      "key": "seed.mazarr",
+      "name": "Mazarr",
+      "category": "seed",
+      "resale_gp": 200
+    },
+    {
+      "key": "seed.sea",
+      "name": "Sea",
+      "category": "seed",
+      "resale_gp": 150
+    },
+    {
+      "key": "seed.shomuro",
+      "name": "Shomuro",
+      "category": "seed",
+      "resale_gp": 500,
+      "rarity": "rare"
+    },
+    {
+      "key": "seed.slow",
+      "name": "Slow",
+      "category": "seed",
+      "resale_gp": 50,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "seed.tovar",
+      "name": "Tovar",
+      "category": "seed",
+      "resale_gp": 1000,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "seed.wind",
+      "name": "Wind",
+      "category": "seed",
+      "resale_gp": 150
+    },
+    {
+      "key": "scroll.alchemic",
+      "name": "Alchemic",
+      "category": "scroll",
+      "resale_gp": 80,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "scroll.de_curse",
+      "name": "De-curse",
+      "category": "scroll",
+      "resale_gp": 100
+    },
+    {
+      "key": "scroll.flat",
+      "name": "Flat",
+      "category": "scroll",
+      "resale_gp": 100,
+      "rarity": "exceptionally_rare"
+    },
+    {
+      "key": "scroll.holy",
+      "name": "Holy",
+      "category": "scroll",
+      "resale_gp": 150
+    },
+    {
+      "key": "scroll.malicious",
+      "name": "Malicious",
+      "category": "scroll",
+      "resale_gp": 150
+    },
+    {
+      "key": "scroll.restore",
+      "name": "Restore",
+      "category": "scroll",
+      "resale_gp": 400,
+      "rarity": "rare"
+    },
+    {
+      "key": "scroll.trap",
+      "name": "Trap",
+      "category": "scroll",
+      "resale_gp": 400
+    },
+    {
+      "key": "bell.familiar",
+      "name": "Familiar",
+      "category": "bell",
+      "resale_gp": 400
+    },
+    {
+      "key": "bell.holy",
+      "name": "Holy",
+      "category": "bell",
+      "resale_gp": 100
+    },
+    {
+      "key": "bell.malicious",
+      "name": "Malicious",
+      "category": "bell",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.acid_rain",
+      "name": "Acid Rain",
+      "category": "ball",
+      "resale_gp": 800,
+      "rarity": "rare"
+    },
+    {
+      "key": "ball.binding",
+      "name": "Binding",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "ball.blaze",
+      "name": "Blaze",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "ball.blinder",
+      "name": "Blinder",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "ball.fire",
+      "name": "Fire",
+      "category": "ball",
+      "resale_gp": 300
+    },
+    {
+      "key": "ball.flame",
+      "name": "Flame",
+      "category": "ball",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.ice_rock",
+      "name": "Ice Rock",
+      "category": "ball",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.pillar",
+      "name": "Pillar",
+      "category": "ball",
+      "resale_gp": 1000
+    },
+    {
+      "key": "ball.poison",
+      "name": "Poison",
+      "category": "ball",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.recovery",
+      "name": "Recovery",
+      "category": "ball",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.repel",
+      "name": "Repel",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "ball.sleep",
+      "name": "Sleep",
+      "category": "ball",
+      "resale_gp": 800
+    },
+    {
+      "key": "ball.water",
+      "name": "Water",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "ball.weak",
+      "name": "Weak",
+      "category": "ball",
+      "resale_gp": 500
+    },
+    {
+      "key": "loupe.exit",
+      "name": "Exit",
+      "category": "loupe",
+      "resale_gp": 50
+    },
+    {
+      "key": "loupe.monster",
+      "name": "Monster",
+      "category": "loupe",
+      "resale_gp": 50
+    },
+    {
+      "key": "loupe.trap",
+      "name": "Trap",
+      "category": "loupe",
+      "resale_gp": 100
+    },
+    {
+      "key": "loupe.treasure",
+      "name": "Treasure",
+      "category": "loupe",
+      "resale_gp": 50
+    },
+    {
+      "key": "glasses.star",
+      "name": "Star",
+      "category": "glasses",
+      "resale_gp": 50
+    },
+    {
+      "key": "glasses.truth",
+      "name": "Truth",
+      "category": "glasses",
+      "resale_gp": 100
+    },
+    {
+      "key": "sand.blue",
+      "name": "Blue",
+      "category": "sand",
+      "resale_gp": 100
+    },
+    {
+      "key": "sand.red",
+      "name": "Red",
+      "category": "sand",
+      "resale_gp": 100
+    },
+    {
+      "key": "sand.white",
+      "name": "White",
+      "category": "sand",
+      "resale_gp": 100
+    },
+    {
+      "key": "money.copper",
+      "name": "Copper",
+      "category": "money",
+      "coin_gp_min": 16,
+      "coin_gp_max": 24
+    },
+    {
+      "key": "money.silver",
+      "name": "Silver",
+      "category": "money",
+      "coin_gp_min": 80,
+      "coin_gp_max": 120
+    },
+    {
+      "key": "money.gold",
+      "name": "Gold",
+      "category": "money",
+      "coin_gp_min": 160,
+      "coin_gp_max": 240
+    },
+    {
+      "key": "miscellaneous.b_cape",
+      "name": "B. Cape",
+      "category": "miscellaneous",
+      "resale_gp": null,
+      "unique": true
+    },
+    {
+      "key": "miscellaneous.b_collar",
+      "name": "B. Collar",
+      "category": "miscellaneous",
+      "resale_gp": null,
+      "unique": true
+    },
+    {
+      "key": "miscellaneous.meat",
+      "name": "Meat",
+      "category": "miscellaneous",
+      "resale_gp": null
+    },
+    {
+      "key": "miscellaneous.oil_pot",
+      "name": "Oil Pot",
+      "category": "miscellaneous",
+      "resale_gp": null,
+      "unique": true
+    },
+    {
+      "key": "miscellaneous.w_medal",
+      "name": "W. Medal",
+      "category": "miscellaneous",
+      "resale_gp": 1000,
+      "unique": true
+    },
+    {
+      "key": "egg.arachne",
+      "name": "Arachne",
+      "category": "egg",
+      "resale_gp": 2400
+    },
+    {
+      "key": "egg.griffon",
+      "name": "Griffon",
+      "category": "egg",
+      "resale_gp": 2000
+    },
+    {
+      "key": "egg.snowman",
+      "name": "Snowman",
+      "category": "egg",
+      "resale_gp": 6000
+    },
+    {
+      "key": "egg.balloon",
+      "name": "Balloon",
+      "category": "egg",
+      "resale_gp": 1000
+    },
+    {
+      "key": "egg.kid",
+      "name": "Kid",
+      "category": "egg",
+      "resale_gp": 15000
+    },
+    {
+      "key": "egg.stealth",
+      "name": "Stealth",
+      "category": "egg",
+      "resale_gp": 3600
+    },
+    {
+      "key": "egg.barong",
+      "name": "Barong",
+      "category": "egg",
+      "resale_gp": 8000
+    },
+    {
+      "key": "egg.killer",
+      "name": "Killer",
+      "category": "egg",
+      "resale_gp": 8000
+    },
+    {
+      "key": "egg.troll",
+      "name": "Troll",
+      "category": "egg",
+      "resale_gp": 800
+    },
+    {
+      "key": "egg.block",
+      "name": "Block",
+      "category": "egg",
+      "resale_gp": 4000
+    },
+    {
+      "key": "egg.kraken",
+      "name": "Kraken",
+      "category": "egg",
+      "resale_gp": 2200
+    },
+    {
+      "key": "egg.tyrant",
+      "name": "Tyrant",
+      "category": "egg",
+      "resale_gp": 10000
+    },
+    {
+      "key": "egg.blume",
+      "name": "Blume",
+      "category": "egg",
+      "resale_gp": 800
+    },
+    {
+      "key": "egg.mandara",
+      "name": "Mandara",
+      "category": "egg",
+      "resale_gp": 5000
+    },
+    {
+      "key": "egg.u_boat",
+      "name": "U-Boat",
+      "category": "egg",
+      "resale_gp": 1200
+    },
+    {
+      "key": "egg.clown",
+      "name": "Clown",
+      "category": "egg",
+      "resale_gp": 1000
+    },
+    {
+      "key": "egg.manoeva",
+      "name": "Manoeva",
+      "category": "egg",
+      "resale_gp": 800
+    },
+    {
+      "key": "egg.ultimate",
+      "name": "Ultimate",
+      "category": "egg",
+      "resale_gp": 50000,
+      "unique": true
+    },
+    {
+      "key": "egg.cyclone",
+      "name": "Cyclone",
+      "category": "egg",
+      "resale_gp": 800
+    },
+    {
+      "key": "egg.maximum",
+      "name": "Maximum",
+      "category": "egg",
+      "resale_gp": 35000
+    },
+    {
+      "key": "egg.unicorn",
+      "name": "Unicorn",
+      "category": "egg",
+      "resale_gp": 3200
+    },
+    {
+      "key": "egg.dreamin",
+      "name": "Dreamin",
+      "category": "egg",
+      "resale_gp": 1300
+    },
+    {
+      "key": "egg.naplass",
+      "name": "Naplass",
+      "category": "egg",
+      "resale_gp": 7600
+    },
+    {
+      "key": "egg.viper",
+      "name": "Viper",
+      "category": "egg",
+      "resale_gp": 4500
+    },
+    {
+      "key": "egg.flame",
+      "name": "Flame",
+      "category": "egg",
+      "resale_gp": 600
+    },
+    {
+      "key": "egg.noise",
+      "name": "Noise",
+      "category": "egg",
+      "resale_gp": 600
+    },
+    {
+      "key": "egg.volcano",
+      "name": "Volcano",
+      "category": "egg",
+      "resale_gp": 1600
+    },
+    {
+      "key": "egg.garuda",
+      "name": "Garuda",
+      "category": "egg",
+      "resale_gp": 2400
+    },
+    {
+      "key": "egg.nyuel",
+      "name": "Nyuel",
+      "category": "egg",
+      "resale_gp": 1800
+    },
+    {
+      "key": "egg.weadog",
+      "name": "Weadog",
+      "category": "egg",
+      "resale_gp": 3000
+    },
+    {
+      "key": "egg.glacier",
+      "name": "Glacier",
+      "category": "egg",
+      "resale_gp": 12000
+    },
+    {
+      "key": "egg.picket",
+      "name": "Picket",
+      "category": "egg",
+      "resale_gp": 2400
+    },
+    {
+      "key": "egg.zu",
+      "name": "Zu",
+      "category": "egg",
+      "resale_gp": 5000
+    },
+    {
+      "key": "egg.golem",
+      "name": "Golem",
+      "category": "egg",
+      "resale_gp": 23000
+    },
+    {
+      "key": "egg.pulunpa",
+      "name": "Pulunpa",
+      "category": "egg",
+      "resale_gp": 400
+    }
+  ]
+}

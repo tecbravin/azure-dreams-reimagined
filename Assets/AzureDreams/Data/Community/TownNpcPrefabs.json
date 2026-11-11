@@ -1,0 +1,92 @@
+[
+  {
+    "character": "Nico",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Nico.prefab",
+    "status": "sheet_textured_low_poly_model",
+    "sheet": "Nico, Weedy & Jorda"
+  },
+  {
+    "character": "Weedy",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Weedy.prefab",
+    "status": "sheet_textured_low_poly_model",
+    "sheet": "Nico, Weedy & Jorda"
+  },
+  {
+    "character": "Jorda",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Jorda.prefab",
+    "status": "sheet_textured_low_poly_model",
+    "sheet": "Nico, Weedy & Jorda"
+  },
+  {
+    "character": "Wreath",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Wreath.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Guy, Wreath & Young Koh"
+  },
+  {
+    "character": "YoungKoh",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_YoungKoh.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Guy, Wreath & Young Koh"
+  },
+  {
+    "character": "Guy",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Guy.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Guy, Wreath & Young Koh"
+  },
+  {
+    "character": "Cherrl",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Cherrl.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Cherrl & Chappie"
+  },
+  {
+    "character": "Chappi",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Chappi.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Cherrl & Chappie"
+  },
+  {
+    "character": "Ghosh",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Ghosh.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Selfi & Ghosh"
+  },
+  {
+    "character": "Selfi",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Selfi.prefab",
+    "status": "provisional_part_assembly_requires_visual_validation",
+    "sheet": "Selfi & Ghosh"
+  },
+  {
+    "character": "Master",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Master.prefab",
+    "status": "static_video_sprite",
+    "source": "community/town.mp4 @ 402s"
+  },
+  {
+    "character": "Barry",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Barry.prefab",
+    "status": "static_video_sprite",
+    "source": "community/town.mp4 @ 530s"
+  },
+  {
+    "character": "Hush",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Hush.prefab",
+    "status": "static_video_sprite",
+    "source": "community/town.mp4 @ 618s"
+  },
+  {
+    "character": "Shiela",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Shiela.prefab",
+    "status": "static_video_sprite",
+    "source": "community/town.mp4 @ 490s"
+  },
+  {
+    "character": "Fur",
+    "prefab": "Assets/AzureDreams/Prefabs/NPCs/NPC_Fur.prefab",
+    "status": "static_video_sprite",
+    "source": "community/town.mp4 @ 578s"
+  }
+]

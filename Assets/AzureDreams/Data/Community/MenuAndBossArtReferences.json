@@ -1,0 +1,46 @@
+{
+  "kohFaces": [
+    "frog",
+    "normal",
+    "ill",
+    "heavy",
+    "dizzy",
+    "frozen",
+    "reduced",
+    "sleeping",
+    "angry",
+    "bonus"
+  ],
+  "unmappedRuntimeStatuses": [
+    "heavy",
+    "frozen",
+    "reduced"
+  ],
+  "monsterPortraitColumns": [
+    {
+      "column": 0,
+      "element": "fire",
+      "coreValue": 1
+    },
+    {
+      "column": 1,
+      "element": "water",
+      "coreValue": 2
+    },
+    {
+      "column": 2,
+      "element": "wind",
+      "userLabel": "raio",
+      "coreValue": 4
+    }
+  ],
+  "restaurantSheet": "PlayStation - Azure Dreams - Miscellaneous - Restaurant Dishes.png",
+  "restaurantNote": "User-identified dishes. Names, prices and effects still require source verification.",
+  "beldo": {
+    "sheet": "PlayStation - Azure Dreams - Monsters - Beldo.png",
+    "floor": 40,
+    "role": "scripted_boss",
+    "randomSpawn": false,
+    "speciesId": 55
+  }
+}

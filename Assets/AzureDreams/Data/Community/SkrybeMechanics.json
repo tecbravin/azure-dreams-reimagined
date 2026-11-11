@@ -1,0 +1,1679 @@
+{
+  "source": "Azure Dreams - Game Mechanics Guide - PlayStation - By Skrybezero - GameFAQs.mhtml",
+  "sha256": "f598258e9d1fa74ee9c00d6e26ed27c5f91dc53d87a01937d688546efecb347e",
+  "author": "Skrybe",
+  "version": "1.0",
+  "runtime_policy": {
+    "random_monster_excluded_floors": [
+      2,
+      40
+    ],
+    "reference_only": true
+  },
+  "monster_encounters": [
+    {
+      "floor": 1,
+      "entries": [
+        {
+          "name": "Pulunpa",
+          "reported_percent": 50,
+          "fixed_count": null
+        },
+        {
+          "name": "Noise",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Hammer)",
+          "reported_percent": 25,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 2,
+      "entries": [
+        {
+          "name": "Noise",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Hammer)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Pulunpa",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Flame",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 3,
+      "entries": [
+        {
+          "name": "Troll (Hammer)",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Cyclone",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Pulunpa",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Flame",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 4,
+      "entries": [
+        {
+          "name": "Troll (Hammer)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Cyclone",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Flame",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Balloon",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 99
+    },
+    {
+      "floor": 5,
+      "entries": [
+        {
+          "name": "Flame",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Cyclone",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Balloon",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv5)",
+          "reported_percent": 25,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 6,
+      "entries": [
+        {
+          "name": "Balloon",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv5)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Blume",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Cyclone",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 7,
+      "entries": [
+        {
+          "name": "Blume",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv5)",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "U-Boat",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Balloon",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 8,
+      "entries": [
+        {
+          "name": "Blume",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "U-Boat",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Clown",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv5)",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 9,
+      "entries": [
+        {
+          "name": "Clown",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "U-Boat",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Blume",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Dreamin",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 10,
+      "entries": [
+        {
+          "name": "Troll (Bow)",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Clown",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Volcano",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Dreamin",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 11,
+      "entries": [
+        {
+          "name": "Troll (Bow)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Dreamin",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Volcano",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Griffon",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 12,
+      "entries": [
+        {
+          "name": "Dreamin",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Volcano",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Griffon",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Kraken",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 13,
+      "entries": [
+        {
+          "name": "Griffon",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Kraken",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Volcano",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Nyuel",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 14,
+      "entries": [
+        {
+          "name": "Nyuel",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Sword)",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Kraken",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Garuda",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 15,
+      "entries": [
+        {
+          "name": "Garuda",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Nyuel",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Sword)",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Kraken",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 16,
+      "entries": [
+        {
+          "name": "Troll (Sword)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv15)",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Garuda",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Barong",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 87
+    },
+    {
+      "floor": 17,
+      "entries": [
+        {
+          "name": "Troll (Hammer)",
+          "reported_percent": 13,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Bow)",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Troll (Sword)",
+          "reported_percent": 13,
+          "fixed_count": null
+        },
+        {
+          "name": "Picket",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv15)",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Garuda",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 18,
+      "entries": [
+        {
+          "name": "Picket",
+          "reported_percent": 44,
+          "fixed_count": null
+        },
+        {
+          "name": "Arachne",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv15)",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 19,
+      "entries": [
+        {
+          "name": "Arachne",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Weadog",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Picket",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv15)",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 20,
+      "entries": [
+        {
+          "name": "Weadog",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Unicorn",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Arachne",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Viper",
+          "reported_percent": 25,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 21,
+      "entries": [
+        {
+          "name": "Unicorn",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Viper",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Weadog",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Pulunpa",
+          "reported_percent": 13,
+          "fixed_count": null
+        },
+        {
+          "name": "Dark Pulunpa",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 22,
+      "entries": [
+        {
+          "name": "Pulunpa",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Viper",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Unicorn",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Block",
+          "reported_percent": 13,
+          "fixed_count": null
+        },
+        {
+          "name": "Dark Pulunpa",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 23,
+      "entries": [
+        {
+          "name": "Viper",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Unicorn",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Block",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Stealth",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 24,
+      "entries": [
+        {
+          "name": "Block",
+          "reported_percent": 44,
+          "fixed_count": null
+        },
+        {
+          "name": "Viper",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Zu",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Stealth",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 107
+    },
+    {
+      "floor": 25,
+      "entries": [
+        {
+          "name": "Stealth",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Zu",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Block",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Picket",
+          "reported_percent": null,
+          "fixed_count": 1
+        }
+      ],
+      "reported_total": 95
+    },
+    {
+      "floor": 26,
+      "entries": [
+        {
+          "name": "Zu",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Snowman",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Mandara",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Barong",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 27,
+      "entries": [
+        {
+          "name": "Snowman",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Mandara",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv25)",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Zu",
+          "reported_percent": 25,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 106
+    },
+    {
+      "floor": 28,
+      "entries": [
+        {
+          "name": "Manoeva (Lv25)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Mandara",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Snowman",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Naplass",
+          "reported_percent": 19,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 29,
+      "entries": [
+        {
+          "name": "Manoeva (Lv25)",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Naplass",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Snowman",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Killer",
+          "reported_percent": 9,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 102
+    },
+    {
+      "floor": 30,
+      "entries": [
+        {
+          "name": "Killer",
+          "reported_percent": 44,
+          "fixed_count": null
+        },
+        {
+          "name": "Tyrant",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Naplass",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Manoeva (Lv25)",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 31,
+      "entries": [
+        {
+          "name": "Tyrant",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Killer",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Naplass",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 106
+    },
+    {
+      "floor": 32,
+      "entries": [
+        {
+          "name": "Dragon",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Tyrant",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Killer",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 25,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 33,
+      "entries": [
+        {
+          "name": "Glacier",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Tyrant",
+          "reported_percent": 19,
+          "fixed_count": null
+        },
+        {
+          "name": "Golem",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 34,
+      "entries": [
+        {
+          "name": "Golem",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Tyrant",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 35,
+      "entries": [
+        {
+          "name": "Golem",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Maximum",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 100
+    },
+    {
+      "floor": 36,
+      "entries": [
+        {
+          "name": "Golem",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Maximum",
+          "reported_percent": 31,
+          "fixed_count": null
+        },
+        {
+          "name": "Barong",
+          "reported_percent": 6,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 99
+    },
+    {
+      "floor": 37,
+      "entries": [
+        {
+          "name": "Maximum",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Golem",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 38,
+      "entries": [
+        {
+          "name": "Maximum",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Golem",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    },
+    {
+      "floor": 39,
+      "entries": [
+        {
+          "name": "Maximum",
+          "reported_percent": 38,
+          "fixed_count": null
+        },
+        {
+          "name": "Golem",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Glacier",
+          "reported_percent": 25,
+          "fixed_count": null
+        },
+        {
+          "name": "Dragon",
+          "reported_percent": 13,
+          "fixed_count": null
+        }
+      ],
+      "reported_total": 101
+    }
+  ],
+  "egg_rates": [
+    {
+      "species": "Arachne",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 9
+    },
+    {
+      "species": "Arachne",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 16
+    },
+    {
+      "species": "Balloon",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 12
+    },
+    {
+      "species": "Balloon",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 16
+    },
+    {
+      "species": "Barong",
+      "first_floor": 16,
+      "last_floor": 25,
+      "reported_percent": 3
+    },
+    {
+      "species": "Block",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 9
+    },
+    {
+      "species": "Block",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 16
+    },
+    {
+      "species": "Blume",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 9
+    },
+    {
+      "species": "Blume",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 19
+    },
+    {
+      "species": "Clown",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 9
+    },
+    {
+      "species": "Clown",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 16
+    },
+    {
+      "species": "Cyclone",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 9
+    },
+    {
+      "species": "Cyclone",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 16
+    },
+    {
+      "species": "Dreamin",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 9
+    },
+    {
+      "species": "Dreamin",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 16
+    },
+    {
+      "species": "Flame",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 16
+    },
+    {
+      "species": "Garuda",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 9
+    },
+    {
+      "species": "Garuda",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 16
+    },
+    {
+      "species": "Glacier",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 9
+    },
+    {
+      "species": "Glacier",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 19
+    },
+    {
+      "species": "Golem",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 16
+    },
+    {
+      "species": "Griffon",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 9
+    },
+    {
+      "species": "Griffon",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 16
+    },
+    {
+      "species": "Kid",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 9
+    },
+    {
+      "species": "Kid",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 16
+    },
+    {
+      "species": "Killer",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 9
+    },
+    {
+      "species": "Killer",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 22
+    },
+    {
+      "species": "Kraken",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 9
+    },
+    {
+      "species": "Kraken",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 16
+    },
+    {
+      "species": "Mandara",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 9
+    },
+    {
+      "species": "Mandara",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 16
+    },
+    {
+      "species": "Manoeva",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 6
+    },
+    {
+      "species": "Manoeva",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 13
+    },
+    {
+      "species": "Manoeva",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 6
+    },
+    {
+      "species": "Maximum",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 9
+    },
+    {
+      "species": "Naplass",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 9
+    },
+    {
+      "species": "Naplass",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 16
+    },
+    {
+      "species": "Noise",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 19
+    },
+    {
+      "species": "Nyuel",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 9
+    },
+    {
+      "species": "Nyuel",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 16
+    },
+    {
+      "species": "Picket",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 9
+    },
+    {
+      "species": "Picket",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 16
+    },
+    {
+      "species": "Pulunpa",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 16
+    },
+    {
+      "species": "Snowman",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 9
+    },
+    {
+      "species": "Snowman",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 16
+    },
+    {
+      "species": "Stealth",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 9
+    },
+    {
+      "species": "Stealth",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 16
+    },
+    {
+      "species": "Troll",
+      "first_floor": 1,
+      "last_floor": 5,
+      "reported_percent": 13
+    },
+    {
+      "species": "Troll",
+      "first_floor": 16,
+      "last_floor": 25,
+      "reported_percent": 6
+    },
+    {
+      "species": "Tyrant",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 9
+    },
+    {
+      "species": "Tyrant",
+      "first_floor": 36,
+      "last_floor": 39,
+      "reported_percent": 19
+    },
+    {
+      "species": "U-Boat",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 9
+    },
+    {
+      "species": "U-Boat",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 16
+    },
+    {
+      "species": "Unicorn",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 9
+    },
+    {
+      "species": "Unicorn",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 16
+    },
+    {
+      "species": "Viper",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 9
+    },
+    {
+      "species": "Viper",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 16
+    },
+    {
+      "species": "Volcano",
+      "first_floor": 6,
+      "last_floor": 10,
+      "reported_percent": 9
+    },
+    {
+      "species": "Volcano",
+      "first_floor": 11,
+      "last_floor": 15,
+      "reported_percent": 16
+    },
+    {
+      "species": "Weadog",
+      "first_floor": 16,
+      "last_floor": 20,
+      "reported_percent": 9
+    },
+    {
+      "species": "Weadog",
+      "first_floor": 21,
+      "last_floor": 25,
+      "reported_percent": 16
+    },
+    {
+      "species": "Zu",
+      "first_floor": 26,
+      "last_floor": 30,
+      "reported_percent": 9
+    },
+    {
+      "species": "Zu",
+      "first_floor": 31,
+      "last_floor": 35,
+      "reported_percent": 16
+    }
+  ],
+  "base_luck": [
+    {
+      "name": "Arachne",
+      "value": 70
+    },
+    {
+      "name": "Kraken",
+      "value": 80
+    },
+    {
+      "name": "Ashra",
+      "value": 70
+    },
+    {
+      "name": "Mandara",
+      "value": 80
+    },
+    {
+      "name": "Balloon",
+      "value": 80
+    },
+    {
+      "name": "Manoeva",
+      "value": 60
+    },
+    {
+      "name": "Barong",
+      "value": 90
+    },
+    {
+      "name": "Maximum",
+      "value": 80
+    },
+    {
+      "name": "Battnel",
+      "value": 70
+    },
+    {
+      "name": "Metal",
+      "value": 70
+    },
+    {
+      "name": "Block",
+      "value": 70
+    },
+    {
+      "name": "Naplass",
+      "value": 60
+    },
+    {
+      "name": "Blume",
+      "value": 70
+    },
+    {
+      "name": "Noise",
+      "value": 65
+    },
+    {
+      "name": "Clown",
+      "value": 70
+    },
+    {
+      "name": "Nyuel",
+      "value": 80
+    },
+    {
+      "name": "Cyclone",
+      "value": 60
+    },
+    {
+      "name": "Picket",
+      "value": 85
+    },
+    {
+      "name": "Death",
+      "value": 70
+    },
+    {
+      "name": "Pulunpa",
+      "value": 50
+    },
+    {
+      "name": "Dragon",
+      "value": 75
+    },
+    {
+      "name": "Saber",
+      "value": 70
+    },
+    {
+      "name": "Dreamin",
+      "value": 60
+    },
+    {
+      "name": "Snowman",
+      "value": 75
+    },
+    {
+      "name": "Flame",
+      "value": 80
+    },
+    {
+      "name": "Stealth",
+      "value": 60
+    },
+    {
+      "name": "Garuda",
+      "value": 60
+    },
+    {
+      "name": "Troll",
+      "value": 60
+    },
+    {
+      "name": "Glacier",
+      "value": 85
+    },
+    {
+      "name": "Tyrant",
+      "value": 65
+    },
+    {
+      "name": "Golem",
+      "value": 70
+    },
+    {
+      "name": "U-Boat",
+      "value": 60
+    },
+    {
+      "name": "Griffon",
+      "value": 80
+    },
+    {
+      "name": "Unicorn",
+      "value": 70
+    },
+    {
+      "name": "Grineut",
+      "value": 70
+    },
+    {
+      "name": "Univern",
+      "value": 70
+    },
+    {
+      "name": "Ifrit",
+      "value": 70
+    },
+    {
+      "name": "Viper",
+      "value": 70
+    },
+    {
+      "name": "Kewne",
+      "value": 60
+    },
+    {
+      "name": "Volcano",
+      "value": 70
+    },
+    {
+      "name": "Kid",
+      "value": 75
+    },
+    {
+      "name": "Weadog",
+      "value": 70
+    },
+    {
+      "name": "Killer",
+      "value": 80
+    },
+    {
+      "name": "Zu",
+      "value": 80
+    }
+  ],
+  "direct_spell_power": [
+    {
+      "name": "Breath",
+      "value": 16
+    },
+    {
+      "name": "Brid",
+      "value": 10
+    },
+    {
+      "name": "LoGrave",
+      "value": 24
+    },
+    {
+      "name": "Rise",
+      "value": 19
+    },
+    {
+      "name": "Sled",
+      "value": 8
+    }
+  ],
+  "ball_spell_learning_minimum_charges": 10,
+  "ball_spell_learning_exclusions": [
+    "Acid Rain"
+  ],
+  "rare_items": {
+    "approximate_one_in": 5000,
+    "names": [
+      "Bow Gun",
+      "Dark Sword",
+      "Holy Sword",
+      "Roche Fruit",
+      "Trained Wand"
+    ]
+  },
+  "sections": {
+    "1": {
+      "title": "Base Luck stats",
+      "text": "Luck is a hidden stat that most players know from the Tovar Seed, which\r\nstates that it increases the user's Luck by 1.  What the stat does isn't\r\nclear; not even the Konami guide says explicitly what it is for.  However,\r\neach monster does have a distinct Luck stat, listed below.\r\n\r\nLuck doesn't change at level up, with one exception: the Barong.  Luck *can*\r\nchange when a familiar evolves.  The Pulunpa has the lowest Luck in the\r\ngame, at 50.  The Barong is the highest at 90, plus the Barong apparently\r\nslowly gains Luck as it levels up.  A level 20 Barong, the level at which it\r\nis encountered in the tower, has a Luck of 93.\r\n\r\n\r\nArachne: 70     Kraken:  80\r\nAshra:   70     Mandara: 80\r\nBalloon: 80     Manoeva: 60\r\nBarong:  90     Maximum: 80\r\nBattnel: 70     Metal:   70\r\nBlock:   70     Naplass: 60\r\nBlume:   70     Noise:   65\r\nClown:   70     Nyuel:   80\r\nCyclone: 60     Picket:  85\r\nDeath:   70     Pulunpa: 50\r\nDragon:  75     Saber:   70\r\nDreamin: 60     Snowman: 75\r\nFlame:   80     Stealth: 60\r\nGaruda:  60     Troll:   60\r\nGlacier: 85     Tyrant:  65\r\nGolem:   70     U-Boat:  60\r\nGriffon: 80     Unicorn: 70\r\nGrineut: 70     Univern: 70\r\nIfrit:   70     Viper:   70\r\nKewne:   60     Volcano: 70\r\nKid:     75     Weadog:  70\r\nKiller:  80     Zu:      80"
+    },
+    "2": {
+      "title": "Hidden Agility stat",
+      "text": "In addition to Luck, all monsters have a hidden Agility stat.  Once again,\r\nthe Konami guide doesn't specify what this stat is for, though I assume,\r\nbased on the name, that it is connected in some way to attack evasion.\r\nUnlike Luck, Agility does increase at level up.  Unfortunately, the Konami\r\nguide only lists monster stats at level 1 and at the level they are\r\nencountered in the tower, which varies from monster to monster.  This makes a\r\ncomprehensive comparison of stats impossible.  Level 1 stats are too similar\r\nto be of much use, and comparing, for example, a level 3 Flame to a level 30\r\nMaximum doesn't tell us much.\r\n\r\nThe monster with the highest Agility, as encountered in the tower, is,\r\nsurprisingly, the Killer, with an Agility of 45 at level 28.  The Univern\r\nhas an Agility of 44 immediately after evolution at level 20, so it likely\r\ncan surpass the Killer."
+    },
+    "3": {
+      "title": "Damage stats for direct attack magic",
+      "text": "While the base power of spells can be approximated by observing damage dealt,\r\nthe exact values are never stated. Note that LoGrave, the only direct damage\r\nspell that isn't naturally fire-elemental, is also the most damaging spell in\r\nthe game.  LoGrave is also cheaper to cast than the weaker Rise spell.  For\r\nall direct attack spells, base power remains the same if the element changes.\r\n\r\nBreath: 16\r\nBrid: 10\r\nLoGrave: 24\r\nRise: 19\r\nSled: 8"
+    },
+    "4": {
+      "title": "Learning spells from magic balls",
+      "text": "A familiar can be taught the spell contained in a magic ball if the ball is\r\ngiven to the familiar when it has at least 10 charges.  Balls don't generate\r\nwith that many charges, so you have to build one up using white sand.  This\r\nworks with any ball, except the Acid Rain ball."
+    },
+    "5": {
+      "title": "Special familiar diets",
+      "text": "Most familiars recover 50 MP when eating a Pita Fruit or an egg, and 3 MP\r\nwhen eating most plants (herbs, seeds, and fruit)  The following monsters\r\nhave unique diets:\r\n\r\nKid/Dragon:\r\nPita - 3 MP\r\nEggs - 50 MP\r\nPlants - 3 MP\r\nMetal (e.g. coins, swords) - 100 MP\r\nOther - 3 MP\r\n\r\nNyuel/Battnel:\r\nPita - 50 MP\r\nEggs - 50 MP\r\nPlants - 50 MP\r\n\r\nPicket:\r\nAnything - 50 MP\r\n\r\nViper:\r\nPita - 50 MP\r\nEggs - 100 MP\r\nPlants- 3 MP"
+    },
+    "6": {
+      "title": "Familiar abilities",
+      "text": "Some familiars have hidden, inherent abilities that don't transfer to other\r\nmonsters during fusion:\r\n\r\nFlame/Ifrit:  Immunity to the Zu's roar.  The player also becomes immune.\r\n\r\nGolem:  Uses MP at double the normal rate.\r\n\r\nGriffon/Grineut:  Makes the player immune to the Picket's steal ability.\r\n\r\nKid/Dragon:  Immunity to the Garuda's abduct ability.\r\n\r\nKiller:  Gets a bonus to physical damage.  This is unrelated to its\r\n         Atrocious ability.\r\n\r\nMaximum:  Uses MP at double the normal rate.\r\n\r\nThe following transferable traits are discussed in other FAQs, but I mention\r\nthem here since has been a lot of speculation and confusion as to how they\r\nwork:\r\n\r\nAtrocious (Killer): Increases critical hit rate.\r\nGrowth Promoted (Barong): Gives a bonus to earned XP, but only if the monster\r\nwith this trait is the one delivering the final blow.\r\n\r\nThe Konami guide also says that the Arachne/Ashra gives the player an attack\r\nboost, though from my testing this doesn't appear to be true."
+    },
+    "7": {
+      "title": "Egg rarity",
+      "text": "When an egg is found in the tower, the game determines what monster it\r\ncontains by picking from a weighted list, based on what floor you are on.\r\nThis list changes every 5 floors (i.e., when the music changes.)  In most\r\ncases, an egg for a given monster can be found over the span of 10\r\nconsecutive floors, with higher chances on the upper 5 floors of that range.\r\n\r\nF1-5:           F6-10: \r\nNoise (19%)     Blume (19%)\r\nFlame (16%)     Balloon (16%)\r\nPulunpa (16%)   Cyclone (16%)\r\nTroll (13%)     Manoeva (13%)\r\nBalloon (12%)   Clown (9%)\r\nBlume (9%)      Dreamin (9%)\r\nCyclone (9%)    U-Boat (9%)\r\nManoeva (6%)    Volcano (9%)\r\n\r\nF11-15:         F16-20:\r\nClown (16%)     Garuda (16%)\r\nDreamin (16%)   Griffon (16%)\r\nU-Boat (16%)    Kraken (16%)\r\nVolcano (16%)   Nyuel (16%)\r\nGaruda (9%)     Arachne (9%)\r\nGriffon (9%)    Picket (9%)\r\nKraken (9%)     Weadog (9%)\r\nNyuel (9%)      Troll (6%)\r\n                Barong (3%)\r\n\r\nF21-25:         F26-30:\r\nArachne (16%)   Block (16%)\r\nPicket (16%)    Stealth (16%)\r\nWeadog (16%)    Unicorn (16%)\r\nBlock (9%)      Viper (16%)\r\nStealth (9%)    Mandara (9%)\r\nUnicorn (9%)    Naplass (9%)\r\nViper (9%)      Snowman (9%)\r\nManoeva (6%)    Zu (9%)\r\nTroll (6%)\r\nBarong (3%)\r\n\r\nF31-35:         F36-39:\r\nMandara (16%)   Killer (22%)\r\nNaplass (16%)   Glacier (19%)\r\nSnowman (16%)   Tyrant (19%)\r\nZu (16%)        Golem (16%)\r\nGlacier (9%)    Kid (16%)\r\nKid (9%)        Maximum (9%)\r\nKiller (9%)\r\nTyrant (9%)\r\n\r\nHere is the same information, sorted by monster:\r\n\r\nArachne:  F16-20 (9%), F21-25 (16%)\r\nBalloon:  F1-5 (12%), F6-10 (16%)\r\nBarong:   F16-25 (3%)\r\nBlock:    F21-25 (9%), F26-30 (16%)\r\nBlume:    F1-5 (9%), F6-10 (19%)\r\nClown:    F6-10 (9%), F11-15 (16%)\r\nCyclone:  F1-5 (9%), F6-10 (16%)\r\nDreamin:  F6-10 (9%), F11-15 (16%)\r\nFlame:    F1-5 (16%)\r\nGaruda:   F11-15 (9%), F16-20 (16%)\r\nGlacier:  F31-35 (9%), F36-39 (19%)\r\nGolem:    F36-39 (16%)\r\nGriffon:  F11-15 (9%), F16-20 (16%)\r\nKid:      F31-35 (9%), F36-39 (16%)\r\nKiller:   F31-35 (9%), F36-39 (22%)\r\nKraken:   F11-15 (9%), F16-20 (16%)\r\nMandara:  F26-30 (9%), F31-35 (16%)\r\nManoeva:  F1-5 (6%), F6-10 (13%), F21-25 (6%)\r\nMaximum:  F36-39 (9%)\r\nNaplass:  F26-30 (9%), F31-35 (16%)\r\nNoise:    F1-5 (19%)\r\nNyuel:    F11-15 (9%), F16-20 (16%)\r\nPicket:   F16-20 (9%), F21-25 (16%)\r\nPulunpa:  F1-5 (16%)\r\nSnowman:  F26-30 (9%), F31-35 (16%)\r\nStealth:  F21-25 (9%), F26-30 (16%)\r\nTroll:    F1-5 (13%) F16-25 (6%)\r\nTyrant:   F31-35 (9%), F36-39 (19%)\r\nU-Boat:   F6-10 (9%), F11-15 (16%)\r\nUnicorn:  F21-25 (9%), F26-30 (16%)\r\nViper:    F21-25 (9%), F26-30 (16%)\r\nVolcano:  F6-10 (9%), F11-15 (16%)\r\nWeadog:   F16-20 (9%), F21-25 (16%)\r\nZu:       F26-30 (9%), F31-35 (16%)"
+    },
+    "8": {
+      "title": "Monster rarity by floor",
+      "text": "Any given floor can generate at most 4 unique types of monsters, excluding\r\nvariants like Trolls with different weapons.  The following lists which\r\nmonsters appear on each floor, and at what rates.  Percentages are rounded,\r\nso some floors may not sum up to exactly 100%.  The sums for floors 16, 27,\r\nand 31 are noticeably far from 100%; I assume these were typos in the Konami\r\nguide.\r\n\r\nNote that the \"Dark Pulunpa\" is the name given by the Konami guide to the\r\nPulunpa that can steal your collar.\r\n\r\nF1:  Pulunpa (50%), Noise (25%), Troll (Hammer) (25%)\r\nF2:  Noise (38%), Troll (Hammer) (31%), Pulunpa (25%), Flame (6%)\r\nF3:  Troll (Hammer) (38%), Cyclone (31%), Pulunpa (19%), Flame (13%)\r\nF4:  Troll (Hammer) (31%), Cyclone (31%), Flame (31%), Balloon (6%)\r\nF5:  Flame (25%), Cyclone (25%), Balloon (25%), Manoeva (Lv5) (25%)\r\nF6:  Balloon (31%), Manoeva (Lv5) (31%), Blume (25%), Cyclone (13%)\r\nF7:  Blume (38%), Manoeva (Lv5) (25%), U-Boat (25%), Balloon (13%)\r\nF8:  Blume (31%), U-Boat (25%), Clown (25%), Manoeva (Lv5) (19%)\r\nF9:  Clown (31%), U-Boat (31%), Blume (19%), Dreamin (19%)\r\nF10: Troll (Bow) (38%), Clown (25%), Volcano (19%), Dreamin (19%)\r\nF11: Troll (Bow) (31%), Dreamin (25%), Volcano (25%), Griffon (19%)\r\nF12: Dreamin (31%), Volcano (25%), Griffon (25%), Kraken (19%)\r\nF13: Griffon (38%), Kraken (25%), Volcano (19%), Nyuel (19%)\r\nF14: Nyuel (31%), Troll (Sword) (25%), Kraken (25%), Garuda (19%)\r\nF15: Garuda (38%), Nyuel (31%), Troll (Sword) (25%), Kraken (6%)\r\nF16: Troll (Sword) (31%), Manoeva (Lv15) (25%), Garuda (25%), Barong (6%)\r\nF17: Troll (Hammer) (13%), Troll (Bow) (19%), Troll (Sword) (13%),\r\n     Picket (31%), Manoeva (Lv15) (19%), Garuda (6%)\r\nF18: Picket (44%), Arachne (38%), Manoeva (Lv15) (19%)\r\nF19: Arachne (38%), Weadog (25%), Picket (25%), Manoeva (Lv15) (13%)\r\nF20: Weadog (25%), Unicorn (25%), Arachne (25%), Viper (25%)\r\nF21: Unicorn (31%), Viper (25%), Weadog (25%), Pulunpa (13%), Dark Pulunpa (6%)\r\nF22: Pulunpa (25%), Viper (31%), Unicorn (25%), Block (13%), Dark Pulunpa (6%)\r\nF23: Viper (38%), Unicorn (31%), Block (25%), Stealth (6%)\r\nF24: Block (44%), Viper (38%), Zu (19%), Stealth (6%)\r\nF25: Stealth (38%), Zu (38%), Block (19%), Picket (just 1)\r\nF26: Zu (38%), Snowman (31%), Mandara (25%), Barong (6%)\r\nF27: Snowman (31%), Mandara (25%), Manoeva (Lv25) (25%), Zu (25%)\r\nF28: Manoeva (Lv25) (31%), Mandara (25%), Snowman (25%), Naplass (19%)\r\nF29: Manoeva (Lv25) (31%), Naplass (31%), Snowman (31%), Killer (9%)\r\nF30: Killer (44%), Tyrant (25%), Naplass (19%), Manoeva (Lv25) (13%)\r\nF31: Tyrant (38%), Killer (31%), Dragon (31%)*, Naplass (6%)\r\n     *I suspect Dragon should be 25% here.\r\nF32: Dragon (25%), Tyrant (25%), Killer (25%), Glacier (25%)\r\nF33: Glacier (38%), Dragon (31%), Tyrant (19%), Golem (13%)\r\nF34: Golem (31%), Glacier (31%), Dragon (25%), Tyrant (13%)\r\nF35: Golem (38%), Glacier (31%), Dragon (25%), Maximum (6%)\r\nF36: Golem (31%), Glacier (31%), Maximum (31%), Barong (6%)\r\nF37: Maximum (38%), Golem (25%), Glacier (25%), Dragon (13%)\r\nF38: Maximum (38%), Golem (25%), Glacier (25%), Dragon (13%)\r\nF39: Maximum (38%), Golem (25%), Glacier (25%), Dragon (13%)"
+    },
+    "9": {
+      "title": "Equipment abilities",
+      "text": "The game can be somewhat opaque when it comes to equipment details.  Many\r\nequipment abilities are at least somewhat intuitive (wands increase mix magic\r\ndamage, the mirror shield reflects magic, etc.)  However, two pieces of\r\nequipment have abilities that are not obvious at all: the Dark Sword, which\r\nlowers your hit rate, and the Leather Shield, which raises your evasion rate.\r\nIt's possible that there are other hidden abilities; even the Konami guide is\r\nvague on some items, like the Holy Sword."
+    },
+    "10": {
+      "title": "Rarest items",
+      "text": "The following items are the rarest in the game; all have an appearance rate\r\nof about 1 in 5000.  These are the only items that the Konami guide gives\r\nspecific appearance rates for:\r\n\r\nBow Gun\r\nDark Sword\r\nHoly Sword\r\nRoche Fruit\r\nTrained Wand"
+    },
+    "11": {
+      "title": "Acknowledgements",
+      "text": "Much of the information in this guide was translated from the Other Life\r\nAzure Dreams Konami Official Guide.\r\n\r\nI also want to thank the dedicated fans at the Azure Dreams GameFAQs board,\r\nwho provided a lot of research and speculation into the workings of this\r\ngame.  I specifically want to mention Kain__Dragoon, who did extensive\r\nresearch into familiar stats and abilities, and turned up some things even\r\nthe Konami guide doesn't mention, like the Killer's innate attack bonus."
+    }
+  }
+}

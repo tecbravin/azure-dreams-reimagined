@@ -1,0 +1,214 @@
+{
+  "entries": [
+    {
+      "id": "Interior_01_koh_house_1",
+      "label": "Koh House 1",
+      "labelPtBr": "Casa do Koh 1"
+    },
+    {
+      "id": "Interior_02_koh_house_2",
+      "label": "Koh House 2",
+      "labelPtBr": "Casa do Koh 2"
+    },
+    {
+      "id": "Interior_03_koh_house_3",
+      "label": "Koh House 3",
+      "labelPtBr": "Casa do Koh 3"
+    },
+    {
+      "id": "Interior_06_casino_2",
+      "label": "Casino 2",
+      "labelPtBr": "Cassino 2"
+    },
+    {
+      "id": "Interior_07_library",
+      "label": "Library",
+      "labelPtBr": "Biblioteca"
+    },
+    {
+      "id": "Interior_08_gym",
+      "label": "Gym",
+      "labelPtBr": "Academia"
+    },
+    {
+      "id": "Interior_09_arcade_1",
+      "label": "Arcade 1",
+      "labelPtBr": "Fliperama 1"
+    },
+    {
+      "id": "Interior_0a_racetrack_entrance",
+      "label": "Racetrack Entrance",
+      "labelPtBr": "Entrada da pista de corrida"
+    },
+    {
+      "id": "Interior_0b_theater",
+      "label": "Theater",
+      "labelPtBr": "Teatro"
+    },
+    {
+      "id": "Interior_0c_alley",
+      "label": "Alley",
+      "labelPtBr": "Boliche"
+    },
+    {
+      "id": "Interior_0d_pool_quest_done",
+      "label": "Pool Quest Done",
+      "labelPtBr": "Piscina restaurada"
+    },
+    {
+      "id": "Interior_0d_pool_quest_not_done",
+      "label": "Pool Quest Not Done",
+      "labelPtBr": "Piscina antes da restauração"
+    },
+    {
+      "id": "Interior_0e_restaurant",
+      "label": "Restaurant",
+      "labelPtBr": "Restaurante"
+    },
+    {
+      "id": "Interior_0f_hospital",
+      "label": "Hospital",
+      "labelPtBr": "Hospital"
+    },
+    {
+      "id": "Interior_10_hospital_2",
+      "label": "Hospital 2",
+      "labelPtBr": "Hospital 2"
+    },
+    {
+      "id": "Interior_11_temple",
+      "label": "Temple",
+      "labelPtBr": "Templo"
+    },
+    {
+      "id": "Interior_12_temple_2",
+      "label": "Temple 2",
+      "labelPtBr": "Templo 2"
+    },
+    {
+      "id": "Interior_13_carpenter",
+      "label": "Carpenter",
+      "labelPtBr": "Carpintaria"
+    },
+    {
+      "id": "Interior_14_monster_shop",
+      "label": "Monster Shop",
+      "labelPtBr": "Loja de monstros"
+    },
+    {
+      "id": "Interior_15_blacksmith",
+      "label": "Blacksmith",
+      "labelPtBr": "Ferraria"
+    },
+    {
+      "id": "Interior_16_general_store",
+      "label": "General Store",
+      "labelPtBr": "Loja de móveis e artigos gerais"
+    },
+    {
+      "id": "Interior_17_fortune_house",
+      "label": "Fortune House",
+      "labelPtBr": "Casa da vidente"
+    },
+    {
+      "id": "Interior_18_cherrl_house",
+      "label": "Cherrl House",
+      "labelPtBr": "Casa da Cherrl"
+    },
+    {
+      "id": "Interior_19_generic_building",
+      "label": "Generic Building",
+      "labelPtBr": "Prédio comum"
+    },
+    {
+      "id": "Interior_1a_generic_building",
+      "label": "Generic Building",
+      "labelPtBr": "Prédio comum"
+    },
+    {
+      "id": "Interior_1b_generic_building",
+      "label": "Generic Building",
+      "labelPtBr": "Prédio comum"
+    },
+    {
+      "id": "Interior_1c_generic_building",
+      "label": "Generic Building",
+      "labelPtBr": "Prédio comum"
+    },
+    {
+      "id": "Interior_1d_generic_building",
+      "label": "Generic Building",
+      "labelPtBr": "Prédio comum"
+    },
+    {
+      "id": "Interior_20_bar",
+      "label": "Bar",
+      "labelPtBr": "Bar"
+    },
+    {
+      "id": "Interior_21_rhodes_house",
+      "label": "Rhodes House",
+      "labelPtBr": "Casa dos Rhodes"
+    },
+    {
+      "id": "Interior_22_nico_house",
+      "label": "Nico House",
+      "labelPtBr": "Casa da Nico"
+    },
+    {
+      "id": "Interior_23_generic_house",
+      "label": "Generic House",
+      "labelPtBr": "Casa comum"
+    },
+    {
+      "id": "Interior_24_dr_hal_house",
+      "label": "Dr Hal House",
+      "labelPtBr": "Casa do Dr. Hal"
+    },
+    {
+      "id": "Interior_25_monster_hut_2x2",
+      "label": "Monster Hut 2X2",
+      "labelPtBr": "Alojamento de monstros 2x2"
+    },
+    {
+      "id": "Interior_26_monster_hut_3x3",
+      "label": "Monster Hut 3X3",
+      "labelPtBr": "Alojamento de monstros 3x3"
+    },
+    {
+      "id": "Interior_27_monster_hut_4x4",
+      "label": "Monster Hut 4X4",
+      "labelPtBr": "Alojamento de monstros 4x4"
+    },
+    {
+      "id": "Interior_28_monster_hut_6x6",
+      "label": "Monster Hut 6X6",
+      "labelPtBr": "Alojamento de monstros 6x6"
+    },
+    {
+      "id": "Interior_29_monster_hut_8x8",
+      "label": "Monster Hut 8X8",
+      "labelPtBr": "Alojamento de monstros 8x8"
+    },
+    {
+      "id": "Interior_2a_arcade_2",
+      "label": "Arcade 2",
+      "labelPtBr": "Fliperama 2"
+    },
+    {
+      "id": "Interior_2b_casino_1",
+      "label": "Casino 1",
+      "labelPtBr": "Cassino 1"
+    },
+    {
+      "id": "Interior_2c_silver_house",
+      "label": "Silver House",
+      "labelPtBr": "Casa do Silver"
+    },
+    {
+      "id": "Interior_37_racetrack_course",
+      "label": "Racetrack Course",
+      "labelPtBr": "Pista de corrida"
+    }
+  ]
+}

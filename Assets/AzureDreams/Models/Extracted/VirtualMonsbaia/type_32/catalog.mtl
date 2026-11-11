@@ -1,0 +1,60 @@
+newmtl page_10_clut_30082
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_10_clut_30082.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_10_clut_30082.png
+
+newmtl page_13_clut_30080
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30080.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30080.png
+
+newmtl page_13_clut_30081
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30081.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30081.png
+
+newmtl page_13_clut_30082
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30082.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_13_clut_30082.png
+
+newmtl page_149_clut_28672
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_149_clut_28672.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_149_clut_28672.png
+
+newmtl page_149_clut_28736
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_149_clut_28736.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_149_clut_28736.png
+
+newmtl page_150_clut_28864
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28864.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28864.png
+
+newmtl page_150_clut_28928
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28928.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28928.png
+
+newmtl page_150_clut_28992
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28992.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_150_clut_28992.png
+
+newmtl page_181_clut_28800
+Kd 1 1 1
+illum 0
+map_Kd ../../../../Textures/Extracted/VirtualMonsbaia/page_181_clut_28800.png
+map_d ../../../../Textures/Extracted/VirtualMonsbaia/page_181_clut_28800.png
+

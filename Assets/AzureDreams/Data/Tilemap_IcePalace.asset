@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feffe5029ce51364ba52a7fd0e5d3b16, type: 3}
+  m_Name: Tilemap_IcePalace
+  m_EditorClassIdentifier: AzureDreams.Editor::AzureDreamsReimagined.Editor.TilemapData
+  theme: 3
+  floorMaterial: {fileID: 2100000, guid: 75a9375dfd31b9e4eae73ead91309dac, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 7742cbca079bda247841e9b13b289638, type: 2}
+  backgroundMaterial: {fileID: 2100000, guid: c5800f60509785a4693432ccc4c2a5db, type: 2}
+  floorTexture: {fileID: 0}
+  wallTexture: {fileID: 0}
+  tileSize: 1
+  mapWidth: 32
+  mapHeight: 32

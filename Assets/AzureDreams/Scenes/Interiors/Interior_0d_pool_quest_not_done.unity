@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Pool Quest Not Done
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_0d_pool_quest_not_done
+  displayName: Pool Quest Not Done
+  geometry: {fileID: 4900000, guid: c04953680497416c9c3f5d9dfc300b3b, type: 3}
+  heights: {fileID: 4900000, guid: 555b727bf3a04f5b9c9102870c97959a, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 1c6cb5d55e1a45709426b96d5442b764, type: 2}
+  - {fileID: 2100000, guid: de02dc395c6b4d2fa487139158ea865a, type: 2}
+  - {fileID: 2100000, guid: c81144e450964c84b27043836853bfec, type: 2}
+  - {fileID: 2100000, guid: 70d79f77cbb64452880777b1dac2b29f, type: 2}
+  - {fileID: 2100000, guid: d2d4ce5e08d9486c8766d78d9350ecdd, type: 2}
+  - {fileID: 2100000, guid: 041c89bcc1d241e48c8c86ea0632ffe7, type: 2}
+  - {fileID: 2100000, guid: c7f7578a4a074308b972401db8fad403, type: 2}
+  - {fileID: 2100000, guid: 46818c2f42444c7f8de5af4904df8f21, type: 2}
+  - {fileID: 2100000, guid: fa69f98655bc4e5cad93733d97744eb4, type: 2}
+  - {fileID: 2100000, guid: 3162413cc2b64877b2d70355135f11f0, type: 2}
+  - {fileID: 2100000, guid: 43209f8ea526407194d10999a6ac6cbd, type: 2}
+  - {fileID: 2100000, guid: 78660c9a4ebd474e99e6f54691b065a3, type: 2}
+  - {fileID: 2100000, guid: dc5b180039f1486d8bd0021c3ed0a81c, type: 2}
+  - {fileID: 2100000, guid: da80b1ebc72146ec8ae7004859d2666c, type: 2}
+  - {fileID: 2100000, guid: f4878b00dba642e7ac5170fff5053839, type: 2}
+  - {fileID: 2100000, guid: b99a08f53efd4964a16ddf3bb4156821, type: 2}
+  - {fileID: 2100000, guid: e00711c786dd4120887acec15a1c40bd, type: 2}
+  - {fileID: 2100000, guid: 20b5a6cc256a49bbb3cce8c514507219, type: 2}
+  - {fileID: 2100000, guid: 067b062c7f84489e998b1d468221ddae, type: 2}
+  - {fileID: 2100000, guid: 616c9bbd2e114088ba0a4d1f253c89f7, type: 2}
+  entryPosition: {x: 14, y: 0, z: 9}
+  residentPrefabs: []
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

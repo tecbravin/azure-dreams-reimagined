@@ -1,0 +1,6783 @@
+{
+  "source": "https://adrando.com/guide/",
+  "author": "pro_grammar",
+  "scope": "Reference data. Raw encyclopedia IDs are PS1 IDs. Spell ID 0 means none. Spawn likelihood values are raw weights. This asset does not alter Tower behavior.",
+  "tableSources": {
+    "units": "https://adrando.com/guide/tables/units.js",
+    "talents": "https://adrando.com/guide/tables/talents.js",
+    "spells": "https://adrando.com/guide/tables/spells.js",
+    "elements": "https://adrando.com/guide/tables/elements.js",
+    "floors": "https://adrando.com/guide/tables/floors.js"
+  },
+  "pages": [
+    {
+      "url": "https://adrando.com/guide/",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Table of Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/bugs.html",
+      "title": "Azure Dreams PS1 guide - Bugs",
+      "sections": [
+        "Crashes",
+        "Bugs that cause the game to encounter an exception from which it can't recover, or enter an infinite loop.",
+        "Softlocks",
+        "Bugs where game logic is waiting for some action to occur but it never does.",
+        "Time losses (temporary softlocks)",
+        "Softlocks that are resolved automatically after 30 seconds.",
+        "Game logic",
+        "Bugs where the developers clearly intended one thing to happen but something else happens instead (not purely cosmetic).",
+        "Graphical bugs",
+        "Cosmetic issues that have no effect on gameplay.",
+        "Speculation",
+        "Places where I suspect something might be intended to work differently, but might have been deliberately made otherwise."
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/controls/",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/controls/index.html",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/controls/tower.html",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Controller 1",
+        "General",
+        "Menus",
+        "Controller 2",
+        "General"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floors"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=1",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=10",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=11",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=12",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=13",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=14",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=15",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=16",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=17",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=18",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=19",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=2",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=20",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=21",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=22",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=23",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=24",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=25",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=26",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=27",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=28",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=29",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=3",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=30",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=31",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=32",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=33",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=34",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=35",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=36",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=37",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=38",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=39",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=4",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=40",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=5",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=6",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=7",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=8",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/floors/floor.html?number=9",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Floor",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Notes"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/glossary.html",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Glossary"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/index.html",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Table of Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/mechanics/damage.html",
+      "title": "Azure Dreams PS1 Encyclopedia - Damage calculation",
+      "sections": [
+        "Standard attacks and Fire Sword, Blizzard Sword, and Wind Cutter mix magic",
+        "Spells and Traps"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/mechanics/stats.html",
+      "title": "Azure Dreams PS1 Encyclopedia - Stats",
+      "sections": [
+        "Overview",
+        "Core Stats",
+        "Stat Forms",
+        "Stat Calculation"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Description",
+        "Talent list"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=1",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=1048576",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=1073741824",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=128",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=131072",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=134217728",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=16",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=16384",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=2",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=2097152",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=256",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=262144",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=268435456",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=32",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=32768",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=33554432",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=4",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=4194304",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=524288",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=536870912",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=64",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=65536",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=67108864",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=8",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=8388608",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Talent:",
+        "Description",
+        "Units with talent"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/index.html",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Contents"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Arachne",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Ashra",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Baloon",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Barong",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Battnel",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Beldo",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Block",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Blume",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Clown",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Cyclone",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Death",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Dragon",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Dreamin",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Flame",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Frog",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Garuda",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Ghosh",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Glacier",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Golem",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Griffon",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Grineut",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Guy",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Hikewne",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Ifrit",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Kewne",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Kid",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Killer",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Koh",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Kraken",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Mandara",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Manoeva",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Maximum",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Metal",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Naplass",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Noise",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Nyuel",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Picket",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Pulunpa",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Rock",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Saber",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Salamander",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Selfi",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Snowman",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Stealth",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Troll",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Tyrant",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=U-Boat",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Unicorn",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Univern",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Viper",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Volcano",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Weadog",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=Zu",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=block",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=picket",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?name=stealth",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?unitId=51",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?unitId=52",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?unitId=53",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?unitId=55",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    },
+    {
+      "url": "https://adrando.com/guide/units/unit.html?unitId=57",
+      "title": "Azure Dreams PS1 Encyclopedia",
+      "sections": [
+        "Unit:",
+        "Name",
+        "Core Stats",
+        "Properties",
+        "Talent(s)",
+        "Spells",
+        "Diet (MP restoration)",
+        "Enemy Stats",
+        "Eggs probabilities",
+        "Stats by Level",
+        "Other"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "unitId": 0,
+      "name": "Koh",
+      "gbcName": "Kou",
+      "hiraganaName": "\u30b3\u30a6",
+      "romajiName": "K\u014d",
+      "baseAtk": 5,
+      "baseDef": 4,
+      "baseAgility": 4,
+      "baseLuck": 32,
+      "baseMp": 100,
+      "baseHp": 16,
+      "baseExp": 16,
+      "nativeSpellId": 0,
+      "nativeElement": 0,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 13,
+      "growthDef": 14,
+      "growthAgility": 8,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 22,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 3,
+      "likesBigPitas": 3,
+      "weaponDamage": "by equipment",
+      "accuracy": "by equipment",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Koh"
+    },
+    {
+      "unitId": 1,
+      "name": "Hikewne",
+      "gbcName": "HyKewne",
+      "hiraganaName": "\u30cf\u30a4\u30ad\u30e5\u30fc\u30f3",
+      "romajiName": "Haiky\u016bn",
+      "baseAtk": 7,
+      "baseDef": 7,
+      "baseAgility": 8,
+      "baseLuck": 100,
+      "baseMp": 120,
+      "baseHp": 15,
+      "baseExp": 3,
+      "nativeSpellId": 46,
+      "nativeElement": 0,
+      "pushable": false,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 20,
+      "growthDef": 19,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 4,
+      "growthHp": 17,
+      "growthExp": 30,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 4194304,
+      "url": "https://adrando.com/guide/units/unit.html?name=Hikewne"
+    },
+    {
+      "unitId": 2,
+      "name": "Kewne",
+      "gbcName": "Kewne",
+      "hiraganaName": "\u30ad\u30e5\u30fc\u30f3",
+      "romajiName": "Kuhn, Ky\u016bn",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 100,
+      "baseHp": 12,
+      "baseExp": 3,
+      "nativeSpellId": 7,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 20,
+      "growthDef": 14,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 9437184,
+      "url": "https://adrando.com/guide/units/unit.html?name=Kewne"
+    },
+    {
+      "unitId": 3,
+      "name": "Dragon",
+      "gbcName": "Dragon",
+      "hiraganaName": "\u30c9\u30e9\u30b4\u30f3",
+      "romajiName": "Dragon",
+      "baseAtk": 9,
+      "baseDef": 8,
+      "baseAgility": 4,
+      "baseLuck": 75,
+      "baseMp": 70,
+      "baseHp": 15,
+      "baseExp": 3,
+      "nativeSpellId": 1,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 17,
+      "growthDef": 19,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 22,
+      "likesAny": 3,
+      "likesEggs": 50,
+      "likesMetal": 100,
+      "likesVegetation": 3,
+      "likesPitas": 3,
+      "likesBigPitas": 3,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 131072,
+      "url": "https://adrando.com/guide/units/unit.html?name=Dragon"
+    },
+    {
+      "unitId": 4,
+      "name": "Kid",
+      "gbcName": "Kid",
+      "hiraganaName": "\u30ad\u30c3\u30ba",
+      "romajiName": "Kids",
+      "baseAtk": 7,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 75,
+      "baseMp": 60,
+      "baseHp": 12,
+      "baseExp": 2,
+      "nativeSpellId": 1,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 20,
+      "growthDef": 19,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 8,
+      "growthHp": 18,
+      "growthExp": 19,
+      "likesAny": 3,
+      "likesEggs": 50,
+      "likesMetal": 100,
+      "likesVegetation": 3,
+      "likesPitas": 3,
+      "likesBigPitas": 3,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "03",
+      "talentIds": 131072,
+      "url": "https://adrando.com/guide/units/unit.html?name=Kid"
+    },
+    {
+      "unitId": 5,
+      "name": "Ifrit",
+      "gbcName": "Ifrit",
+      "hiraganaName": "\u30a4\u30fc\u30d5\u30ea\u30fc\u30c8",
+      "romajiName": "Ifreet",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 6,
+      "baseLuck": 70,
+      "baseMp": 90,
+      "baseHp": 9,
+      "baseExp": 3,
+      "nativeSpellId": 4,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 21,
+      "growthDef": 18,
+      "growthAgility": 14,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 21,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 262144,
+      "url": "https://adrando.com/guide/units/unit.html?name=Ifrit"
+    },
+    {
+      "unitId": 6,
+      "name": "Flame",
+      "gbcName": "Flame",
+      "hiraganaName": "\u30d5\u30ec\u30a4\u30e0",
+      "romajiName": "Flame",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 80,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 4,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 25,
+      "growthDef": 17,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "05",
+      "talentIds": 262144,
+      "url": "https://adrando.com/guide/units/unit.html?name=Flame"
+    },
+    {
+      "unitId": 7,
+      "name": "Grineut",
+      "gbcName": "Grineut",
+      "hiraganaName": "\u30b0\u30ea\u30cb\u30e5\u30fc\u30c8",
+      "romajiName": "Guriny\u016bto",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 6,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 10,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 19,
+      "growthDef": 18,
+      "growthAgility": 21,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 18,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 524288,
+      "url": "https://adrando.com/guide/units/unit.html?name=Grineut"
+    },
+    {
+      "unitId": 8,
+      "name": "Griffon",
+      "gbcName": "Griffin",
+      "hiraganaName": "\u30b0\u30ea\u30d5\u30a9\u30f3",
+      "romajiName": "Griffin",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 10,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 19,
+      "growthDef": 18,
+      "growthAgility": 25,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "07",
+      "talentIds": 524288,
+      "url": "https://adrando.com/guide/units/unit.html?name=Griffon"
+    },
+    {
+      "unitId": 9,
+      "name": "Saber",
+      "gbcName": "Saber",
+      "hiraganaName": "\u30b5\u30fc\u30d9\u30eb",
+      "romajiName": "Saber",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 90,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 17,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 23,
+      "growthDef": 19,
+      "growthAgility": 22,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 17,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "1.5x current ATK",
+      "specialAccuracy": "7c",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Saber"
+    },
+    {
+      "unitId": 10,
+      "name": "Snowman",
+      "gbcName": "Saskatch",
+      "hiraganaName": "\u30b5\u30b9\u30ab\u30c3\u30c1",
+      "romajiName": "Sasquatch",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 4,
+      "baseLuck": 75,
+      "baseMp": 90,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 17,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 22,
+      "growthDef": 17,
+      "growthAgility": 22,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "1.5x current ATK",
+      "specialAccuracy": "7c",
+      "evolvesInto": "09",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Snowman"
+    },
+    {
+      "unitId": 11,
+      "name": "Ashra",
+      "gbcName": "Ashra",
+      "hiraganaName": "\u30a2\u30b7\u30e5\u30e9",
+      "romajiName": "Ashura",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 3,
+      "nativeSpellId": 20,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 20,
+      "growthDef": 22,
+      "growthAgility": 21,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 17,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 8,
+      "url": "https://adrando.com/guide/units/unit.html?name=Ashra"
+    },
+    {
+      "unitId": 12,
+      "name": "Arachne",
+      "gbcName": "Arachne",
+      "hiraganaName": "\u30a2\u30e9\u30af\u30cd",
+      "romajiName": "Arachne",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 70,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 20,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 18,
+      "growthDef": 20,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 16,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "0B",
+      "talentIds": 8,
+      "url": "https://adrando.com/guide/units/unit.html?name=Arachne"
+    },
+    {
+      "unitId": 13,
+      "name": "Battnel",
+      "gbcName": "Batnyuel",
+      "hiraganaName": "\u30d0\u30c8\u30cb\u30e5\u30a8\u30eb",
+      "romajiName": "Batnuel",
+      "baseAtk": 7,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 70,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 26,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 20,
+      "growthDef": 20,
+      "growthAgility": 17,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 18,
+      "likesAny": 0,
+      "likesEggs": 3,
+      "likesMetal": 0,
+      "likesVegetation": 50,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 536870912,
+      "url": "https://adrando.com/guide/units/unit.html?name=Battnel"
+    },
+    {
+      "unitId": 14,
+      "name": "Nyuel",
+      "gbcName": "Nyuel",
+      "hiraganaName": "\u30cb\u30e5\u30a8\u30eb",
+      "romajiName": "Nuell",
+      "baseAtk": 4,
+      "baseDef": 5,
+      "baseAgility": 8,
+      "baseLuck": 80,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 26,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 19,
+      "growthDef": 19,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 15,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 3,
+      "likesMetal": 0,
+      "likesVegetation": 50,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "0D",
+      "talentIds": 536870912,
+      "url": "https://adrando.com/guide/units/unit.html?name=Nyuel"
+    },
+    {
+      "unitId": 15,
+      "name": "Death",
+      "gbcName": "Cadavron",
+      "hiraganaName": "\u30c7\u30b9\u30b2\u30a4\u30eb",
+      "romajiName": "Deathgale",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 8,
+      "baseExp": 3,
+      "nativeSpellId": 42,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 18,
+      "growthDef": 18,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "4",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 128,
+      "url": "https://adrando.com/guide/units/unit.html?name=Death"
+    },
+    {
+      "unitId": 16,
+      "name": "Clown",
+      "gbcName": "Galelop",
+      "hiraganaName": "\u30ab\u30bc\u30ad\u30ea",
+      "romajiName": "Kazekiri",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 8,
+      "baseExp": 2,
+      "nativeSpellId": 42,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 17,
+      "growthDef": 18,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 18,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "0F",
+      "talentIds": 128,
+      "url": "https://adrando.com/guide/units/unit.html?name=Clown"
+    },
+    {
+      "unitId": 17,
+      "name": "Univern",
+      "gbcName": "Univern",
+      "hiraganaName": "\u30e6\u30cb\u30d0\u30fc\u30f3",
+      "romajiName": "Yunib\u0101n",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 7,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 33,
+      "nativeElement": 4,
+      "pushable": false,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 0,
+      "growthAtk": 18,
+      "growthDef": 15,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 22,
+      "growthExp": 20,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 134217728,
+      "url": "https://adrando.com/guide/units/unit.html?name=Univern"
+    },
+    {
+      "unitId": 18,
+      "name": "Unicorn",
+      "gbcName": "Unicap",
+      "hiraganaName": "\u30e6\u30cb\u30b7\u30e3\u30dd\u30fc",
+      "romajiName": "Unishapo",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 7,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 33,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 17,
+      "growthDef": 18,
+      "growthAgility": 15,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "11",
+      "talentIds": 134217728,
+      "url": "https://adrando.com/guide/units/unit.html?name=Unicorn"
+    },
+    {
+      "unitId": 19,
+      "name": "Metal",
+      "gbcName": "Metar",
+      "hiraganaName": "\u30e1\u30bf\u30eb",
+      "romajiName": "Metaru",
+      "baseAtk": 6,
+      "baseDef": 8,
+      "baseAgility": 4,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 36,
+      "nativeElement": 4,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 17,
+      "growthDef": 19,
+      "growthAgility": 22,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 17,
+      "growthExp": 18,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 16,
+      "url": "https://adrando.com/guide/units/unit.html?name=Metal"
+    },
+    {
+      "unitId": 20,
+      "name": "Block",
+      "gbcName": "Alloyer",
+      "hiraganaName": "\u30de\u30c6\u30ea\u30a2\u30eb",
+      "romajiName": "Material",
+      "baseAtk": 6,
+      "baseDef": 8,
+      "baseAgility": 3,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 36,
+      "nativeElement": 4,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 16,
+      "growthDef": 18,
+      "growthAgility": 22,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 16,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "13",
+      "talentIds": 16,
+      "url": "https://adrando.com/guide/units/unit.html?name=Block"
+    },
+    {
+      "unitId": 21,
+      "name": "Pulunpa",
+      "gbcName": "Catawump",
+      "hiraganaName": "\u30d7\u30eb\u30f3\u30d1",
+      "romajiName": "Plumpa",
+      "baseAtk": 4,
+      "baseDef": 4,
+      "baseAgility": 4,
+      "baseLuck": 50,
+      "baseMp": 40,
+      "baseHp": 8,
+      "baseExp": 1,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 26,
+      "growthAtk": 18,
+      "growthDef": 19,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 11,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Pulunpa"
+    },
+    {
+      "unitId": 22,
+      "name": "Troll",
+      "gbcName": "Troll",
+      "hiraganaName": "\u30c8\u30ed\u30eb",
+      "romajiName": "Troll",
+      "baseAtk": 4,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 60,
+      "baseMp": 60,
+      "baseHp": 6,
+      "baseExp": 4,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 7,
+      "growthAtk": 18,
+      "growthDef": 18,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "by equipment",
+      "accuracy": "by equipment",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Troll"
+    },
+    {
+      "unitId": 23,
+      "name": "Noise",
+      "gbcName": "Noise",
+      "hiraganaName": "\u30ce\u30a4\u30ba",
+      "romajiName": "Noise",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 65,
+      "baseMp": 70,
+      "baseHp": 9,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 39,
+      "growthAtk": 19,
+      "growthDef": 20,
+      "growthAgility": 16,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 15,
+      "growthExp": 12,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 1073741824,
+      "url": "https://adrando.com/guide/units/unit.html?name=Noise"
+    },
+    {
+      "unitId": 24,
+      "name": "U-Boat",
+      "gbcName": "Submar",
+      "hiraganaName": "\u30b5\u30d6\u30de\u30ea\u30f3",
+      "romajiName": "Submarine",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 60,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 23,
+      "growthAtk": 18,
+      "growthDef": 20,
+      "growthAgility": 22,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 17,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=U-Boat"
+    },
+    {
+      "unitId": 25,
+      "name": "Baloon",
+      "gbcName": "Balloon",
+      "hiraganaName": "\u30d0\u30eb\u30fc\u30f3",
+      "romajiName": "Baloon",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 80,
+      "baseMp": 70,
+      "baseHp": 8,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 1,
+      "growthAtk": 17,
+      "growthDef": 19,
+      "growthAgility": 16,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 12,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Baloon"
+    },
+    {
+      "unitId": 26,
+      "name": "Dreamin",
+      "gbcName": "Daymare",
+      "hiraganaName": "\u30ca\u30a4\u30c8\u30e1\u30a2",
+      "romajiName": "Nightmare",
+      "baseAtk": 3,
+      "baseDef": 5,
+      "baseAgility": 4,
+      "baseLuck": 60,
+      "baseMp": 70,
+      "baseHp": 8,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 39,
+      "growthAtk": 19,
+      "growthDef": 19,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 10,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "10",
+      "specialAccuracy": "10",
+      "evolvesInto": "",
+      "talentIds": 33554432,
+      "url": "https://adrando.com/guide/units/unit.html?name=Dreamin"
+    },
+    {
+      "unitId": 27,
+      "name": "Blume",
+      "gbcName": "Blume",
+      "hiraganaName": "\u30d6\u30eb\u30fc\u30e1",
+      "romajiName": "Blume",
+      "baseAtk": 5,
+      "baseDef": 4,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 17,
+      "growthAtk": 20,
+      "growthDef": 22,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 23,
+      "growthExp": 13,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Blume"
+    },
+    {
+      "unitId": 28,
+      "name": "Volcano",
+      "gbcName": "Volcano",
+      "hiraganaName": "\u30f4\u30a9\u30eb\u30ab\u30ce",
+      "romajiName": "Volcano",
+      "baseAtk": 4,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 4,
+      "growthAtk": 27,
+      "growthDef": 16,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 21,
+      "growthExp": 12,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Volcano"
+    },
+    {
+      "unitId": 29,
+      "name": "Cyclone",
+      "gbcName": "Cyclone",
+      "hiraganaName": "\u30b5\u30a4\u30af\u30ed\u30f3",
+      "romajiName": "Cyclone",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 60,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 45,
+      "growthAtk": 23,
+      "growthDef": 17,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 17,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 256,
+      "url": "https://adrando.com/guide/units/unit.html?name=Cyclone"
+    },
+    {
+      "unitId": 30,
+      "name": "Manoeva",
+      "gbcName": "Analoeba",
+      "hiraganaName": "\u30de\u30cd\u30fc\u30d0",
+      "romajiName": "Man\u0113ba",
+      "baseAtk": 5,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 60,
+      "baseMp": 70,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 29,
+      "growthAtk": 21,
+      "growthDef": 17,
+      "growthAgility": 17,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Manoeva"
+    },
+    {
+      "unitId": 31,
+      "name": "Barong",
+      "gbcName": "Barong",
+      "hiraganaName": "\u30d0\u30ed\u30f3",
+      "romajiName": "Barong",
+      "baseAtk": 5,
+      "baseDef": 4,
+      "baseAgility": 5,
+      "baseLuck": 90,
+      "baseMp": 60,
+      "baseHp": 6,
+      "baseExp": 4,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 13,
+      "growthAtk": 16,
+      "growthDef": 12,
+      "growthAgility": 14,
+      "growthLuck": 2,
+      "growthMp": 0,
+      "growthHp": 28,
+      "growthExp": 13,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 32,
+      "url": "https://adrando.com/guide/units/unit.html?name=Barong"
+    },
+    {
+      "unitId": 32,
+      "name": "Picket",
+      "gbcName": "Souvenir",
+      "hiraganaName": "\u30b9\u30fc\u30d9\u30cb\u30a2",
+      "romajiName": "souvenir",
+      "baseAtk": 3,
+      "baseDef": 4,
+      "baseAgility": 8,
+      "baseLuck": 85,
+      "baseMp": 65,
+      "baseHp": 8,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 42,
+      "growthAtk": 8,
+      "growthDef": 14,
+      "growthAgility": 15,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 14,
+      "likesAny": 50,
+      "likesEggs": 50,
+      "likesMetal": 50,
+      "likesVegetation": 50,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 1,
+      "url": "https://adrando.com/guide/units/unit.html?name=Picket"
+    },
+    {
+      "unitId": 33,
+      "name": "Kraken",
+      "gbcName": "Kraken",
+      "hiraganaName": "\u30af\u30e9\u30fc\u30b1\u30f3",
+      "romajiName": "Kraken",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 70,
+      "baseHp": 8,
+      "baseExp": 1,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": true,
+      "hiddenSpellId": 17,
+      "growthAtk": 19,
+      "growthDef": 18,
+      "growthAgility": 16,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 22,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 32768,
+      "url": "https://adrando.com/guide/units/unit.html?name=Kraken"
+    },
+    {
+      "unitId": 34,
+      "name": "Weadog",
+      "gbcName": "Guardian",
+      "hiraganaName": "\u30ac\u30fc\u30c7\u30a3\u30a2\u30f3",
+      "romajiName": "Guardian",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 1,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 7,
+      "growthAtk": 18,
+      "growthDef": 19,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Weadog"
+    },
+    {
+      "unitId": 35,
+      "name": "Stealth",
+      "gbcName": "Sizar",
+      "hiraganaName": "\u30bd\u30a4\u30eb\u30b7\u30b6\u30fc",
+      "romajiName": "Soil scissors",
+      "baseAtk": 4,
+      "baseDef": 5,
+      "baseAgility": 4,
+      "baseLuck": 60,
+      "baseMp": 80,
+      "baseHp": 8,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 33,
+      "growthAtk": 20,
+      "growthDef": 20,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 12,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 65536,
+      "url": "https://adrando.com/guide/units/unit.html?name=Stealth"
+    },
+    {
+      "unitId": 36,
+      "name": "Viper",
+      "gbcName": "Viper",
+      "hiraganaName": "\u30f4\u30a1\u30a4\u30d1\u30fc",
+      "romajiName": "Viper",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 70,
+      "baseMp": 80,
+      "baseHp": 9,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 20,
+      "growthAtk": 19,
+      "growthDef": 18,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 100,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 16384,
+      "url": "https://adrando.com/guide/units/unit.html?name=Viper"
+    },
+    {
+      "unitId": 37,
+      "name": "Naplass",
+      "gbcName": "Naprus",
+      "hiraganaName": "\u30ca\u30c3\u30d7\u30e9\u30b9",
+      "romajiName": "Nappurasu",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 60,
+      "baseMp": 80,
+      "baseHp": 11,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 10,
+      "growthAtk": 18,
+      "growthDef": 19,
+      "growthAgility": 16,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2,
+      "url": "https://adrando.com/guide/units/unit.html?name=Naplass"
+    },
+    {
+      "unitId": 38,
+      "name": "Zu",
+      "gbcName": "Zu",
+      "hiraganaName": "\u30ba\u30fc",
+      "romajiName": "Zu",
+      "baseAtk": 6,
+      "baseDef": 5,
+      "baseAgility": 7,
+      "baseLuck": 80,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": true,
+      "hiddenSpellId": 45,
+      "growthAtk": 17,
+      "growthDef": 17,
+      "growthAgility": 15,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 12,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 268435456,
+      "url": "https://adrando.com/guide/units/unit.html?name=Zu"
+    },
+    {
+      "unitId": 39,
+      "name": "Mandara",
+      "gbcName": "Mandara",
+      "hiraganaName": "\u30de\u30f3\u30c0\u30e9",
+      "romajiName": "Mandala",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 85,
+      "baseHp": 11,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 29,
+      "growthAtk": 18,
+      "growthDef": 15,
+      "growthAgility": 17,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 14,
+      "growthExp": 16,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "10",
+      "specialAccuracy": "28",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Mandara"
+    },
+    {
+      "unitId": 40,
+      "name": "Killer",
+      "gbcName": "Killer",
+      "hiraganaName": "\u30ad\u30e9\u30fc",
+      "romajiName": "Killer",
+      "baseAtk": 8,
+      "baseDef": 5,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 60,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 4,
+      "growthAtk": 18,
+      "growthDef": 19,
+      "growthAgility": 19,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 19,
+      "growthExp": 18,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "8",
+      "accuracy": "7c",
+      "specialDamage": "8",
+      "specialAccuracy": "7e",
+      "evolvesInto": "",
+      "talentIds": 2097152,
+      "url": "https://adrando.com/guide/units/unit.html?name=Killer"
+    },
+    {
+      "unitId": 41,
+      "name": "Garuda",
+      "gbcName": "Garuda",
+      "hiraganaName": "\u30ac\u30eb\u30fc\u30c0",
+      "romajiName": "Gar\u016bda",
+      "baseAtk": 5,
+      "baseDef": 5,
+      "baseAgility": 6,
+      "baseLuck": 60,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": true,
+      "liftable": true,
+      "flying": true,
+      "hiddenSpellId": 42,
+      "growthAtk": 19,
+      "growthDef": 21,
+      "growthAgility": 18,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 16,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Garuda"
+    },
+    {
+      "unitId": 42,
+      "name": "Glacier",
+      "gbcName": "Glacier",
+      "hiraganaName": "\u30b0\u30ec\u30a4\u30b7\u30e3\u30fc",
+      "romajiName": "Glaciet",
+      "baseAtk": 5,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 85,
+      "baseMp": 80,
+      "baseHp": 10,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 20,
+      "growthAtk": 18,
+      "growthDef": 19,
+      "growthAgility": 17,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 20,
+      "growthExp": 15,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Glacier"
+    },
+    {
+      "unitId": 43,
+      "name": "Tyrant",
+      "gbcName": "Behemoth",
+      "hiraganaName": "\u30d9\u30d2\u30fc\u30e2\u30b9",
+      "romajiName": "Behemoth",
+      "baseAtk": 6,
+      "baseDef": 6,
+      "baseAgility": 5,
+      "baseLuck": 65,
+      "baseMp": 70,
+      "baseHp": 10,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 10,
+      "growthAtk": 17,
+      "growthDef": 18,
+      "growthAgility": 16,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 18,
+      "growthExp": 14,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Tyrant"
+    },
+    {
+      "unitId": 44,
+      "name": "Golem",
+      "gbcName": "Golem",
+      "hiraganaName": "\u30b4\u30fc\u30ec\u30e0",
+      "romajiName": "Golem",
+      "baseAtk": 7,
+      "baseDef": 10,
+      "baseAgility": 4,
+      "baseLuck": 70,
+      "baseMp": 70,
+      "baseHp": 14,
+      "baseExp": 3,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 36,
+      "growthAtk": 19,
+      "growthDef": 16,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 15,
+      "growthExp": 17,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "4",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Golem"
+    },
+    {
+      "unitId": 45,
+      "name": "Maximum",
+      "gbcName": "Gronmon",
+      "hiraganaName": "\u30b0\u30e9\u30f3\u30e2\u30f3\u30b9",
+      "romajiName": "Grand mons",
+      "baseAtk": 8,
+      "baseDef": 9,
+      "baseAgility": 4,
+      "baseLuck": 80,
+      "baseMp": 80,
+      "baseHp": 16,
+      "baseExp": 4,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 1,
+      "growthAtk": 19,
+      "growthDef": 15,
+      "growthAgility": 20,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 16,
+      "growthExp": 21,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Maximum"
+    },
+    {
+      "unitId": 46,
+      "name": "Frog",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 1,
+      "baseDef": 1,
+      "baseAgility": 1,
+      "baseLuck": 64,
+      "baseMp": 128,
+      "baseHp": 8,
+      "baseExp": 2,
+      "nativeSpellId": 0,
+      "nativeElement": 0,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 3,
+      "likesBigPitas": 3,
+      "weaponDamage": "0",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Frog"
+    },
+    {
+      "unitId": 47,
+      "name": "Salamander",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 48,
+      "baseDef": 1,
+      "baseAgility": 32,
+      "baseLuck": 64,
+      "baseMp": 255,
+      "baseHp": 255,
+      "baseExp": 0,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 0,
+      "likesPitas": 0,
+      "likesBigPitas": 0,
+      "weaponDamage": "0",
+      "accuracy": "80",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 1,
+      "url": "https://adrando.com/guide/units/unit.html?name=Salamander"
+    },
+    {
+      "unitId": 48,
+      "name": "Guy",
+      "gbcName": "Guy",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 8,
+      "baseDef": 6,
+      "baseAgility": 4,
+      "baseLuck": 128,
+      "baseMp": 100,
+      "baseHp": 16,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Guy"
+    },
+    {
+      "unitId": 49,
+      "name": "Ghosh",
+      "gbcName": "Ghosh",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 8,
+      "baseDef": 6,
+      "baseAgility": 4,
+      "baseLuck": 128,
+      "baseMp": 100,
+      "baseHp": 16,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 4,
+      "growthDef": 4,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 4,
+      "growthExp": 4,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "6",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Ghosh"
+    },
+    {
+      "unitId": 50,
+      "name": "Selfi",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 1,
+      "baseDef": 1,
+      "baseAgility": 1,
+      "baseLuck": 1,
+      "baseMp": 10,
+      "baseHp": 4,
+      "baseExp": 0,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?name=Selfi"
+    },
+    {
+      "unitId": 51,
+      "name": "Wall of Fire",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 0,
+      "baseDef": 16,
+      "baseAgility": 1,
+      "baseLuck": 128,
+      "baseMp": 0,
+      "baseHp": 64,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 0,
+      "likesPitas": 0,
+      "likesBigPitas": 0,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2124365824,
+      "url": "https://adrando.com/guide/units/unit.html?unitId=51"
+    },
+    {
+      "unitId": 52,
+      "name": "Wall of Ice",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 0,
+      "baseDef": 16,
+      "baseAgility": 1,
+      "baseLuck": 128,
+      "baseMp": 0,
+      "baseHp": 64,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 2,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 0,
+      "likesPitas": 0,
+      "likesBigPitas": 0,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2124365824,
+      "url": "https://adrando.com/guide/units/unit.html?unitId=52"
+    },
+    {
+      "unitId": 53,
+      "name": "Wall of Storm",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 0,
+      "baseDef": 16,
+      "baseAgility": 1,
+      "baseLuck": 128,
+      "baseMp": 0,
+      "baseHp": 64,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 4,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 0,
+      "likesPitas": 0,
+      "likesBigPitas": 0,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2124365824,
+      "url": "https://adrando.com/guide/units/unit.html?unitId=53"
+    },
+    {
+      "unitId": 54,
+      "name": "Rock",
+      "gbcName": "",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 0,
+      "baseDef": 16,
+      "baseAgility": 1,
+      "baseLuck": 128,
+      "baseMp": 0,
+      "baseHp": 64,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 0,
+      "likesMetal": 0,
+      "likesVegetation": 0,
+      "likesPitas": 0,
+      "likesBigPitas": 0,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2124365824,
+      "url": "https://adrando.com/guide/units/unit.html?name=Rock"
+    },
+    {
+      "unitId": 55,
+      "name": "Beldo (vision)",
+      "gbcName": "Beldo",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 8,
+      "baseDef": 6,
+      "baseAgility": 4,
+      "baseLuck": 128,
+      "baseMp": 100,
+      "baseHp": 16,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 0,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 0,
+      "growthDef": 0,
+      "growthAgility": 0,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 0,
+      "growthExp": 0,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "",
+      "accuracy": "",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 0,
+      "url": "https://adrando.com/guide/units/unit.html?unitId=55"
+    },
+    {
+      "unitId": 56,
+      "name": "Beldo",
+      "gbcName": "Beldo",
+      "hiraganaName": "",
+      "romajiName": "",
+      "baseAtk": 8,
+      "baseDef": 6,
+      "baseAgility": 4,
+      "baseLuck": 128,
+      "baseMp": 100,
+      "baseHp": 16,
+      "baseExp": 8,
+      "nativeSpellId": 0,
+      "nativeElement": 0,
+      "pushable": false,
+      "liftable": false,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 3,
+      "growthDef": 4,
+      "growthAgility": 6,
+      "growthLuck": 0,
+      "growthMp": 0,
+      "growthHp": 4,
+      "growthExp": 8,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "20",
+      "accuracy": "80",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 2124365824,
+      "url": "https://adrando.com/guide/units/unit.html?name=Beldo"
+    },
+    {
+      "unitId": 57,
+      "name": "Kewne (tutorial)",
+      "gbcName": "Kewne",
+      "hiraganaName": "\u30ad\u30e5\u30fc\u30f3",
+      "romajiName": "Kuhn, Ky\u016bn",
+      "baseAtk": 6,
+      "baseDef": 7,
+      "baseAgility": 5,
+      "baseLuck": 80,
+      "baseMp": 100,
+      "baseHp": 14,
+      "baseExp": 8,
+      "nativeSpellId": 7,
+      "nativeElement": 1,
+      "pushable": true,
+      "liftable": true,
+      "flying": false,
+      "hiddenSpellId": 0,
+      "growthAtk": 64,
+      "growthDef": 1,
+      "growthAgility": 72,
+      "growthLuck": 3,
+      "growthMp": 72,
+      "growthHp": 3,
+      "growthExp": 121,
+      "likesAny": 0,
+      "likesEggs": 50,
+      "likesMetal": 0,
+      "likesVegetation": 3,
+      "likesPitas": 50,
+      "likesBigPitas": 100,
+      "weaponDamage": "0",
+      "accuracy": "7c",
+      "specialDamage": "",
+      "specialAccuracy": "",
+      "evolvesInto": "",
+      "talentIds": 9437184,
+      "url": "https://adrando.com/guide/units/unit.html?unitId=57"
+    }
+  ],
+  "talents": [
+    {
+      "talentId": 1,
+      "name": "Quick",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=1"
+    },
+    {
+      "talentId": 2,
+      "name": "HP Increased",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=2"
+    },
+    {
+      "talentId": 4,
+      "name": "MP Increased",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=4"
+    },
+    {
+      "talentId": 8,
+      "name": "Strength Increased",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=8"
+    },
+    {
+      "talentId": 16,
+      "name": "Hard",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=16"
+    },
+    {
+      "talentId": 32,
+      "name": "Growth Promoted",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=32"
+    },
+    {
+      "talentId": 64,
+      "name": "Increase EXP given",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=64"
+    },
+    {
+      "talentId": 128,
+      "name": "Magic Attack increased",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=128"
+    },
+    {
+      "talentId": 256,
+      "name": "MP Consumption Decreased",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=256"
+    },
+    {
+      "talentId": 16384,
+      "name": "Lowering ATK may not work",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=16384"
+    },
+    {
+      "talentId": 32768,
+      "name": "Electric Shock",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=32768"
+    },
+    {
+      "talentId": 65536,
+      "name": "Rustproof",
+      "url": "https://adrando.com/guide/talents/talent.html?talentId=65536"
+    },
+    {
+      "talentId": 131072,
+      "name": "Abduct-proof"
+    },
+    {
+      "talentId": 262144,
+      "name": "Bark-proof"
+    },
+    {
+      "talentId": 524288,
+      "name": "Stealing-proof"
+    },
+    {
+      "talentId": 1048576,
+      "name": "Unbrainwashable"
+    },
+    {
+      "talentId": 2097152,
+      "name": "Atrocious"
+    },
+    {
+      "talentId": 4194304,
+      "name": "Does not survive fusion"
+    },
+    {
+      "talentId": 8388608,
+      "name": "Survives fusion"
+    },
+    {
+      "talentId": 33554432,
+      "name": "Sleep-proof"
+    },
+    {
+      "talentId": 67108864,
+      "name": "Confusion-proof"
+    },
+    {
+      "talentId": 134217728,
+      "name": "Blinder-proof"
+    },
+    {
+      "talentId": 268435456,
+      "name": "Paralysis-proof"
+    },
+    {
+      "talentId": 536870912,
+      "name": "Poison-proof"
+    },
+    {
+      "talentId": 1073741824,
+      "name": "Spell-proof"
+    }
+  ],
+  "spells": [
+    {
+      "spellId": 0,
+      "name": "None",
+      "element": "None"
+    },
+    {
+      "spellId": 1,
+      "name": "Breath",
+      "element": "Fire"
+    },
+    {
+      "spellId": 2,
+      "name": "NeaBreath",
+      "element": "Water"
+    },
+    {
+      "spellId": 3,
+      "name": "NoaBreath",
+      "element": "Wind"
+    },
+    {
+      "spellId": 4,
+      "name": "Sled",
+      "element": "Fire"
+    },
+    {
+      "spellId": 5,
+      "name": "NeaSled",
+      "element": "Water"
+    },
+    {
+      "spellId": 6,
+      "name": "NoaSled",
+      "element": "Wind"
+    },
+    {
+      "spellId": 7,
+      "name": "Brid",
+      "element": "Fire"
+    },
+    {
+      "spellId": 8,
+      "name": "NeaBrid",
+      "element": "Water"
+    },
+    {
+      "spellId": 9,
+      "name": "NoaBrid",
+      "element": "Wind"
+    },
+    {
+      "spellId": 10,
+      "name": "Rise",
+      "element": "Fire"
+    },
+    {
+      "spellId": 11,
+      "name": "NeaRise",
+      "element": "Water"
+    },
+    {
+      "spellId": 12,
+      "name": "NoaRise",
+      "element": "Wind"
+    },
+    {
+      "spellId": 13,
+      "name": "Poison",
+      "element": "Fire"
+    },
+    {
+      "spellId": 14,
+      "name": "NeaPoison",
+      "element": "Water"
+    },
+    {
+      "spellId": 15,
+      "name": "NoaPoison",
+      "element": "Wind"
+    },
+    {
+      "spellId": 16,
+      "name": "DeaWall",
+      "element": "Fire"
+    },
+    {
+      "spellId": 17,
+      "name": "DeWall",
+      "element": "Water"
+    },
+    {
+      "spellId": 18,
+      "name": "DeoWall",
+      "element": "Wind"
+    },
+    {
+      "spellId": 19,
+      "name": "DeaMirror",
+      "element": "Fire"
+    },
+    {
+      "spellId": 20,
+      "name": "DeMirror",
+      "element": "Water"
+    },
+    {
+      "spellId": 21,
+      "name": "DeoMirror",
+      "element": "Wind"
+    },
+    {
+      "spellId": 22,
+      "name": "DeaRock",
+      "element": "Fire"
+    },
+    {
+      "spellId": 23,
+      "name": "DeRock",
+      "element": "Water"
+    },
+    {
+      "spellId": 24,
+      "name": "DeoRock",
+      "element": "Wind"
+    },
+    {
+      "spellId": 25,
+      "name": "DeaHeal",
+      "element": "Fire"
+    },
+    {
+      "spellId": 26,
+      "name": "DeHeal",
+      "element": "Water"
+    },
+    {
+      "spellId": 27,
+      "name": "DeoHeal",
+      "element": "Wind"
+    },
+    {
+      "spellId": 28,
+      "name": "DeaForth",
+      "element": "Fire"
+    },
+    {
+      "spellId": 29,
+      "name": "DeForth",
+      "element": "Water"
+    },
+    {
+      "spellId": 30,
+      "name": "DeoForth",
+      "element": "Wind"
+    },
+    {
+      "spellId": 31,
+      "name": "LaBlind",
+      "element": "Fire"
+    },
+    {
+      "spellId": 32,
+      "name": "LeBlind",
+      "element": "Water"
+    },
+    {
+      "spellId": 33,
+      "name": "LoBlind",
+      "element": "Wind"
+    },
+    {
+      "spellId": 34,
+      "name": "LaBind",
+      "element": "Fire"
+    },
+    {
+      "spellId": 35,
+      "name": "LeBind",
+      "element": "Water"
+    },
+    {
+      "spellId": 36,
+      "name": "LoBind",
+      "element": "Wind"
+    },
+    {
+      "spellId": 37,
+      "name": "LaSleep",
+      "element": "Fire"
+    },
+    {
+      "spellId": 38,
+      "name": "LeSleep",
+      "element": "Water"
+    },
+    {
+      "spellId": 39,
+      "name": "LoSleep",
+      "element": "Wind"
+    },
+    {
+      "spellId": 40,
+      "name": "LaDown",
+      "element": "Fire"
+    },
+    {
+      "spellId": 41,
+      "name": "LeDown",
+      "element": "Water"
+    },
+    {
+      "spellId": 42,
+      "name": "LoDown",
+      "element": "Wind"
+    },
+    {
+      "spellId": 43,
+      "name": "LaGrave",
+      "element": "Fire"
+    },
+    {
+      "spellId": 44,
+      "name": "LeoGrave",
+      "element": "Water"
+    },
+    {
+      "spellId": 45,
+      "name": "LoGrave",
+      "element": "Wind"
+    },
+    {
+      "spellId": 46,
+      "name": "Dark Wave",
+      "element": "None"
+    },
+    {
+      "spellId": 47,
+      "name": "Dark Wave",
+      "element": "None"
+    },
+    {
+      "spellId": 48,
+      "name": "Dark Wave",
+      "element": "None"
+    },
+    {
+      "spellId": 49,
+      "name": "Acid Rain",
+      "element": "Water"
+    }
+  ],
+  "elements": [
+    {
+      "elementId": 0,
+      "name": "None"
+    },
+    {
+      "elementId": 1,
+      "name": "Fire"
+    },
+    {
+      "elementId": 2,
+      "name": "Water"
+    },
+    {
+      "elementId": 4,
+      "name": "Wind"
+    }
+  ],
+  "enemyFloors": {
+    "1": [
+      {
+        "unitId": 21,
+        "level": 1,
+        "likelihood": 8
+      },
+      {
+        "unitId": 22,
+        "level": 2,
+        "likelihood": 4
+      },
+      {
+        "unitId": 23,
+        "level": 1,
+        "likelihood": 4
+      }
+    ],
+    "2": [
+      {
+        "unitId": 6,
+        "level": 3,
+        "likelihood": 1
+      },
+      {
+        "unitId": 21,
+        "level": 1,
+        "likelihood": 4
+      },
+      {
+        "unitId": 22,
+        "level": 2,
+        "likelihood": 5
+      },
+      {
+        "unitId": 23,
+        "level": 1,
+        "likelihood": 6
+      }
+    ],
+    "3": [
+      {
+        "unitId": 6,
+        "level": 3,
+        "likelihood": 3
+      },
+      {
+        "unitId": 21,
+        "level": 1,
+        "likelihood": 3
+      },
+      {
+        "unitId": 22,
+        "level": 2,
+        "likelihood": 7
+      },
+      {
+        "unitId": 29,
+        "level": 4,
+        "likelihood": 3
+      }
+    ],
+    "4": [
+      {
+        "unitId": 6,
+        "level": 3,
+        "likelihood": 5
+      },
+      {
+        "unitId": 22,
+        "level": 2,
+        "likelihood": 5
+      },
+      {
+        "unitId": 25,
+        "level": 5,
+        "likelihood": 1
+      },
+      {
+        "unitId": 29,
+        "level": 4,
+        "likelihood": 5
+      }
+    ],
+    "5": [
+      {
+        "unitId": 6,
+        "level": 3,
+        "likelihood": 4
+      },
+      {
+        "unitId": 25,
+        "level": 5,
+        "likelihood": 4
+      },
+      {
+        "unitId": 29,
+        "level": 4,
+        "likelihood": 4
+      },
+      {
+        "unitId": 30,
+        "level": 5,
+        "likelihood": 4
+      }
+    ],
+    "6": [
+      {
+        "unitId": 25,
+        "level": 5,
+        "likelihood": 5
+      },
+      {
+        "unitId": 27,
+        "level": 6,
+        "likelihood": 4
+      },
+      {
+        "unitId": 29,
+        "level": 4,
+        "likelihood": 2
+      },
+      {
+        "unitId": 30,
+        "level": 5,
+        "likelihood": 5
+      }
+    ],
+    "7": [
+      {
+        "unitId": 24,
+        "level": 7,
+        "likelihood": 3
+      },
+      {
+        "unitId": 25,
+        "level": 5,
+        "likelihood": 3
+      },
+      {
+        "unitId": 27,
+        "level": 6,
+        "likelihood": 6
+      },
+      {
+        "unitId": 30,
+        "level": 5,
+        "likelihood": 4
+      }
+    ],
+    "8": [
+      {
+        "unitId": 16,
+        "level": 8,
+        "likelihood": 2
+      },
+      {
+        "unitId": 24,
+        "level": 7,
+        "likelihood": 4
+      },
+      {
+        "unitId": 27,
+        "level": 6,
+        "likelihood": 6
+      },
+      {
+        "unitId": 30,
+        "level": 5,
+        "likelihood": 4
+      }
+    ],
+    "9": [
+      {
+        "unitId": 16,
+        "level": 8,
+        "likelihood": 5
+      },
+      {
+        "unitId": 24,
+        "level": 7,
+        "likelihood": 5
+      },
+      {
+        "unitId": 26,
+        "level": 9,
+        "likelihood": 2
+      },
+      {
+        "unitId": 27,
+        "level": 6,
+        "likelihood": 4
+      }
+    ],
+    "10": [
+      {
+        "unitId": 16,
+        "level": 8,
+        "likelihood": 3
+      },
+      {
+        "unitId": 22,
+        "level": 10,
+        "likelihood": 6
+      },
+      {
+        "unitId": 26,
+        "level": 9,
+        "likelihood": 4
+      },
+      {
+        "unitId": 28,
+        "level": 11,
+        "likelihood": 3
+      }
+    ],
+    "11": [
+      {
+        "unitId": 8,
+        "level": 12,
+        "likelihood": 3
+      },
+      {
+        "unitId": 22,
+        "level": 10,
+        "likelihood": 5
+      },
+      {
+        "unitId": 26,
+        "level": 9,
+        "likelihood": 4
+      },
+      {
+        "unitId": 28,
+        "level": 11,
+        "likelihood": 4
+      }
+    ],
+    "12": [
+      {
+        "unitId": 8,
+        "level": 12,
+        "likelihood": 4
+      },
+      {
+        "unitId": 26,
+        "level": 9,
+        "likelihood": 5
+      },
+      {
+        "unitId": 26,
+        "level": 11,
+        "likelihood": 1
+      },
+      {
+        "unitId": 28,
+        "level": 11,
+        "likelihood": 4
+      },
+      {
+        "unitId": 33,
+        "level": 13,
+        "likelihood": 2
+      }
+    ],
+    "13": [
+      {
+        "unitId": 8,
+        "level": 12,
+        "likelihood": 6
+      },
+      {
+        "unitId": 14,
+        "level": 14,
+        "likelihood": 3
+      },
+      {
+        "unitId": 28,
+        "level": 11,
+        "likelihood": 3
+      },
+      {
+        "unitId": 33,
+        "level": 13,
+        "likelihood": 4
+      }
+    ],
+    "14": [
+      {
+        "unitId": 14,
+        "level": 14,
+        "likelihood": 5
+      },
+      {
+        "unitId": 22,
+        "level": 15,
+        "likelihood": 4
+      },
+      {
+        "unitId": 33,
+        "level": 13,
+        "likelihood": 4
+      },
+      {
+        "unitId": 41,
+        "level": 16,
+        "likelihood": 3
+      }
+    ],
+    "15": [
+      {
+        "unitId": 14,
+        "level": 14,
+        "likelihood": 5
+      },
+      {
+        "unitId": 22,
+        "level": 15,
+        "likelihood": 4
+      },
+      {
+        "unitId": 33,
+        "level": 13,
+        "likelihood": 1
+      },
+      {
+        "unitId": 41,
+        "level": 16,
+        "likelihood": 6
+      }
+    ],
+    "16": [
+      {
+        "unitId": 22,
+        "level": 15,
+        "likelihood": 5
+      },
+      {
+        "unitId": 30,
+        "level": 15,
+        "likelihood": 5
+      },
+      {
+        "unitId": 31,
+        "level": 20,
+        "likelihood": 1
+      },
+      {
+        "unitId": 41,
+        "level": 16,
+        "likelihood": 5
+      }
+    ],
+    "17": [
+      {
+        "unitId": 22,
+        "level": 2,
+        "likelihood": 2
+      },
+      {
+        "unitId": 22,
+        "level": 10,
+        "likelihood": 3
+      },
+      {
+        "unitId": 22,
+        "level": 15,
+        "likelihood": 2
+      },
+      {
+        "unitId": 30,
+        "level": 15,
+        "likelihood": 3
+      },
+      {
+        "unitId": 32,
+        "level": 17,
+        "likelihood": 5
+      },
+      {
+        "unitId": 41,
+        "level": 16,
+        "likelihood": 1
+      }
+    ],
+    "18": [
+      {
+        "unitId": 12,
+        "level": 18,
+        "likelihood": 6
+      },
+      {
+        "unitId": 30,
+        "level": 15,
+        "likelihood": 3
+      },
+      {
+        "unitId": 32,
+        "level": 17,
+        "likelihood": 7
+      }
+    ],
+    "19": [
+      {
+        "unitId": 12,
+        "level": 18,
+        "likelihood": 6
+      },
+      {
+        "unitId": 30,
+        "level": 15,
+        "likelihood": 2
+      },
+      {
+        "unitId": 32,
+        "level": 17,
+        "likelihood": 4
+      },
+      {
+        "unitId": 34,
+        "level": 19,
+        "likelihood": 4
+      }
+    ],
+    "20": [
+      {
+        "unitId": 12,
+        "level": 18,
+        "likelihood": 4
+      },
+      {
+        "unitId": 18,
+        "level": 20,
+        "likelihood": 4
+      },
+      {
+        "unitId": 34,
+        "level": 19,
+        "likelihood": 4
+      },
+      {
+        "unitId": 36,
+        "level": 21,
+        "likelihood": 4
+      }
+    ],
+    "21": [
+      {
+        "unitId": 18,
+        "level": 20,
+        "likelihood": 5
+      },
+      {
+        "unitId": 21,
+        "level": 1,
+        "likelihood": 2
+      },
+      {
+        "unitId": 21,
+        "level": 16,
+        "likelihood": 1
+      },
+      {
+        "unitId": 34,
+        "level": 19,
+        "likelihood": 4
+      },
+      {
+        "unitId": 36,
+        "level": 21,
+        "likelihood": 4
+      }
+    ],
+    "22": [
+      {
+        "unitId": 18,
+        "level": 20,
+        "likelihood": 4
+      },
+      {
+        "unitId": 20,
+        "level": 22,
+        "likelihood": 2
+      },
+      {
+        "unitId": 21,
+        "level": 1,
+        "likelihood": 4
+      },
+      {
+        "unitId": 21,
+        "level": 16,
+        "likelihood": 1
+      },
+      {
+        "unitId": 36,
+        "level": 21,
+        "likelihood": 5
+      }
+    ],
+    "23": [
+      {
+        "unitId": 18,
+        "level": 20,
+        "likelihood": 5
+      },
+      {
+        "unitId": 20,
+        "level": 22,
+        "likelihood": 4
+      },
+      {
+        "unitId": 35,
+        "level": 23,
+        "likelihood": 1
+      },
+      {
+        "unitId": 36,
+        "level": 21,
+        "likelihood": 6
+      }
+    ],
+    "24": [
+      {
+        "unitId": 20,
+        "level": 22,
+        "likelihood": 7
+      },
+      {
+        "unitId": 35,
+        "level": 23,
+        "likelihood": 1
+      },
+      {
+        "unitId": 36,
+        "level": 21,
+        "likelihood": 5
+      },
+      {
+        "unitId": 38,
+        "level": 24,
+        "likelihood": 3
+      }
+    ],
+    "25": [
+      {
+        "unitId": 20,
+        "level": 22,
+        "likelihood": 3
+      },
+      {
+        "unitId": 32,
+        "level": 17,
+        "likelihood": 1
+      },
+      {
+        "unitId": 35,
+        "level": 23,
+        "likelihood": 6
+      },
+      {
+        "unitId": 38,
+        "level": 24,
+        "likelihood": 6
+      }
+    ],
+    "26": [
+      {
+        "unitId": 10,
+        "level": 25,
+        "likelihood": 5
+      },
+      {
+        "unitId": 31,
+        "level": 20,
+        "likelihood": 1
+      },
+      {
+        "unitId": 38,
+        "level": 24,
+        "likelihood": 6
+      },
+      {
+        "unitId": 39,
+        "level": 26,
+        "likelihood": 4
+      }
+    ],
+    "27": [
+      {
+        "unitId": 10,
+        "level": 25,
+        "likelihood": 5
+      },
+      {
+        "unitId": 30,
+        "level": 25,
+        "likelihood": 4
+      },
+      {
+        "unitId": 38,
+        "level": 24,
+        "likelihood": 3
+      },
+      {
+        "unitId": 39,
+        "level": 26,
+        "likelihood": 4
+      }
+    ],
+    "28": [
+      {
+        "unitId": 10,
+        "level": 25,
+        "likelihood": 4
+      },
+      {
+        "unitId": 30,
+        "level": 25,
+        "likelihood": 5
+      },
+      {
+        "unitId": 37,
+        "level": 27,
+        "likelihood": 3
+      },
+      {
+        "unitId": 39,
+        "level": 26,
+        "likelihood": 4
+      }
+    ],
+    "29": [
+      {
+        "unitId": 10,
+        "level": 25,
+        "likelihood": 5
+      },
+      {
+        "unitId": 30,
+        "level": 25,
+        "likelihood": 5
+      },
+      {
+        "unitId": 37,
+        "level": 27,
+        "likelihood": 5
+      },
+      {
+        "unitId": 40,
+        "level": 28,
+        "likelihood": 1
+      }
+    ],
+    "30": [
+      {
+        "unitId": 30,
+        "level": 25,
+        "likelihood": 2
+      },
+      {
+        "unitId": 37,
+        "level": 27,
+        "likelihood": 3
+      },
+      {
+        "unitId": 40,
+        "level": 28,
+        "likelihood": 7
+      },
+      {
+        "unitId": 43,
+        "level": 29,
+        "likelihood": 4
+      }
+    ],
+    "31": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 37,
+        "level": 27,
+        "likelihood": 1
+      },
+      {
+        "unitId": 40,
+        "level": 28,
+        "likelihood": 5
+      },
+      {
+        "unitId": 43,
+        "level": 29,
+        "likelihood": 6
+      }
+    ],
+    "32": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 40,
+        "level": 28,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 43,
+        "level": 29,
+        "likelihood": 4
+      }
+    ],
+    "33": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 5
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 6
+      },
+      {
+        "unitId": 43,
+        "level": 29,
+        "likelihood": 3
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 2
+      }
+    ],
+    "34": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 5
+      },
+      {
+        "unitId": 43,
+        "level": 29,
+        "likelihood": 2
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 5
+      }
+    ],
+    "35": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 5
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 6
+      },
+      {
+        "unitId": 45,
+        "level": 30,
+        "likelihood": 1
+      }
+    ],
+    "36": [
+      {
+        "unitId": 31,
+        "level": 20,
+        "likelihood": 1
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 5
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 5
+      },
+      {
+        "unitId": 45,
+        "level": 30,
+        "likelihood": 5
+      }
+    ],
+    "37": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 45,
+        "level": 30,
+        "likelihood": 4
+      }
+    ],
+    "38": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 45,
+        "level": 30,
+        "likelihood": 4
+      }
+    ],
+    "39": [
+      {
+        "unitId": 3,
+        "level": 29,
+        "likelihood": 4
+      },
+      {
+        "unitId": 42,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 44,
+        "level": 30,
+        "likelihood": 4
+      },
+      {
+        "unitId": 45,
+        "level": 30,
+        "likelihood": 4
+      }
+    ],
+    "40": [
+      {
+        "unitId": 56,
+        "level": 99,
+        "likelihood": 16
+      }
+    ]
+  },
+  "eggFloors": {
+    "1": [
+      {
+        "unitId": 6,
+        "probability": 15.625
+      },
+      {
+        "unitId": 21,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 12.5
+      },
+      {
+        "unitId": 23,
+        "probability": 18.75
+      },
+      {
+        "unitId": 25,
+        "probability": 12.5
+      },
+      {
+        "unitId": 27,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 9.375
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      }
+    ],
+    "2": [
+      {
+        "unitId": 6,
+        "probability": 15.625
+      },
+      {
+        "unitId": 21,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 12.5
+      },
+      {
+        "unitId": 23,
+        "probability": 18.75
+      },
+      {
+        "unitId": 25,
+        "probability": 12.5
+      },
+      {
+        "unitId": 27,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 9.375
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      }
+    ],
+    "3": [
+      {
+        "unitId": 6,
+        "probability": 15.625
+      },
+      {
+        "unitId": 21,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 12.5
+      },
+      {
+        "unitId": 23,
+        "probability": 18.75
+      },
+      {
+        "unitId": 25,
+        "probability": 12.5
+      },
+      {
+        "unitId": 27,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 9.375
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      }
+    ],
+    "4": [
+      {
+        "unitId": 6,
+        "probability": 15.625
+      },
+      {
+        "unitId": 21,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 12.5
+      },
+      {
+        "unitId": 23,
+        "probability": 18.75
+      },
+      {
+        "unitId": 25,
+        "probability": 12.5
+      },
+      {
+        "unitId": 27,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 9.375
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      }
+    ],
+    "5": [
+      {
+        "unitId": 6,
+        "probability": 15.625
+      },
+      {
+        "unitId": 21,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 12.5
+      },
+      {
+        "unitId": 23,
+        "probability": 18.75
+      },
+      {
+        "unitId": 25,
+        "probability": 12.5
+      },
+      {
+        "unitId": 27,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 9.375
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      }
+    ],
+    "6": [
+      {
+        "unitId": 16,
+        "probability": 9.375
+      },
+      {
+        "unitId": 24,
+        "probability": 9.375
+      },
+      {
+        "unitId": 25,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 9.375
+      },
+      {
+        "unitId": 27,
+        "probability": 18.75
+      },
+      {
+        "unitId": 28,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 15.625
+      },
+      {
+        "unitId": 30,
+        "probability": 12.5
+      }
+    ],
+    "7": [
+      {
+        "unitId": 16,
+        "probability": 9.375
+      },
+      {
+        "unitId": 24,
+        "probability": 9.375
+      },
+      {
+        "unitId": 25,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 9.375
+      },
+      {
+        "unitId": 27,
+        "probability": 18.75
+      },
+      {
+        "unitId": 28,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 15.625
+      },
+      {
+        "unitId": 30,
+        "probability": 12.5
+      }
+    ],
+    "8": [
+      {
+        "unitId": 16,
+        "probability": 9.375
+      },
+      {
+        "unitId": 24,
+        "probability": 9.375
+      },
+      {
+        "unitId": 25,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 9.375
+      },
+      {
+        "unitId": 27,
+        "probability": 18.75
+      },
+      {
+        "unitId": 28,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 15.625
+      },
+      {
+        "unitId": 30,
+        "probability": 12.5
+      }
+    ],
+    "9": [
+      {
+        "unitId": 16,
+        "probability": 9.375
+      },
+      {
+        "unitId": 24,
+        "probability": 9.375
+      },
+      {
+        "unitId": 25,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 9.375
+      },
+      {
+        "unitId": 27,
+        "probability": 18.75
+      },
+      {
+        "unitId": 28,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 15.625
+      },
+      {
+        "unitId": 30,
+        "probability": 12.5
+      }
+    ],
+    "10": [
+      {
+        "unitId": 16,
+        "probability": 9.375
+      },
+      {
+        "unitId": 24,
+        "probability": 9.375
+      },
+      {
+        "unitId": 25,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 9.375
+      },
+      {
+        "unitId": 27,
+        "probability": 18.75
+      },
+      {
+        "unitId": 28,
+        "probability": 9.375
+      },
+      {
+        "unitId": 29,
+        "probability": 15.625
+      },
+      {
+        "unitId": 30,
+        "probability": 12.5
+      }
+    ],
+    "11": [
+      {
+        "unitId": 8,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 9.375
+      },
+      {
+        "unitId": 16,
+        "probability": 15.625
+      },
+      {
+        "unitId": 24,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 15.625
+      },
+      {
+        "unitId": 28,
+        "probability": 15.625
+      },
+      {
+        "unitId": 33,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 9.375
+      }
+    ],
+    "12": [
+      {
+        "unitId": 8,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 9.375
+      },
+      {
+        "unitId": 16,
+        "probability": 15.625
+      },
+      {
+        "unitId": 24,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 15.625
+      },
+      {
+        "unitId": 28,
+        "probability": 15.625
+      },
+      {
+        "unitId": 33,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 9.375
+      }
+    ],
+    "13": [
+      {
+        "unitId": 8,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 9.375
+      },
+      {
+        "unitId": 16,
+        "probability": 15.625
+      },
+      {
+        "unitId": 24,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 15.625
+      },
+      {
+        "unitId": 28,
+        "probability": 15.625
+      },
+      {
+        "unitId": 33,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 9.375
+      }
+    ],
+    "14": [
+      {
+        "unitId": 8,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 9.375
+      },
+      {
+        "unitId": 16,
+        "probability": 15.625
+      },
+      {
+        "unitId": 24,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 15.625
+      },
+      {
+        "unitId": 28,
+        "probability": 15.625
+      },
+      {
+        "unitId": 33,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 9.375
+      }
+    ],
+    "15": [
+      {
+        "unitId": 8,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 9.375
+      },
+      {
+        "unitId": 16,
+        "probability": 15.625
+      },
+      {
+        "unitId": 24,
+        "probability": 15.625
+      },
+      {
+        "unitId": 26,
+        "probability": 15.625
+      },
+      {
+        "unitId": 28,
+        "probability": 15.625
+      },
+      {
+        "unitId": 33,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 9.375
+      }
+    ],
+    "16": [
+      {
+        "unitId": 8,
+        "probability": 15.625
+      },
+      {
+        "unitId": 12,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 9.375
+      },
+      {
+        "unitId": 33,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 15.625
+      }
+    ],
+    "17": [
+      {
+        "unitId": 8,
+        "probability": 15.625
+      },
+      {
+        "unitId": 12,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 9.375
+      },
+      {
+        "unitId": 33,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 15.625
+      }
+    ],
+    "18": [
+      {
+        "unitId": 8,
+        "probability": 15.625
+      },
+      {
+        "unitId": 12,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 9.375
+      },
+      {
+        "unitId": 33,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 15.625
+      }
+    ],
+    "19": [
+      {
+        "unitId": 8,
+        "probability": 15.625
+      },
+      {
+        "unitId": 12,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 9.375
+      },
+      {
+        "unitId": 33,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 15.625
+      }
+    ],
+    "20": [
+      {
+        "unitId": 8,
+        "probability": 15.625
+      },
+      {
+        "unitId": 12,
+        "probability": 9.375
+      },
+      {
+        "unitId": 14,
+        "probability": 15.625
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 9.375
+      },
+      {
+        "unitId": 33,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 9.375
+      },
+      {
+        "unitId": 41,
+        "probability": 15.625
+      }
+    ],
+    "21": [
+      {
+        "unitId": 12,
+        "probability": 15.625
+      },
+      {
+        "unitId": 18,
+        "probability": 9.375
+      },
+      {
+        "unitId": 20,
+        "probability": 9.375
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 9.375
+      },
+      {
+        "unitId": 36,
+        "probability": 9.375
+      }
+    ],
+    "22": [
+      {
+        "unitId": 12,
+        "probability": 15.625
+      },
+      {
+        "unitId": 18,
+        "probability": 9.375
+      },
+      {
+        "unitId": 20,
+        "probability": 9.375
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 9.375
+      },
+      {
+        "unitId": 36,
+        "probability": 9.375
+      }
+    ],
+    "23": [
+      {
+        "unitId": 12,
+        "probability": 15.625
+      },
+      {
+        "unitId": 18,
+        "probability": 9.375
+      },
+      {
+        "unitId": 20,
+        "probability": 9.375
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 9.375
+      },
+      {
+        "unitId": 36,
+        "probability": 9.375
+      }
+    ],
+    "24": [
+      {
+        "unitId": 12,
+        "probability": 15.625
+      },
+      {
+        "unitId": 18,
+        "probability": 9.375
+      },
+      {
+        "unitId": 20,
+        "probability": 9.375
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 9.375
+      },
+      {
+        "unitId": 36,
+        "probability": 9.375
+      }
+    ],
+    "25": [
+      {
+        "unitId": 12,
+        "probability": 15.625
+      },
+      {
+        "unitId": 18,
+        "probability": 9.375
+      },
+      {
+        "unitId": 20,
+        "probability": 9.375
+      },
+      {
+        "unitId": 22,
+        "probability": 6.25
+      },
+      {
+        "unitId": 30,
+        "probability": 6.25
+      },
+      {
+        "unitId": 31,
+        "probability": 3.125
+      },
+      {
+        "unitId": 32,
+        "probability": 15.625
+      },
+      {
+        "unitId": 34,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 9.375
+      },
+      {
+        "unitId": 36,
+        "probability": 9.375
+      }
+    ],
+    "26": [
+      {
+        "unitId": 10,
+        "probability": 9.375
+      },
+      {
+        "unitId": 18,
+        "probability": 15.625
+      },
+      {
+        "unitId": 20,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 15.625
+      },
+      {
+        "unitId": 36,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 9.375
+      },
+      {
+        "unitId": 38,
+        "probability": 9.375
+      },
+      {
+        "unitId": 39,
+        "probability": 9.375
+      }
+    ],
+    "27": [
+      {
+        "unitId": 10,
+        "probability": 9.375
+      },
+      {
+        "unitId": 18,
+        "probability": 15.625
+      },
+      {
+        "unitId": 20,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 15.625
+      },
+      {
+        "unitId": 36,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 9.375
+      },
+      {
+        "unitId": 38,
+        "probability": 9.375
+      },
+      {
+        "unitId": 39,
+        "probability": 9.375
+      }
+    ],
+    "28": [
+      {
+        "unitId": 10,
+        "probability": 9.375
+      },
+      {
+        "unitId": 18,
+        "probability": 15.625
+      },
+      {
+        "unitId": 20,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 15.625
+      },
+      {
+        "unitId": 36,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 9.375
+      },
+      {
+        "unitId": 38,
+        "probability": 9.375
+      },
+      {
+        "unitId": 39,
+        "probability": 9.375
+      }
+    ],
+    "29": [
+      {
+        "unitId": 10,
+        "probability": 9.375
+      },
+      {
+        "unitId": 18,
+        "probability": 15.625
+      },
+      {
+        "unitId": 20,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 15.625
+      },
+      {
+        "unitId": 36,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 9.375
+      },
+      {
+        "unitId": 38,
+        "probability": 9.375
+      },
+      {
+        "unitId": 39,
+        "probability": 9.375
+      }
+    ],
+    "30": [
+      {
+        "unitId": 10,
+        "probability": 9.375
+      },
+      {
+        "unitId": 18,
+        "probability": 15.625
+      },
+      {
+        "unitId": 20,
+        "probability": 15.625
+      },
+      {
+        "unitId": 35,
+        "probability": 15.625
+      },
+      {
+        "unitId": 36,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 9.375
+      },
+      {
+        "unitId": 38,
+        "probability": 9.375
+      },
+      {
+        "unitId": 39,
+        "probability": 9.375
+      }
+    ],
+    "31": [
+      {
+        "unitId": 4,
+        "probability": 9.375
+      },
+      {
+        "unitId": 10,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 15.625
+      },
+      {
+        "unitId": 38,
+        "probability": 15.625
+      },
+      {
+        "unitId": 39,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 9.375
+      },
+      {
+        "unitId": 42,
+        "probability": 9.375
+      },
+      {
+        "unitId": 43,
+        "probability": 9.375
+      }
+    ],
+    "32": [
+      {
+        "unitId": 4,
+        "probability": 9.375
+      },
+      {
+        "unitId": 10,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 15.625
+      },
+      {
+        "unitId": 38,
+        "probability": 15.625
+      },
+      {
+        "unitId": 39,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 9.375
+      },
+      {
+        "unitId": 42,
+        "probability": 9.375
+      },
+      {
+        "unitId": 43,
+        "probability": 9.375
+      }
+    ],
+    "33": [
+      {
+        "unitId": 4,
+        "probability": 9.375
+      },
+      {
+        "unitId": 10,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 15.625
+      },
+      {
+        "unitId": 38,
+        "probability": 15.625
+      },
+      {
+        "unitId": 39,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 9.375
+      },
+      {
+        "unitId": 42,
+        "probability": 9.375
+      },
+      {
+        "unitId": 43,
+        "probability": 9.375
+      }
+    ],
+    "34": [
+      {
+        "unitId": 4,
+        "probability": 9.375
+      },
+      {
+        "unitId": 10,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 15.625
+      },
+      {
+        "unitId": 38,
+        "probability": 15.625
+      },
+      {
+        "unitId": 39,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 9.375
+      },
+      {
+        "unitId": 42,
+        "probability": 9.375
+      },
+      {
+        "unitId": 43,
+        "probability": 9.375
+      }
+    ],
+    "35": [
+      {
+        "unitId": 4,
+        "probability": 9.375
+      },
+      {
+        "unitId": 10,
+        "probability": 15.625
+      },
+      {
+        "unitId": 37,
+        "probability": 15.625
+      },
+      {
+        "unitId": 38,
+        "probability": 15.625
+      },
+      {
+        "unitId": 39,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 9.375
+      },
+      {
+        "unitId": 42,
+        "probability": 9.375
+      },
+      {
+        "unitId": 43,
+        "probability": 9.375
+      }
+    ],
+    "36": [
+      {
+        "unitId": 4,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 21.875
+      },
+      {
+        "unitId": 42,
+        "probability": 18.75
+      },
+      {
+        "unitId": 43,
+        "probability": 18.75
+      },
+      {
+        "unitId": 44,
+        "probability": 15.625
+      },
+      {
+        "unitId": 45,
+        "probability": 9.375
+      }
+    ],
+    "37": [
+      {
+        "unitId": 4,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 21.875
+      },
+      {
+        "unitId": 42,
+        "probability": 18.75
+      },
+      {
+        "unitId": 43,
+        "probability": 18.75
+      },
+      {
+        "unitId": 44,
+        "probability": 15.625
+      },
+      {
+        "unitId": 45,
+        "probability": 9.375
+      }
+    ],
+    "38": [
+      {
+        "unitId": 4,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 21.875
+      },
+      {
+        "unitId": 42,
+        "probability": 18.75
+      },
+      {
+        "unitId": 43,
+        "probability": 18.75
+      },
+      {
+        "unitId": 44,
+        "probability": 15.625
+      },
+      {
+        "unitId": 45,
+        "probability": 9.375
+      }
+    ],
+    "39": [
+      {
+        "unitId": 4,
+        "probability": 15.625
+      },
+      {
+        "unitId": 40,
+        "probability": 21.875
+      },
+      {
+        "unitId": 42,
+        "probability": 18.75
+      },
+      {
+        "unitId": 43,
+        "probability": 18.75
+      },
+      {
+        "unitId": 44,
+        "probability": 15.625
+      },
+      {
+        "unitId": 45,
+        "probability": 9.375
+      }
+    ],
+    "40": []
+  },
+  "floorEvents": {
+    "1": "First visit uses a fixed tutorial layout, placements, and encounters. Later visits choose among four fixed layouts and randomize placements.",
+    "2": "The enemy table applies to the first ascent according to the guide. Later visits use a fixed layout with no items. The Unity project retains its requested NPC-only override.",
+    "12": "Blue Collar can appear if still uncollected. An item room can prevent it.",
+    "15": "Guru oil pot requires the windmill conversation with Isaac and an uncollected pot.",
+    "20": "Blue Cape requires talking with Okami at the bar and an uncollected cape.",
+    "25": "The Water Medal quest can spawn a white Picket after talking with Watta.",
+    "28": "Healing Herb can appear after advancing Cherrl\u2019s story if still uncollected.",
+    "31": "The first visit can show a Beldo vision. Trap rooms or monster dens can override it.",
+    "40": "First visit has Beldo. Later visits have Wind Crystals for returning."
+  },
+  "mechanics": {
+    "towerControls": {
+      "url": "https://adrando.com/guide/controls/tower.html",
+      "menuSort": "Triangle",
+      "menuConfirm": "Square",
+      "controller2DisableVsync": [
+        "L1",
+        "R1"
+      ],
+      "controller2EnableVsync": [
+        "L2",
+        "R2"
+      ],
+      "vsyncCondition": "After clearing the game and seeing the message upon leaving Koh\u2019s house."
+    },
+    "damage": {
+      "url": "https://adrando.com/guide/mechanics/damage.html",
+      "status": "Section headings only. No damage formulas published on this page."
+    },
+    "stats": {
+      "url": "https://adrando.com/guide/mechanics/stats.html",
+      "formulaSource": "https://adrando.com/guide/units/unit.js",
+      "atkDefAgilityDivisor": 64,
+      "mpLuckDivisor": 1024,
+      "standardGrowth": "min(base + floor(base * growth * (level - 1) / divisor), 255)",
+      "hpGrowth": "min(base + floor(growth * (level - 1) / 16) + floor(2896 * growth * sqrt(growth * (level - 1)) / 32768), 255)",
+      "expGiven": "(base * level + floor((level - 1)^2 * (base + growth * (level - 1)) / 512)) mod 65535",
+      "experienceNotes": "Experience is doubled for a lower-level recipient. Koh and his familiars share experience from their kills."
+    },
+    "bugs": {
+      "url": "https://adrando.com/guide/bugs.html",
+      "examples": [
+        "Egg-bomb or second tower encounters above monster level 99 can hang.",
+        "Gaining 32767 to 39480 EXP at once can crash.",
+        "An item room can overwrite a quest item. Trap placement can overwrite the Beldo vision.",
+        "Barong\u2019s replacement item rarity check compares the input to itself.",
+        "The tile under Koh can retain an occupancy flag if a carried familiar is removed."
+      ]
+    }
+  }
+}

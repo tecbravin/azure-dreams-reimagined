@@ -1,0 +1,373 @@
+[
+  {
+    "file_offset": "0x2184",
+    "resident_address": "0x8002e984",
+    "text": "Ｐｒｅｓｅｎｔｅｄ　ｂｙ",
+    "normalized_text": "Presented by",
+    "raw_hex": "826f8292828582938285828e829482858284814082828299"
+  },
+  {
+    "file_offset": "0x21a0",
+    "resident_address": "0x8002e9a0",
+    "text": "Ｋｉｔａｕｅ　Ｋａｚｕｍｉ",
+    "normalized_text": "Kitaue Kazumi",
+    "raw_hex": "826a828982948281829582858140826a8281829a8295828d8289"
+  },
+  {
+    "file_offset": "0x21bc",
+    "resident_address": "0x8002e9bc",
+    "text": "Ｐｒｏｄｕｃｅｄ　ｂｙ",
+    "normalized_text": "Produced by",
+    "raw_hex": "826f8292828f82848295828382858284814082828299"
+  },
+  {
+    "file_offset": "0x21d4",
+    "resident_address": "0x8002e9d4",
+    "text": "Ｙｏｎｅｏｋａ　Ｍａｓａｋｉ",
+    "normalized_text": "Yoneoka Masaki",
+    "raw_hex": "8278828f828e8285828f828b82818140826c828182938281828b8289"
+  },
+  {
+    "file_offset": "0x21f4",
+    "resident_address": "0x8002e9f4",
+    "text": "Ｓｕｐｅｒｖｉｓｅｄ　ｂｙ",
+    "normalized_text": "Supervised by",
+    "raw_hex": "8272829582908285829282968289829382858284814082828299"
+  },
+  {
+    "file_offset": "0x2210",
+    "resident_address": "0x8002ea10",
+    "text": "Ｈａｒａｄａ　Ｍａｓａａｋｉ",
+    "normalized_text": "Harada Masaaki",
+    "raw_hex": "8267828182928281828482818140826c8281829382818281828b8289"
+  },
+  {
+    "file_offset": "0x2230",
+    "resident_address": "0x8002ea30",
+    "text": "Ｓｐｅｃｉａｌ　ｔｈａｎｋｓ　ｔｏ",
+    "normalized_text": "Special thanks to",
+    "raw_hex": "827282908285828382898281828c8140829482888281828e828b829381408294828f"
+  },
+  {
+    "file_offset": "0x2254",
+    "resident_address": "0x8002ea54",
+    "text": "ＫＡＳＡＩ　ＨＩＤＥＫＩ",
+    "normalized_text": "KASAI HIDEKI",
+    "raw_hex": "826a826082728260826881408267826882638264826a8268"
+  },
+  {
+    "file_offset": "0x2270",
+    "resident_address": "0x8002ea70",
+    "text": "ＦＬＡＴＬＩＮＥ",
+    "normalized_text": "FLATLINE",
+    "raw_hex": "8265826b82608273826b8268826d8264"
+  },
+  {
+    "file_offset": "0x2284",
+    "resident_address": "0x8002ea84",
+    "text": "Ｓｏｕｎｄ　ｅｄｉｔｅｄ　ｂｙ",
+    "normalized_text": "Sound edited by",
+    "raw_hex": "8272828f8295828e82848140828582848289829482858284814082828299"
+  },
+  {
+    "file_offset": "0x22a4",
+    "resident_address": "0x8002eaa4",
+    "text": "Ｋｉｙｏｈｉｋｏ　Ｙａｍａｎｅ",
+    "normalized_text": "Kiyohiko Yamane",
+    "raw_hex": "826a82898299828f82888289828b828f814082788281828d8281828e8285"
+  },
+  {
+    "file_offset": "0x22c4",
+    "resident_address": "0x8002eac4",
+    "text": "Ｍｕｓｉｃ　ｄｒｉｖｅｒ　ｂｙ",
+    "normalized_text": "Music driver by",
+    "raw_hex": "826c82958293828982838140828482928289829682858292814082828299"
+  },
+  {
+    "file_offset": "0x22e4",
+    "resident_address": "0x8002eae4",
+    "text": "Ｎｏｒｉｔａｄａ　Ｍａｔｓｕｋａｗａ",
+    "normalized_text": "Noritada Matsukawa",
+    "raw_hex": "826d828f8292828982948281828482818140826c8281829482938295828b828182978281"
+  },
+  {
+    "file_offset": "0x230c",
+    "resident_address": "0x8002eb0c",
+    "text": "Ｓｏｕｎｄ　ｍａｎａｇｅｍｅｎｔ　ｂｙ",
+    "normalized_text": "Sound management by",
+    "raw_hex": "8272828f8295828e82848140828d8281828e828182878285828d8285828e8294814082828299"
+  },
+  {
+    "file_offset": "0x2334",
+    "resident_address": "0x8002eb34",
+    "text": "Ｓｏｕｎｄ　ｐｒｏｇｒａｍｍｉｎｇ　ｂｙ",
+    "normalized_text": "Sound programming by",
+    "raw_hex": "8272828f8295828e8284814082908292828f828782928281828d828d8289828e8287814082828299"
+  },
+  {
+    "file_offset": "0x2360",
+    "resident_address": "0x8002eb60",
+    "text": "Ｉｍｏｈｏｒｅ　ＩＭＡＩ",
+    "normalized_text": "Imohore IMAI",
+    "raw_hex": "8268828d828f8288828f8292828581408268826c82608268"
+  },
+  {
+    "file_offset": "0x237c",
+    "resident_address": "0x8002eb7c",
+    "text": "Ｍｏｖｉｅ　ＳＥ　ｂｙ",
+    "normalized_text": "Movie SE by",
+    "raw_hex": "826c828f829682898285814082728264814082828299"
+  },
+  {
+    "file_offset": "0x2394",
+    "resident_address": "0x8002eb94",
+    "text": "Ｈｉｒｏｅ　Ｎｏｇｕｃｈｉ",
+    "normalized_text": "Hiroe Noguchi",
+    "raw_hex": "826782898292828f82858140826d828f82878295828382888289"
+  },
+  {
+    "file_offset": "0x23b0",
+    "resident_address": "0x8002ebb0",
+    "text": "Ｓｏｕｎｄ　ｅｆｆｅｃｔｓ　ｂｙ",
+    "normalized_text": "Sound effects by",
+    "raw_hex": "8272828f8295828e828481408285828682868285828382948293814082828299"
+  },
+  {
+    "file_offset": "0x23d4",
+    "resident_address": "0x8002ebd4",
+    "text": "Ｈｉｒｏｓｈｉ　Ｔａｍａｗａｒｉ",
+    "normalized_text": "Hiroshi Tamawari",
+    "raw_hex": "826782898292828f829382888289814082738281828d82818297828182928289"
+  },
+  {
+    "file_offset": "0x23f8",
+    "resident_address": "0x8002ebf8",
+    "text": "Ｍｕｓｉｃ　ｂｙ",
+    "normalized_text": "Music by",
+    "raw_hex": "826c8295829382898283814082828299"
+  },
+  {
+    "file_offset": "0x240c",
+    "resident_address": "0x8002ec0c",
+    "text": "ＴＡＤＡＮＯ　ＴＳＵＧＵＯ",
+    "normalized_text": "TADANO TSUGUO",
+    "raw_hex": "8273826082638260826d826e814082738272827482668274826e"
+  },
+  {
+    "file_offset": "0x2428",
+    "resident_address": "0x8002ec28",
+    "text": "Ｉｍａｉｚｕｍｉ　Ｋｅｎｉｃｈｉｒｏ",
+    "normalized_text": "Imaizumi Kenichiro",
+    "raw_hex": "8268828d82818289829a8295828d82898140826a8285828e82898283828882898292828f"
+  },
+  {
+    "file_offset": "0x2450",
+    "resident_address": "0x8002ec50",
+    "text": "Ｎａｋａｎｏ　Ｋａｚｕａｋｉ",
+    "normalized_text": "Nakano Kazuaki",
+    "raw_hex": "826d8281828b8281828e828f8140826a8281829a82958281828b8289"
+  },
+  {
+    "file_offset": "0x2470",
+    "resident_address": "0x8002ec70",
+    "text": "Ｍｏｖｉｅ　ｂｙ",
+    "normalized_text": "Movie by",
+    "raw_hex": "826c828f829682898285814082828299"
+  },
+  {
+    "file_offset": "0x2484",
+    "resident_address": "0x8002ec84",
+    "text": "Ｔａｊｉｍａ　Ｔｅｒｕｔｏ",
+    "normalized_text": "Tajima Teruto",
+    "raw_hex": "82738281828a8289828d8281814082738285829282958294828f"
+  },
+  {
+    "file_offset": "0x24a0",
+    "resident_address": "0x8002eca0",
+    "text": "Ａｏｋｉ　Ｙｏｋｏ",
+    "normalized_text": "Aoki Yoko",
+    "raw_hex": "8260828f828b828981408278828f828b828f"
+  },
+  {
+    "file_offset": "0x24b4",
+    "resident_address": "0x8002ecb4",
+    "text": "Ａｄｄｉｔｉｏｎａｌ　ｄｅｓｉｇｎ　ｂｙ",
+    "normalized_text": "Additional design by",
+    "raw_hex": "826082848284828982948289828f828e8281828c814082848285829382898287828e814082828299"
+  },
+  {
+    "file_offset": "0x24e0",
+    "resident_address": "0x8002ece0",
+    "text": "Ｍａｓａｋｏ　Ｙａｓｈｉｍａ",
+    "normalized_text": "Masako Yashima",
+    "raw_hex": "826c828182938281828b828f814082788281829382888289828d8281"
+  },
+  {
+    "file_offset": "0x2500",
+    "resident_address": "0x8002ed00",
+    "text": "Ｋａｎｅｇｕｃｈｉ　Ｋｅｎｊｉ",
+    "normalized_text": "Kaneguchi Kenji",
+    "raw_hex": "826a8281828e8285828782958283828882898140826a8285828e828a8289"
+  },
+  {
+    "file_offset": "0x2520",
+    "resident_address": "0x8002ed20",
+    "text": "Ｓａｔｏｈ　Ｈｉｒｏｋｉ",
+    "normalized_text": "Satoh Hiroki",
+    "raw_hex": "827282818294828f82888140826782898292828f828b8289"
+  },
+  {
+    "file_offset": "0x253c",
+    "resident_address": "0x8002ed3c",
+    "text": "Ｉｗａｋｕｒａ　Ｋｏｕｓｕｋｅ",
+    "normalized_text": "Iwakura Kousuke",
+    "raw_hex": "826882978281828b8295829282818140826a828f829582938295828b8285"
+  },
+  {
+    "file_offset": "0x255c",
+    "resident_address": "0x8002ed5c",
+    "text": "ＫＯＭＡ",
+    "normalized_text": "KOMA",
+    "raw_hex": "826a826e826c8260"
+  },
+  {
+    "file_offset": "0x2568",
+    "resident_address": "0x8002ed68",
+    "text": "Ｈａｇｉｈａｒａ　Ｔｏｒｕ",
+    "normalized_text": "Hagihara Toru",
+    "raw_hex": "8267828182878289828882818292828181408273828f82928295"
+  },
+  {
+    "file_offset": "0x2584",
+    "resident_address": "0x8002ed84",
+    "text": "Ｓｃｅｎａｒｉｏ　ｃｏｄｅｄ　ｂｙ",
+    "normalized_text": "Scenario coded by",
+    "raw_hex": "827282838285828e828182928289828f81408283828f828482858284814082828299"
+  },
+  {
+    "file_offset": "0x25a8",
+    "resident_address": "0x8002eda8",
+    "text": "ＫＡＴＡＮＡ−１",
+    "normalized_text": "KATANA−1",
+    "raw_hex": "826a826082738260826d8260817c8250"
+  },
+  {
+    "file_offset": "0x25bc",
+    "resident_address": "0x8002edbc",
+    "text": "Ｋｉｋｕｃｈｉ　Ｙｕｊｉ",
+    "normalized_text": "Kikuchi Yuji",
+    "raw_hex": "826a8289828b8295828382888289814082788295828a8289"
+  },
+  {
+    "file_offset": "0x25d8",
+    "resident_address": "0x8002edd8",
+    "text": "Ｉｓｈｉｋａｗａ　Ｋａｚｕｏ",
+    "normalized_text": "Ishikawa Kazuo",
+    "raw_hex": "8268829382888289828b8281829782818140826a8281829a8295828f"
+  },
+  {
+    "file_offset": "0x25f8",
+    "resident_address": "0x8002edf8",
+    "text": "Ｏｇｉｓｏ　Ｋａｚｕｍａｓａ",
+    "normalized_text": "Ogiso Kazumasa",
+    "raw_hex": "826e828782898293828f8140826a8281829a8295828d828182938281"
+  },
+  {
+    "file_offset": "0x2618",
+    "resident_address": "0x8002ee18",
+    "text": "ＨＡＫＯＤＡＴＥ　ＺＩＲＯ",
+    "normalized_text": "HAKODATE ZIRO",
+    "raw_hex": "82678260826a826e82638260827382648140827982688271826e"
+  },
+  {
+    "file_offset": "0x2634",
+    "resident_address": "0x8002ee34",
+    "text": "Ｐｒｏｇｒａｍｍｉｎｇ　ｂｙ",
+    "normalized_text": "Programming by",
+    "raw_hex": "826f8292828f828782928281828d828d8289828e8287814082828299"
+  },
+  {
+    "file_offset": "0x2654",
+    "resident_address": "0x8002ee54",
+    "text": "Ｉｎａｂａ　Ｈａｒｕｈｉｋｏ",
+    "normalized_text": "Inaba Haruhiko",
+    "raw_hex": "8268828e8281828282818140826782818292829582888289828b828f"
+  },
+  {
+    "file_offset": "0x2674",
+    "resident_address": "0x8002ee74",
+    "text": "Ａｓｓｉｓｔａｎｔ　ｄｉｒｅｃｔｅｄ　ｂｙ",
+    "normalized_text": "Assistant directed by",
+    "raw_hex": "8260829382938289829382948281828e8294814082848289829282858283829482858284814082828299"
+  },
+  {
+    "file_offset": "0x26a0",
+    "resident_address": "0x8002eea0",
+    "text": "Ｂａｃｋｇｒｏｕｎｄ　ｄｅｓｉｇｎ　ｂｙ",
+    "normalized_text": "Background design by",
+    "raw_hex": "826182818283828b82878292828f8295828e8284814082848285829382898287828e814082828299"
+  },
+  {
+    "file_offset": "0x26cc",
+    "resident_address": "0x8002eecc",
+    "text": "Ｈａｔｔｏｒｉ　Ｋ−ｓｕｋｅ",
+    "normalized_text": "Hattori K−suke",
+    "raw_hex": "8267828182948294828f829282898140826a817c82938295828b8285"
+  },
+  {
+    "file_offset": "0x26ec",
+    "resident_address": "0x8002eeec",
+    "text": "Ｍｏｎｓｔｅｒ　ｄｅｓｉｇｎ　ｂｙ",
+    "normalized_text": "Monster design by",
+    "raw_hex": "826c828f828e8293829482858292814082848285829382898287828e814082828299"
+  },
+  {
+    "file_offset": "0x2710",
+    "resident_address": "0x8002ef10",
+    "text": "Ｃｈａｒａｃｔｅｒ　ｄｅｓｉｇｎ　ｂｙ",
+    "normalized_text": "Character design by",
+    "raw_hex": "826282888281829282818283829482858292814082848285829382898287828e814082828299"
+  },
+  {
+    "file_offset": "0x2738",
+    "resident_address": "0x8002ef38",
+    "text": "Ｙａｍａｄａ　Ｋｏｊｉ",
+    "normalized_text": "Yamada Koji",
+    "raw_hex": "82788281828d8281828482818140826a828f828a8289"
+  },
+  {
+    "file_offset": "0x2750",
+    "resident_address": "0x8002ef50",
+    "text": "Ｓｃｅｎａｒｉｏ　ｗｒｉｔｔｅｎ　ｂｙ",
+    "normalized_text": "Scenario written by",
+    "raw_hex": "827282838285828e828182928289828f8140829782928289829482948285828e814082828299"
+  },
+  {
+    "file_offset": "0x2778",
+    "resident_address": "0x8002ef78",
+    "text": "Ｈｏｒｉｏ　Ｋｅｎｉｃｈｉｒｏ",
+    "normalized_text": "Horio Kenichiro",
+    "raw_hex": "8267828f82928289828f8140826a8285828e82898283828882898292828f"
+  },
+  {
+    "file_offset": "0x2798",
+    "resident_address": "0x8002ef98",
+    "text": "Ｄｉｒｅｃｔｅｄ　ｂｙ",
+    "normalized_text": "Directed by",
+    "raw_hex": "82638289829282858283829482858284814082828299"
+  },
+  {
+    "file_offset": "0x27b0",
+    "resident_address": "0x8002efb0",
+    "text": "Ｃｒｅｄｉｔｓ",
+    "normalized_text": "Credits",
+    "raw_hex": "8262829282858284828982948293"
+  },
+  {
+    "file_offset": "0x27c0",
+    "resident_address": "0x8002efc0",
+    "text": "Ａｚｕｒｅ　Ｄｒｅａｍｓ",
+    "normalized_text": "Azure Dreams",
+    "raw_hex": "8260829a82958292828581408263829282858281828d8293"
+  }
+]

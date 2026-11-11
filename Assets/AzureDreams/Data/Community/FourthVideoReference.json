@@ -1,0 +1,43 @@
+{
+  "source": "community/4.mp4",
+  "audioUsed": false,
+  "observations": [
+    {
+      "seconds": 54,
+      "detail": "EXP notifications above combat actors."
+    },
+    {
+      "seconds": 164,
+      "detail": "Medicinal Herb is eaten; dialogue reports restored HP amount."
+    },
+    {
+      "seconds": 219,
+      "detail": "Kewne becomes unable to fight and returns to the bag."
+    },
+    {
+      "seconds": 329,
+      "detail": "Wreath says Isaac lives by the fields."
+    },
+    {
+      "seconds": 384,
+      "detail": "Isaac encountered near fields and windmills."
+    },
+    {
+      "seconds": 659,
+      "detail": "Lower dialogue reports EXP, level up, and the new level."
+    },
+    {
+      "seconds": 714,
+      "detail": "Kewne chants Flame Sword, distinct from a physical attack."
+    },
+    {
+      "seconds": 1154,
+      "detail": "Purple circular floor hazard beside grassy room edge."
+    },
+    {
+      "seconds": 1264,
+      "detail": "Tumna fruit hits Manoeva; dialogue reports frog transformation."
+    }
+  ],
+  "limits": "Sampled visual observations. Context-dependent HP and damage values were not generalized."
+}

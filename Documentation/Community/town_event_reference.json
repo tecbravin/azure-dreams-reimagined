@@ -1,0 +1,1392 @@
+[
+  {
+    "source_row": 3,
+    "source_column": 3,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Go to Nico's House and talk to her dad. Nico will show up and talk about culture.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 5,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Go to Fur Store and buy/sell any item.\n[STEP 0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 8,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Patty",
+    "route_label": null,
+    "text": "Go to Restaurant and order all meals at least once and pay for them immediately.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 9,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Bar and talk to Okami\n[STEP 0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 11,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 0]\nGo to Pool and agree to get Water Medal. Needs to be done latest at day 9.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 12,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Clinic and talk to Hush.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 14,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Temple, Alley & Casino\n[Casino can also be built in Vivian story]",
+    "route_label": null,
+    "text": "With at least 6000G go to Carpenter and Expand your house.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 16,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Arcade",
+    "route_label": null,
+    "text": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 1 (check „Buildings score” tab).",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 3,
+    "source_column": 17,
+    "day_label": "0",
+    "location": "Town",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Go to Blacksmith and talk to Barry. Say [No I'm not!].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 4,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Enter tower.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 9,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Get Blue Cape from 20F.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 11,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Get to 25F and retrieve Water Medal from Picket. Needs to be done latest at day 9.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 15,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Circuit",
+    "route_label": null,
+    "text": "Enter tower.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 17,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Reach at least 10F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 4,
+    "source_column": 18,
+    "day_label": "0",
+    "location": "Tower",
+    "column_label": "Windmills",
+    "route_label": null,
+    "text": "Get to 5F.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 3,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Town lake and donate 1000G.\n[Check Note 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 4,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 5,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Go to Fur Store and buy/sell any item.\n[STEP 2]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 8,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Patty",
+    "route_label": null,
+    "text": "Go to Restaurant. Patti will be there on her own. Talk to her and order any meal.\n[STEP 3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 9,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Bar with Blue Cape in inventory.\n[STEP 3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 11,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 2]\nGo to Pool with Water Medal in inventory and give it to Wookie. Needs to be done latest at day 10 before you go to Library.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 12,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "With at least 4000G go to Clinic and talk to Hush. Say [Yes, let me make a donation.] and [Money is not a factor.].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 14,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Temple, Alley & Casino\n[Casino can also be built in Vivian story]",
+    "route_label": null,
+    "text": "With at least 4000G go to Chappel and talk to Jorda. Say [To build a bigger temple.] and [I'll give you 4000G].\nWith 40000G go to Carpenter and build Alley.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 15,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Circuit",
+    "route_label": null,
+    "text": "Go to Silver's House and talk to any Nyuel. When you get the chance say [I'm building a race track!] and [Money is not a concern.].\nWith 30000G go to Carpenter and build Circuit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 16,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Arcade",
+    "route_label": null,
+    "text": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 2 (check „Buildings score” tab).",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 17,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Go to Blacksmith and talk to Barry.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 5,
+    "source_column": 18,
+    "day_label": "1",
+    "location": "Town",
+    "column_label": "Windmills",
+    "route_label": null,
+    "text": "Go to Town and talk to Issac. Say [I'll go and get it for you.].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 6,
+    "source_column": 4,
+    "day_label": "1",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says Koh is handsome.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 6,
+    "source_column": 17,
+    "day_label": "1",
+    "location": "Tower",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Reach at least 20F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 6,
+    "source_column": 18,
+    "day_label": "1",
+    "location": "Tower",
+    "column_label": "Windmills",
+    "route_label": null,
+    "text": "Get Guru's Pot from 15F",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 3,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Nico will wake you up thanking for your donation.\nTalk to Nico at Town lake and donate 1000G.\n[Check Note 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 5,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Go to Fur Store and buy/sell any item.\n[STEP 4]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 8,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Patty",
+    "route_label": null,
+    "text": "Go to Restaurant and order any meal.\n[STEP 4]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 9,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Bar and talk to Barten.\n[STEP 5]\nGo to Bar. Cut-scene will play where you talk to Okami. If during dialogue you choose [Give me some booze!], you'll wake up at home.\n[STEP 6]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 11,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Dr. Hal's House and talk to him.\n[STEP 4]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 12,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "At Cherrl's House talk to her through window. She will drop Chappy. Pick him up and give him back to Cherrl. Say [I guess i could come in.] and enter Cherrl's House. Talk to her.\n[STEP 0]\nRe-enter Cherrl's House and talk to her. Say [I want you.] for faster dialogue. Say [I want to be your friend too.].\n[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 14,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Temple, Alley & Casino\n[Casino can also be built in Vivian story]",
+    "route_label": null,
+    "text": "Go to Temple and talk to Jorda. Re-enter Temple and talk to Jorda again.\nWith 100000G go to Carpenter and build a Casino.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 16,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Arcade",
+    "route_label": null,
+    "text": "Go to Carpenter and talk to Pen. Talk to Pen again. He'll say he's got a dream of building amusement center.\nUpgrade buildings so that total upgrades score is at least 3 (check „Buildings score” tab).",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 17,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Go to Blacksmith and talk to Barry.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 7,
+    "source_column": 18,
+    "day_label": "2",
+    "location": "Town",
+    "column_label": "Windmills",
+    "route_label": null,
+    "text": "Give Guru's Pot to Issac.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 8,
+    "source_column": 4,
+    "day_label": "2",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Ghosh encounter.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 8,
+    "source_column": 5,
+    "day_label": "2",
+    "location": "Tower",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Reach at least 5F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 8,
+    "source_column": 17,
+    "day_label": "2",
+    "location": "Tower",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Reach at least 30F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 3,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Fountain.\n[STEP 0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 5,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Talk to Fur at her store.\n[STEP 6]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 8,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Patty",
+    "route_label": null,
+    "text": "Go to Restaurant and talk to Patty. She will ask whether she can order your meal and say [I'd love that!]. Choose any meal and pay for it.\n[STEP 5]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 9,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Bar and talk to Vivian.\n[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 11,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Dr. Hal's House and talk to him.\n[STEP 5]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 12,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Cherrl's House. She will be alone. Talk to her.\n[STEP 2]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 16,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Arcade",
+    "route_label": null,
+    "text": "With 30000G go to Carpenter and talk to Pen. Talk to him again and say [Do you want me to pay for it?] and [I'll hand you that money].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 17,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Gym",
+    "route_label": null,
+    "text": "Go to Blacksmith and talk to Barry. Say [Just looking around.]. Talk to Barry again.\nWith 30000G go to Carpenter and build Gym.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 9,
+    "source_column": 18,
+    "day_label": "3",
+    "location": "Town",
+    "column_label": "Windmills",
+    "route_label": null,
+    "text": "Windmills are now working again.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 10,
+    "source_column": 4,
+    "day_label": "3",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says Koh is busy hunting treasure.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 10,
+    "source_column": 5,
+    "day_label": "3",
+    "location": "Tower",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Reach at least 10F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 10,
+    "source_column": 9,
+    "day_label": "3",
+    "location": "Tower",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Reach at least 10F in any tower visit.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 11,
+    "source_column": 5,
+    "day_label": "4",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Talk to Fur at her store.\n[STEP 8]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 11,
+    "source_column": 8,
+    "day_label": "4",
+    "location": "Town",
+    "column_label": "Patty",
+    "route_label": null,
+    "text": "Go to Restaurant for a cut-scene. Ghosh asks Patty to prepare meal for him. Talk to Patty.\n[Patty DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 11,
+    "source_column": 9,
+    "day_label": "4",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Talk to Fon at the entrance to Carpenter and say [I am the entertainment!]. With 8000G, go to Carpenter and build a Theater.\nGo to Bar and talk to Okami.\n[STEP 8]\nRe-enter Bar for a cut-scene with Vivian dancing.Talk to Vivian again.\n[STEP 9]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 11,
+    "source_column": 11,
+    "day_label": "4",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Dr. Hal's House. Talk to him and say [I'll build it for you.].\n[STEP 6]\nWith 8000G, go to Carpenter and build a Library.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 11,
+    "source_column": 12,
+    "day_label": "4",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Cherrl's House. You will see a cut-scene where Cherrl's mom asks you to take care of her, while she is gone. Say [Sure, I don't mind.]. At 2nd choice say [Still, no good to be selfish.] for faster dialogue.\nRe-enter Cherrl's house and talk to her. She will ask you to take her for a walk. Say [Okay. Deal.]. At Hospital say [Okay, I'm going.] for faster dialogue. When you're back at Cherrl's House, talk to her.\nRe-enter Cherrl's house and talk to her. This will trigger Healing Herb to show up in tower.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 12,
+    "source_column": 9,
+    "day_label": "4",
+    "location": null,
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "When you don't have casino built yet, she will talk about her dancing dream.\nRe-enter Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 12,
+    "source_column": 10,
+    "day_label": "4",
+    "location": null,
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "When you have casino built, she will talk about Casino in Haruka.\nRe-enter bar and Vivian will not be there.\n[STEP 10]\nGo to Casino and talk to Vivian. Answer [Don't you have to work?] and [I'd love to see you dance.].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 13,
+    "source_column": 4,
+    "day_label": "4",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Ghosh and Selfi argue about coin.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 13,
+    "source_column": 12,
+    "day_label": "4",
+    "location": "Tower",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Get to 28F and find Healing Herb.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 14,
+    "source_column": 5,
+    "day_label": "5",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Talk to Fur at her store. She will show you Music Box.[STEP 10]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 14,
+    "source_column": 9,
+    "day_label": "5",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 14,
+    "source_column": 10,
+    "day_label": "5",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Bar and talk to Vivian. She will talk about about her dancing dream.\nGo to the Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 14,
+    "source_column": 11,
+    "day_label": "5",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia.\nRe-enter Library and talk to Miya again.\n[STEP 0]\nRe-enter Library and talk to Mia again. Say [It's quite interesting.].\n[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 14,
+    "source_column": 12,
+    "day_label": "5",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Hospital and give Healing Herb to Hush.\nPath choices:\n[Don't tell her anything] – Path 1\n[Yes. Go ahead!] - Path 2\n[STEP 6]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 15,
+    "source_column": 4,
+    "day_label": "5",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says she is an oasis.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 15,
+    "source_column": 7,
+    "day_label": "5",
+    "location": "Tower",
+    "column_label": null,
+    "route_label": "Path 3",
+    "text": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 16,
+    "source_column": 5,
+    "day_label": "6",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Enter Fur's store for a scene with Ghosh. Talk to Fur.\nPath choices:\n[Hey that's too much!][Forget it.] – Path 1\n[Hey that's too much!][Apologize] – Path 2\n[You're absolutely right.][I don't] – Path 1\n[You're absolutely right.][You can apologize to me.] - Path 2\n[STEP 12]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 16,
+    "source_column": 9,
+    "day_label": "6",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 16,
+    "source_column": 10,
+    "day_label": "6",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 16,
+    "source_column": 11,
+    "day_label": "6",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia. Say [It's actually pretty amusing.].\n[STEP 3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 16,
+    "source_column": 12,
+    "day_label": "6",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Hospital and talk to Cherrl. \n[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 17,
+    "source_column": 6,
+    "day_label": "6",
+    "location": null,
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Exit and enter Fur's store and talk to her again. Say [I'm just looking.] and you'll have another dialogue choice.\nPath choices:\n[I accept your apology.] - Path 2\n[I'll never forgive you.] - Path 3\n[STEP 13]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 17,
+    "source_column": 11,
+    "day_label": "6",
+    "location": null,
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 17,
+    "source_column": 13,
+    "day_label": "6",
+    "location": null,
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Say [Because I wanted to go.] for faster dialogue.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 18,
+    "source_column": 6,
+    "day_label": "6",
+    "location": null,
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Exit and enter Fur's store and talk to her again.\n[STEP 19]\nExit and enter Fur's store. Talk to her and say [I've come to see you.]. Talk to her again.\n[STEP 20]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 18,
+    "source_column": 7,
+    "day_label": "6",
+    "location": null,
+    "column_label": null,
+    "route_label": "Path 3",
+    "text": "Exit and enter Fur's store and talk to her again. Say [I'm done.].\n[STEP 17]\nExit and enter Fur's store. Talk to her and say [I'm done.]. Talk to her again and say [I liked the tomboy.].\n[STEP 18]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 19,
+    "source_column": 4,
+    "day_label": "6",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi is attacked by Pulunpa. Save her.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 19,
+    "source_column": 5,
+    "day_label": "6",
+    "location": "Tower",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 3,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "After Selfi gives you egg at Fountain, go to Nico's House and talk to Nico.\n[STEP 6]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 4,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Make sure you've got at least 1 empty slot in inventory and talk to Selfi south of Fountain.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 5,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Talk to Fur at her store. Exit and enter the store again. Talk to Fur and say [I'm done.]. Talk to her again and say [I don't like you now.]. \n[STEP 14&15]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 9,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 10,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 11,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library for a cut-scene with Ghosh bumping into Mia. Pick up her glasses and give them to her.\n[STEP 5]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 20,
+    "source_column": 12,
+    "day_label": "7",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Hospital and talk to Cherrl.\nRe-enter Hospital and talk to Cherrl again.\n[STEP 8]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 21,
+    "source_column": 4,
+    "day_label": "7",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says Koh put fire on nails.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 3,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Nico's House.\n[STEP 7.0]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 4,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 5]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 5,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Fur",
+    "route_label": "Path 1",
+    "text": "Enter Fur's store for a scene with Ghosh. Talk to Fur. Say [I'm a man] for faster dialogue.\n[Fur Done]\n[STEP 22].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 9,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 10,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 11,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia. Say [Actually quite interesting.].\n[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 12,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Cherrl's House and talk to Cherrl. She will talk about becoming a nurse.\nPath choices:\n[That's a great idea.] - Path 1\n[It doesn't suite you.] - Path 2\nIf you choose Path 2, re-enter Cherrl's House and continue from this day Path 2.\n[STEP 8]\n",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 22,
+    "source_column": 13,
+    "day_label": "8",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Cherrl's House and talk to Cherrl. Say [Super model.] for faster dialogue.\n[STEP 9]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 23,
+    "source_column": 12,
+    "day_label": "8",
+    "location": null,
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Hospital for a cut-scene with Cherrl as a nurse. At 2nd dialogue choice, say [I've come to see Cherrl.].\n[STEP 11]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 24,
+    "source_column": 4,
+    "day_label": "8",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says Koh wet his pants in tower.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 3,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Nico's House.\n[STEP 7.1]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 4,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 6]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 9,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 10,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 11,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia. With 2nd choice say [Talk what you want to.].\n[STEP 8]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 12,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": "Cherrl",
+    "route_label": "Path 1",
+    "text": "Go to Hospital for a cut-scene without Cherrl.\n[STEP 12]\nRe-enter Hospital and talk to Cherrl.\n[Cherrl DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 25,
+    "source_column": 13,
+    "day_label": "9",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Cherrl's House and talk to Cherrl. Say [Thanks!] for faster dialogue.\n[STEP 10]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 26,
+    "source_column": 4,
+    "day_label": "9",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi says Koh can tell where the monster are with his nose.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 26,
+    "source_column": 9,
+    "day_label": "9",
+    "location": "Tower",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 3,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Nico's House.\n[STEP 7.2]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 4,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 9,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 10,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 11,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia. When she asks to take her to Pool say [I'd be delighted to.]. At the pool say [You've got a poor figure.] for faster dialogue.\n[STEP 9]\nGo to Library and talk to Mia again.\n[STEP 10]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 27,
+    "source_column": 13,
+    "day_label": "10",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Cherrl's House and talk to Cherrl.\n[STEP 11]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 28,
+    "source_column": 9,
+    "day_label": "10",
+    "location": "Tower",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "[STEP 9]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 28,
+    "source_column": 10,
+    "day_label": "10",
+    "location": "Tower",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "[STEP 7]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 3,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Nico's House.\n[STEP 7.3]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 4,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 8]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 9,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": "Vivian",
+    "route_label": "Path 1",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 10,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 11,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia.\n[STEP 11]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 29,
+    "source_column": 13,
+    "day_label": "11",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Cherrl's House and talk to Cherrl.\n[Cherrl DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 30,
+    "source_column": 10,
+    "day_label": "11",
+    "location": "Tower",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "[STEP 9]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 31,
+    "source_column": 3,
+    "day_label": "12",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at Nico's House.\n[STEP 7.4]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 31,
+    "source_column": 4,
+    "day_label": "12",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 9]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 31,
+    "source_column": 10,
+    "day_label": "12",
+    "location": "Town",
+    "column_label": null,
+    "route_label": "Path 2",
+    "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 31,
+    "source_column": 11,
+    "day_label": "12",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Go to Library and talk to Mia.\n[STEP 12]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 32,
+    "source_column": 4,
+    "day_label": "12",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Selfi jumps on you from behind the pillar and says Koh is her main interest.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 33,
+    "source_column": 3,
+    "day_label": "13",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Chero at Fountain. When Ghosh shows up say [Help him] and [The music was so beatiful].",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 33,
+    "source_column": 11,
+    "day_label": "13",
+    "location": "Town",
+    "column_label": "Mia",
+    "route_label": null,
+    "text": "Mia will start following you. Go to Library and enter/exit it 5 ftimes. After 5th time talk to Mia in Town and say [Why are you following me?] and [No.].\n[Mia DONE]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 34,
+    "source_column": 4,
+    "day_label": "13",
+    "location": "Tower",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Get to 2F and watch cut-scene – Koh is attacked by U-Boat and saved by Selfi.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 35,
+    "source_column": 3,
+    "day_label": "14",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Nico will wake you up and say she is going to be honest with her feelings.\nGo to Nico's House. Ghosh will be in front of it. Nico will let you in. Enter her house.",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 35,
+    "source_column": 4,
+    "day_label": "14",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house.\n[STEP 12]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 37,
+    "source_column": 3,
+    "day_label": "15",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at her House.\n[STEP 10]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 37,
+    "source_column": 4,
+    "day_label": "15",
+    "location": "Town",
+    "column_label": "Selfi",
+    "route_label": null,
+    "text": "Talk to Selfi in front of her house and say [You love me. Don't you?].\n[Selfi DONE] [STEP 13]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 39,
+    "source_column": 3,
+    "day_label": "16",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Talk to Nico at her House. [STEP 11]",
+    "validation": "community_reference_not_retail_verified"
+  },
+  {
+    "source_row": 41,
+    "source_column": 3,
+    "day_label": "17",
+    "location": "Town",
+    "column_label": "Nico",
+    "route_label": null,
+    "text": "Enter Nico's house.\n[Nico DONE]",
+    "validation": "community_reference_not_retail_verified"
+  }
+]

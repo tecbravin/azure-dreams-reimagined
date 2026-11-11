@@ -1,0 +1,33 @@
+{
+  "assembly": "Assets/Plugins/AzureDreams.Core.dll",
+  "sha256": "0d8fd08aa6afc4252fb0382f9106f202a894477d2179505db76884aae25d5a99",
+  "framework": "netstandard2.1",
+  "build_property": "UnityPort=true",
+  "excluded": [
+    "desktop SaveSystem.cs",
+    "System.Text.Json package"
+  ],
+  "sources": {
+    "ActorFlags.cs": "f9eaa63df993adde0b0c101ac53dcf3a516db2755466b6c7f27531b297fc7e07",
+    "ActorRecord.cs": "dcfb1fb4739748321bd92361fd821561b840d77d20f2ab3d397094372d185d1b",
+    "ActorStatusEffects.cs": "7f00c3a5fcf67dcee15a75590d41de823bd4bc3f5bb050d8b4c1be9494eafc25",
+    "AudioSystem.cs": "6c8eed21245d15263ace058e46141d09c8356c9a2080be0d7fafac65f7b98362",
+    "Combat.cs": "275cd7c32ca76b2657c5121d8c101c4ee9d1b408e7f77c62dd042b66badc07c9",
+    "DirStep.cs": "b8fd1fb0cdea5c2d98f867439e7a85d6d4ea0d8e22eb329dc7e6fdbd3a17cbe6",
+    "DungeonGenerator.cs": "9ee2488ad48daccaca7a5b6bdbeeab1cedc829f4b1b75ee6ba17c0ffb2546b12",
+    "DungeonItemEntry.cs": "07643f26ad0820afd5e717d98b444649547ad23d7bb40490c589cec3102f26af",
+    "FamiliarSystem.cs": "95cf1eb79431fde5bc3053e9f21cd51c9f735c8640b7062a9df1e2c6b8c63ad7",
+    "InitialStatsTable.cs": "d4bf1911756adab8ba37933419d0b55ff4450202ef4c0a5b4980882531dc10d7",
+    "InputSystem.cs": "0a3b7724cfb0f696bb605a7594aeab95d92225c8d65fb3bf43744b7a3527e361",
+    "ItemSystem.cs": "eb7d91ec404d1d47f03b99fa215675d1466b1061b481fb4b3eef22c536c6c336",
+    "Leveling.cs": "efb61689fea26c51cad295ba43b61da901e82ea214968b7c549a582cbbc88b6a",
+    "MathUtil.cs": "0ccec919868bbd2b0e47d018f009d4f318082ca679a6a5eceecc93f5766055de",
+    "MonsterAI.cs": "9fa5ae8fdff80b78f62d891c9511edec1cbd19b2bbc3a03fa899502aa45ef29b",
+    "MonsterSpecies.cs": "5b603bd2c4b49d2ad1847bda682ce3572cbe52ff2c93ea5a5ca82bc23a7ad6d5",
+    "Rng.cs": "93c69c4a4c392975cef5af2510e761a80e04d989eb26f475a599c9974c65d435",
+    "SpellRecord.cs": "22accbdde9e97b648644f09a2ec20b685932e18f6b35d5d930fbcc4bdf407467",
+    "TownSystem.cs": "4f9d2c48c13932f03a011525a9734110afa8cbb357e9b645a231e12647b6847f",
+    "TurnSystem.cs": "28e6154dfe85d7d90f89b8d9b4585aa2926514771f0ae14d268aa432e4ea88e4",
+    "UiSystem.cs": "e04a93f50e3ae872077ae7ec6da2a57813f148029309046546adaa9a0c96d7bc"
+  }
+}

@@ -1,0 +1,1077 @@
+{
+  "entries": [
+    {
+      "kind": 12,
+      "id": 4,
+      "en": "Blue Collar",
+      "ptBr": "Colar Azul",
+      "descriptionEn": "Lets Koh summon a second familiar.",
+      "descriptionPtBr": "Permite que Koh invoque um segundo familiar.",
+      "gear": 0
+    },
+    {
+      "kind": 13,
+      "id": 1,
+      "en": "Guru's Oil Pot",
+      "ptBr": "Pote de Óleo do Guru",
+      "descriptionEn": "Oil for the windmill.",
+      "descriptionPtBr": "Óleo para o moinho de vento.",
+      "gear": 0
+    },
+    {
+      "kind": 13,
+      "id": 2,
+      "en": "Water Medal",
+      "ptBr": "Medalha da Água",
+      "descriptionEn": "A water cleansing medal stolen from the pool.",
+      "descriptionPtBr": "Uma medalha que purifica a água, roubada da piscina.",
+      "gear": 0
+    },
+    {
+      "kind": 13,
+      "id": 6,
+      "en": "Blue Cape",
+      "ptBr": "Capa Azul",
+      "descriptionEn": "A worn-out blue cape.",
+      "descriptionPtBr": "Uma capa azul desgastada.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 1,
+      "en": "Medicinal Herb",
+      "ptBr": "Erva Medicinal",
+      "descriptionEn": "Restores 20 HP. At full HP, raises maximum HP by 1. Koh loses the bonus when he returns to town.",
+      "descriptionPtBr": "Restaura 20 PV. Com os PV cheios, aumenta o máximo em 1. Koh perde o bônus ao voltar à cidade.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 2,
+      "en": "Antidote Herb",
+      "ptBr": "Erva Antídoto",
+      "descriptionEn": "Herb neutralizes a poison.",
+      "descriptionPtBr": "Neutraliza veneno.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 3,
+      "en": "Antichaos Herb",
+      "ptBr": "Erva Anticaos",
+      "descriptionEn": "Herb that restores chaos.",
+      "descriptionPtBr": "Cura confusão.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 4,
+      "en": "Wake-up Herb",
+      "ptBr": "Erva Despertar",
+      "descriptionEn": "Wakes up the target.",
+      "descriptionPtBr": "Acorda o alvo.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 5,
+      "en": "Cure-all Herb",
+      "ptBr": "Erva Panaceia",
+      "descriptionEn": "Clears negative status effects.",
+      "descriptionPtBr": "Cura condições negativas.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 6,
+      "en": "Hazak Herb",
+      "ptBr": "Erva Hazak",
+      "descriptionEn": "Recovers weakened attack.",
+      "descriptionPtBr": "Recupera o ataque enfraquecido.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 7,
+      "en": "Shomuro Herb",
+      "ptBr": "Erva Shomuro",
+      "descriptionEn": "Restores weakened defense.",
+      "descriptionPtBr": "Recupera a defesa enfraquecida.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 8,
+      "en": "Healing Herb",
+      "ptBr": "Erva Curativa",
+      "descriptionEn": "Can heal disease of Cherrl.",
+      "descriptionPtBr": "Pode curar a doença de Cherrl.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 9,
+      "en": "Poison Herb",
+      "ptBr": "Erva Venenosa",
+      "descriptionEn": "Toxic herb.",
+      "descriptionPtBr": "Envenena o alvo.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 10,
+      "en": "Paralyze Herb",
+      "ptBr": "Erva Paralisante",
+      "descriptionEn": "Herb that freezes motion.",
+      "descriptionPtBr": "Paralisa o alvo.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 11,
+      "en": "Harash Herb",
+      "ptBr": "Erva Harash",
+      "descriptionEn": "Reduces the target’s attack by 1.",
+      "descriptionPtBr": "Reduz o ataque do alvo em 1 ponto.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 12,
+      "en": "Horrey Herb",
+      "ptBr": "Erva Horrey",
+      "descriptionEn": "Reduces the target’s defense by 1.",
+      "descriptionPtBr": "Reduz a defesa do alvo em 1 ponto.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 13,
+      "en": "Sleep Herb",
+      "ptBr": "Erva Sonífera",
+      "descriptionEn": "Puts the recipient to sleep.",
+      "descriptionPtBr": "Faz o alvo dormir.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 14,
+      "en": "Roeam Herb",
+      "ptBr": "Erva Roeam",
+      "descriptionEn": "Enables eye sight.",
+      "descriptionPtBr": "Restaura a visão.",
+      "gear": 0
+    },
+    {
+      "kind": 1,
+      "id": 15,
+      "en": "Medicinal Herb",
+      "ptBr": "Erva Medicinal",
+      "descriptionEn": "Restores 20 HP.",
+      "descriptionPtBr": "Restaura 20 PV.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 1,
+      "en": "Pita Fruit",
+      "ptBr": "Fruta Pita",
+      "descriptionEn": "Restores monster MP, or permanently adds 1 MP if full.",
+      "descriptionPtBr": "Recupera PM do monstro ou aumenta o PM máximo em 1 se estiver cheio.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 2,
+      "en": "Big Pita Fruit",
+      "ptBr": "Fruta Pita grande",
+      "descriptionEn": "Restores more monster MP, or permanently adds 1 MP if full.",
+      "descriptionPtBr": "Recupera mais PM do monstro ou aumenta o PM máximo em 1 se estiver cheio.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 3,
+      "en": "Tumna Fruit",
+      "ptBr": "Fruta Tumna",
+      "descriptionEn": "Turns the target into a frog for 20 turns. The target cannot attack or cast spells, and its shield stops working.",
+      "descriptionPtBr": "Transforma o alvo em sapo por 20 turnos. Ele não pode atacar nem usar magia, e o escudo perde o efeito.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 4,
+      "en": "Leva Fruit",
+      "ptBr": "Fruta Leva",
+      "descriptionEn": "Preserves this familiar’s form in its next fusion.",
+      "descriptionPtBr": "Preserva a forma do familiar na próxima fusão.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 5,
+      "en": "Leolam Fruit",
+      "ptBr": "Fruta Leolam",
+      "descriptionEn": "Prevents MP costs for 30 turns.",
+      "descriptionPtBr": "Impede o consumo de PM por 30 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 6,
+      "en": "Laev Fruit",
+      "ptBr": "Fruta Laev",
+      "descriptionEn": "Doubles MP costs for 30 turns.",
+      "descriptionPtBr": "Dobra o consumo de PM por 30 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 7,
+      "en": "Roche Fruit",
+      "ptBr": "Fruta Roche",
+      "descriptionEn": "Turns a monster into an identified egg of its own species.",
+      "descriptionPtBr": "Transforma o monstro em um ovo identificado da própria espécie.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 8,
+      "en": "Limit Fruit",
+      "ptBr": "Fruta Limit",
+      "descriptionEn": "Causes anger and raises critical hit chance by 50% for 15 turns.",
+      "descriptionPtBr": "Causa raiva e aumenta a chance de acerto crítico em 50% por 15 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 9,
+      "en": "Oleem Fruit",
+      "ptBr": "Fruta Oleem",
+      "descriptionEn": "Makes a familiar vanish and returns Koh to town. When thrown, only the target vanishes.",
+      "descriptionPtBr": "Faz um familiar desaparecer e leva Koh de volta à cidade. Se arremessada, só o alvo desaparece.",
+      "gear": 0
+    },
+    {
+      "kind": 2,
+      "id": 10,
+      "en": "Geropita Fruit",
+      "ptBr": "Fruta Geropita",
+      "descriptionEn": "Reduces the target’s MP to zero.",
+      "descriptionPtBr": "Zera o PM do alvo.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 1,
+      "en": "Hazak Seed",
+      "ptBr": "Semente de Hazak",
+      "descriptionEn": "Raises ATK by 1. Permanent for familiars, until returning to town for Koh.",
+      "descriptionPtBr": "Aumenta o ATQ em 1. É permanente para familiares e dura até a volta à cidade para Koh.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 2,
+      "en": "Shomuro Seed",
+      "ptBr": "Semente de Shomuro",
+      "descriptionEn": "Raises DEF by 1. Permanent for familiars, until returning to town for Koh.",
+      "descriptionPtBr": "Aumenta a DEF em 1. É permanente para familiares e dura até a volta à cidade para Koh.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 3,
+      "en": "Mazarr Seed",
+      "ptBr": "Semente de Mazarr",
+      "descriptionEn": "Raises the target’s level by 1.",
+      "descriptionPtBr": "Aumenta o nível do alvo em 1.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 4,
+      "en": "Mahell Seed",
+      "ptBr": "Semente de Mahell",
+      "descriptionEn": "Lets the target move twice per turn for 20 turns.",
+      "descriptionPtBr": "Permite que o alvo se mova duas vezes por turno durante 20 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 5,
+      "en": "Light Seed",
+      "ptBr": "Semente de luz",
+      "descriptionEn": "Changes a monster and its spells to Fire.",
+      "descriptionPtBr": "Muda o elemento do monstro e de suas magias para fogo.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 6,
+      "en": "Sea Seed",
+      "ptBr": "Semente do mar",
+      "descriptionEn": "Changes a monster and its spells to Water.",
+      "descriptionPtBr": "Muda o elemento do monstro e de suas magias para água.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 7,
+      "en": "Wind Seed",
+      "ptBr": "Semente do vento",
+      "descriptionEn": "Changes a monster and its spells to Wind.",
+      "descriptionPtBr": "Muda o elemento do monstro e de suas magias para vento.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 8,
+      "en": "Lar Seed",
+      "ptBr": "Semente de Lar",
+      "descriptionEn": "Lowers the target’s level by 1.",
+      "descriptionPtBr": "Reduz o nível do alvo em 1.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 9,
+      "en": "Slow Seed",
+      "ptBr": "Semente de lentidão",
+      "descriptionEn": "The target acts only once every two turns for 20 turns.",
+      "descriptionPtBr": "O alvo só pode agir uma vez a cada dois turnos, durante 20 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 3,
+      "id": 10,
+      "en": "Tovar Seed",
+      "ptBr": "Semente de Tovar",
+      "descriptionEn": "Raises Luck by 1.",
+      "descriptionPtBr": "Aumenta a Sorte em 1 ponto.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 1,
+      "en": "Fire Ball",
+      "ptBr": "Bola de fogo",
+      "descriptionEn": "A ball that contains a fire arrow.",
+      "descriptionPtBr": "Lança uma flecha de fogo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 2,
+      "en": "Blaze Ball",
+      "ptBr": "Bola de labareda",
+      "descriptionEn": "A ball that blazes along the ground in a straight line.",
+      "descriptionPtBr": "Lança uma labareda em linha reta.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 3,
+      "en": "Flame Ball",
+      "ptBr": "Bola de chama",
+      "descriptionEn": "A ball that contains a fireball.",
+      "descriptionPtBr": "Lança uma bola de fogo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 4,
+      "en": "Pillar Ball",
+      "ptBr": "Bola de pilar",
+      "descriptionEn": "Contains a fiery pillar which ascends from the ground.",
+      "descriptionPtBr": "Ergue um pilar de fogo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 5,
+      "en": "Poison Ball",
+      "ptBr": "Bola de veneno",
+      "descriptionEn": "Contains poison contagious to all enemies in the same room.",
+      "descriptionPtBr": "Envenena os inimigos no cômodo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 6,
+      "en": "Water Ball",
+      "ptBr": "Bola de água",
+      "descriptionEn": "A ball that contains a water wall which protects the user.",
+      "descriptionPtBr": "Cria uma barreira de água.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 7,
+      "en": "Repel Ball",
+      "ptBr": "Bola de repulsão",
+      "descriptionEn": "A ball that has the power to repel magic.",
+      "descriptionPtBr": "Repele magia.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 8,
+      "en": "Ice Rock Ball",
+      "ptBr": "Bola de gelo",
+      "descriptionEn": "Contains a huge iceberg which blocks one’s way.",
+      "descriptionPtBr": "Cria um bloco de gelo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 9,
+      "en": "Recovery Ball",
+      "ptBr": "Bola de recuperação",
+      "descriptionEn": "Contains a soap bubble which recovers HP.",
+      "descriptionPtBr": "Recupera PV.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 10,
+      "en": "DeForth Ball",
+      "ptBr": "Bola de DeForth",
+      "descriptionEn": "A crystal ball containing DeForth magic.",
+      "descriptionPtBr": "Bola de cristal que contém a magia DeForth.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 11,
+      "en": "Blinder Ball",
+      "ptBr": "Bola de cegueira",
+      "descriptionEn": "Blinds the target for 20 turns.",
+      "descriptionPtBr": "Cega o alvo por 20 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 12,
+      "en": "Binding Ball",
+      "ptBr": "Bola de vínculo",
+      "descriptionEn": "A ball that has the power to bind monsters with thunder.",
+      "descriptionPtBr": "Paralisa o alvo com um raio.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 13,
+      "en": "Sleep Ball",
+      "ptBr": "Bola de sono",
+      "descriptionEn": "A ball that contains Morpheus and puts enemies to sleep.",
+      "descriptionPtBr": "Faz o alvo dormir.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 14,
+      "en": "Weak Ball",
+      "ptBr": "Bola de fraqueza",
+      "descriptionEn": "Contains a beam which decreases level of enemies.",
+      "descriptionPtBr": "Reduz o nível do alvo.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 15,
+      "en": "LoGrave Ball",
+      "ptBr": "Bola de LoGrave",
+      "descriptionEn": "A crystal ball containing LoGrave magic.",
+      "descriptionPtBr": "Bola de cristal que contém a magia LoGrave.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 16,
+      "en": "LeoGrave Ball",
+      "ptBr": "Bola de LeoGrave",
+      "descriptionEn": "A crystal ball containing LeoGrave magic.",
+      "descriptionPtBr": "Bola de cristal que contém a magia LeoGrave.",
+      "gear": 0
+    },
+    {
+      "kind": 4,
+      "id": 17,
+      "en": "Acid Rain Ball",
+      "ptBr": "Bola de chuva ácida",
+      "descriptionEn": "Contains acid rain and attacks enemies.",
+      "descriptionPtBr": "Ataca com chuva ácida.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 1,
+      "en": "Holy Scroll",
+      "ptBr": "Pergaminho Sagrado",
+      "descriptionEn": "Creates a sacred tile that repels enemies for 20 turns.",
+      "descriptionPtBr": "Cria uma luz sagrada que impede ataques e a entrada de inimigos por 20 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 2,
+      "en": "Malicious Scroll",
+      "ptBr": "Pergaminho Maligno",
+      "descriptionEn": "Malicious beam bringing chaos for a while.",
+      "descriptionPtBr": "Causa confusão.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 3,
+      "en": "Trap Scroll",
+      "ptBr": "Pergaminho de armadilha",
+      "descriptionEn": "Reveals and reactivates all traps on this floor.",
+      "descriptionPtBr": "Revela e reativa todas as armadilhas do andar.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 4,
+      "en": "Restore Scroll",
+      "ptBr": "Pergaminho de restauração",
+      "descriptionEn": "Restores a fainted familiar to 30% of its maximum HP.",
+      "descriptionPtBr": "Restaura um familiar desmaiado a 30% dos PV máximos.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 5,
+      "en": "De-curse Scroll",
+      "ptBr": "Pergaminho de purificação",
+      "descriptionEn": "The beam removes a curse cast upon equipment.",
+      "descriptionPtBr": "Remove maldições de equipamentos.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 6,
+      "en": "Flat Scroll",
+      "ptBr": "Pergaminho de nivelamento",
+      "descriptionEn": "The beam removes steps and flattens the entire floor.",
+      "descriptionPtBr": "Nivela o piso do andar.",
+      "gear": 0
+    },
+    {
+      "kind": 5,
+      "id": 7,
+      "en": "Alchemic Scroll",
+      "ptBr": "Pergaminho Alquímico",
+      "descriptionEn": "The beam turns all items on the floor into gold coins.",
+      "descriptionPtBr": "Transforma itens no chão em moedas de ouro.",
+      "gear": 0
+    },
+    {
+      "kind": 6,
+      "id": 1,
+      "en": "Fire Crystal",
+      "ptBr": "Cristal de fogo",
+      "descriptionEn": "Summons a Salamander that moves up to twice per turn and fights for 30 turns.",
+      "descriptionPtBr": "Invoca uma Salamandra que se move até duas vezes por turno e luta por 30 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 6,
+      "id": 2,
+      "en": "Water Crystal",
+      "ptBr": "Cristal de água",
+      "descriptionEn": "Cures negative conditions on Koh and nearby familiars. Fully restores HP and MP to those familiars.",
+      "descriptionPtBr": "Cura condições negativas de Koh e dos familiares próximos. Recupera todos os PV e PM desses familiares.",
+      "gear": 0
+    },
+    {
+      "kind": 6,
+      "id": 3,
+      "en": "Wind Crystal",
+      "ptBr": "Cristal de vento",
+      "descriptionEn": "Returns Koh to town. If thrown at an enemy, makes it vanish.",
+      "descriptionPtBr": "Leva Koh de volta à cidade. Se atingir um inimigo ao ser arremessado, faz o inimigo desaparecer.",
+      "gear": 0
+    },
+    {
+      "kind": 7,
+      "id": 1,
+      "en": "Holy Bell",
+      "ptBr": "Sino sagrado",
+      "descriptionEn": "Forces enemies to leave their rooms for 15 turns.",
+      "descriptionPtBr": "Força os inimigos a saírem das salas por 15 turnos.",
+      "gear": 0
+    },
+    {
+      "kind": 7,
+      "id": 2,
+      "en": "Malicious Bell",
+      "ptBr": "Sino maligno",
+      "descriptionEn": "Raises every enemy on this floor by 1 level.",
+      "descriptionPtBr": "Aumenta em 1 o nível de todos os inimigos do andar.",
+      "gear": 0
+    },
+    {
+      "kind": 7,
+      "id": 3,
+      "en": "Familiar Bell",
+      "ptBr": "Sino do familiar",
+      "descriptionEn": "Teleports all familiars on this floor to your room.",
+      "descriptionPtBr": "Teleporta todos os familiares do andar para a sua sala.",
+      "gear": 0
+    },
+    {
+      "kind": 8,
+      "id": 1,
+      "en": "Truth Glasses",
+      "ptBr": "Óculos da verdade",
+      "descriptionEn": "Identify an item.",
+      "descriptionPtBr": "Identificam um item.",
+      "gear": 0
+    },
+    {
+      "kind": 8,
+      "id": 2,
+      "en": "Star Glasses",
+      "ptBr": "Óculos Estrela",
+      "descriptionEn": "Reveal all enemies, the elevator, items, and traps on this floor.",
+      "descriptionPtBr": "Revelam todos os inimigos, o elevador, os itens e as armadilhas deste andar.",
+      "gear": 0
+    },
+    {
+      "kind": 9,
+      "id": 1,
+      "en": "Exit Loupe",
+      "ptBr": "Lupa de saída",
+      "descriptionEn": "Identifies the locations of elevators.",
+      "descriptionPtBr": "Revela elevadores.",
+      "gear": 0
+    },
+    {
+      "kind": 9,
+      "id": 2,
+      "en": "Trap Loupe",
+      "ptBr": "Lupa de armadilhas",
+      "descriptionEn": "Makes traps visible.",
+      "descriptionPtBr": "Revela armadilhas.",
+      "gear": 0
+    },
+    {
+      "kind": 9,
+      "id": 3,
+      "en": "Focus Loupe",
+      "ptBr": "Lupa de foco",
+      "descriptionEn": "Makes invisibles visible.",
+      "descriptionPtBr": "Revela objetos invisíveis.",
+      "gear": 0
+    },
+    {
+      "kind": 9,
+      "id": 4,
+      "en": "Monster Loupe",
+      "ptBr": "Lupa de monstros",
+      "descriptionEn": "Identifies the location of monsters.",
+      "descriptionPtBr": "Revela os monstros.",
+      "gear": 0
+    },
+    {
+      "kind": 9,
+      "id": 5,
+      "en": "Treasure Loupe",
+      "ptBr": "Lupa de tesouro",
+      "descriptionEn": "Loupe that identifies the location of items.",
+      "descriptionPtBr": "Revela os itens no chão.",
+      "gear": 0
+    },
+    {
+      "kind": 10,
+      "id": 1,
+      "en": "Red Sand",
+      "ptBr": "Areia vermelha",
+      "descriptionEn": "Adds 1 attack to the equipped weapon.",
+      "descriptionPtBr": "Adiciona 1 ponto de ataque à arma equipada.",
+      "gear": 0
+    },
+    {
+      "kind": 10,
+      "id": 2,
+      "en": "Blue Sand",
+      "ptBr": "Areia azul",
+      "descriptionEn": "Adds 1 defense to the equipped shield.",
+      "descriptionPtBr": "Adiciona 1 ponto de defesa ao escudo equipado.",
+      "gear": 0
+    },
+    {
+      "kind": 10,
+      "id": 3,
+      "en": "White Sand",
+      "ptBr": "Areia branca",
+      "descriptionEn": "Adds 1 charge to a magic ball with 8 charges or fewer.",
+      "descriptionPtBr": "Adiciona 1 carga a uma bola de cristal com até 8 cargas.",
+      "gear": 0
+    },
+    {
+      "kind": 14,
+      "id": 1,
+      "en": "Copper Coin",
+      "ptBr": "Moeda de cobre",
+      "descriptionEn": "A copper coin.",
+      "descriptionPtBr": "Uma moeda de cobre.",
+      "gear": 0
+    },
+    {
+      "kind": 14,
+      "id": 2,
+      "en": "Silver Coin",
+      "ptBr": "Moeda de prata",
+      "descriptionEn": "A silver coin.",
+      "descriptionPtBr": "Uma moeda de prata.",
+      "gear": 0
+    },
+    {
+      "kind": 14,
+      "id": 3,
+      "en": "Gold Coin",
+      "ptBr": "Moeda de ouro",
+      "descriptionEn": "A gold coin.",
+      "descriptionPtBr": "Uma moeda de ouro.",
+      "gear": 0
+    },
+    {
+      "kind": 15,
+      "id": 1,
+      "en": "Gold Sword",
+      "ptBr": "Espada de ouro",
+      "descriptionEn": "Coated with gold. ATK 1.",
+      "descriptionPtBr": "Revestida de ouro. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 15,
+      "id": 2,
+      "en": "Copper Sword",
+      "ptBr": "Espada de cobre",
+      "descriptionEn": "Made of copper. ATK 2.",
+      "descriptionPtBr": "Feita de cobre. ATQ 2.",
+      "gear": 2
+    },
+    {
+      "kind": 15,
+      "id": 3,
+      "en": "Iron Sword",
+      "ptBr": "Espada de ferro",
+      "descriptionEn": "Made of Iron. ATK 3.",
+      "descriptionPtBr": "Feita de ferro. ATQ 3.",
+      "gear": 3
+    },
+    {
+      "kind": 15,
+      "id": 4,
+      "en": "Steel Sword",
+      "ptBr": "Espada de aço",
+      "descriptionEn": "Made of steel. ATK 4.",
+      "descriptionPtBr": "Feita de aço. ATQ 4.",
+      "gear": 4
+    },
+    {
+      "kind": 15,
+      "id": 5,
+      "en": "Fire Sword",
+      "ptBr": "Espada de fogo",
+      "descriptionEn": "Fire genus. ATK 5.",
+      "descriptionPtBr": "Elemento fogo. ATQ 5.",
+      "gear": 5
+    },
+    {
+      "kind": 15,
+      "id": 6,
+      "en": "Blizzard Sword",
+      "ptBr": "Espada da nevasca",
+      "descriptionEn": "Water genus. ATK 5.",
+      "descriptionPtBr": "Elemento água. ATQ 5.",
+      "gear": 5
+    },
+    {
+      "kind": 15,
+      "id": 7,
+      "en": "Gulfwind Sword",
+      "ptBr": "Espada do vendaval",
+      "descriptionEn": "Wind genus. ATK 5.",
+      "descriptionPtBr": "Elemento vento. ATQ 5.",
+      "gear": 5
+    },
+    {
+      "kind": 15,
+      "id": 8,
+      "en": "Vital Sword",
+      "ptBr": "Espada vital",
+      "descriptionEn": "Prevents opponent from multiplying. ATK 5.",
+      "descriptionPtBr": "Impede que o oponente se multiplique. ATQ 5.",
+      "gear": 5
+    },
+    {
+      "kind": 15,
+      "id": 9,
+      "en": "Dark Sword",
+      "ptBr": "Espada sombria",
+      "descriptionEn": "A cursed sword. ATK 10.",
+      "descriptionPtBr": "Uma espada amaldiçoada. ATQ 10.",
+      "gear": 10
+    },
+    {
+      "kind": 15,
+      "id": 10,
+      "en": "Holy Sword",
+      "ptBr": "Espada sagrada",
+      "descriptionEn": "Holy sword with divine protection. ATK 7.",
+      "descriptionPtBr": "Uma espada com proteção divina. ATQ 7.",
+      "gear": 7
+    },
+    {
+      "kind": 15,
+      "id": 11,
+      "en": "Seraphim Sword",
+      "ptBr": "Espada Serafim",
+      "descriptionEn": "Guy’s keepsake sword. Seraphim",
+      "descriptionPtBr": "A espada que Guy deixou de lembrança.",
+      "gear": 0
+    },
+    {
+      "kind": 15,
+      "id": 12,
+      "en": "Seraphim Sword",
+      "ptBr": "Espada Serafim",
+      "descriptionEn": "Guy’s keepsake sword. Seraphim ATK 8.",
+      "descriptionPtBr": "A espada que Guy deixou de lembrança. ATQ 8.",
+      "gear": 8
+    },
+    {
+      "kind": 15,
+      "id": 13,
+      "en": "Troll Sword",
+      "ptBr": "Espada de Troll",
+      "descriptionEn": "Can’t be blocked by a Shield. Exclusive to Troll-types.",
+      "descriptionPtBr": "Escudos não bloqueiam seus ataques. Exclusiva para Trolls.",
+      "gear": 0
+    },
+    {
+      "kind": 15,
+      "id": 14,
+      "en": "Troll Hammer",
+      "ptBr": "Martelo de Troll",
+      "descriptionEn": "A mace-type club weapon. Exclusive to Troll-types.",
+      "descriptionPtBr": "Uma arma do tipo maça. Exclusiva para Trolls.",
+      "gear": 0
+    },
+    {
+      "kind": 15,
+      "id": 15,
+      "en": "Bow Gun",
+      "ptBr": "Espada-besta",
+      "descriptionEn": "A long-range weapon. Exclusive to Troll-types.",
+      "descriptionPtBr": "Uma arma de longo alcance. Exclusiva para Trolls.",
+      "gear": 0
+    },
+    {
+      "kind": 15,
+      "id": 16,
+      "en": "Rusty Sword",
+      "ptBr": "Espada enferrujada",
+      "descriptionEn": "A rusty sword. ATK 2.",
+      "descriptionPtBr": "Uma espada enferrujada. ATQ 2.",
+      "gear": 2
+    },
+    {
+      "kind": 16,
+      "id": 1,
+      "en": "Wooden Wand",
+      "ptBr": "Varinha de madeira",
+      "descriptionEn": "A wand made of wood. ATK 1.",
+      "descriptionPtBr": "Uma varinha feita de madeira. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 2,
+      "en": "Trained Wand",
+      "ptBr": "Varinha de treino",
+      "descriptionEn": "Can be tempered with Red Sand. ATK 1.",
+      "descriptionPtBr": "Pode ser aprimorada com areia vermelha. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 3,
+      "en": "Life Wand",
+      "ptBr": "Varinha da vida",
+      "descriptionEn": "Restores 1–4 HP to Koh on a successful hit. ATK 1.",
+      "descriptionPtBr": "Recupera de 1 a 4 PV de Koh ao acertar um inimigo. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 4,
+      "en": "Paralyze Wand",
+      "ptBr": "Varinha paralisante",
+      "descriptionEn": "Hits have a 20% chance to paralyze the target. ATK 1.",
+      "descriptionPtBr": "Cada acerto tem 20% de chance de paralisar o alvo. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 5,
+      "en": "Money Wand",
+      "ptBr": "Varinha do dinheiro",
+      "descriptionEn": "A finishing blow has a 30% chance to turn the enemy into coins. ATK 1.",
+      "descriptionPtBr": "Um golpe final tem 30% de chance de transformar o inimigo em moedas. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 6,
+      "en": "Scarlet Wand",
+      "ptBr": "Varinha escarlate",
+      "descriptionEn": "Increases the power of fire magic. ATK 1.",
+      "descriptionPtBr": "Aumenta o poder da magia de fogo. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 7,
+      "en": "Stream Wand",
+      "ptBr": "Varinha da correnteza",
+      "descriptionEn": "Increases the power of water magic. ATK 1.",
+      "descriptionPtBr": "Aumenta o poder da magia de água. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 8,
+      "en": "Gulf Wand",
+      "ptBr": "Varinha do vendaval",
+      "descriptionEn": "Increases the power of wind magic. ATK 1.",
+      "descriptionPtBr": "Aumenta o poder da magia de vento. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 9,
+      "en": "Seal Wand",
+      "ptBr": "Varinha do selo",
+      "descriptionEn": "Hits have a 20% chance to seal the target’s magic. ATK 1.",
+      "descriptionPtBr": "Cada acerto tem 20% de chance de selar a magia do alvo. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 16,
+      "id": 10,
+      "en": "Fire Staff",
+      "ptBr": "Cajado de fogo",
+      "descriptionEn": "A staff of fire. ATK 1.",
+      "descriptionPtBr": "Um cajado do elemento fogo. ATQ 1.",
+      "gear": 1
+    },
+    {
+      "kind": 17,
+      "id": 1,
+      "en": "Wood Shield",
+      "ptBr": "Escudo de madeira",
+      "descriptionEn": "Rustproof wooden shield. DEF 2.",
+      "descriptionPtBr": "Escudo de madeira imune à ferrugem. DEF 2.",
+      "gear": 2
+    },
+    {
+      "kind": 17,
+      "id": 2,
+      "en": "Leather Shield",
+      "ptBr": "Escudo de couro",
+      "descriptionEn": "Rustproof leather shield. DEF 1.",
+      "descriptionPtBr": "Escudo de couro imune à ferrugem. DEF 1.",
+      "gear": 1
+    },
+    {
+      "kind": 17,
+      "id": 3,
+      "en": "Mirror Shield",
+      "ptBr": "Escudo-espelho",
+      "descriptionEn": "Rustproof. Has a 30% chance to reflect monster spells. DEF 3.",
+      "descriptionPtBr": "Imune à ferrugem. Tem 30% de chance de refletir magias de monstros. DEF 3.",
+      "gear": 3
+    },
+    {
+      "kind": 17,
+      "id": 4,
+      "en": "Copper Shield",
+      "ptBr": "Escudo de cobre",
+      "descriptionEn": "A copper shield. DEF 4.",
+      "descriptionPtBr": "Um escudo de cobre. DEF 4.",
+      "gear": 4
+    },
+    {
+      "kind": 17,
+      "id": 5,
+      "en": "Iron Shield",
+      "ptBr": "Escudo de ferro",
+      "descriptionEn": "An iron shield. DEF 5.",
+      "descriptionPtBr": "Um escudo de ferro. DEF 5.",
+      "gear": 5
+    },
+    {
+      "kind": 17,
+      "id": 6,
+      "en": "Steel Shield",
+      "ptBr": "Escudo de aço",
+      "descriptionEn": "A very tough steel shield. DEF 6.",
+      "descriptionPtBr": "Um escudo de aço muito resistente. DEF 6.",
+      "gear": 6
+    },
+    {
+      "kind": 17,
+      "id": 7,
+      "en": "Diamond Shield",
+      "ptBr": "Escudo de diamante",
+      "descriptionEn": "Rustproof diamond shield. DEF 7.",
+      "descriptionPtBr": "Escudo de diamante imune à ferrugem. DEF 7.",
+      "gear": 7
+    },
+    {
+      "kind": 17,
+      "id": 8,
+      "en": "Scorch Shield",
+      "ptBr": "Escudo flamejante",
+      "descriptionEn": "Reduces damage from Fire attacks. DEF 5.",
+      "descriptionPtBr": "Reduz o dano de ataques de fogo. DEF 5.",
+      "gear": 5
+    },
+    {
+      "kind": 17,
+      "id": 9,
+      "en": "Ice Shield",
+      "ptBr": "Escudo de gelo",
+      "descriptionEn": "Reduces damage from Water attacks. DEF 5.",
+      "descriptionPtBr": "Reduz o dano de ataques de água. DEF 5.",
+      "gear": 5
+    },
+    {
+      "kind": 17,
+      "id": 10,
+      "en": "Earth Shield",
+      "ptBr": "Escudo de terra",
+      "descriptionEn": "Reduces damage from Wind attacks. DEF 5.",
+      "descriptionPtBr": "Reduz o dano de ataques de vento. DEF 5.",
+      "gear": 5
+    },
+    {
+      "kind": 17,
+      "id": 11,
+      "en": "Live Shield",
+      "ptBr": "Escudo vivo",
+      "descriptionEn": "Has a 20% chance to return 20% of damage taken to the attacker. DEF 5.",
+      "descriptionPtBr": "Tem 20% de chance de devolver 20% do dano recebido ao atacante. DEF 5.",
+      "gear": 5
+    }
+  ],
+  "sourceLanguage": "en",
+  "translationLanguage": "pt-BR"
+}

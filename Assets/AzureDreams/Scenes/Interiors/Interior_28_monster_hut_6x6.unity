@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Monster Hut 6X6
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_28_monster_hut_6x6
+  displayName: Monster Hut 6X6
+  geometry: {fileID: 4900000, guid: bcb324a6f59f4ade92998de9bafdd449, type: 3}
+  heights: {fileID: 4900000, guid: ae4c143dec8d48a9834e8cf00160aec4, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 76080908d1a44a61a283d6440fa82e09, type: 2}
+  - {fileID: 2100000, guid: d0eee979a0f94c12a4c90c7e568c91e3, type: 2}
+  - {fileID: 2100000, guid: a0a6817a80234a3d9e3107625500e6eb, type: 2}
+  - {fileID: 2100000, guid: 62e118dc71b840ddbe09c441346df78b, type: 2}
+  - {fileID: 2100000, guid: 80c83d6f60ee473fa619dcfd15a73ce3, type: 2}
+  - {fileID: 2100000, guid: f940f110493f4999969192d66067cb07, type: 2}
+  - {fileID: 2100000, guid: c9aaa29f193743a78d0391dc24fb0af9, type: 2}
+  - {fileID: 2100000, guid: 0bd7c304b06e4e2389cc1c1d038fcaaf, type: 2}
+  - {fileID: 2100000, guid: 8e9c3c653a3b429f955c92a0cbb59880, type: 2}
+  - {fileID: 2100000, guid: 9c2888331e384781ba66edd3e6f68f63, type: 2}
+  entryPosition: {x: 21, y: 0, z: 18}
+  residentPrefabs: []
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

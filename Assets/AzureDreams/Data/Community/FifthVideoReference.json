@@ -1,0 +1,47 @@
+{
+  "source": "community/5.mp4",
+  "audioUsed": false,
+  "observations": [
+    {
+      "seconds": 52,
+      "detail": "Troll and Kewne attack sequentially. A bright impact accompanies the hit. Live implementation still resolves committed damage together."
+    },
+    {
+      "seconds": 104,
+      "detail": "QUIT prompt has Yes/No choices inside the lower dialogue frame."
+    },
+    {
+      "seconds": 209,
+      "detail": "3F shows gold corridor stones, a green room floor, and an Oleem pickup message."
+    },
+    {
+      "seconds": 314,
+      "detail": "4F uses brown masonry walls and metal corridor tiles over a dark shaft."
+    },
+    {
+      "seconds": 524,
+      "detail": "6F uses grass room tiles and circular stone corridors with a green depth background."
+    },
+    {
+      "seconds": 682,
+      "detail": "7F inventory has two columns, colored selected text and a lower description. Selected description increases critical chance temporarily."
+    },
+    {
+      "seconds": 786,
+      "detail": "8F has metal room tiles and a brown shaft backdrop. Some tiles show raised seams and warm highlights."
+    },
+    {
+      "seconds": 996,
+      "detail": "9F Acid Rain ball use reports actor use and firing as separate text lines."
+    },
+    {
+      "seconds": 1049,
+      "detail": "10F rock tiles and a red or orange backdrop."
+    },
+    {
+      "seconds": 1206,
+      "detail": "Tonka offers Expand for 6000G and Hut for 4000G in this save. The dialogue says to expand the Monster Hut before it fills."
+    }
+  ],
+  "limits": "Floor appearance is sampled at the listed timestamps. Animated backdrop UV speed and precise camera-relative parallax remain unmeasured. Prices are observed offers for this save state."
+}

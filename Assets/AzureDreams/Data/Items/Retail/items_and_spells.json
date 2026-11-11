@@ -1,0 +1,2837 @@
+[
+  {
+    "file_offset": "0x2810",
+    "resident_address": "0x8002f010",
+    "text": "Ｍａｋｅｓ　ｉｔ　ｐｏｓｓｉｂｌｅ　ｔｏ　ｒｅｔｕｒｎ\nｔｏ　ａ　ｔｏｗｎ．",
+    "normalized_text": "Makes it possible to return\nto a town.",
+    "raw_hex": "826c8281828b8285829381408289829481408290828f8293829382898282828c828581408294828f814082928285829482958292828e0a8294828f8140828181408294828f8297828e8144"
+  },
+  {
+    "file_offset": "0x285c",
+    "resident_address": "0x8002f05c",
+    "text": "Ｗｉｎｄ",
+    "normalized_text": "Wind",
+    "raw_hex": "82768289828e8284"
+  },
+  {
+    "file_offset": "0x2868",
+    "resident_address": "0x8002f068",
+    "text": "Ｒｅｓｔｏｒｅｓ　ｓｔａｔｕｓ　ｏｆ　ｆａｍｉｌｉａｒ　ａｎｄ\nｒｅｃｏｖｅｒｓ　ＭＰ　＆　ＨＰ　ｔｏ　ｍａｘｉｍｕｍ．",
+    "normalized_text": "Restores status of familiar and\nrecovers MP & HP to maximum.",
+    "raw_hex": "8271828582938294828f82928285829381408293829482818294829582938140828f8286814082868281828d8289828c82898281829281408281828e82840a829282858283828f82968285829282938140826c826f8140819581408267826f81408294828f8140828d828182988289828d8295828d8144"
+  },
+  {
+    "file_offset": "0x28e0",
+    "resident_address": "0x8002f0e0",
+    "text": "Ｗａｔｅｒ",
+    "normalized_text": "Water",
+    "raw_hex": "82768281829482858292"
+  },
+  {
+    "file_offset": "0x28ec",
+    "resident_address": "0x8002f0ec",
+    "text": "Ｓｕｍｍｏｎｓ　ＳＡＬＡＭＡＮＤＥＲ，　ｗｈｉｃｈ　ｂｕｒｎｓ\nｕｐ　ｅｎｅｍｉｅｓ　ｏｎｅ　ａｆｔｅｒ　ａｎｏｔｈｅｒ．",
+    "normalized_text": "Summons SALAMANDER, which burns\nup enemies one after another.",
+    "raw_hex": "82728295828d828d828f828e8293814082728260826b8260826c8260826d82638264827181438140829782888289828382888140828282958292828e82930a8295829081408285828e8285828d8289828582938140828f828e828581408281828682948285829281408281828e828f82948288828582928144"
+  },
+  {
+    "file_offset": "0x2968",
+    "resident_address": "0x8002f168",
+    "text": "Ｆｉｒｅ",
+    "normalized_text": "Fire",
+    "raw_hex": "8265828982928285"
+  },
+  {
+    "file_offset": "0x2974",
+    "resident_address": "0x8002f174",
+    "text": "Ｖａｎｉｓｈｅｓ　ｆａｍｉｌｉａｒ，　ａｎｄ　ｔｈｅ\nｐｌａｙｅｒ　ｅｓｃａｐｅｓ　ｆｒｏｍ　ｔｈｅ　ｔｏｗｅｒ．",
+    "normalized_text": "Vanishes familiar, and the\nplayer escapes from the tower.",
+    "raw_hex": "82758281828e82898293828882858293814082868281828d8289828c828982818292814381408281828e828481408294828882850a8290828c828182998285829281408285829382838281829082858293814082868292828f828d814082948288828581408294828f8297828582928144"
+  },
+  {
+    "file_offset": "0x29e8",
+    "resident_address": "0x8002f1e8",
+    "text": "Ｏｌｅｅｍ",
+    "normalized_text": "Oleem",
+    "raw_hex": "826e828c82858285828d"
+  },
+  {
+    "file_offset": "0x29f4",
+    "resident_address": "0x8002f1f4",
+    "text": "Ｉｆ　ｙｏｕ　ｈａｖｅ　ｔｈｉｓ．．．．",
+    "normalized_text": "If you have this....",
+    "raw_hex": "8268828681408299828f829581408288828182968285814082948288828982938144814481448144"
+  },
+  {
+    "file_offset": "0x2a20",
+    "resident_address": "0x8002f220",
+    "text": "Ｉｔ　ａｂｓｏｒｂｓ　ｄａｍａｇｅ　ｔｏ　ａ　ｃｅｒｔａｉｎ\nｄｅｇｒｅｅ，　ｂｕｔ　ｉｆ　ｉｔ　ｂｕｒｓｔｓ．．．．",
+    "normalized_text": "It absorbs damage to a certain\ndegree, but if it bursts....",
+    "raw_hex": "826882948140828182828293828f829282828293814082848281828d82818287828581408294828f814082818140828382858292829482818289828e0a8284828582878292828582858143814082828295829481408289828681408289829481408282829582928293829482938144814481448144"
+  },
+  {
+    "file_offset": "0x2a98",
+    "resident_address": "0x8002f298",
+    "text": "Ｂａｌｌｏｏｎ",
+    "normalized_text": "Balloon",
+    "raw_hex": "82618281828c828c828f828f828e"
+  },
+  {
+    "file_offset": "0x2aa8",
+    "resident_address": "0x8002f2a8",
+    "text": "Ｄｅｌｉｃｉｏｕｓ　ｍｅａｔ　ｔｈａｔ　ｍｏｎｓｔｅｒｓ\nｌｏｖｅ．",
+    "normalized_text": "Delicious meat that monsters\nlove.",
+    "raw_hex": "82638285828c828982838289828f829582938140828d828582818294814082948288828182948140828d828f828e829382948285829282930a828c828f829682858144"
+  },
+  {
+    "file_offset": "0x2aec",
+    "resident_address": "0x8002f2ec",
+    "text": "Ｍｅａｔ",
+    "normalized_text": "Meat",
+    "raw_hex": "826c828582818294"
+  },
+  {
+    "file_offset": "0x2af8",
+    "resident_address": "0x8002f2f8",
+    "text": "Ａ　ｂｏｘ　ｃｏｎｔａｉｎｉｎｇ　ｓｏｍｅｔｈｉｎｇ\nｖａｌｕａｂｌｅ．",
+    "normalized_text": "A box containing something\nvaluable.",
+    "raw_hex": "826081408282828f829881408283828f828e829482818289828e8289828e828781408293828f828d8285829482888289828e82870a82968281828c829582818282828c82858144"
+  },
+  {
+    "file_offset": "0x2b40",
+    "resident_address": "0x8002f340",
+    "text": "Ａ　ｂｌｕｅ　ｍａｇｉｃ　ｃｏｌｌａｒ　ｔｏ　ｍａｋｅ\nｍｏｎｓｔｅｒ　ｙｏｕｒ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "A blue magic collar to make\nmonster your familiar.",
+    "raw_hex": "826081408282828c829582858140828d828182878289828381408283828f828c828c8281829281408294828f8140828d8281828b82850a828d828f828e829382948285829281408299828f82958292814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x2ba4",
+    "resident_address": "0x8002f3a4",
+    "text": "Ｂ．　Ｃｏｌｌａｒ",
+    "normalized_text": "B. Collar",
+    "raw_hex": "8261814481408262828f828c828c82818292"
+  },
+  {
+    "file_offset": "0x2bb8",
+    "resident_address": "0x8002f3b8",
+    "text": "Ｗｉｌｌ　ｓｈｒｉｎｋ　ａｎ　ｏｐｐｏｎｅｎｔ．",
+    "normalized_text": "Will shrink an opponent.",
+    "raw_hex": "82768289828c828c81408293828882928289828e828b81408281828e8140828f82908290828f828e8285828e82948144"
+  },
+  {
+    "file_offset": "0x2bec",
+    "resident_address": "0x8002f3ec",
+    "text": "Ｍａｌｌｅｔ",
+    "normalized_text": "Mallet",
+    "raw_hex": "826c8281828c828c82858294"
+  },
+  {
+    "file_offset": "0x2bfc",
+    "resident_address": "0x8002f3fc",
+    "text": "Ｂｕｎｄｌｅｄ　Ｍｅｄｉｃｉｎａｌ．　Ｉｔ’ｓ\nｐｏｗｅｒｆｕｌ　ｔｈａｎ　Ｍｅｄｉｃｉｎａｌ　Ｈｅｒｂ．",
+    "normalized_text": "Bundled Medicinal. It’s\npowerful than Medicinal Herb.",
+    "raw_hex": "82618295828e8284828c828582848140826c82858284828982838289828e8281828c8144814082688294816682930a8290828f82978285829282868295828c8140829482888281828e8140826c82858284828982838289828e8281828c814082678285829282828144"
+  },
+  {
+    "file_offset": "0x2c68",
+    "resident_address": "0x8002f468",
+    "text": "Ｒｏｐｅ",
+    "normalized_text": "Rope",
+    "raw_hex": "8271828f82908285"
+  },
+  {
+    "file_offset": "0x2c74",
+    "resident_address": "0x8002f474",
+    "text": "Ｉｔ’ｓ　Ｑｕａｃｋ　ｔｈｅ　Ｄｕｃｋ．\nＣｕｔｅ　ｌｉｔｔｌｅ　ｔｈｉｎｇ．",
+    "normalized_text": "It’s Quack the Duck.\nCute little thing.",
+    "raw_hex": "826882948166829381408270829582818283828b81408294828882858140826382958283828b81440a82628295829482858140828c828982948294828c82858140829482888289828e82878144"
+  },
+  {
+    "file_offset": "0x2cc4",
+    "resident_address": "0x8002f4c4",
+    "text": "Ｄｕｃｋ",
+    "normalized_text": "Duck",
+    "raw_hex": "826382958283828b"
+  },
+  {
+    "file_offset": "0x2cd0",
+    "resident_address": "0x8002f4d0",
+    "text": "Ｗｈｅｎ　ｙｏｕ　ｗａｎｔ　ｔｏ　ｅｘｐｒｅｓｓ\nｐａｓｓｉｏｎ．　Ｒｕｂｙ　ｉｓ　ｔｈｅ　ｇｅｍ．",
+    "normalized_text": "When you want to express\npassion. Ruby is the gem.",
+    "raw_hex": "827682888285828e81408299828f8295814082978281828e829481408294828f814082858298829082928285829382930a82908281829382938289828f828e8144814082718295828282998140828982938140829482888285814082878285828d8144"
+  },
+  {
+    "file_offset": "0x2d34",
+    "resident_address": "0x8002f534",
+    "text": "Ｒｉｎｇ",
+    "normalized_text": "Ring",
+    "raw_hex": "82718289828e8287"
+  },
+  {
+    "file_offset": "0x2d40",
+    "resident_address": "0x8002f540",
+    "text": "Ｔｈｅ　ｋｉｎｄ　ｔｈａｔ　ｇｉｒｌｓ　ｌｉｋｅ．",
+    "normalized_text": "The kind that girls like.",
+    "raw_hex": "8273828882858140828b8289828e8284814082948288828182948140828782898292828c82938140828c8289828b82858144"
+  },
+  {
+    "file_offset": "0x2d74",
+    "resident_address": "0x8002f574",
+    "text": "Ｈａｎｄ　Ｂａｇ",
+    "normalized_text": "Hand Bag",
+    "raw_hex": "82678281828e82848140826182818287"
+  },
+  {
+    "file_offset": "0x2d88",
+    "resident_address": "0x8002f588",
+    "text": "Ｔｈｅ　ｏｎｅ　Ｇｈｏｓｈ　ｏｆｔｅｎ　ｇｉｖｅｓ　ｔｏ\nｇｉｒｌｓ．",
+    "normalized_text": "The one Ghosh often gives to\ngirls.",
+    "raw_hex": "8273828882858140828f828e8285814082668288828f829382888140828f828682948285828e81408287828982968285829381408294828f0a828782898292828c82938144"
+  },
+  {
+    "file_offset": "0x2dd0",
+    "resident_address": "0x8002f5d0",
+    "text": "Ｒｏｓｅｓ",
+    "normalized_text": "Roses",
+    "raw_hex": "8271828f829382858293"
+  },
+  {
+    "file_offset": "0x2ddc",
+    "resident_address": "0x8002f5dc",
+    "text": "Ｂｅａｕｔｙ　ｃｒｅａｍ　ｔｈａｔ　ｍａｋｅｓ　ｙｏｕｒ\nｓｋｉｎ　ｒｅａｌｌｙ　ｓｍｏｏｔｈ．　",
+    "normalized_text": "Beauty cream that makes your\nskin really smooth. ",
+    "raw_hex": "82618285828182958294829981408283829282858281828d814082948288828182948140828d8281828b8285829381408299828f829582920a8293828b8289828e8140829282858281828c828c829981408293828d828f828f8294828881448140"
+  },
+  {
+    "file_offset": "0x2e40",
+    "resident_address": "0x8002f640",
+    "text": "Ｃｒｅａｍ",
+    "normalized_text": "Cream",
+    "raw_hex": "8262829282858281828d"
+  },
+  {
+    "file_offset": "0x2e4c",
+    "resident_address": "0x8002f64c",
+    "text": "Ｃｈａｐｐｉｅ",
+    "normalized_text": "Chappie",
+    "raw_hex": "8262828882818290829082898285"
+  },
+  {
+    "file_offset": "0x2e5c",
+    "resident_address": "0x8002f65c",
+    "text": "Ａ　ｗｏｒｎ−ｏｕｔ　ｂｌｕｅ　ｃａｐｅ．\nＮｏｔ　ｌｉｋｅｌｙ　ｔｏ　ｆｉｔ　ｍｅ．",
+    "normalized_text": "A worn−out blue cape.\nNot likely to fit me.",
+    "raw_hex": "826081408297828f8292828e817c828f8295829481408282828c829582858140828382818290828581440a826d828f82948140828c8289828b8285828c829981408294828f81408286828982948140828d82858144"
+  },
+  {
+    "file_offset": "0x2eb4",
+    "resident_address": "0x8002f6b4",
+    "text": "Ｂ．　Ｃａｐｅ",
+    "normalized_text": "B. Cape",
+    "raw_hex": "8261814481408262828182908285"
+  },
+  {
+    "file_offset": "0x2ec4",
+    "resident_address": "0x8002f6c4",
+    "text": "Ｅｙｅ　Ｇｌａｓｓｅｓ",
+    "normalized_text": "Eye Glasses",
+    "raw_hex": "82648299828581408266828c82818293829382858293"
+  },
+  {
+    "file_offset": "0x2edc",
+    "resident_address": "0x8002f6dc",
+    "text": "Ａ　ｓｍａｌｌ　ｍｕｓｉｃ　ｂｏｘ　ｗｈａｔ　ｐｌａｙｓ　\nｓｏｏｔｈｉｎｇ　ｍｕｓｉｃ．",
+    "normalized_text": "A small music box what plays \nsoothing music.",
+    "raw_hex": "826081408293828d8281828c828c8140828d829582938289828381408282828f82988140829782888281829481408290828c82818299829381400a8293828f828f829482888289828e82878140828d82958293828982838144"
+  },
+  {
+    "file_offset": "0x2f38",
+    "resident_address": "0x8002f738",
+    "text": "Ｍｕｓｉｃ　Ｂｏｘ",
+    "normalized_text": "Music Box",
+    "raw_hex": "826c829582938289828381408261828f8298"
+  },
+  {
+    "file_offset": "0x2f4c",
+    "resident_address": "0x8002f74c",
+    "text": "Ｄｅｌｉｃｉｏｕｓ　Ｏｃｔｏｐｕｓ　Ｄｕｍｐｌｉｎｇｓ．",
+    "normalized_text": "Delicious Octopus Dumplings.",
+    "raw_hex": "82638285828c828982838289828f829582938140826e82838294828f829082958293814082638295828d8290828c8289828e828782938144"
+  },
+  {
+    "file_offset": "0x2f88",
+    "resident_address": "0x8002f788",
+    "text": "Ｄｕｍｐｌｉｎｇｓ",
+    "normalized_text": "Dumplings",
+    "raw_hex": "82638295828d8290828c8289828e82878293"
+  },
+  {
+    "file_offset": "0x2f9c",
+    "resident_address": "0x8002f79c",
+    "text": "Ａ　ｗａｔｅｒ　ｃｌｅａｎｓｉｎｇ　ｍｅｄａｌ　ｓｔｏｌｅｎ\nｆｒｏｍ　ｔｈｅ　ｐｏｏｌ．",
+    "normalized_text": "A water cleansing medal stolen\nfrom the pool.",
+    "raw_hex": "826081408297828182948285829281408283828c82858281828e82938289828e82878140828d828582848281828c814082938294828f828c8285828e0a82868292828f828d814082948288828581408290828f828f828c8144"
+  },
+  {
+    "file_offset": "0x2ff8",
+    "resident_address": "0x8002f7f8",
+    "text": "Ｗ．　Ｍｅｄａｌ",
+    "normalized_text": "W. Medal",
+    "raw_hex": "827681448140826c828582848281828c"
+  },
+  {
+    "file_offset": "0x300c",
+    "resident_address": "0x8002f80c",
+    "text": "Ａ　ｐｏｔ　ｃｏｎｔａｉｎｉｎｇ　ａｍｐｌｅ　ｏｉｌ　ｔｏ\nｕｓｅ　ｆｏｒ　ａ　ｗｉｎｄｍｉｌｌ．",
+    "normalized_text": "A pot containing ample oil to\nuse for a windmill.",
+    "raw_hex": "826081408290828f829481408283828f828e829482818289828e8289828e828781408281828d8290828c82858140828f8289828c81408294828f0a82958293828581408286828f829281408281814082978289828e8284828d8289828c828c8144"
+  },
+  {
+    "file_offset": "0x3070",
+    "resident_address": "0x8002f870",
+    "text": "Ｇｕｒｕ’ｓ　Ｐｏｔ",
+    "normalized_text": "Guru’s Pot",
+    "raw_hex": "8266829582928295816682938140826f828f8294"
+  },
+  {
+    "file_offset": "0x3088",
+    "resident_address": "0x8002f888",
+    "text": "Ｇｏｌｄ　ｃｏｉｎｓ．\nＨｉｇｈｌｙ　ｖａｌｕａｂｌｅ．",
+    "normalized_text": "Gold coins.\nHighly valuable.",
+    "raw_hex": "8266828f828c828481408283828f8289828e829381440a8267828982878288828c8299814082968281828c829582818282828c82858144"
+  },
+  {
+    "file_offset": "0x30c0",
+    "resident_address": "0x8002f8c0",
+    "text": "Ｇｏｌｄ",
+    "normalized_text": "Gold",
+    "raw_hex": "8266828f828c8284"
+  },
+  {
+    "file_offset": "0x30cc",
+    "resident_address": "0x8002f8cc",
+    "text": "Ｓｉｌｖｅｒ　ｃｏｉｎｓ．\nＭｏｄｅｒａｔｅｌｙ　ｖａｌｕａｂｌｅ．",
+    "normalized_text": "Silver coins.\nModerately valuable.",
+    "raw_hex": "82728289828c82968285829281408283828f8289828e829381440a826c828f828482858292828182948285828c8299814082968281828c829582818282828c82858144"
+  },
+  {
+    "file_offset": "0x3110",
+    "resident_address": "0x8002f910",
+    "text": "Ｓｉｌｖｅｒ",
+    "normalized_text": "Silver",
+    "raw_hex": "82728289828c829682858292"
+  },
+  {
+    "file_offset": "0x3120",
+    "resident_address": "0x8002f920",
+    "text": "Ｃｏｐｐｅｒ　ｃｏｉｎｓ．　\nＮｏｔ　ｖｅｒｙ　ｖａｌｕａｂｌｅ．",
+    "normalized_text": "Copper coins. \nNot very valuable.",
+    "raw_hex": "8262828f829082908285829281408283828f8289828e8293814481400a826d828f829481408296828582928299814082968281828c829582818282828c82858144"
+  },
+  {
+    "file_offset": "0x3164",
+    "resident_address": "0x8002f964",
+    "text": "Ｃｏｐｐｅｒ",
+    "normalized_text": "Copper",
+    "raw_hex": "8262828f8290829082858292"
+  },
+  {
+    "file_offset": "0x3174",
+    "resident_address": "0x8002f974",
+    "text": "Ａ　ｌｏｎｇ−ｒａｎｇｅ　ｗｅａｐｏｎ．\nＥｘｃｌｕｓｉｖｅ　ｔｏ　Ｔｒｏｌｌ−ｔｙｐｅｓ．",
+    "normalized_text": "A long−range weapon.\nExclusive to Troll−types.",
+    "raw_hex": "82608140828c828f828e8287817c82928281828e8287828581408297828582818290828f828e81440a826482988283828c8295829382898296828581408294828f814082738292828f828c828c817c829482998290828582938144"
+  },
+  {
+    "file_offset": "0x31d0",
+    "resident_address": "0x8002f9d0",
+    "text": "Ｂｏｗ　Ｇｕｎ",
+    "normalized_text": "Bow Gun",
+    "raw_hex": "8261828f8297814082668295828e"
+  },
+  {
+    "file_offset": "0x31e0",
+    "resident_address": "0x8002f9e0",
+    "text": "Ａ　ｍａｃｅ−ｔｙｐｅ　ｃｌｕｂ　ｗｅａｐｏｎ．\nＥｘｃｌｕｓｉｖｅ　ｔｏ　Ｔｒｏｌｌ−ｔｙｐｅｓ．",
+    "normalized_text": "A mace−type club weapon.\nExclusive to Troll−types.",
+    "raw_hex": "82608140828d828182838285817c829482998290828581408283828c8295828281408297828582818290828f828e81440a826482988283828c8295829382898296828581408294828f814082738292828f828c828c817c829482998290828582938144"
+  },
+  {
+    "file_offset": "0x3244",
+    "resident_address": "0x8002fa44",
+    "text": "Ｈａｍｍｅｒ",
+    "normalized_text": "Hammer",
+    "raw_hex": "82678281828d828d82858292"
+  },
+  {
+    "file_offset": "0x3254",
+    "resident_address": "0x8002fa54",
+    "text": "Ｃａｎ’ｔ　ｂｅ　ｂｌｏｃｋｅｄ　ｂｙ　ａ　Ｓｈｉｅｌｄ．\nＥｘｃｌｕｓｉｖｅ　ｔｏ　Ｔｒｏｌｌ−ｔｙｐｅｓ．",
+    "normalized_text": "Can’t be blocked by a Shield.\nExclusive to Troll−types.",
+    "raw_hex": "82628281828e8166829481408282828581408282828c828f8283828b828582848140828282998140828181408272828882898285828c828481440a826482988283828c8295829382898296828581408294828f814082738292828f828c828c817c829482998290828582938144"
+  },
+  {
+    "file_offset": "0x32c4",
+    "resident_address": "0x8002fac4",
+    "text": "Ｔｒｏｌｌ",
+    "normalized_text": "Troll",
+    "raw_hex": "82738292828f828c828c"
+  },
+  {
+    "file_offset": "0x32d0",
+    "resident_address": "0x8002fad0",
+    "text": "Ｇｕｙ’ｓ　ｋｅｅｐｓａｋｅ　ｓｗｏｒｄ．\nＳｅｒａｐｈｉｍ　ＡＴＫ　８．",
+    "normalized_text": "Guy’s keepsake sword.\nSeraphim ATK 8.",
+    "raw_hex": "826682958299816682938140828b82858285829082938281828b8285814082938297828f8292828481440a8272828582928281829082888289828d814082608273826a814082578144"
+  },
+  {
+    "file_offset": "0x331c",
+    "resident_address": "0x8002fb1c",
+    "text": "Ｇｕｙ’ｓ　ｋｅｅｐｓａｋｅ　ｓｗｏｒｄ．\nＳｅｒａｐｈｉｍ",
+    "normalized_text": "Guy’s keepsake sword.\nSeraphim",
+    "raw_hex": "826682958299816682938140828b82858285829082938281828b8285814082938297828f8292828481440a8272828582928281829082888289828d"
+  },
+  {
+    "file_offset": "0x3358",
+    "resident_address": "0x8002fb58",
+    "text": "Ｓｅｒａｐｈｉｍ",
+    "normalized_text": "Seraphim",
+    "raw_hex": "8272828582928281829082888289828d"
+  },
+  {
+    "file_offset": "0x336c",
+    "resident_address": "0x8002fb6c",
+    "text": "Ｈｏｌｙ　ｓｗｏｒｄ　ｗｉｔｈ　ｄｉｖｉｎｅ\nｐｒｏｔｅｃｔｉｏｎ．　ＡＴＫ　７．",
+    "normalized_text": "Holy sword with divine\nprotection. ATK 7.",
+    "raw_hex": "8267828f828c8299814082938297828f829282848140829782898294828881408284828982968289828e82850a82908292828f82948285828382948289828f828e8144814082608273826a814082568144"
+  },
+  {
+    "file_offset": "0x33c0",
+    "resident_address": "0x8002fbc0",
+    "text": "Ｈｏｌｙ",
+    "normalized_text": "Holy",
+    "raw_hex": "8267828f828c8299"
+  },
+  {
+    "file_offset": "0x33cc",
+    "resident_address": "0x8002fbcc",
+    "text": "Ａ　ｃｕｒｓｅｄ　ｓｗｏｒｄ．　ＡＴＫ　１０．",
+    "normalized_text": "A cursed sword. ATK 10.",
+    "raw_hex": "82608140828382958292829382858284814082938297828f829282848144814082608273826a81408250824f8144"
+  },
+  {
+    "file_offset": "0x33fc",
+    "resident_address": "0x8002fbfc",
+    "text": "Ｄａｒｋ",
+    "normalized_text": "Dark",
+    "raw_hex": "826382818292828b"
+  },
+  {
+    "file_offset": "0x3408",
+    "resident_address": "0x8002fc08",
+    "text": "Ｐｒｅｖｅｎｔｓ　ｏｐｐｏｎｅｎｔ　ｆｒｏｍ\nｍｕｌｔｉｐｌｙｉｎｇ．　ＡＴＫ　５．",
+    "normalized_text": "Prevents opponent from\nmultiplying. ATK 5.",
+    "raw_hex": "826f8292828582968285828e829482938140828f82908290828f828e8285828e8294814082868292828f828d0a828d8295828c829482898290828c82998289828e82878144814082608273826a814082548144"
+  },
+  {
+    "file_offset": "0x345c",
+    "resident_address": "0x8002fc5c",
+    "text": "Ｖｉｔａｌ",
+    "normalized_text": "Vital",
+    "raw_hex": "8275828982948281828c"
+  },
+  {
+    "file_offset": "0x3468",
+    "resident_address": "0x8002fc68",
+    "text": "Ｗｉｎｄ　ｇｅｎｕｓ．　ＡＴＫ　５．",
+    "normalized_text": "Wind genus. ATK 5.",
+    "raw_hex": "82768289828e8284814082878285828e829582938144814082608273826a814082548144"
+  },
+  {
+    "file_offset": "0x3490",
+    "resident_address": "0x8002fc90",
+    "text": "Ｇｕｌｆｗｉｎｄ",
+    "normalized_text": "Gulfwind",
+    "raw_hex": "82668295828c828682978289828e8284"
+  },
+  {
+    "file_offset": "0x34a4",
+    "resident_address": "0x8002fca4",
+    "text": "Ｗａｔｅｒ　ｇｅｎｕｓ．　ＡＴＫ　５．",
+    "normalized_text": "Water genus. ATK 5.",
+    "raw_hex": "82768281829482858292814082878285828e829582938144814082608273826a814082548144"
+  },
+  {
+    "file_offset": "0x34cc",
+    "resident_address": "0x8002fccc",
+    "text": "Ｂｌｉｚｚａｒｄ",
+    "normalized_text": "Blizzard",
+    "raw_hex": "8261828c8289829a829a828182928284"
+  },
+  {
+    "file_offset": "0x34e0",
+    "resident_address": "0x8002fce0",
+    "text": "Ｆｉｒｅ　ｇｅｎｕｓ．　ＡＴＫ　５．",
+    "normalized_text": "Fire genus. ATK 5.",
+    "raw_hex": "8265828982928285814082878285828e829582938144814082608273826a814082548144"
+  },
+  {
+    "file_offset": "0x3508",
+    "resident_address": "0x8002fd08",
+    "text": "Ｍａｄｅ　ｏｆ　ｓｔｅｅｌ．　ＡＴＫ　４．",
+    "normalized_text": "Made of steel. ATK 4.",
+    "raw_hex": "826c8281828482858140828f828681408293829482858285828c8144814082608273826a814082538144"
+  },
+  {
+    "file_offset": "0x3534",
+    "resident_address": "0x8002fd34",
+    "text": "Ｓｔｅｅｌ",
+    "normalized_text": "Steel",
+    "raw_hex": "8272829482858285828c"
+  },
+  {
+    "file_offset": "0x3540",
+    "resident_address": "0x8002fd40",
+    "text": "Ｍａｄｅ　ｏｆ　Ｉｒｏｎ．　ＡＴＫ　３．",
+    "normalized_text": "Made of Iron. ATK 3.",
+    "raw_hex": "826c8281828482858140828f8286814082688292828f828e8144814082608273826a814082528144"
+  },
+  {
+    "file_offset": "0x356c",
+    "resident_address": "0x8002fd6c",
+    "text": "Ｉｒｏｎ",
+    "normalized_text": "Iron",
+    "raw_hex": "82688292828f828e"
+  },
+  {
+    "file_offset": "0x3578",
+    "resident_address": "0x8002fd78",
+    "text": "Ｍａｄｅ　ｏｆ　ｃｏｐｐｅｒ．　ＡＴＫ　２．",
+    "normalized_text": "Made of copper. ATK 2.",
+    "raw_hex": "826c8281828482858140828f828681408283828f82908290828582928144814082608273826a814082518144"
+  },
+  {
+    "file_offset": "0x35a8",
+    "resident_address": "0x8002fda8",
+    "text": "Ｃｏａｔｅｄ　ｗｉｔｈ　ｇｏｌｄ．　ＡＴＫ　１．",
+    "normalized_text": "Coated with gold. ATK 1.",
+    "raw_hex": "8262828f82818294828582848140829782898294828881408287828f828c82848144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x35dc",
+    "resident_address": "0x8002fddc",
+    "text": "Ｓｏｍｅｔｉｍｅｓ　ｓｅａｌｓ　ｔｈｅ　ｓｐｅｃｉａｌ\nｐｏｗｅｒｓ　ｏｆ　ｍｏｎｓｔｅｒｓ．　ＡＴＫ　１．",
+    "normalized_text": "Sometimes seals the special\npowers of monsters. ATK 1.",
+    "raw_hex": "8272828f828d828582948289828d828582938140829382858281828c829381408294828882858140829382908285828382898281828c0a8290828f82978285829282938140828f82868140828d828f828e829382948285829282938144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x3648",
+    "resident_address": "0x8002fe48",
+    "text": "Ｓｅａｌ",
+    "normalized_text": "Seal",
+    "raw_hex": "827282858281828c"
+  },
+  {
+    "file_offset": "0x3654",
+    "resident_address": "0x8002fe54",
+    "text": "Ａ　ｗａｎｄ　ｏｆ　ｗｉｎｄ．　ＡＴＫ　１．",
+    "normalized_text": "A wand of wind. ATK 1.",
+    "raw_hex": "8260814082978281828e82848140828f8286814082978289828e82848144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x3684",
+    "resident_address": "0x8002fe84",
+    "text": "Ｇｕｌｆ",
+    "normalized_text": "Gulf",
+    "raw_hex": "82668295828c8286"
+  },
+  {
+    "file_offset": "0x3690",
+    "resident_address": "0x8002fe90",
+    "text": "Ａ　ｗａｎｄ　ｏｆ　ｗａｔｅｒ．　ＡＴＫ　１．",
+    "normalized_text": "A wand of water. ATK 1.",
+    "raw_hex": "8260814082978281828e82848140828f82868140829782818294828582928144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x36c0",
+    "resident_address": "0x8002fec0",
+    "text": "Ｓｔｒｅａｍ",
+    "normalized_text": "Stream",
+    "raw_hex": "82728294829282858281828d"
+  },
+  {
+    "file_offset": "0x36d0",
+    "resident_address": "0x8002fed0",
+    "text": "Ａ　ｗａｎｄ　ｏｆ　ｆｉｒｅ．　ＡＴＫ　１．",
+    "normalized_text": "A wand of fire. ATK 1.",
+    "raw_hex": "8260814082978281828e82848140828f8286814082868289829282858144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x3700",
+    "resident_address": "0x8002ff00",
+    "text": "Ｓｃａｒｌｅｔ",
+    "normalized_text": "Scarlet",
+    "raw_hex": "8272828382818292828c82858294"
+  },
+  {
+    "file_offset": "0x3710",
+    "resident_address": "0x8002ff10",
+    "text": "Ｓｏｍｅｔｉｍｅｓ　ｃｈａｎｇｅｓ　ｋｉｌｌｅｄ\nＭｏｎｓｔｅｒｓ　ｉｎｔｏ　ｍｏｎｅｙ．　ＡＴＫ　１．",
+    "normalized_text": "Sometimes changes killed\nMonsters into money. ATK 1.",
+    "raw_hex": "8272828f828d828582948289828d828582938140828382888281828e8287828582938140828b8289828c828c828582840a826c828f828e8293829482858292829381408289828e8294828f8140828d828f828e828582998144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x3778",
+    "resident_address": "0x8002ff78",
+    "text": "Ｍｏｎｅｙ",
+    "normalized_text": "Money",
+    "raw_hex": "826c828f828e82858299"
+  },
+  {
+    "file_offset": "0x3784",
+    "resident_address": "0x8002ff84",
+    "text": "Ｓｏｍｅｔｉｍｅｓ　ｆｒｅｅｚｅｓ　Ｍｏｎｓｔｅｒ’ｓ\nｍｏｂｉｌｉｔｙ．　ＡＴＫ　１．",
+    "normalized_text": "Sometimes freezes Monster’s\nmobility. ATK 1.",
+    "raw_hex": "8272828f828d828582948289828d8285829381408286829282858285829a828582938140826c828f828e8293829482858292816682930a828d828f82828289828c8289829482998144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x37dc",
+    "resident_address": "0x8002ffdc",
+    "text": "Ｐａｒａｌｙｚｅ",
+    "normalized_text": "Paralyze",
+    "raw_hex": "826f828182928281828c8299829a8285"
+  },
+  {
+    "file_offset": "0x37f0",
+    "resident_address": "0x8002fff0",
+    "text": "Ｒｅｃｏｖｅｒｓ　ＨＰ　ｓｌｉｇｈｔｌｙ　ｉｆ　ａｎ\nｏｐｐｏｎｅｎｔ　ｉｓ　ｈｉｔ．　ＡＴＫ　１．",
+    "normalized_text": "Recovers HP slightly if an\nopponent is hit. ATK 1.",
+    "raw_hex": "827182858283828f829682858292829381408267826f81408293828c8289828782888294828c829981408289828681408281828e0a828f82908290828f828e8285828e829481408289829381408288828982948144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x3854",
+    "resident_address": "0x80030054",
+    "text": "Ｌｉｆｅ",
+    "normalized_text": "Life",
+    "raw_hex": "826b828982868285"
+  },
+  {
+    "file_offset": "0x3860",
+    "resident_address": "0x80030060",
+    "text": "Ｃａｎ　ｂｅ　ｔｅｍｐｅｒｅｄ　ｗｉｔｈ　ｔｈｅ　\nＲｅｄ　Ｓａｎｄ．　ＡＴＫ　１．",
+    "normalized_text": "Can be tempered with the \nRed Sand. ATK 1.",
+    "raw_hex": "82628281828e814082828285814082948285828d8290828582928285828481408297828982948288814082948288828581400a827182858284814082728281828e82848144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x38b4",
+    "resident_address": "0x800300b4",
+    "text": "Ｔｒａｉｎｅｄ",
+    "normalized_text": "Trained",
+    "raw_hex": "8273829282818289828e82858284"
+  },
+  {
+    "file_offset": "0x38c4",
+    "resident_address": "0x800300c4",
+    "text": "Ａ　ｗａｎｄ　ｍａｄｅ　ｏｆ　ｗｏｏｄ．　ＡＴＫ　１．",
+    "normalized_text": "A wand made of wood. ATK 1.",
+    "raw_hex": "8260814082978281828e82848140828d8281828482858140828f828681408297828f828f82848144814082608273826a814082508144"
+  },
+  {
+    "file_offset": "0x38fc",
+    "resident_address": "0x800300fc",
+    "text": "Ｗｏｏｄｅｎ",
+    "normalized_text": "Wooden",
+    "raw_hex": "8276828f828f82848285828e"
+  },
+  {
+    "file_offset": "0x390c",
+    "resident_address": "0x8003010c",
+    "text": "Ｓｏｍｅｔｉｍｅｓ　ｒｅｔａｌｉａｔｅｓ　ｗｈｅｎ　ｉｔ’ｓ\nｈｉｔ．　ＤＥＦ　５．",
+    "normalized_text": "Sometimes retaliates when it’s\nhit. DEF 5.",
+    "raw_hex": "8272828f828d828582948289828d8285829381408292828582948281828c828982818294828582938140829782888285828e814082898294816682930a82888289829481448140826382648265814082548144"
+  },
+  {
+    "file_offset": "0x3960",
+    "resident_address": "0x80030160",
+    "text": "Ｌｉｖｅ",
+    "normalized_text": "Live",
+    "raw_hex": "826b828982968285"
+  },
+  {
+    "file_offset": "0x396c",
+    "resident_address": "0x8003016c",
+    "text": "Ｗｉｎｄ　ｇｅｎｕｓ　ｓｈｉｅｌｄ．　ＤＥＦ　５．",
+    "normalized_text": "Wind genus shield. DEF 5.",
+    "raw_hex": "82768289828e8284814082878285828e8295829381408293828882898285828c828481448140826382648265814082548144"
+  },
+  {
+    "file_offset": "0x39a0",
+    "resident_address": "0x800301a0",
+    "text": "Ｅａｒｔｈ",
+    "normalized_text": "Earth",
+    "raw_hex": "82648281829282948288"
+  },
+  {
+    "file_offset": "0x39ac",
+    "resident_address": "0x800301ac",
+    "text": "Ｗａｔｅｒ　ｇｅｎｕｓ　ｓｈｉｅｌｄ．　ＤＥＦ　５．",
+    "normalized_text": "Water genus shield. DEF 5.",
+    "raw_hex": "82768281829482858292814082878285828e8295829381408293828882898285828c828481448140826382648265814082548144"
+  },
+  {
+    "file_offset": "0x39e4",
+    "resident_address": "0x800301e4",
+    "text": "Ｆｉｒｅ　ｇｅｎｕｓ　ｓｈｉｅｌｄ．　ＤＥＦ　５．",
+    "normalized_text": "Fire genus shield. DEF 5.",
+    "raw_hex": "8265828982928285814082878285828e8295829381408293828882898285828c828481448140826382648265814082548144"
+  },
+  {
+    "file_offset": "0x3a18",
+    "resident_address": "0x80030218",
+    "text": "Ｓｃｏｒｃｈ",
+    "normalized_text": "Scorch",
+    "raw_hex": "82728283828f829282838288"
+  },
+  {
+    "file_offset": "0x3a28",
+    "resident_address": "0x80030228",
+    "text": "Ａ　ｓｈｉｅｌｄ　ｍａｄｅ　ｏｆ　ｄｉａｍｏｎｄ．\nＤＥＦ　７．",
+    "normalized_text": "A shield made of diamond.\nDEF 7.",
+    "raw_hex": "826081408293828882898285828c82848140828d8281828482858140828f82868140828482898281828d828f828e828481440a826382648265814082568144"
+  },
+  {
+    "file_offset": "0x3a68",
+    "resident_address": "0x80030268",
+    "text": "Ｄｉａｍｏｎｄ",
+    "normalized_text": "Diamond",
+    "raw_hex": "826382898281828d828f828e8284"
+  },
+  {
+    "file_offset": "0x3a78",
+    "resident_address": "0x80030278",
+    "text": "Ａ　ｖｅｒｙ　ｔｏｕｇｈ　ｓｔｅｅｌ　ｓｈｉｅｌｄ．\nＤＥＦ　６．",
+    "normalized_text": "A very tough steel shield.\nDEF 6.",
+    "raw_hex": "82608140829682858292829981408294828f82958287828881408293829482858285828c81408293828882898285828c828481440a826382648265814082558144"
+  },
+  {
+    "file_offset": "0x3abc",
+    "resident_address": "0x800302bc",
+    "text": "Ａｎ　ｉｒｏｎ　ｓｈｉｅｌｄ．　ＤＥＦ　５．",
+    "normalized_text": "An iron shield. DEF 5.",
+    "raw_hex": "8260828e814082898292828f828e81408293828882898285828c828481448140826382648265814082548144"
+  },
+  {
+    "file_offset": "0x3aec",
+    "resident_address": "0x800302ec",
+    "text": "Ａ　ｃｏｐｐｅｒ　ｓｈｉｅｌｄ．　ＤＥＦ　４．",
+    "normalized_text": "A copper shield. DEF 4.",
+    "raw_hex": "826081408283828f829082908285829281408293828882898285828c828481448140826382648265814082538144"
+  },
+  {
+    "file_offset": "0x3b1c",
+    "resident_address": "0x8003031c",
+    "text": "Ｓｈｉｅｌｄ　ｐｏｌｉｓｈｅｄ　ｉｎｔｏ　ａ　ｍｉｒｒｏｒ．\nＤＥＦ　３．",
+    "normalized_text": "Shield polished into a mirror.\nDEF 3.",
+    "raw_hex": "8272828882898285828c828481408290828f828c8289829382888285828481408289828e8294828f814082818140828d828982928292828f829281440a826382648265814082528144"
+  },
+  {
+    "file_offset": "0x3b68",
+    "resident_address": "0x80030368",
+    "text": "Ｍｉｒｒｏｒ",
+    "normalized_text": "Mirror",
+    "raw_hex": "826c828982928292828f8292"
+  },
+  {
+    "file_offset": "0x3b78",
+    "resident_address": "0x80030378",
+    "text": "Ｔａｎｎｅｄ　ｌｅａｔｈｅｒ　ｓｈｉｅｌｄ．　ＤＥＦ　１．",
+    "normalized_text": "Tanned leather shield. DEF 1.",
+    "raw_hex": "82738281828e828e828582848140828c82858281829482888285829281408293828882898285828c828481448140826382648265814082508144"
+  },
+  {
+    "file_offset": "0x3bb4",
+    "resident_address": "0x800303b4",
+    "text": "Ｌｅａｔｈｅｒ",
+    "normalized_text": "Leather",
+    "raw_hex": "826b828582818294828882858292"
+  },
+  {
+    "file_offset": "0x3bc4",
+    "resident_address": "0x800303c4",
+    "text": "Ｗｏｏｄｅｎ　ｓｈｉｅｌｄ．　ＤＥＦ　２．",
+    "normalized_text": "Wooden shield. DEF 2.",
+    "raw_hex": "8276828f828f82848285828e81408293828882898285828c828481448140826382648265814082518144"
+  },
+  {
+    "file_offset": "0x3bf0",
+    "resident_address": "0x800303f0",
+    "text": "Ｗｏｏｄ",
+    "normalized_text": "Wood",
+    "raw_hex": "8276828f828f8284"
+  },
+  {
+    "file_offset": "0x3bfc",
+    "resident_address": "0x800303fc",
+    "text": "Ｂｅｌｄｏ",
+    "normalized_text": "Beldo",
+    "raw_hex": "82618285828c8284828f"
+  },
+  {
+    "file_offset": "0x3c08",
+    "resident_address": "0x80030408",
+    "text": "Ｒｏｃｋ",
+    "normalized_text": "Rock",
+    "raw_hex": "8271828f8283828b"
+  },
+  {
+    "file_offset": "0x3c14",
+    "resident_address": "0x80030414",
+    "text": "Ｗａｌｌ　ｏｆ　ｓｔｏｒｍ",
+    "normalized_text": "Wall of storm",
+    "raw_hex": "82768281828c828c8140828f8286814082938294828f8292828d"
+  },
+  {
+    "file_offset": "0x3c30",
+    "resident_address": "0x80030430",
+    "text": "Ｗａｌｌ　ｏｆ　ｉｃｅ",
+    "normalized_text": "Wall of ice",
+    "raw_hex": "82768281828c828c8140828f82868140828982838285"
+  },
+  {
+    "file_offset": "0x3c48",
+    "resident_address": "0x80030448",
+    "text": "Ｗａｌｌ　ｏｆ　ｆｉｒｅ",
+    "normalized_text": "Wall of fire",
+    "raw_hex": "82768281828c828c8140828f828681408286828982928285"
+  },
+  {
+    "file_offset": "0x3c64",
+    "resident_address": "0x80030464",
+    "text": "Ｓｅｌｆｉ",
+    "normalized_text": "Selfi",
+    "raw_hex": "82728285828c82868289"
+  },
+  {
+    "file_offset": "0x3c70",
+    "resident_address": "0x80030470",
+    "text": "Ｇｈｏｓｈ",
+    "normalized_text": "Ghosh",
+    "raw_hex": "82668288828f82938288"
+  },
+  {
+    "file_offset": "0x3c7c",
+    "resident_address": "0x8003047c",
+    "text": "ＳＡＬＡＭＡＮ",
+    "normalized_text": "SALAMAN",
+    "raw_hex": "82728260826b8260826c8260826d"
+  },
+  {
+    "file_offset": "0x3c8c",
+    "resident_address": "0x8003048c",
+    "text": "ＦＲＯＧ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "FROG−type familiar.",
+    "raw_hex": "82658271826e8266817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3cb4",
+    "resident_address": "0x800304b4",
+    "text": "ＦＲＯＧ",
+    "normalized_text": "FROG",
+    "raw_hex": "82658271826e8266"
+  },
+  {
+    "file_offset": "0x3cc0",
+    "resident_address": "0x800304c0",
+    "text": "ＭＡＸＩＭＵＭ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "MAXIMUM−type familiar.",
+    "raw_hex": "826c826082778268826c8274826c817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3cf0",
+    "resident_address": "0x800304f0",
+    "text": "ＭＡＸＩＭＵＭ",
+    "normalized_text": "MAXIMUM",
+    "raw_hex": "826c826082778268826c8274826c"
+  },
+  {
+    "file_offset": "0x3d00",
+    "resident_address": "0x80030500",
+    "text": "ＧＯＬＥＭ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "GOLEM−type familiar.",
+    "raw_hex": "8266826e826b8264826c817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3d2c",
+    "resident_address": "0x8003052c",
+    "text": "ＧＯＬＥＭ",
+    "normalized_text": "GOLEM",
+    "raw_hex": "8266826e826b8264826c"
+  },
+  {
+    "file_offset": "0x3d38",
+    "resident_address": "0x80030538",
+    "text": "ＴＹＲＡＮＴ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "TYRANT−type familiar.",
+    "raw_hex": "8273827882718260826d8273817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3d64",
+    "resident_address": "0x80030564",
+    "text": "ＴＹＲＡＮＴ",
+    "normalized_text": "TYRANT",
+    "raw_hex": "8273827882718260826d8273"
+  },
+  {
+    "file_offset": "0x3d74",
+    "resident_address": "0x80030574",
+    "text": "ＧＬＡＣＩＥＲ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "GLACIER−type familiar.",
+    "raw_hex": "8266826b82608262826882648271817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3da4",
+    "resident_address": "0x800305a4",
+    "text": "ＧＬＡＣＩＥＲ",
+    "normalized_text": "GLACIER",
+    "raw_hex": "8266826b82608262826882648271"
+  },
+  {
+    "file_offset": "0x3db4",
+    "resident_address": "0x800305b4",
+    "text": "ＧＡＲＵＤＡ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "GARUDA−type familiar.",
+    "raw_hex": "826682608271827482638260817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3de0",
+    "resident_address": "0x800305e0",
+    "text": "ＧＡＲＵＤＡ",
+    "normalized_text": "GARUDA",
+    "raw_hex": "826682608271827482638260"
+  },
+  {
+    "file_offset": "0x3df0",
+    "resident_address": "0x800305f0",
+    "text": "ＫＩＬＬＥＲ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "KILLER−type familiar.",
+    "raw_hex": "826a8268826b826b82648271817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3e1c",
+    "resident_address": "0x8003061c",
+    "text": "ＫＩＬＬＥＲ",
+    "normalized_text": "KILLER",
+    "raw_hex": "826a8268826b826b82648271"
+  },
+  {
+    "file_offset": "0x3e2c",
+    "resident_address": "0x8003062c",
+    "text": "ＭＡＮＤＡＲＡ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "MANDARA−type familiar.",
+    "raw_hex": "826c8260826d8263826082718260817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3e5c",
+    "resident_address": "0x8003065c",
+    "text": "ＭＡＮＤＡＲＡ",
+    "normalized_text": "MANDARA",
+    "raw_hex": "826c8260826d8263826082718260"
+  },
+  {
+    "file_offset": "0x3e6c",
+    "resident_address": "0x8003066c",
+    "text": "ＺＵ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "ZU−type familiar.",
+    "raw_hex": "82798274817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3e90",
+    "resident_address": "0x80030690",
+    "text": "ＮＡＰＬＡＳＳ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "NAPLASS−type familiar.",
+    "raw_hex": "826d8260826f826b826082728272817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3ec0",
+    "resident_address": "0x800306c0",
+    "text": "ＮＡＰＬＡＳＳ",
+    "normalized_text": "NAPLASS",
+    "raw_hex": "826d8260826f826b826082728272"
+  },
+  {
+    "file_offset": "0x3ed0",
+    "resident_address": "0x800306d0",
+    "text": "ＶＩＰＥＲ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "VIPER−type familiar.",
+    "raw_hex": "82758268826f82648271817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3efc",
+    "resident_address": "0x800306fc",
+    "text": "ＶＩＰＥＲ",
+    "normalized_text": "VIPER",
+    "raw_hex": "82758268826f82648271"
+  },
+  {
+    "file_offset": "0x3f08",
+    "resident_address": "0x80030708",
+    "text": "ＳＴＥＡＬＴＨ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "STEALTH−type familiar.",
+    "raw_hex": "8272827382648260826b82738267817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3f38",
+    "resident_address": "0x80030738",
+    "text": "ＳＴＥＡＬＴＨ",
+    "normalized_text": "STEALTH",
+    "raw_hex": "8272827382648260826b82738267"
+  },
+  {
+    "file_offset": "0x3f48",
+    "resident_address": "0x80030748",
+    "text": "ＷＥＡＤＯＧ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "WEADOG−type familiar.",
+    "raw_hex": "8276826482608263826e8266817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3f74",
+    "resident_address": "0x80030774",
+    "text": "ＷＥＡＤＯＧ",
+    "normalized_text": "WEADOG",
+    "raw_hex": "8276826482608263826e8266"
+  },
+  {
+    "file_offset": "0x3f84",
+    "resident_address": "0x80030784",
+    "text": "ＫＲＡＫＥＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "KRAKEN−type familiar.",
+    "raw_hex": "826a82718260826a8264826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3fb0",
+    "resident_address": "0x800307b0",
+    "text": "ＫＲＡＫＥＮ",
+    "normalized_text": "KRAKEN",
+    "raw_hex": "826a82718260826a8264826d"
+  },
+  {
+    "file_offset": "0x3fc0",
+    "resident_address": "0x800307c0",
+    "text": "ＰＩＣＫＥＴ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "PICKET−type familiar.",
+    "raw_hex": "826f82688262826a82648273817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x3fec",
+    "resident_address": "0x800307ec",
+    "text": "ＰＩＣＫＥＴ",
+    "normalized_text": "PICKET",
+    "raw_hex": "826f82688262826a82648273"
+  },
+  {
+    "file_offset": "0x3ffc",
+    "resident_address": "0x800307fc",
+    "text": "ＢＡＲＯＮＧ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "BARONG−type familiar.",
+    "raw_hex": "826182608271826e826d8266817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4028",
+    "resident_address": "0x80030828",
+    "text": "ＢＡＲＯＮＧ",
+    "normalized_text": "BARONG",
+    "raw_hex": "826182608271826e826d8266"
+  },
+  {
+    "file_offset": "0x4038",
+    "resident_address": "0x80030838",
+    "text": "ＭＡＮＯＥＶＡ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "MANOEVA−type familiar.",
+    "raw_hex": "826c8260826d826e826482758260817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4068",
+    "resident_address": "0x80030868",
+    "text": "ＭＡＮＯＥＶＡ",
+    "normalized_text": "MANOEVA",
+    "raw_hex": "826c8260826d826e826482758260"
+  },
+  {
+    "file_offset": "0x4078",
+    "resident_address": "0x80030878",
+    "text": "ＣＹＣＬＯＮＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "CYCLONE−type familiar.",
+    "raw_hex": "826282788262826b826e826d8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x40a8",
+    "resident_address": "0x800308a8",
+    "text": "ＣＹＣＬＯＮＥ",
+    "normalized_text": "CYCLONE",
+    "raw_hex": "826282788262826b826e826d8264"
+  },
+  {
+    "file_offset": "0x40b8",
+    "resident_address": "0x800308b8",
+    "text": "ＶＯＬＣＡＮＯ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "VOLCANO−type familiar.",
+    "raw_hex": "8275826e826b82628260826d826e817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x40e8",
+    "resident_address": "0x800308e8",
+    "text": "ＶＯＬＣＡＮＯ",
+    "normalized_text": "VOLCANO",
+    "raw_hex": "8275826e826b82628260826d826e"
+  },
+  {
+    "file_offset": "0x40f8",
+    "resident_address": "0x800308f8",
+    "text": "ＢＬＵＭＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "BLUME−type familiar.",
+    "raw_hex": "8261826b8274826c8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4124",
+    "resident_address": "0x80030924",
+    "text": "ＢＬＵＭＥ",
+    "normalized_text": "BLUME",
+    "raw_hex": "8261826b8274826c8264"
+  },
+  {
+    "file_offset": "0x4130",
+    "resident_address": "0x80030930",
+    "text": "ＤＲＥＡＭＩＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "DREAMIN−type familiar.",
+    "raw_hex": "8263827182648260826c8268826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4160",
+    "resident_address": "0x80030960",
+    "text": "ＤＲＥＡＭＩＮ",
+    "normalized_text": "DREAMIN",
+    "raw_hex": "8263827182648260826c8268826d"
+  },
+  {
+    "file_offset": "0x4170",
+    "resident_address": "0x80030970",
+    "text": "ＢＡＬＯＯＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "BALOON−type familiar.",
+    "raw_hex": "82618260826b826e826e826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x419c",
+    "resident_address": "0x8003099c",
+    "text": "ＢＡＬＯＯＮ",
+    "normalized_text": "BALOON",
+    "raw_hex": "82618260826b826e826e826d"
+  },
+  {
+    "file_offset": "0x41ac",
+    "resident_address": "0x800309ac",
+    "text": "Ｕ−ＢＯＡＴ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "U−BOAT−type familiar.",
+    "raw_hex": "8274817c8261826e82608273817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x41d8",
+    "resident_address": "0x800309d8",
+    "text": "Ｕ−ＢＯＡＴ",
+    "normalized_text": "U−BOAT",
+    "raw_hex": "8274817c8261826e82608273"
+  },
+  {
+    "file_offset": "0x41e8",
+    "resident_address": "0x800309e8",
+    "text": "ＮＯＩＳＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "NOISE−type familiar.",
+    "raw_hex": "826d826e826882728264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4214",
+    "resident_address": "0x80030a14",
+    "text": "ＮＯＩＳＥ",
+    "normalized_text": "NOISE",
+    "raw_hex": "826d826e826882728264"
+  },
+  {
+    "file_offset": "0x4220",
+    "resident_address": "0x80030a20",
+    "text": "ＴＲＯＬＬ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "TROLL−type familiar.",
+    "raw_hex": "82738271826e826b826b817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x424c",
+    "resident_address": "0x80030a4c",
+    "text": "ＴＲＯＬＬ",
+    "normalized_text": "TROLL",
+    "raw_hex": "82738271826e826b826b"
+  },
+  {
+    "file_offset": "0x4258",
+    "resident_address": "0x80030a58",
+    "text": "ＰＵＬＵＮＰＡ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "PULUNPA−type familiar.",
+    "raw_hex": "826f8274826b8274826d826f8260817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4288",
+    "resident_address": "0x80030a88",
+    "text": "ＰＵＬＵＮＰＡ",
+    "normalized_text": "PULUNPA",
+    "raw_hex": "826f8274826b8274826d826f8260"
+  },
+  {
+    "file_offset": "0x4298",
+    "resident_address": "0x80030a98",
+    "text": "ＢＬＯＣＫ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "BLOCK−type familiar.",
+    "raw_hex": "8261826b826e8262826a817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x42c4",
+    "resident_address": "0x80030ac4",
+    "text": "ＢＬＯＣＫ",
+    "normalized_text": "BLOCK",
+    "raw_hex": "8261826b826e8262826a"
+  },
+  {
+    "file_offset": "0x42d0",
+    "resident_address": "0x80030ad0",
+    "text": "ＭＥＴＡＬ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "METAL−type familiar.",
+    "raw_hex": "826c826482738260826b817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x42fc",
+    "resident_address": "0x80030afc",
+    "text": "ＭＥＴＡＬ",
+    "normalized_text": "METAL",
+    "raw_hex": "826c826482738260826b"
+  },
+  {
+    "file_offset": "0x4308",
+    "resident_address": "0x80030b08",
+    "text": "ＵＮＩＣＯＲＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "UNICORN−type familiar.",
+    "raw_hex": "8274826d82688262826e8271826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4338",
+    "resident_address": "0x80030b38",
+    "text": "ＵＮＩＣＯＲＮ",
+    "normalized_text": "UNICORN",
+    "raw_hex": "8274826d82688262826e8271826d"
+  },
+  {
+    "file_offset": "0x4348",
+    "resident_address": "0x80030b48",
+    "text": "ＵＮＩＶＥＲＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "UNIVERN−type familiar.",
+    "raw_hex": "8274826d8268827582648271826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4378",
+    "resident_address": "0x80030b78",
+    "text": "ＵＮＩＶＥＲＮ",
+    "normalized_text": "UNIVERN",
+    "raw_hex": "8274826d8268827582648271826d"
+  },
+  {
+    "file_offset": "0x4388",
+    "resident_address": "0x80030b88",
+    "text": "ＣＬＯＷＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "CLOWN−type familiar.",
+    "raw_hex": "8262826b826e8276826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x43b4",
+    "resident_address": "0x80030bb4",
+    "text": "ＣＬＯＷＮ",
+    "normalized_text": "CLOWN",
+    "raw_hex": "8262826b826e8276826d"
+  },
+  {
+    "file_offset": "0x43c0",
+    "resident_address": "0x80030bc0",
+    "text": "ＤＥＡＴＨ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "DEATH−type familiar.",
+    "raw_hex": "82638264826082738267817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x43ec",
+    "resident_address": "0x80030bec",
+    "text": "ＤＥＡＴＨ",
+    "normalized_text": "DEATH",
+    "raw_hex": "82638264826082738267"
+  },
+  {
+    "file_offset": "0x43f8",
+    "resident_address": "0x80030bf8",
+    "text": "ＮＹＵＥＬ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "NYUEL−type familiar.",
+    "raw_hex": "826d827882748264826b817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4424",
+    "resident_address": "0x80030c24",
+    "text": "ＮＹＵＥＬ",
+    "normalized_text": "NYUEL",
+    "raw_hex": "826d827882748264826b"
+  },
+  {
+    "file_offset": "0x4430",
+    "resident_address": "0x80030c30",
+    "text": "ＢＡＴＴＮＥＬ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "BATTNEL−type familiar.",
+    "raw_hex": "8261826082738273826d8264826b817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4460",
+    "resident_address": "0x80030c60",
+    "text": "ＢＡＴＴＮＥＬ",
+    "normalized_text": "BATTNEL",
+    "raw_hex": "8261826082738273826d8264826b"
+  },
+  {
+    "file_offset": "0x4470",
+    "resident_address": "0x80030c70",
+    "text": "ＡＲＡＣＨＮＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "ARACHNE−type familiar.",
+    "raw_hex": "82608271826082628267826d8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x44a0",
+    "resident_address": "0x80030ca0",
+    "text": "ＡＲＡＣＨＮＥ",
+    "normalized_text": "ARACHNE",
+    "raw_hex": "82608271826082628267826d8264"
+  },
+  {
+    "file_offset": "0x44b0",
+    "resident_address": "0x80030cb0",
+    "text": "ＡＳＨＲＡ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "ASHRA−type familiar.",
+    "raw_hex": "82608272826782718260817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x44dc",
+    "resident_address": "0x80030cdc",
+    "text": "ＡＳＨＲＡ",
+    "normalized_text": "ASHRA",
+    "raw_hex": "82608272826782718260"
+  },
+  {
+    "file_offset": "0x44e8",
+    "resident_address": "0x80030ce8",
+    "text": "ＳＮＯＷＭＡＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "SNOWMAN−type familiar.",
+    "raw_hex": "8272826d826e8276826c8260826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4518",
+    "resident_address": "0x80030d18",
+    "text": "ＳＮＯＷＭＡＮ",
+    "normalized_text": "SNOWMAN",
+    "raw_hex": "8272826d826e8276826c8260826d"
+  },
+  {
+    "file_offset": "0x4528",
+    "resident_address": "0x80030d28",
+    "text": "ＳＡＢＥＲ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "SABER−type familiar.",
+    "raw_hex": "82728260826182648271817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4554",
+    "resident_address": "0x80030d54",
+    "text": "ＳＡＢＥＲ",
+    "normalized_text": "SABER",
+    "raw_hex": "82728260826182648271"
+  },
+  {
+    "file_offset": "0x4560",
+    "resident_address": "0x80030d60",
+    "text": "ＧＲＩＦＦＯＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "GRIFFON−type familiar.",
+    "raw_hex": "82668271826882658265826e826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4590",
+    "resident_address": "0x80030d90",
+    "text": "ＧＲＩＦＦＯＮ",
+    "normalized_text": "GRIFFON",
+    "raw_hex": "82668271826882658265826e826d"
+  },
+  {
+    "file_offset": "0x45a0",
+    "resident_address": "0x80030da0",
+    "text": "ＧＲＩＮＥＵＴ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "GRINEUT−type familiar.",
+    "raw_hex": "826682718268826d826482748273817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x45d0",
+    "resident_address": "0x80030dd0",
+    "text": "ＧＲＩＮＥＵＴ",
+    "normalized_text": "GRINEUT",
+    "raw_hex": "826682718268826d826482748273"
+  },
+  {
+    "file_offset": "0x45e0",
+    "resident_address": "0x80030de0",
+    "text": "ＦＬＡＭＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "FLAME−type familiar.",
+    "raw_hex": "8265826b8260826c8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x460c",
+    "resident_address": "0x80030e0c",
+    "text": "ＦＬＡＭＥ",
+    "normalized_text": "FLAME",
+    "raw_hex": "8265826b8260826c8264"
+  },
+  {
+    "file_offset": "0x4618",
+    "resident_address": "0x80030e18",
+    "text": "ＩＦＲＩＴ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "IFRIT−type familiar.",
+    "raw_hex": "82688265827182688273817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4644",
+    "resident_address": "0x80030e44",
+    "text": "ＩＦＲＩＴ",
+    "normalized_text": "IFRIT",
+    "raw_hex": "82688265827182688273"
+  },
+  {
+    "file_offset": "0x4650",
+    "resident_address": "0x80030e50",
+    "text": "ＫＩＤ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "KID−type familiar.",
+    "raw_hex": "826a82688263817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4678",
+    "resident_address": "0x80030e78",
+    "text": "ＤＲＡＧＯＮ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "DRAGON−type familiar.",
+    "raw_hex": "8263827182608266826e826d817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x46a4",
+    "resident_address": "0x80030ea4",
+    "text": "ＤＲＡＧＯＮ",
+    "normalized_text": "DRAGON",
+    "raw_hex": "8263827182608266826e826d"
+  },
+  {
+    "file_offset": "0x46b4",
+    "resident_address": "0x80030eb4",
+    "text": "ＫＥＷＮＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "KEWNE−type familiar.",
+    "raw_hex": "826a82648276826d8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x46e0",
+    "resident_address": "0x80030ee0",
+    "text": "ＫＥＷＮＥ",
+    "normalized_text": "KEWNE",
+    "raw_hex": "826a82648276826d8264"
+  },
+  {
+    "file_offset": "0x46ec",
+    "resident_address": "0x80030eec",
+    "text": "ＨＩＫＥＷＮＥ−ｔｙｐｅ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "HIKEWNE−type familiar.",
+    "raw_hex": "82678268826a82648276826d8264817c8294829982908285814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x471c",
+    "resident_address": "0x80030f1c",
+    "text": "ＨＩＫＥＷＮＥ",
+    "normalized_text": "HIKEWNE",
+    "raw_hex": "82678268826a82648276826d8264"
+  },
+  {
+    "file_offset": "0x472c",
+    "resident_address": "0x80030f2c",
+    "text": "Ａｎ　ｅｌｅｖａｔｏｒ．　Ｗａｎｎａ　ｇｏ　ｕｐ？\n",
+    "normalized_text": "An elevator. Wanna go up?\n",
+    "raw_hex": "8260828e81408285828c8285829682818294828f82928144814082768281828e828e828181408287828f81408295829081480a"
+  },
+  {
+    "file_offset": "0x4760",
+    "resident_address": "0x80030f60",
+    "text": "Ｅｌｅｖａｔｏｒ",
+    "normalized_text": "Elevator",
+    "raw_hex": "8264828c8285829682818294828f8292"
+  },
+  {
+    "file_offset": "0x4774",
+    "resident_address": "0x80030f74",
+    "text": "Ｔｈｅ　ｅｑｕｉｐｍｅｎｔ　ｏｎ　ｈａｎｄ　ｗｉｌｌ\nｒｕｓｔ．",
+    "normalized_text": "The equipment on hand will\nrust.",
+    "raw_hex": "827382888285814082858291829582898290828d8285828e82948140828f828e814082888281828e8284814082978289828c828c0a82928295829382948144"
+  },
+  {
+    "file_offset": "0x47b4",
+    "resident_address": "0x80030fb4",
+    "text": "Ｒｕｓｔ",
+    "normalized_text": "Rust",
+    "raw_hex": "8271829582938294"
+  },
+  {
+    "file_offset": "0x47c0",
+    "resident_address": "0x80030fc0",
+    "text": "Ｓｅａｌｓ　ｍａｇｉｃ．",
+    "normalized_text": "Seals magic.",
+    "raw_hex": "827282858281828c82938140828d82818287828982838144"
+  },
+  {
+    "file_offset": "0x47dc",
+    "resident_address": "0x80030fdc",
+    "text": "Ｔｈｅ　ｔｅｒｒａｉｎ　ｒｉｓｅｓ．",
+    "normalized_text": "The terrain rises.",
+    "raw_hex": "8273828882858140829482858292829282818289828e8140829282898293828582938144"
+  },
+  {
+    "file_offset": "0x4804",
+    "resident_address": "0x80031004",
+    "text": "Ｕｐｈｅａｖａｌ",
+    "normalized_text": "Upheaval",
+    "raw_hex": "8274829082888285828182968281828c"
+  },
+  {
+    "file_offset": "0x4818",
+    "resident_address": "0x80031018",
+    "text": "Ｔｈｅ　ｔｅｒｒａｉｎ　ｃａｖｅｓ　ｉｎ．",
+    "normalized_text": "The terrain caves in.",
+    "raw_hex": "8273828882858140829482858292829282818289828e81408283828182968285829381408289828e8144"
+  },
+  {
+    "file_offset": "0x4844",
+    "resident_address": "0x80031044",
+    "text": "Ｃｒａｃｋ",
+    "normalized_text": "Crack",
+    "raw_hex": "8262829282818283828b"
+  },
+  {
+    "file_offset": "0x4850",
+    "resident_address": "0x80031050",
+    "text": "Ｗａｋｅｓ　ｕｐ　ａ　ｓｌｅｅｐｉｎｇ　ｍｏｎｓｔｅｒ．",
+    "normalized_text": "Wakes up a sleeping monster.",
+    "raw_hex": "82768281828b828582938140829582908140828181408293828c8285828582908289828e82878140828d828f828e82938294828582928144"
+  },
+  {
+    "file_offset": "0x488c",
+    "resident_address": "0x8003108c",
+    "text": "Ｂｕｍｐ",
+    "normalized_text": "Bump",
+    "raw_hex": "82618295828d8290"
+  },
+  {
+    "file_offset": "0x4898",
+    "resident_address": "0x80031098",
+    "text": "Ｔｕｒｎｓ　ｉｎｔｏ　ａ　ｆｒｏｇ．",
+    "normalized_text": "Turns into a frog.",
+    "raw_hex": "827382958292828e829381408289828e8294828f81408281814082868292828f82878144"
+  },
+  {
+    "file_offset": "0x48c0",
+    "resident_address": "0x800310c0",
+    "text": "Ｆｒｏｇ",
+    "normalized_text": "Frog",
+    "raw_hex": "82658292828f8287"
+  },
+  {
+    "file_offset": "0x48cc",
+    "resident_address": "0x800310cc",
+    "text": "Ｍｏｖｅｍｅｎｔ　ｗｉｌｌ　ｂｅ　ｆｒｏｚｅｎ　ａｎｄ　ｔｈｅ\nｐｌａｙｅｒ　ｗｉｌｌ　ｂｅｃｏｍｅ　ｉｍｍｏｂｉｌｅ．",
+    "normalized_text": "Movement will be frozen and the\nplayer will become immobile.",
+    "raw_hex": "826c828f82968285828d8285828e8294814082978289828c828c814082828285814082868292828f829a8285828e81408281828e828481408294828882850a8290828c8281829982858292814082978289828c828c8140828282858283828f828d828581408289828d828d828f82828289828c82858144"
+  },
+  {
+    "file_offset": "0x4944",
+    "resident_address": "0x80031144",
+    "text": "Ｐｒｉｓｏｎ",
+    "normalized_text": "Prison",
+    "raw_hex": "826f829282898293828f828e"
+  },
+  {
+    "file_offset": "0x4954",
+    "resident_address": "0x80031154",
+    "text": "Ｔｈｅ　ｐｌａｙｅｒ　ｇｅｔｓ　ｐｏｉｓｏｎｅｄ．",
+    "normalized_text": "The player gets poisoned.",
+    "raw_hex": "82738288828581408290828c82818299828582928140828782858294829381408290828f82898293828f828e828582848144"
+  },
+  {
+    "file_offset": "0x4988",
+    "resident_address": "0x80031188",
+    "text": "Ｐｏｉｓｏｎ",
+    "normalized_text": "Poison",
+    "raw_hex": "826f828f82898293828f828e"
+  },
+  {
+    "file_offset": "0x4998",
+    "resident_address": "0x80031198",
+    "text": "Ｔｈｅ　ｔｒａｐ　ｂｌｉｎｄｓ　ｔｈｅ　ｐｌａｙｅｒ．",
+    "normalized_text": "The trap blinds the player.",
+    "raw_hex": "8273828882858140829482928281829081408282828c8289828e82848293814082948288828581408290828c82818299828582928144"
+  },
+  {
+    "file_offset": "0x49d0",
+    "resident_address": "0x800311d0",
+    "text": "Ｂｌｉｎｄｅｒ",
+    "normalized_text": "Blinder",
+    "raw_hex": "8261828c8289828e828482858292"
+  },
+  {
+    "file_offset": "0x49e0",
+    "resident_address": "0x800311e0",
+    "text": "Ｔｈｅ　ｔｒａｐ　ｐｕｔｓ　ｔｈｅ　ｐｌａｙｅｒ　ｔｏ\nｓｌｅｅｐ．",
+    "normalized_text": "The trap puts the player to\nsleep.",
+    "raw_hex": "8273828882858140829482928281829081408290829582948293814082948288828581408290828c828182998285829281408294828f0a8293828c8285828582908144"
+  },
+  {
+    "file_offset": "0x4a24",
+    "resident_address": "0x80031224",
+    "text": "Ｓｌｅｅｐ",
+    "normalized_text": "Sleep",
+    "raw_hex": "8272828c828582858290"
+  },
+  {
+    "file_offset": "0x4a30",
+    "resident_address": "0x80031230",
+    "text": "Ａｎ　ｏｂｊｅｃｔ　ｆａｌｌｓ　ｏｎｔｏ　ｔｈｅ\nｐｌａｙｅｒ．",
+    "normalized_text": "An object falls onto the\nplayer.",
+    "raw_hex": "8260828e8140828f8282828a828582838294814082868281828c828c82938140828f828e8294828f81408294828882850a8290828c82818299828582928144"
+  },
+  {
+    "file_offset": "0x4a70",
+    "resident_address": "0x80031270",
+    "text": "Ｓｌａｍ",
+    "normalized_text": "Slam",
+    "raw_hex": "8272828c8281828d"
+  },
+  {
+    "file_offset": "0x4a7c",
+    "resident_address": "0x8003127c",
+    "text": "Ｉｔ　ｅｘｐｌｏｄｅｓ　ａｎｄ　ｃａｕｓｅｓ\nｄａｍａｇｅ．",
+    "normalized_text": "It explodes and causes\ndamage.",
+    "raw_hex": "826882948140828582988290828c828f82848285829381408281828e828481408283828182958293828582930a82848281828d8281828782858144"
+  },
+  {
+    "file_offset": "0x4ab8",
+    "resident_address": "0x800312b8",
+    "text": "Ｂｏｍｂ",
+    "normalized_text": "Bomb",
+    "raw_hex": "8261828f828d8282"
+  },
+  {
+    "file_offset": "0x4ac4",
+    "resident_address": "0x800312c4",
+    "text": "Ｔｈｅ　ｔｒａｐ　ｐｕｔｓ　ｔｈｅ　ｐｌａｙｅｒ　ｉｎｔｏ\nｃｈａｏｓ．",
+    "normalized_text": "The trap puts the player into\nchaos.",
+    "raw_hex": "8273828882858140829482928281829081408290829582948293814082948288828581408290828c828182998285829281408289828e8294828f0a828382888281828f82938144"
+  },
+  {
+    "file_offset": "0x4b0c",
+    "resident_address": "0x8003130c",
+    "text": "Ｃｈａｏｓ",
+    "normalized_text": "Chaos",
+    "raw_hex": "826282888281828f8293"
+  },
+  {
+    "file_offset": "0x4b18",
+    "resident_address": "0x80031318",
+    "text": "Ｔｈｅ　ｐｌａｙｅｒ　ｗｉｌｌ　ｂｅ　ｓｈｉｆｔｅｄ　ｔｏ\nａｎ　ｕｐｐｅｒ　ｆｌｏｏｒ．",
+    "normalized_text": "The player will be shifted to\nan upper floor.",
+    "raw_hex": "82738288828581408290828c8281829982858292814082978289828c828c8140828282858140829382888289828682948285828481408294828f0a8281828e81408295829082908285829281408286828c828f828f82928144"
+  },
+  {
+    "file_offset": "0x4b74",
+    "resident_address": "0x80031374",
+    "text": "Ｇｏ　ｕｐ",
+    "normalized_text": "Go up",
+    "raw_hex": "8266828f814082958290"
+  },
+  {
+    "file_offset": "0x4b80",
+    "resident_address": "0x80031380",
+    "text": "Ｔｈｅ　ｐｌａｙｅｒ　ｗｉｌｌ　ｂｅ　ｓｈｉｆｔｅｄ　ｔｏ\nａｎｏｔｈｅｒ　ｌｏｃａｔｉｏｎ．",
+    "normalized_text": "The player will be shifted to\nanother location.",
+    "raw_hex": "82738288828581408290828c8281829982858292814082978289828c828c8140828282858140829382888289828682948285828481408294828f0a8281828e828f82948288828582928140828c828f8283828182948289828f828e8144"
+  },
+  {
+    "file_offset": "0x4be0",
+    "resident_address": "0x800313e0",
+    "text": "Ｗａｒｐ",
+    "normalized_text": "Warp",
+    "raw_hex": "8276828182928290"
+  },
+  {
+    "file_offset": "0x4bec",
+    "resident_address": "0x800313ec",
+    "text": "Ｓｐｅｅｄ　ｗｉｌｌ　ｂｅ　ｒｅｄｕｃｅｄ　ｂｙ　ｈａｌｆ．",
+    "normalized_text": "Speed will be reduced by half.",
+    "raw_hex": "82728290828582858284814082978289828c828c81408282828581408292828582848295828382858284814082828299814082888281828c82868144"
+  },
+  {
+    "file_offset": "0x4c2c",
+    "resident_address": "0x8003142c",
+    "text": "Ｓｌｏｗ",
+    "normalized_text": "Slow",
+    "raw_hex": "8272828c828f8297"
+  },
+  {
+    "file_offset": "0x4c38",
+    "resident_address": "0x80031438",
+    "text": "Ｃｅｉｌｉｎｇ　ａｎｄ　ｆｌｏｏｒ　ｗｉｌｌ　ｂｅ\nｔｕｒｎｅｄ　ｕｐｓｉｄｅ　ｄｏｗｎ．",
+    "normalized_text": "Ceiling and floor will be\nturned upside down.",
+    "raw_hex": "826282858289828c8289828e828781408281828e828481408286828c828f828f8292814082978289828c828c8140828282850a829482958292828e82858284814082958290829382898284828581408284828f8297828e8144"
+  },
+  {
+    "file_offset": "0x4c94",
+    "resident_address": "0x80031494",
+    "text": "Ｒｅｖｅｒｓａｌ",
+    "normalized_text": "Reversal",
+    "raw_hex": "8271828582968285829282938281828c"
+  },
+  {
+    "file_offset": "0x4ca8",
+    "resident_address": "0x800314a8",
+    "text": "紺色の草",
+    "normalized_text": "紺色の草",
+    "raw_hex": "8dae904682cc9190"
+  },
+  {
+    "file_offset": "0x4cb4",
+    "resident_address": "0x800314b4",
+    "text": "朱色の草",
+    "normalized_text": "朱色の草",
+    "raw_hex": "8ee9904682cc9190"
+  },
+  {
+    "file_offset": "0x4cc0",
+    "resident_address": "0x800314c0",
+    "text": "Ｅｎａｂｌｅｓ　ｅｙｅ　ｓｉｇｈｔ．",
+    "normalized_text": "Enables eye sight.",
+    "raw_hex": "8264828e82818282828c8285829381408285829982858140829382898287828882948144"
+  },
+  {
+    "file_offset": "0x4ce8",
+    "resident_address": "0x800314e8",
+    "text": "Ｒｏｅａｍ",
+    "normalized_text": "Roeam",
+    "raw_hex": "8271828f82858281828d"
+  },
+  {
+    "file_offset": "0x4cf4",
+    "resident_address": "0x800314f4",
+    "text": "オレンジ色の草",
+    "normalized_text": "オレンジ色の草",
+    "raw_hex": "8349838c83938357904682cc9190"
+  },
+  {
+    "file_offset": "0x4d04",
+    "resident_address": "0x80031504",
+    "text": "Ｐｕｔｓ　ｔｈｅ　ｒｅｃｉｐｉｅｎｔ　ｔｏ　ｓｌｅｅｐ．",
+    "normalized_text": "Puts the recipient to sleep.",
+    "raw_hex": "826f829582948293814082948288828581408292828582838289829082898285828e829481408294828f81408293828c8285828582908144"
+  },
+  {
+    "file_offset": "0x4d40",
+    "resident_address": "0x80031540",
+    "text": "銀色の草",
+    "normalized_text": "銀色の草",
+    "raw_hex": "8be2904682cc9190"
+  },
+  {
+    "file_offset": "0x4d4c",
+    "resident_address": "0x8003154c",
+    "text": "Ｗｅａｋｅｎｓ　ｄｅｆｅｎｓｉｖｅ　ｐｏｗｅｒ．",
+    "normalized_text": "Weakens defensive power.",
+    "raw_hex": "827682858281828b8285828e829381408284828582868285828e829382898296828581408290828f8297828582928144"
+  },
+  {
+    "file_offset": "0x4d80",
+    "resident_address": "0x80031580",
+    "text": "Ｈｏｒｒｅｙ",
+    "normalized_text": "Horrey",
+    "raw_hex": "8267828f8292829282858299"
+  },
+  {
+    "file_offset": "0x4d90",
+    "resident_address": "0x80031590",
+    "text": "金色の草",
+    "normalized_text": "金色の草",
+    "raw_hex": "8be0904682cc9190"
+  },
+  {
+    "file_offset": "0x4d9c",
+    "resident_address": "0x8003159c",
+    "text": "Ｗｅａｋｅｎｓ　ａｔｔａｃｋｉｎｇ　ｐｏｗｅｒ．",
+    "normalized_text": "Weakens attacking power.",
+    "raw_hex": "827682858281828b8285828e8293814082818294829482818283828b8289828e828781408290828f8297828582928144"
+  },
+  {
+    "file_offset": "0x4dd0",
+    "resident_address": "0x800315d0",
+    "text": "Ｈａｒａｓｈ",
+    "normalized_text": "Harash",
+    "raw_hex": "826782818292828182938288"
+  },
+  {
+    "file_offset": "0x4de0",
+    "resident_address": "0x800315e0",
+    "text": "水色の草",
+    "normalized_text": "水色の草",
+    "raw_hex": "9085904682cc9190"
+  },
+  {
+    "file_offset": "0x4dec",
+    "resident_address": "0x800315ec",
+    "text": "Ｈｅｒｂ　ｔｈａｔ　ｆｒｅｅｚｅｓ　ｍｏｔｉｏｎ．",
+    "normalized_text": "Herb that freezes motion.",
+    "raw_hex": "82678285829282828140829482888281829481408286829282858285829a828582938140828d828f82948289828f828e8144"
+  },
+  {
+    "file_offset": "0x4e20",
+    "resident_address": "0x80031620",
+    "text": "紫色の草",
+    "normalized_text": "紫色の草",
+    "raw_hex": "8e87904682cc9190"
+  },
+  {
+    "file_offset": "0x4e2c",
+    "resident_address": "0x8003162c",
+    "text": "Ｔｏｘｉｃ　ｈｅｒｂ．",
+    "normalized_text": "Toxic herb.",
+    "raw_hex": "8273828f829882898283814082888285829282828144"
+  },
+  {
+    "file_offset": "0x4e44",
+    "resident_address": "0x80031644",
+    "text": "灰色の草",
+    "normalized_text": "灰色の草",
+    "raw_hex": "8a44904682cc9190"
+  },
+  {
+    "file_offset": "0x4e50",
+    "resident_address": "0x80031650",
+    "text": "Ｃａｎ　ｈｅａｌ　ｄｉｓｅａｓｅ　ｏｆ　Ｃｈｅｒｒｌ．",
+    "normalized_text": "Can heal disease of Cherrl.",
+    "raw_hex": "82628281828e8140828882858281828c814082848289829382858281829382858140828f8286814082628288828582928292828c8144"
+  },
+  {
+    "file_offset": "0x4e88",
+    "resident_address": "0x80031688",
+    "text": "Ｈｅａｌｉｎｇ",
+    "normalized_text": "Healing",
+    "raw_hex": "826782858281828c8289828e8287"
+  },
+  {
+    "file_offset": "0x4e98",
+    "resident_address": "0x80031698",
+    "text": "Ｒｅｓｔｏｒｅｓ　ｗｅａｋｅｎｅｄ　ｄｅｆｅｎｓｅ．",
+    "normalized_text": "Restores weakened defense.",
+    "raw_hex": "8271828582938294828f8292828582938140829782858281828b8285828e8285828481408284828582868285828e829382858144"
+  },
+  {
+    "file_offset": "0x4ed0",
+    "resident_address": "0x800316d0",
+    "text": "Ｓｈｏｍｕｒｏ",
+    "normalized_text": "Shomuro",
+    "raw_hex": "82728288828f828d82958292828f"
+  },
+  {
+    "file_offset": "0x4ee0",
+    "resident_address": "0x800316e0",
+    "text": "ピンクの草",
+    "normalized_text": "ピンクの草",
+    "raw_hex": "83738393834e82cc9190"
+  },
+  {
+    "file_offset": "0x4eec",
+    "resident_address": "0x800316ec",
+    "text": "Ｒｅｃｏｖｅｒｓ　ｗｅａｋｅｎｅｄ　ａｔｔａｃｋ．",
+    "normalized_text": "Recovers weakened attack.",
+    "raw_hex": "827182858283828f82968285829282938140829782858281828b8285828e82858284814082818294829482818283828b8144"
+  },
+  {
+    "file_offset": "0x4f20",
+    "resident_address": "0x80031720",
+    "text": "Ｈａｚａｋ",
+    "normalized_text": "Hazak",
+    "raw_hex": "82678281829a8281828b"
+  },
+  {
+    "file_offset": "0x4f2c",
+    "resident_address": "0x8003172c",
+    "text": "Ｈｅｒｂ　ｔｈａｔ　ｒｅｓｔｏｒｅｓ　ｅｖｅｒｙｔｈｉｎｇ．",
+    "normalized_text": "Herb that restores everything.",
+    "raw_hex": "82678285829282828140829482888281829481408292828582938294828f829282858293814082858296828582928299829482888289828e82878144"
+  },
+  {
+    "file_offset": "0x4f6c",
+    "resident_address": "0x8003176c",
+    "text": "Ｃｕｒｅ−ａｌｌ",
+    "normalized_text": "Cure−all",
+    "raw_hex": "8262829582928285817c8281828c828c"
+  },
+  {
+    "file_offset": "0x4f80",
+    "resident_address": "0x80031780",
+    "text": "Ｗａｋｅｓ　ｕｐ　ａ　ｓｌｅｅｐｉｎｇ　ｆａｍｉｌｉａｒ．",
+    "normalized_text": "Wakes up a sleeping familiar.",
+    "raw_hex": "82768281828b828582938140829582908140828181408293828c8285828582908289828e8287814082868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x4fbc",
+    "resident_address": "0x800317bc",
+    "text": "Ｗａｋｅ−ｕｐ",
+    "normalized_text": "Wake−up",
+    "raw_hex": "82768281828b8285817c82958290"
+  },
+  {
+    "file_offset": "0x4fcc",
+    "resident_address": "0x800317cc",
+    "text": "黄色い草",
+    "normalized_text": "黄色い草",
+    "raw_hex": "89a9904682a29190"
+  },
+  {
+    "file_offset": "0x4fd8",
+    "resident_address": "0x800317d8",
+    "text": "Ｈｅｒｂ　ｔｈａｔ　ｒｅｓｔｏｒｅｓ　ｃｈａｏｓ．",
+    "normalized_text": "Herb that restores chaos.",
+    "raw_hex": "82678285829282828140829482888281829481408292828582938294828f8292828582938140828382888281828f82938144"
+  },
+  {
+    "file_offset": "0x500c",
+    "resident_address": "0x8003180c",
+    "text": "Ａｎｔｉｃｈａｏｓ",
+    "normalized_text": "Antichaos",
+    "raw_hex": "8260828e82948289828382888281828f8293"
+  },
+  {
+    "file_offset": "0x5020",
+    "resident_address": "0x80031820",
+    "text": "Ｈｅｒｂ　ｎｅｕｔｒａｌｉｚｅｓ　ａ　ｐｏｉｓｏｎ．",
+    "normalized_text": "Herb neutralizes a poison.",
+    "raw_hex": "82678285829282828140828e82858295829482928281828c8289829a828582938140828181408290828f82898293828f828e8144"
+  },
+  {
+    "file_offset": "0x5058",
+    "resident_address": "0x80031858",
+    "text": "Ａｎｔｉｄｏｔｅ",
+    "normalized_text": "Antidote",
+    "raw_hex": "8260828e829482898284828f82948285"
+  },
+  {
+    "file_offset": "0x506c",
+    "resident_address": "0x8003186c",
+    "text": "Ｈｅｒｂ　ｔｈａｔ　ｒｅｓｔｏｒｅｓ　ＨＰ．",
+    "normalized_text": "Herb that restores HP.",
+    "raw_hex": "82678285829282828140829482888281829481408292828582938294828f82928285829381408267826f8144"
+  },
+  {
+    "file_offset": "0x509c",
+    "resident_address": "0x8003189c",
+    "text": "Ｍｅｄｉｃｉｎａｌ",
+    "normalized_text": "Medicinal",
+    "raw_hex": "826c82858284828982838289828e8281828c"
+  },
+  {
+    "file_offset": "0x50b0",
+    "resident_address": "0x800318b0",
+    "text": "水色の実",
+    "normalized_text": "水色の実",
+    "raw_hex": "9085904682cc8ec0"
+  },
+  {
+    "file_offset": "0x50bc",
+    "resident_address": "0x800318bc",
+    "text": "Ｖａｎｉｓｈｅｓ　ＭＰ　ｏｆ　ｔｈｅ　ｍｏｎｓｔｅｒ　ａｔｅ\nｔｈｉｓ　ｆｒｕｉｔ．",
+    "normalized_text": "Vanishes MP of the monster ate\nthis fruit.",
+    "raw_hex": "82758281828e828982938288828582938140826c826f8140828f828681408294828882858140828d828f828e829382948285829281408281829482850a82948288828982938140828682928295828982948144"
+  },
+  {
+    "file_offset": "0x5110",
+    "resident_address": "0x80031910",
+    "text": "Ｇｅｒｏｐｉｔａ",
+    "normalized_text": "Geropita",
+    "raw_hex": "826682858292828f8290828982948281"
+  },
+  {
+    "file_offset": "0x5124",
+    "resident_address": "0x80031924",
+    "text": "Ｖａｎｉｓｈｅｓ　ｆａｍｉｌｉａｒ　ａｎｄ　ｔｈｅ\nｐｌａｙｅｒ　ｅｓｃａｐｅｓ　ｆｒｏｍ　ｔｈｅ　ｔｏｗｅｒ．",
+    "normalized_text": "Vanishes familiar and the\nplayer escapes from the tower.",
+    "raw_hex": "82758281828e82898293828882858293814082868281828d8289828c82898281829281408281828e828481408294828882850a8290828c828182998285829281408285829382838281829082858293814082868292828f828d814082948288828581408294828f8297828582928144"
+  },
+  {
+    "file_offset": "0x5194",
+    "resident_address": "0x80031994",
+    "text": "茶色い実",
+    "normalized_text": "茶色い実",
+    "raw_hex": "9283904682a28ec0"
+  },
+  {
+    "file_offset": "0x51a0",
+    "resident_address": "0x800319a0",
+    "text": "Ｉｎｃｒｅａｓｅ　ｐｅｒｃｅｎｔａｇｅ　ｏｆ\nｃｒｉｔｉｃａｌ　ｈｉｔｓ　ｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "Increase percentage of\ncritical hits for a while.",
+    "raw_hex": "8268828e828382928285828182938285814082908285829282838285828e82948281828782858140828f82860a8283829282898294828982838281828c8140828882898294829381408286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x5204",
+    "resident_address": "0x80031a04",
+    "text": "Ｌｉｍｉｔ",
+    "normalized_text": "Limit",
+    "raw_hex": "826b8289828d82898294"
+  },
+  {
+    "file_offset": "0x5210",
+    "resident_address": "0x80031a10",
+    "text": "Ｗｉｌｌ　ｒｅｖｅｒｔ　ｍｏｎｓｔｅｒ　ｔｏ　ｉｔｓ\nｅｇｇ−ｓｔａｇｅ．",
+    "normalized_text": "Will revert monster to its\negg−stage.",
+    "raw_hex": "82768289828c828c81408292828582968285829282948140828d828f828e829382948285829281408294828f81408289829482930a828582878287817c829382948281828782858144"
+  },
+  {
+    "file_offset": "0x525c",
+    "resident_address": "0x80031a5c",
+    "text": "Ｒｏｃｈｅ",
+    "normalized_text": "Roche",
+    "raw_hex": "8271828f828382888285"
+  },
+  {
+    "file_offset": "0x5268",
+    "resident_address": "0x80031a68",
+    "text": "ピンクの実",
+    "normalized_text": "ピンクの実",
+    "raw_hex": "83738393834e82cc8ec0"
+  },
+  {
+    "file_offset": "0x5274",
+    "resident_address": "0x80031a74",
+    "text": "ＭＰ　ｏｆ　ｍｏｎｓｔｅｒ　ｔｅｎｄｓ　ｔｏ\nｄｅｃｒｅａｓｅ　ｏｎ　ｔｈａｔ　ｌｅｖｅｌ．",
+    "normalized_text": "MP of monster tends to\ndecrease on that level.",
+    "raw_hex": "826c826f8140828f82868140828d828f828e8293829482858292814082948285828e8284829381408294828f0a828482858283829282858281829382858140828f828e814082948288828182948140828c828582968285828c8144"
+  },
+  {
+    "file_offset": "0x52d0",
+    "resident_address": "0x80031ad0",
+    "text": "Ｌａｅｖ",
+    "normalized_text": "Laev",
+    "raw_hex": "826b828182858296"
+  },
+  {
+    "file_offset": "0x52dc",
+    "resident_address": "0x80031adc",
+    "text": "黄色い実",
+    "normalized_text": "黄色い実",
+    "raw_hex": "89a9904682a28ec0"
+  },
+  {
+    "file_offset": "0x52e8",
+    "resident_address": "0x80031ae8",
+    "text": "ＭＰ　ｏｆ　ｔｈｅ　ｍｏｎｓｔｅｒ　ｗｉｌｌ　ｎｏｔ\nｄｅｃｒｅａｓｅ　ｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "MP of the monster will not\ndecrease for a while.",
+    "raw_hex": "826c826f8140828f828681408294828882858140828d828f828e8293829482858292814082978289828c828c8140828e828f82940a8284828582838292828582818293828581408286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x5348",
+    "resident_address": "0x80031b48",
+    "text": "Ｌｅｏｌａｍ",
+    "normalized_text": "Leolam",
+    "raw_hex": "826b8285828f828c8281828d"
+  },
+  {
+    "file_offset": "0x5358",
+    "resident_address": "0x80031b58",
+    "text": "Ｆａｍｉｌｉａｒ　ｗｉｌｌ　ｎｏｔ　ｃｈａｎｇｅ　ｆｏｒｍ\nａｆｔｅｒ　ｔｈｅ　ｎｅｘｔ　ｆｕｓｉｏｎ．",
+    "normalized_text": "Familiar will not change form\nafter the next fusion.",
+    "raw_hex": "82658281828d8289828c828982818292814082978289828c828c8140828e828f82948140828382888281828e8287828581408286828f8292828d0a8281828682948285829281408294828882858140828e82858298829481408286829582938289828f828e8144"
+  },
+  {
+    "file_offset": "0x53c0",
+    "resident_address": "0x80031bc0",
+    "text": "Ｌｅｖａ",
+    "normalized_text": "Leva",
+    "raw_hex": "826b828582968281"
+  },
+  {
+    "file_offset": "0x53cc",
+    "resident_address": "0x80031bcc",
+    "text": "Ｔｕｒｎｓ　ｉｎｔｏ　ａ　ｆｒｏｇ　ｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "Turns into a frog for a while.",
+    "raw_hex": "827382958292828e829381408289828e8294828f81408281814082868292828f828781408286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x540c",
+    "resident_address": "0x80031c0c",
+    "text": "Ｔｕｍｎａ",
+    "normalized_text": "Tumna",
+    "raw_hex": "82738295828d828e8281"
+  },
+  {
+    "file_offset": "0x5418",
+    "resident_address": "0x80031c18",
+    "text": "Ｆｏｏｄ　ｆｏｒ　ｆａｍｉｌｉａｒ．\nＲｅｃｏｖｅｒｓ　ＭＰ　ｂｙ　１００．",
+    "normalized_text": "Food for familiar.\nRecovers MP by 100.",
+    "raw_hex": "8265828f828f828481408286828f8292814082868281828d8289828c82898281829281440a827182858283828f82968285829282938140826c826f81408282829981408250824f824f8144"
+  },
+  {
+    "file_offset": "0x5464",
+    "resident_address": "0x80031c64",
+    "text": "Ｂｉｇ　Ｐｉｔａ",
+    "normalized_text": "Big Pita",
+    "raw_hex": "8261828982878140826f828982948281"
+  },
+  {
+    "file_offset": "0x5478",
+    "resident_address": "0x80031c78",
+    "text": "Ｆｏｏｄ　ｆｏｒ　ｆａｍｉｌｉａｒ．\nＲｅｃｏｖｅｒｓ　ＭＰ　ｂｙ　５０．",
+    "normalized_text": "Food for familiar.\nRecovers MP by 50.",
+    "raw_hex": "8265828f828f828481408286828f8292814082868281828d8289828c82898281829281440a827182858283828f82968285829282938140826c826f81408282829981408254824f8144"
+  },
+  {
+    "file_offset": "0x54c4",
+    "resident_address": "0x80031cc4",
+    "text": "Ｐｉｔａ",
+    "normalized_text": "Pita",
+    "raw_hex": "826f828982948281"
+  },
+  {
+    "file_offset": "0x54d0",
+    "resident_address": "0x80031cd0",
+    "text": "銀色の種",
+    "normalized_text": "銀色の種",
+    "raw_hex": "8be2904682cc8eed"
+  },
+  {
+    "file_offset": "0x54dc",
+    "resident_address": "0x80031cdc",
+    "text": "Ｅａｔｉｎｇ　ｔｈｉｓ　ｓｅｅｄ　ｌｅａｄｓ　ｔｏ　ｇｏｏｄ\nｆｏｒｔｕｎｅ．",
+    "normalized_text": "Eating this seed leads to good\nfortune.",
+    "raw_hex": "8264828182948289828e828781408294828882898293814082938285828582848140828c828582818284829381408294828f81408287828f828f82840a8286828f829282948295828e82858144"
+  },
+  {
+    "file_offset": "0x552c",
+    "resident_address": "0x80031d2c",
+    "text": "Ｔｏｖａｒ",
+    "normalized_text": "Tovar",
+    "raw_hex": "8273828f829682818292"
+  },
+  {
+    "file_offset": "0x5538",
+    "resident_address": "0x80031d38",
+    "text": "金色の種",
+    "normalized_text": "金色の種",
+    "raw_hex": "8be0904682cc8eed"
+  },
+  {
+    "file_offset": "0x5544",
+    "resident_address": "0x80031d44",
+    "text": "Ｅａｔｉｎｇ　ｔｈｉｓ　ｓｅｅｄ　ｄｅｃｒｅａｓｅｓ\nｓｐｅｅｄ．",
+    "normalized_text": "Eating this seed decreases\nspeed.",
+    "raw_hex": "8264828182948289828e8287814082948288828982938140829382858285828481408284828582838292828582818293828582930a829382908285828582848144"
+  },
+  {
+    "file_offset": "0x5588",
+    "resident_address": "0x80031d88",
+    "text": "水色の種",
+    "normalized_text": "水色の種",
+    "raw_hex": "9085904682cc8eed"
+  },
+  {
+    "file_offset": "0x5594",
+    "resident_address": "0x80031d94",
+    "text": "Ｅａｔｉｎｇ　ｔｈｉｓ　ｓｅｅｄ　ｌｏｗｅｒｓ　ａ\nｌｅｖｅｌ．",
+    "normalized_text": "Eating this seed lowers a\nlevel.",
+    "raw_hex": "8264828182948289828e828781408294828882898293814082938285828582848140828c828f8297828582928293814082810a828c828582968285828c8144"
+  },
+  {
+    "file_offset": "0x55d4",
+    "resident_address": "0x80031dd4",
+    "text": "緑色の種",
+    "normalized_text": "緑色の種",
+    "raw_hex": "97ce904682cc8eed"
+  },
+  {
+    "file_offset": "0x55e0",
+    "resident_address": "0x80031de0",
+    "text": "Ｃｈａｎｇｅｓ　ｔｈｅ　ｇｅｎｕｓ　ｏｆ　ａ　ｆａｍｉｌｉａｒ\nｔｏ　ｗｉｎｄ．",
+    "normalized_text": "Changes the genus of a familiar\nto wind.",
+    "raw_hex": "826282888281828e8287828582938140829482888285814082878285828e829582938140828f828681408281814082868281828d8289828c8289828182920a8294828f814082978289828e82848144"
+  },
+  {
+    "file_offset": "0x5630",
+    "resident_address": "0x80031e30",
+    "text": "紫色の種",
+    "normalized_text": "紫色の種",
+    "raw_hex": "8e87904682cc8eed"
+  },
+  {
+    "file_offset": "0x563c",
+    "resident_address": "0x80031e3c",
+    "text": "Ｃｈａｎｇｅｓ　ｔｈｅ　ｇｅｎｕｓ　ｏｆ　ａ　ｆａｍｉｌｉａｒ\nｔｏ　ｗａｔｅｒ．",
+    "normalized_text": "Changes the genus of a familiar\nto water.",
+    "raw_hex": "826282888281828e8287828582938140829482888285814082878285828e829582938140828f828681408281814082868281828d8289828c8289828182920a8294828f8140829782818294828582928144"
+  },
+  {
+    "file_offset": "0x5690",
+    "resident_address": "0x80031e90",
+    "text": "黄色い種",
+    "normalized_text": "黄色い種",
+    "raw_hex": "89a9904682a28eed"
+  },
+  {
+    "file_offset": "0x569c",
+    "resident_address": "0x80031e9c",
+    "text": "Ｃｈａｎｇｅｓ　ｔｈｅ　ｇｅｎｕｓ　ｏｆ　ａ　ｆａｍｉｌｉａｒ\nｔｏ　ｆｉｒｅ．",
+    "normalized_text": "Changes the genus of a familiar\nto fire.",
+    "raw_hex": "826282888281828e8287828582938140829482888285814082878285828e829582938140828f828681408281814082868281828d8289828c8289828182920a8294828f814082868289829282858144"
+  },
+  {
+    "file_offset": "0x56ec",
+    "resident_address": "0x80031eec",
+    "text": "Ｌｉｇｈｔ",
+    "normalized_text": "Light",
+    "raw_hex": "826b8289828782888294"
+  },
+  {
+    "file_offset": "0x56f8",
+    "resident_address": "0x80031ef8",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ｓｐｅｅｄ　ｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "Increases speed for a while.",
+    "raw_hex": "8268828e828382928285828182938285829381408293829082858285828481408286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x5734",
+    "resident_address": "0x80031f34",
+    "text": "Ｍａｈｅｌｌ",
+    "normalized_text": "Mahell",
+    "raw_hex": "826c828182888285828c828c"
+  },
+  {
+    "file_offset": "0x5744",
+    "resident_address": "0x80031f44",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ｔｈｅ　ｌｅｖｅｌ．",
+    "normalized_text": "Increases the level.",
+    "raw_hex": "8268828e828382928285828182938285829381408294828882858140828c828582968285828c8144"
+  },
+  {
+    "file_offset": "0x5770",
+    "resident_address": "0x80031f70",
+    "text": "Ｍａｚａｒｒ",
+    "normalized_text": "Mazarr",
+    "raw_hex": "826c8281829a828182928292"
+  },
+  {
+    "file_offset": "0x5780",
+    "resident_address": "0x80031f80",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ｄｅｆｅｎｓｉｖｅ　ｐｏｗｅｒ．",
+    "normalized_text": "Increases defensive power.",
+    "raw_hex": "8268828e828382928285828182938285829381408284828582868285828e829382898296828581408290828f8297828582928144"
+  },
+  {
+    "file_offset": "0x57b8",
+    "resident_address": "0x80031fb8",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ａｔｔａｃｋｉｎｇ　ｐｏｗｅｒ．",
+    "normalized_text": "Increases attacking power.",
+    "raw_hex": "8268828e8283829282858281829382858293814082818294829482818283828b8289828e828781408290828f8297828582928144"
+  },
+  {
+    "file_offset": "0x57f0",
+    "resident_address": "0x80031ff0",
+    "text": "つるつるな玉",
+    "normalized_text": "つるつるな玉",
+    "raw_hex": "82c282e982c282e982c88bca"
+  },
+  {
+    "file_offset": "0x5800",
+    "resident_address": "0x80032000",
+    "text": "Ｃｏｎｔａｉｎｓ　ａｃｉｄ　ｒａｉｎ　ａｎｄ　ａｔｔａｃｋｓ\nｅｎｅｍｉｅｓ．",
+    "normalized_text": "Contains acid rain and attacks\nenemies.",
+    "raw_hex": "8262828f828e829482818289828e8293814082818283828982848140829282818289828e81408281828e8284814082818294829482818283828b82930a8285828e8285828d8289828582938144"
+  },
+  {
+    "file_offset": "0x5850",
+    "resident_address": "0x80032050",
+    "text": "Ａｃｉｄ　Ｒａｉｎ",
+    "normalized_text": "Acid Rain",
+    "raw_hex": "82608283828982848140827182818289828e"
+  },
+  {
+    "file_offset": "0x5864",
+    "resident_address": "0x80032064",
+    "text": "ごつごつな玉",
+    "normalized_text": "ごつごつな玉",
+    "raw_hex": "82b282c282b282c282c88bca"
+  },
+  {
+    "file_offset": "0x5874",
+    "resident_address": "0x80032074",
+    "text": "Ｃｏｎｔａｉｎｓ　ａ　ｂｅａｍ　ｗｈｉｃｈ\nｄｅｃｒｅａｓｅｓ　ｌｅｖｅｌ　ｏｆ　ｅｎｅｍｉｅｓ．",
+    "normalized_text": "Contains a beam which\ndecreases level of enemies.",
+    "raw_hex": "8262828f828e829482818289828e8293814082818140828282858281828d8140829782888289828382880a8284828582838292828582818293828582938140828c828582968285828c8140828f828681408285828e8285828d8289828582938144"
+  },
+  {
+    "file_offset": "0x58d8",
+    "resident_address": "0x800320d8",
+    "text": "Ｗｅａｋ",
+    "normalized_text": "Weak",
+    "raw_hex": "827682858281828b"
+  },
+  {
+    "file_offset": "0x58e4",
+    "resident_address": "0x800320e4",
+    "text": "透明な玉",
+    "normalized_text": "透明な玉",
+    "raw_hex": "93a796be82c88bca"
+  },
+  {
+    "file_offset": "0x58f0",
+    "resident_address": "0x800320f0",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｃｏｎｔａｉｎｓ　Ｍｏｒｐｈｅｕｓ\nａｎｄ　ｐｕｔｓ　ｅｎｅｍｉｅｓ　ｔｏ　ｓｌｅｅｐ．",
+    "normalized_text": "A ball that contains Morpheus\nand puts enemies to sleep.",
+    "raw_hex": "8260814082828281828c828c8140829482888281829481408283828f828e829482818289828e82938140826c828f8292829082888285829582930a8281828e82848140829082958294829381408285828e8285828d82898285829381408294828f81408293828c8285828582908144"
+  },
+  {
+    "file_offset": "0x5960",
+    "resident_address": "0x80032160",
+    "text": "ざらざらな玉",
+    "normalized_text": "ざらざらな玉",
+    "raw_hex": "82b482e782b482e782c88bca"
+  },
+  {
+    "file_offset": "0x5970",
+    "resident_address": "0x80032170",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｈａｓ　ｔｈｅ　ｐｏｗｅｒ　ｔｏ\nｂｉｎｄ　ｍｏｎｓｔｅｒｓ　ｗｉｔｈ　ｔｈｕｎｄｅｒ．",
+    "normalized_text": "A ball that has the power to\nbind monsters with thunder.",
+    "raw_hex": "8260814082828281828c828c814082948288828182948140828882818293814082948288828581408290828f82978285829281408294828f0a82828289828e82848140828d828f828e82938294828582928293814082978289829482888140829482888295828e8284828582928144"
+  },
+  {
+    "file_offset": "0x59e0",
+    "resident_address": "0x800321e0",
+    "text": "Ｂｉｎｄｉｎｇ",
+    "normalized_text": "Binding",
+    "raw_hex": "82618289828e82848289828e8287"
+  },
+  {
+    "file_offset": "0x59f0",
+    "resident_address": "0x800321f0",
+    "text": "Ｃｏｎｔａｉｎｓ　ｄａｒｋｎｅｓｓ　ｗｈｉｃｈ　ｂｌｉｎｄｓ\nｔｈｅ　ｅｙｅｓ　ｏｆ　ｅｎｅｍｉｅｓ．",
+    "normalized_text": "Contains darkness which blinds\nthe eyes of enemies.",
+    "raw_hex": "8262828f828e829482818289828e82938140828482818292828b828e82858293829381408297828882898283828881408282828c8289828e828482930a829482888285814082858299828582938140828f828681408285828e8285828d8289828582938144"
+  },
+  {
+    "file_offset": "0x5a58",
+    "resident_address": "0x80032258",
+    "text": "ぬるぬるの玉",
+    "normalized_text": "ぬるぬるの玉",
+    "raw_hex": "82ca82e982ca82e982cc8bca"
+  },
+  {
+    "file_offset": "0x5a68",
+    "resident_address": "0x80032268",
+    "text": "Ｃｏｎｔａｉｎｓ　ａ　ｓｏａｐ　ｂｕｂｂｌｅ　ｗｈｉｃｈ\nｒｅｃｏｖｅｒｓ　ＨＰ．",
+    "normalized_text": "Contains a soap bubble which\nrecovers HP.",
+    "raw_hex": "8262828f828e829482818289828e82938140828181408293828f8281829081408282829582828282828c82858140829782888289828382880a829282858283828f829682858292829381408267826f8144"
+  },
+  {
+    "file_offset": "0x5abc",
+    "resident_address": "0x800322bc",
+    "text": "Ｒｅｃｏｖｅｒｙ",
+    "normalized_text": "Recovery",
+    "raw_hex": "827182858283828f8296828582928299"
+  },
+  {
+    "file_offset": "0x5ad0",
+    "resident_address": "0x800322d0",
+    "text": "Ｃｏｎｔａｉｎｓ　ａ　ｈｕｇｅ　ｉｃｅｂｅｒｇ　ｗｈｉｃｈ\nｂｌｏｃｋｓ　ｏｎｅ’ｓ　ｗａｙ．",
+    "normalized_text": "Contains a huge iceberg which\nblocks one’s way.",
+    "raw_hex": "8262828f828e829482818289828e82938140828181408288829582878285814082898283828582828285829282878140829782888289828382880a8282828c828f8283828b82938140828f828e82858166829381408297828182998144"
+  },
+  {
+    "file_offset": "0x5b30",
+    "resident_address": "0x80032330",
+    "text": "Ｉｃｅ　Ｒｏｃｋ",
+    "normalized_text": "Ice Rock",
+    "raw_hex": "82688283828581408271828f8283828b"
+  },
+  {
+    "file_offset": "0x5b44",
+    "resident_address": "0x80032344",
+    "text": "大きい玉",
+    "normalized_text": "大きい玉",
+    "raw_hex": "91e582ab82a28bca"
+  },
+  {
+    "file_offset": "0x5b50",
+    "resident_address": "0x80032350",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｈａｓ　ｔｈｅ　ｐｏｗｅｒ　ｔｏ\nｒｅｐｅｌ　ｍａｇｉｃ．",
+    "normalized_text": "A ball that has the power to\nrepel magic.",
+    "raw_hex": "8260814082828281828c828c814082948288828182948140828882818293814082948288828581408290828f82978285829281408294828f0a8292828582908285828c8140828d82818287828982838144"
+  },
+  {
+    "file_offset": "0x5ba4",
+    "resident_address": "0x800323a4",
+    "text": "Ｒｅｐｅｌ",
+    "normalized_text": "Repel",
+    "raw_hex": "8271828582908285828c"
+  },
+  {
+    "file_offset": "0x5bb0",
+    "resident_address": "0x800323b0",
+    "text": "小さい玉",
+    "normalized_text": "小さい玉",
+    "raw_hex": "8fac82b382a28bca"
+  },
+  {
+    "file_offset": "0x5bbc",
+    "resident_address": "0x800323bc",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｃｏｎｔａｉｎｓ　ａ　ｗａｔｅｒ\nｗａｌｌ　ｗｈｉｃｈ　ｐｒｏｔｅｃｔｓ　ｔｈｅ　ｕｓｅｒ．",
+    "normalized_text": "A ball that contains a water\nwall which protects the user.",
+    "raw_hex": "8260814082828281828c828c8140829482888281829481408283828f828e829482818289828e8293814082818140829782818294828582920a82978281828c828c814082978288828982838288814082908292828f829482858283829482938140829482888285814082958293828582928144"
+  },
+  {
+    "file_offset": "0x5c30",
+    "resident_address": "0x80032430",
+    "text": "きれいな玉",
+    "normalized_text": "きれいな玉",
+    "raw_hex": "82ab82ea82a282c88bca"
+  },
+  {
+    "file_offset": "0x5c3c",
+    "resident_address": "0x8003243c",
+    "text": "Ｃｏｎｔａｉｎｓ　ｐｏｉｓｏｎ　ｃｏｎｔａｇｉｏｕｓ　ｔｏ\nａｌｌ　ｅｎｅｍｉｅｓ　ｉｎ　ｔｈｅ　ｓａｍｅ　ｒｏｏｍ．",
+    "normalized_text": "Contains poison contagious to\nall enemies in the same room.",
+    "raw_hex": "8262828f828e829482818289828e829381408290828f82898293828f828e81408283828f828e8294828182878289828f8295829381408294828f0a8281828c828c81408285828e8285828d82898285829381408289828e8140829482888285814082938281828d828581408292828f828f828d8144"
+  },
+  {
+    "file_offset": "0x5cb4",
+    "resident_address": "0x800324b4",
+    "text": "Ｃｏｎｔａｉｎｓ　ａ　ｆｉｅｒｙ　ｐｉｌｌａｒ　ｗｈｉｃｈ\nａｓｃｅｎｄｓ　ｆｒｏｍ　ｔｈｅ　ｇｒｏｕｎｄ．",
+    "normalized_text": "Contains a fiery pillar which\nascends from the ground.",
+    "raw_hex": "8262828f828e829482818289828e829381408281814082868289828582928299814082908289828c828c828182928140829782888289828382880a8281829382838285828e82848293814082868292828f828d8140829482888285814082878292828f8295828e82848144"
+  },
+  {
+    "file_offset": "0x5d20",
+    "resident_address": "0x80032520",
+    "text": "Ｐｉｌｌａｒ",
+    "normalized_text": "Pillar",
+    "raw_hex": "826f8289828c828c82818292"
+  },
+  {
+    "file_offset": "0x5d30",
+    "resident_address": "0x80032530",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｃｏｎｔａｉｎｓ　ａ\nｆｉｒｅｂａｌｌ．",
+    "normalized_text": "A ball that contains a\nfireball.",
+    "raw_hex": "8260814082828281828c828c8140829482888281829481408283828f828e829482818289828e8293814082810a828682898292828582828281828c828c8144"
+  },
+  {
+    "file_offset": "0x5d70",
+    "resident_address": "0x80032570",
+    "text": "Ｆｌａｍｅ",
+    "normalized_text": "Flame",
+    "raw_hex": "8265828c8281828d8285"
+  },
+  {
+    "file_offset": "0x5d7c",
+    "resident_address": "0x8003257c",
+    "text": "明るい玉",
+    "normalized_text": "明るい玉",
+    "raw_hex": "96be82e982a28bca"
+  },
+  {
+    "file_offset": "0x5d88",
+    "resident_address": "0x80032588",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｂｌａｚｅｓ　ａｌｏｎｇ　ｔｈｅ\nｇｒｏｕｎｄ　ｉｎ　ａ　ｓｔｒａｉｇｈｔ　ｌｉｎｅ．",
+    "normalized_text": "A ball that blazes along the\nground in a straight line.",
+    "raw_hex": "8260814082828281828c828c8140829482888281829481408282828c8281829a8285829381408281828c828f828e828781408294828882850a82878292828f8295828e828481408289828e814082818140829382948292828182898287828882948140828c8289828e82858144"
+  },
+  {
+    "file_offset": "0x5df8",
+    "resident_address": "0x800325f8",
+    "text": "Ｂｌａｚｅ",
+    "normalized_text": "Blaze",
+    "raw_hex": "8261828c8281829a8285"
+  },
+  {
+    "file_offset": "0x5e04",
+    "resident_address": "0x80032604",
+    "text": "いびつな玉",
+    "normalized_text": "いびつな玉",
+    "raw_hex": "82a282d182c282c88bca"
+  },
+  {
+    "file_offset": "0x5e10",
+    "resident_address": "0x80032610",
+    "text": "Ａ　ｂａｌｌ　ｔｈａｔ　ｃｏｎｔａｉｎｓ　ａ　ｆｉｒｅ\nａｒｒｏｗ．",
+    "normalized_text": "A ball that contains a fire\narrow.",
+    "raw_hex": "8260814082828281828c828c8140829482888281829481408283828f828e829482818289828e829381408281814082868289829282850a828182928292828f82978144"
+  },
+  {
+    "file_offset": "0x5e54",
+    "resident_address": "0x80032654",
+    "text": "厚い巻き物",
+    "normalized_text": "厚い巻き物",
+    "raw_hex": "8cfa82a28aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x5e60",
+    "resident_address": "0x80032660",
+    "text": "Ｔｈｅ　ｂｅａｍ　ｔｕｒｎｓ　ａｌｌ　ｉｔｅｍｓ　ｏｎ　ｔｈｅ\nｆｌｏｏｒ　ｉｎｔｏ　ｇｏｌｄ　ｃｏｉｎｓ．",
+    "normalized_text": "The beam turns all items on the\nfloor into gold coins.",
+    "raw_hex": "8273828882858140828282858281828d8140829482958292828e829381408281828c828c8140828982948285828d82938140828f828e81408294828882850a8286828c828f828f829281408289828e8294828f81408287828f828c828481408283828f8289828e82938144"
+  },
+  {
+    "file_offset": "0x5ecc",
+    "resident_address": "0x800326cc",
+    "text": "Ａｌｃｈｅｍｉｃ",
+    "normalized_text": "Alchemic",
+    "raw_hex": "8260828c828382888285828d82898283"
+  },
+  {
+    "file_offset": "0x5ee0",
+    "resident_address": "0x800326e0",
+    "text": "薄い巻き物",
+    "normalized_text": "薄い巻き物",
+    "raw_hex": "949682a28aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x5eec",
+    "resident_address": "0x800326ec",
+    "text": "Ｔｈｅ　ｂｅａｍ　ｒｅｍｏｖｅｓ　ｓｔｅｐｓ　ａｎｄ\nｆｌａｔｔｅｎｓ　ｔｈｅ　ｅｎｔｉｒｅ　ｆｌｏｏｒ．",
+    "normalized_text": "The beam removes steps and\nflattens the entire floor.",
+    "raw_hex": "8273828882858140828282858281828d814082928285828d828f82968285829381408293829482858290829381408281828e82840a8286828c8281829482948285828e8293814082948288828581408285828e829482898292828581408286828c828f828f82928144"
+  },
+  {
+    "file_offset": "0x5f58",
+    "resident_address": "0x80032758",
+    "text": "Ｆｌａｔ",
+    "normalized_text": "Flat",
+    "raw_hex": "8265828c82818294"
+  },
+  {
+    "file_offset": "0x5f64",
+    "resident_address": "0x80032764",
+    "text": "新しい巻き物",
+    "normalized_text": "新しい巻き物",
+    "raw_hex": "905682b582a28aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x5f74",
+    "resident_address": "0x80032774",
+    "text": "Ｔｈｅ　ｂｅａｍ　ｒｅｍｏｖｅｓ　ａ　ｃｕｒｓｅ　ｃａｓｔ\nｕｐｏｎ　ｅｑｕｉｐｍｅｎｔ．",
+    "normalized_text": "The beam removes a curse cast\nupon equipment.",
+    "raw_hex": "8273828882858140828282858281828d814082928285828d828f82968285829381408281814082838295829282938285814082838281829382940a82958290828f828e814082858291829582898290828d8285828e82948144"
+  },
+  {
+    "file_offset": "0x5fd0",
+    "resident_address": "0x800327d0",
+    "text": "Ｄｅ−ｃｕｒｓｅ",
+    "normalized_text": "De−curse",
+    "raw_hex": "82638285817c82838295829282938285"
+  },
+  {
+    "file_offset": "0x5fe4",
+    "resident_address": "0x800327e4",
+    "text": "奇蹟の巻き物",
+    "normalized_text": "奇蹟の巻き物",
+    "raw_hex": "8aef90d682cc8aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x5ff4",
+    "resident_address": "0x800327f4",
+    "text": "Ｔｈｅ　ｂｅａｍ　ｒｅｓｕｓｃｉｔａｔｅｓ　ａ　ｆａｉｎｔｅｄ\nｆａｍｉｌｉａｒ．",
+    "normalized_text": "The beam resuscitates a fainted\nfamiliar.",
+    "raw_hex": "8273828882858140828282858281828d8140829282858293829582938283828982948281829482858293814082818140828682818289828e8294828582840a82868281828d8289828c8289828182928144"
+  },
+  {
+    "file_offset": "0x6048",
+    "resident_address": "0x80032848",
+    "text": "Ｒｅｓｔｏｒｅ",
+    "normalized_text": "Restore",
+    "raw_hex": "8271828582938294828f82928285"
+  },
+  {
+    "file_offset": "0x6058",
+    "resident_address": "0x80032858",
+    "text": "古い巻き物",
+    "normalized_text": "古い巻き物",
+    "raw_hex": "8cc382a28aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x6064",
+    "resident_address": "0x80032864",
+    "text": "Ａｌｌ　ｔｒａｐｓ　ｏｎ　ｔｈｅ　ｆｌｏｏｒ　ｂｅｃｏｍｅ\nｉｎｖｉｓｉｂｌｅ．",
+    "normalized_text": "All traps on the floor become\ninvisible.",
+    "raw_hex": "8260828c828c8140829482928281829082938140828f828e814082948288828581408286828c828f828f82928140828282858283828f828d82850a8289828e82968289829382898282828c82858144"
+  },
+  {
+    "file_offset": "0x60b4",
+    "resident_address": "0x800328b4",
+    "text": "Ｔｒａｐ",
+    "normalized_text": "Trap",
+    "raw_hex": "8273829282818290"
+  },
+  {
+    "file_offset": "0x60c0",
+    "resident_address": "0x800328c0",
+    "text": "ぼろの巻き物",
+    "normalized_text": "ぼろの巻き物",
+    "raw_hex": "82da82eb82cc8aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x60d0",
+    "resident_address": "0x800328d0",
+    "text": "Ｍａｌｉｃｉｏｕｓ　ｂｅａｍ　ｂｒｉｎｇｉｎｇ　ｃｈａｏｓ\nｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "Malicious beam bringing chaos\nfor a while.",
+    "raw_hex": "826c8281828c828982838289828f829582938140828282858281828d8140828282928289828e82878289828e82878140828382888281828f82930a8286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x6124",
+    "resident_address": "0x80032924",
+    "text": "Ｍａｌｉｃｉｏｕｓ",
+    "normalized_text": "Malicious",
+    "raw_hex": "826c8281828c828982838289828f82958293"
+  },
+  {
+    "file_offset": "0x6138",
+    "resident_address": "0x80032938",
+    "text": "豪華な巻き物",
+    "normalized_text": "豪華な巻き物",
+    "raw_hex": "8d8b89d882c88aaa82ab95a8"
+  },
+  {
+    "file_offset": "0x6148",
+    "resident_address": "0x80032948",
+    "text": "Ｈｏｌｙ　ｂｅａｍ　ｐｒｏｔｅｃｔｓ　ｔｈｅ　ｒｅａｄｅｒ\nｆｒｏｍ　ｅｎｅｍｙ　ａｔｔａｃｋ　ｆｏｒ　ａ　ｗｈｉｌｅ．",
+    "normalized_text": "Holy beam protects the reader\nfrom enemy attack for a while.",
+    "raw_hex": "8267828f828c82998140828282858281828d814082908292828f82948285828382948293814082948288828581408292828582818284828582920a82868292828f828d81408285828e8285828d8299814082818294829482818283828b81408286828f8292814082818140829782888289828c82858144"
+  },
+  {
+    "file_offset": "0x61c0",
+    "resident_address": "0x800329c0",
+    "text": "Ｃａｌｌ　ｂａｃｋ　ｆａｍｉｌｉａｒｓ　ｔｏ　ｙｏｕ．",
+    "normalized_text": "Call back familiars to you.",
+    "raw_hex": "82628281828c828c8140828282818283828b814082868281828d8289828c828982818292829381408294828f81408299828f82958144"
+  },
+  {
+    "file_offset": "0x61f8",
+    "resident_address": "0x800329f8",
+    "text": "Ｆａｍｉｌｉａｒ",
+    "normalized_text": "Familiar",
+    "raw_hex": "82658281828d8289828c828982818292"
+  },
+  {
+    "file_offset": "0x620c",
+    "resident_address": "0x80032a0c",
+    "text": "小さい鈴",
+    "normalized_text": "小さい鈴",
+    "raw_hex": "8fac82b382a297e9"
+  },
+  {
+    "file_offset": "0x6218",
+    "resident_address": "0x80032a18",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ｔｈｅ　ｌｅｖｅｌ　ｏｆ　ｅｎｅｍｙ\nｍｏｎｓｔｅｒｓ．",
+    "normalized_text": "Increases the level of enemy\nmonsters.",
+    "raw_hex": "8268828e828382928285828182938285829381408294828882858140828c828582968285828c8140828f828681408285828e8285828d82990a828d828f828e829382948285829282938144"
+  },
+  {
+    "file_offset": "0x6264",
+    "resident_address": "0x80032a64",
+    "text": "大きい鈴",
+    "normalized_text": "大きい鈴",
+    "raw_hex": "91e582ab82a297e9"
+  },
+  {
+    "file_offset": "0x6270",
+    "resident_address": "0x80032a70",
+    "text": "Ｃｈａｓｅｓ　ａ　ｍｏｎｓｔｅｒ　ｏｕｔ　ｏｆ　ａ　ｒｏｏｍ．",
+    "normalized_text": "Chases a monster out of a room.",
+    "raw_hex": "826282888281829382858293814082818140828d828f828e82938294828582928140828f829582948140828f82868140828181408292828f828f828d8144"
+  },
+  {
+    "file_offset": "0x62b0",
+    "resident_address": "0x80032ab0",
+    "text": "四角いメガネ",
+    "normalized_text": "四角いメガネ",
+    "raw_hex": "8e6c8a7082a28381834b836c"
+  },
+  {
+    "file_offset": "0x62c0",
+    "resident_address": "0x80032ac0",
+    "text": "Ｍａｋｅ　ｔｈｅ　ｃｕｒｒｅｎｔ　ｆｌｏｏｒ\nｅｎｔｉｒｅｌｙ　ｖｉｓｉｂｌｅ．",
+    "normalized_text": "Make the current floor\nentirely visible.",
+    "raw_hex": "826c8281828b82858140829482888285814082838295829282928285828e829481408286828c828f828f82920a8285828e8294828982928285828c8299814082968289829382898282828c82858144"
+  },
+  {
+    "file_offset": "0x6310",
+    "resident_address": "0x80032b10",
+    "text": "Ｓｔａｒ",
+    "normalized_text": "Star",
+    "raw_hex": "8272829482818292"
+  },
+  {
+    "file_offset": "0x631c",
+    "resident_address": "0x80032b1c",
+    "text": "丸いメガネ",
+    "normalized_text": "丸いメガネ",
+    "raw_hex": "8adb82a28381834b836c"
+  },
+  {
+    "file_offset": "0x6328",
+    "resident_address": "0x80032b28",
+    "text": "Ｉｄｅｎｔｉｆｙ　ｉｔｅｍｓ．\nＥｖｅｎ　ｔｙｐｅｓ　ｏｆ　ｅｇｇｓ．",
+    "normalized_text": "Identify items.\nEven types of eggs.",
+    "raw_hex": "826882848285828e82948289828682998140828982948285828d829381440a826482968285828e8140829482998290828582938140828f8286814082858287828782938144"
+  },
+  {
+    "file_offset": "0x6370",
+    "resident_address": "0x80032b70",
+    "text": "Ｔｒｕｔｈ",
+    "normalized_text": "Truth",
+    "raw_hex": "82738292829582948288"
+  },
+  {
+    "file_offset": "0x637c",
+    "resident_address": "0x80032b7c",
+    "text": "黒いルーペ",
+    "normalized_text": "黒いルーペ",
+    "raw_hex": "8d9582a2838b815b8379"
+  },
+  {
+    "file_offset": "0x6388",
+    "resident_address": "0x80032b88",
+    "text": "Ｌｏｕｐｅ　ｔｈａｔ　ｉｄｅｎｔｉｆｉｅｓ　ｔｈｅ\nｌｏｃａｔｉｏｎ　ｏｆ　ｉｔｅｍｓ．",
+    "normalized_text": "Loupe that identifies the\nlocation of items.",
+    "raw_hex": "826b828f829582908285814082948288828182948140828982848285828e82948289828682898285829381408294828882850a828c828f8283828182948289828f828e8140828f82868140828982948285828d82938144"
+  },
+  {
+    "file_offset": "0x63e0",
+    "resident_address": "0x80032be0",
+    "text": "Ｔｒｅａｓｕｒｅ",
+    "normalized_text": "Treasure",
+    "raw_hex": "82738292828582818293829582928285"
+  },
+  {
+    "file_offset": "0x63f4",
+    "resident_address": "0x80032bf4",
+    "text": "白いルーペ",
+    "normalized_text": "白いルーペ",
+    "raw_hex": "949282a2838b815b8379"
+  },
+  {
+    "file_offset": "0x6400",
+    "resident_address": "0x80032c00",
+    "text": "Ｉｄｅｎｔｉｆｉｅｓ　ｔｈｅ　ｌｏｃａｔｉｏｎ　ｏｆ\nｍｏｎｓｔｅｒｓ．",
+    "normalized_text": "Identifies the location of\nmonsters.",
+    "raw_hex": "826882848285828e82948289828682898285829381408294828882858140828c828f8283828182948289828f828e8140828f82860a828d828f828e829382948285829282938144"
+  },
+  {
+    "file_offset": "0x6448",
+    "resident_address": "0x80032c48",
+    "text": "Ｍｏｎｓｔｅｒ",
+    "normalized_text": "Monster",
+    "raw_hex": "826c828f828e8293829482858292"
+  },
+  {
+    "file_offset": "0x6458",
+    "resident_address": "0x80032c58",
+    "text": "茶色いルーペ",
+    "normalized_text": "茶色いルーペ",
+    "raw_hex": "9283904682a2838b815b8379"
+  },
+  {
+    "file_offset": "0x6468",
+    "resident_address": "0x80032c68",
+    "text": "Ｍａｋｅｓ　ｉｎｖｉｓｉｂｌｅｓ　ｖｉｓｉｂｌｅ．",
+    "normalized_text": "Makes invisibles visible.",
+    "raw_hex": "826c8281828b8285829381408289828e82968289829382898282828c82858293814082968289829382898282828c82858144"
+  },
+  {
+    "file_offset": "0x649c",
+    "resident_address": "0x80032c9c",
+    "text": "Ｆｏｃｕｓ",
+    "normalized_text": "Focus",
+    "raw_hex": "8265828f828382958293"
+  },
+  {
+    "file_offset": "0x64a8",
+    "resident_address": "0x80032ca8",
+    "text": "紫のルーペ",
+    "normalized_text": "紫のルーペ",
+    "raw_hex": "8e8782cc838b815b8379"
+  },
+  {
+    "file_offset": "0x64b4",
+    "resident_address": "0x80032cb4",
+    "text": "Ｍａｋｅｓ　ｔｒａｐｓ　ｖｉｓｉｂｌｅ．",
+    "normalized_text": "Makes traps visible.",
+    "raw_hex": "826c8281828b82858293814082948292828182908293814082968289829382898282828c82858144"
+  },
+  {
+    "file_offset": "0x64e0",
+    "resident_address": "0x80032ce0",
+    "text": "水色のルーペ",
+    "normalized_text": "水色のルーペ",
+    "raw_hex": "9085904682cc838b815b8379"
+  },
+  {
+    "file_offset": "0x64f0",
+    "resident_address": "0x80032cf0",
+    "text": "Ｉｄｅｎｔｉｆｉｅｓ　ｔｈｅ　ｌｏｃａｔｉｏｎｓ　ｏｆ\nｅｌｅｖａｔｏｒｓ．",
+    "normalized_text": "Identifies the locations of\nelevators.",
+    "raw_hex": "826882848285828e82948289828682898285829381408294828882858140828c828f8283828182948289828f828e82938140828f82860a8285828c8285829682818294828f829282938144"
+  },
+  {
+    "file_offset": "0x653c",
+    "resident_address": "0x80032d3c",
+    "text": "Ｅｘｉｔ",
+    "normalized_text": "Exit",
+    "raw_hex": "8264829882898294"
+  },
+  {
+    "file_offset": "0x6548",
+    "resident_address": "0x80032d48",
+    "text": "Ｉｎｃｒｅａｓｅｓ　ｔｈｅ　ｎｕｍｂｅｒ　ｏｆ　ｔｉｍｅｓ\nａ　ｂａｌｌ　ｃａｎ　ｂｅ　ｕｓｅｄ．",
+    "normalized_text": "Increases the number of times\na ball can be used.",
+    "raw_hex": "8268828e828382928285828182938285829381408294828882858140828e8295828d8282828582928140828f8286814082948289828d828582930a8281814082828281828c828c814082838281828e814082828285814082958293828582848144"
+  },
+  {
+    "file_offset": "0x65ac",
+    "resident_address": "0x80032dac",
+    "text": "Ｗｈｉｔｅ",
+    "normalized_text": "White",
+    "raw_hex": "82768288828982948285"
+  },
+  {
+    "file_offset": "0x65b8",
+    "resident_address": "0x80032db8",
+    "text": "Ｔｅｍｐｅｒｓ　ａ　ｓｈｉｅｌｄ．",
+    "normalized_text": "Tempers a shield.",
+    "raw_hex": "82738285828d82908285829282938140828181408293828882898285828c82848144"
+  },
+  {
+    "file_offset": "0x65dc",
+    "resident_address": "0x80032ddc",
+    "text": "Ｂｌｕｅ",
+    "normalized_text": "Blue",
+    "raw_hex": "8261828c82958285"
+  },
+  {
+    "file_offset": "0x65e8",
+    "resident_address": "0x80032de8",
+    "text": "Ｔｅｍｐｅｒｓ　ａ　ｓｗｏｒｄ．",
+    "normalized_text": "Tempers a sword.",
+    "raw_hex": "82738285828d829082858292829381408281814082938297828f829282848144"
+  }
+]

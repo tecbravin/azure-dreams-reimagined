@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feffe5029ce51364ba52a7fd0e5d3b16, type: 3}
+  m_Name: Tilemap_CrystalCave
+  m_EditorClassIdentifier: AzureDreams.Editor::AzureDreamsReimagined.Editor.TilemapData
+  theme: 1
+  floorMaterial: {fileID: 2100000, guid: 3b9b12501ef08e7478d0f0b0b92ae0d5, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 9051ec452c3e33d4f9321d76423f0fc7, type: 2}
+  backgroundMaterial: {fileID: 2100000, guid: 55ded94b9e7a9ff43801b0fd9d330d35, type: 2}
+  floorTexture: {fileID: 0}
+  wallTexture: {fileID: 0}
+  tileSize: 1
+  mapWidth: 32
+  mapHeight: 32

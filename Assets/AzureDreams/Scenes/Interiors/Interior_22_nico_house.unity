@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Nico House
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_22_nico_house
+  displayName: Nico House
+  geometry: {fileID: 4900000, guid: 6f135d785e7f47d5ba26830d0461441a, type: 3}
+  heights: {fileID: 4900000, guid: 2e2cd8793bca493cacdf7a14563e2d05, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 2ebb58b32a0148009bbb26f3140b423f, type: 2}
+  - {fileID: 2100000, guid: afd009b9f5c941a4974e89cbfc19a56d, type: 2}
+  - {fileID: 2100000, guid: f893e64b4534422a88e88443c25ba364, type: 2}
+  - {fileID: 2100000, guid: a581afeb7497494ebfa0af04337d3c53, type: 2}
+  - {fileID: 2100000, guid: 1b1d5cd504bb49a29c6e936e83c019e5, type: 2}
+  - {fileID: 2100000, guid: ede0c1bcb8cc43268efdf39920c9a441, type: 2}
+  - {fileID: 2100000, guid: 2ba2faed8d1c4bceb0000066250af4e2, type: 2}
+  - {fileID: 2100000, guid: f7125b22da4e460bb4328df3255b2c50, type: 2}
+  - {fileID: 2100000, guid: 89e8a3587aa340179e88f53460de3466, type: 2}
+  - {fileID: 2100000, guid: a870ec5ede3e4273b243f448b957406d, type: 2}
+  - {fileID: 2100000, guid: 46581b11ea24414ba4518640b75b20ec, type: 2}
+  - {fileID: 2100000, guid: 0aaf85d6a342473a9d6f2d22bb2a387b, type: 2}
+  - {fileID: 2100000, guid: b8e724ab48a4474e90fe44cd5cebd926, type: 2}
+  - {fileID: 2100000, guid: 6d24b1573f964ace8609a3435063bedb, type: 2}
+  - {fileID: 2100000, guid: 6b15f2fb64a546d1be503ecd4f2e310c, type: 2}
+  - {fileID: 2100000, guid: 8ca40fff9a64429b8258b1a26ece24e7, type: 2}
+  - {fileID: 2100000, guid: d0b9753eca4a4198a478fc3deaed1e98, type: 2}
+  - {fileID: 2100000, guid: 43bf1483b8594e59ba8ba6202061a6f9, type: 2}
+  - {fileID: 2100000, guid: 14d5693add4341a1b8ae6d9fd09a3d28, type: 2}
+  - {fileID: 2100000, guid: 7e664a98c4bf43378c0ef0b325646d13, type: 2}
+  - {fileID: 2100000, guid: 4c060dffd3c747199ce9ec3b3e2fd1a4, type: 2}
+  - {fileID: 2100000, guid: c732f44c66b7401cb239acdb19311516, type: 2}
+  - {fileID: 2100000, guid: ef26c4e8d18e4ade819c2edd73660e05, type: 2}
+  - {fileID: 2100000, guid: 870e1d52d029420b917a00c76711b2f7, type: 2}
+  - {fileID: 2100000, guid: 7519fd499424401e9210ad12dadbc23a, type: 2}
+  - {fileID: 2100000, guid: 0b8ffc7c77884636bc5dddc4c600e589, type: 2}
+  - {fileID: 2100000, guid: 3eb63476bc774319a55a15b5f0f587f0, type: 2}
+  - {fileID: 2100000, guid: a0374d3fd89345deb7e1f8f9f19ee4ec, type: 2}
+  - {fileID: 2100000, guid: 5e9e7677fcdb44bca40f3fed460a2c6e, type: 2}
+  - {fileID: 2100000, guid: 7ae8320f55754ec3a25fbca4138dd0d9, type: 2}
+  - {fileID: 2100000, guid: 8e48017fa2a8439bb5687709568fcccd, type: 2}
+  - {fileID: 2100000, guid: bfc607a07fec4a4cbffddb8bc6712fb1, type: 2}
+  - {fileID: 2100000, guid: 2e05619e2e644ee4858b316e2031980e, type: 2}
+  - {fileID: 2100000, guid: af3d751b58f44987bf4e37341937878b, type: 2}
+  - {fileID: 2100000, guid: 6a1a6c1d061142e1914fed40b585d7c8, type: 2}
+  - {fileID: 2100000, guid: 079134530a7f4d95960dc5f184985dc4, type: 2}
+  - {fileID: 2100000, guid: 5653dba59d7e4d599435e19d454dd480, type: 2}
+  - {fileID: 2100000, guid: 399e0c3cea8d44998280bcb3323963c7, type: 2}
+  - {fileID: 2100000, guid: 70c02c23d2a148c4b75d7234c4fcc1e8, type: 2}
+  - {fileID: 2100000, guid: a6aa98fc630749c28445dd52a9efa5be, type: 2}
+  - {fileID: 2100000, guid: b7b54bd138674c5b918b3e03cfa3c3fc, type: 2}
+  - {fileID: 2100000, guid: 0d6d4f8099fc41759a9c454af9057d13, type: 2}
+  - {fileID: 2100000, guid: e4e7a6777de440f3b8c9a79374774e06, type: 2}
+  - {fileID: 2100000, guid: 27016d97109d4f5dadc73be52a9510ae, type: 2}
+  - {fileID: 2100000, guid: 7f404f104e8a4331b79746341590e184, type: 2}
+  - {fileID: 2100000, guid: 9928a78f068440b3b5043977925542bb, type: 2}
+  entryPosition: {x: 15, y: 0, z: 18}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: faac0bc393e741fe9deec99fab82b350, type: 3}
+  furnitureFootprints:
+  - serializedVersion: 2
+    x: 8.984375
+    y: 8
+    width: 0.03125
+    height: 10
+  - serializedVersion: 2
+    x: 21.984375
+    y: 8
+    width: 0.03125
+    height: 10
+  - serializedVersion: 2
+    x: 9
+    y: 8.984375
+    width: 13
+    height: 0.03125
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 21.5
+      y: 15
+      width: 0.5
+      height: 2
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 18
+      y: 9
+      width: 1
+      height: 0.5
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 19
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 11
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 12
+      y: 9
+      width: 1
+      height: 0.5
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 14
+      y: 11
+      width: 1
+      height: 1
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 11
+      width: 1
+      height: 1
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 13
+      width: 3
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 18.140625
+      y: 13.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 9.140625
+      y: 16.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 21
+      y: 11
+      width: 1
+      height: 2
+    top: 0.75
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

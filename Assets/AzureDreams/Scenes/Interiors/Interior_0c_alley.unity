@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Alley
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_0c_alley
+  displayName: Alley
+  geometry: {fileID: 4900000, guid: aa4087fb08bd4cab8bccd449adaa31f0, type: 3}
+  heights: {fileID: 4900000, guid: 134385882e8b49ed861905b1325fa4ba, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 9eb5bbecd6ca4da8b09a1b8a96c93c58, type: 2}
+  - {fileID: 2100000, guid: 7efbd628f6684e49af688a5e3fa94838, type: 2}
+  - {fileID: 2100000, guid: dc4183ff01494f7d8dafccacd6bd4b2b, type: 2}
+  - {fileID: 2100000, guid: cb5e20d7268143ad8e3abcadc579df22, type: 2}
+  - {fileID: 2100000, guid: fcc0f4e84da34971956b2d49074cdf51, type: 2}
+  - {fileID: 2100000, guid: e8ec3c658b724761879cec29bac47283, type: 2}
+  - {fileID: 2100000, guid: 44dda505130e49dcbe63f5fd7eea9866, type: 2}
+  - {fileID: 2100000, guid: 0b8360bf8c2f438b817b98220dfbb51a, type: 2}
+  - {fileID: 2100000, guid: cdd21498a62745088749a2d64c8c3c42, type: 2}
+  - {fileID: 2100000, guid: fcab395e6bc340469a88bc71bc884106, type: 2}
+  - {fileID: 2100000, guid: 3b9bce1a251347acbfc000503eda5383, type: 2}
+  - {fileID: 2100000, guid: 3ecb3162d51948029847ef3f6fafe7e1, type: 2}
+  - {fileID: 2100000, guid: b9eec9a0f2d0479ead050b1230d5eaed, type: 2}
+  - {fileID: 2100000, guid: 749c4434ed6443bc972877ef2f415414, type: 2}
+  - {fileID: 2100000, guid: 37f9f82a471c4113a6e2a47e37fa133f, type: 2}
+  - {fileID: 2100000, guid: 1e07f1b794684956b6c4ed9ae59588b5, type: 2}
+  - {fileID: 2100000, guid: 6a4be5c280ea4d56918a7dab5663efba, type: 2}
+  - {fileID: 2100000, guid: 30b69af012434309a7f9738999c187df, type: 2}
+  - {fileID: 2100000, guid: e04de2de3de14a738fc38264c3ceae3c, type: 2}
+  - {fileID: 2100000, guid: ef8827a1036c4ba398fb23bd6b3ae110, type: 2}
+  - {fileID: 2100000, guid: 938d1e48d78c4163b31f2ff1739adf50, type: 2}
+  - {fileID: 2100000, guid: ca214aac28ea4c61993425eac3b94cdf, type: 2}
+  - {fileID: 2100000, guid: c6f8e18b82a848da896f48cbeacb913c, type: 2}
+  - {fileID: 2100000, guid: 47c0d1a35bc0492aace8a0f96cb0003e, type: 2}
+  - {fileID: 2100000, guid: 04d9772ec91844469934205e67d0d5d6, type: 2}
+  - {fileID: 2100000, guid: d4c51ee866ee40e7b5c28311c4467e84, type: 2}
+  - {fileID: 2100000, guid: 03fcac5c896247deb70ae3323e30b02e, type: 2}
+  - {fileID: 2100000, guid: 2503321fe0aa4418bc9d5ff471f190d2, type: 2}
+  - {fileID: 2100000, guid: 48b2a1c3cc874154a0e53e2ade13c81f, type: 2}
+  - {fileID: 2100000, guid: 652752cc2dc64a03868656ab64779b31, type: 2}
+  - {fileID: 2100000, guid: 0355fc6707654946a87b5593f58abd46, type: 2}
+  - {fileID: 2100000, guid: 702c04b1e5964b8da715faeb94c9137a, type: 2}
+  - {fileID: 2100000, guid: 285c7f5736e54c07a3ef716e8e72b0fd, type: 2}
+  - {fileID: 2100000, guid: 084c68a39ab24c549496026cd8af1d75, type: 2}
+  - {fileID: 2100000, guid: 26a9a64096794fc0b8fe6738d48e91cd, type: 2}
+  - {fileID: 2100000, guid: 4899064f24dc400fadc4d2fe1db9a049, type: 2}
+  - {fileID: 2100000, guid: 556332403a3d42218442379bb36a25ed, type: 2}
+  - {fileID: 2100000, guid: 8273fc42ae0f4cf082fc859bd4475253, type: 2}
+  - {fileID: 2100000, guid: 8f15e568f70142189deec15924bd20aa, type: 2}
+  - {fileID: 2100000, guid: d3b42ff8e4224e00a62b761187120218, type: 2}
+  - {fileID: 2100000, guid: a606c30ebe7c41f8a22778985421b9ed, type: 2}
+  - {fileID: 2100000, guid: 37d6f5ebfb56471488e3d310b89973e8, type: 2}
+  - {fileID: 2100000, guid: ba92c19be1e545d997c28f4d7cc0f8c5, type: 2}
+  - {fileID: 2100000, guid: 3dd004e31f5247209c32ab83b8b39664, type: 2}
+  - {fileID: 2100000, guid: 8e1787a1241d43439ce25471ada3e93e, type: 2}
+  - {fileID: 2100000, guid: e0ed8414c89549019803e5f450cace0c, type: 2}
+  - {fileID: 2100000, guid: 88a8368f7cce4a939e5a4751a622a473, type: 2}
+  - {fileID: 2100000, guid: 232ff202cdb5470182258a68a94b2385, type: 2}
+  - {fileID: 2100000, guid: ca0cb169bbf54fb192ee13a304cc43d5, type: 2}
+  entryPosition: {x: 20, y: 0, z: 14}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
+  - {fileID: 5151358256163527516, guid: 6f7e72650bb34971a25a19ffe2410ba1, type: 3}
+  - {fileID: 5151358256163527516, guid: 5d20ed09ade240559b2ff15889d149c5, type: 3}
+  - {fileID: 5151358256163527516, guid: cafde313dab54ccda13421411d8469bd, type: 3}
+  residentCells:
+  - {x: 28, y: 17}
+  - {x: 12, y: 17}
+  - {x: 27, y: 14}
+  - {x: 29, y: 13}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

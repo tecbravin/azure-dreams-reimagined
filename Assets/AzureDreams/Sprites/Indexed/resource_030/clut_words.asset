@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!28 &2800000
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: clut_words
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 4
+  m_Width: 16
+  m_Height: 16
+  m_CompleteImageSize: 1024
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 1024
+  _typelessdata: 000000ffdfc300ff9fab00ff7f9700ff7c8e00ffd88900ff2f8900ffab8800ff868c00ffbdf700fff6e600ff51d200ff68bd00ff08ad00fffae900ff1f8000ff000000ffffff00fff7ff00fff0ff00ffe8ff00ffe0ff00ff60ff00ffc0fe00ff40fe00ffa0fd00ff20fd00ff80fc00ff00fc00ff00dc00ff00c000ff00a000ff000000ffffff00fffffe00ff1ffe00ff1ffd00ff1ffc00ff1fec00ff1fd800ff1fc800ff1fb400ff1fa400ff1f9000ff1f8000ff178000ff108000ff088000ff000000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff000000ff5ebf00ff3f8f00ffbf8600ff1f9600ff3d9900ffd68800ff909400ff038c00ffffff00ff7be700ff73ce00ff8cb100ff09a500ffdaf100ffaefc00ff000000ffffff00fff7ff00fff0ff00ffe8ff00ffe0ff00ff60ff00ffc0fe00ff40fe00ffa0fd00ff20fd00ff80fc00ff00fc00ff00dc00ff00c000ff00a000ff000000ffffff00fffffe00ff1ffe00ff1ffd00ff1ffc00ff1fec00ff1fd800ff1fc800ff1fb400ff1fa400ff1f9000ff1f8000ff178000ff108000ff088000ff000000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff000000ff5ff300ffbef200ff3afe00ff71fd00ffcafc00ff48fc00ff01d800ff00a000ffbdf700ff1ae700ff33c600ffaeb500ff09a100ff7ace00ff1f8000ff000000ffffff00fff7ff00fff0ff00ffe8ff00ffe0ff00ff60ff00ffc0fe00ff40fe00ffa0fd00ff20fd00ff80fc00ff00fc00ff00dc00ff00c000ff00a000ff000000ffffff00fffffe00ff1ffe00ff1ffd00ff1ffc00ff1fec00ff1fd800ff1fc800ff1fb400ff1fa400ff1f9000ff1f8000ff178000ff108000ff088000ff000000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff008000ff000000fffdbf00fff7b700ffafa300ff849e00ffa2a100ff029500ffa38c00ff628800ffffff00ff7be700ff72ce00ff8aad00ff089d00ff7dea00ff1f8000ff000000ffffff00fff7ff00fff0ff00ffe8ff00ffe0ff00ff60ff00ffc0fe00ff40fe00ffa0fd00ff20fd00ff80fc00ff00fc00ff00dc00ff00c000ff00a000ff000000ffffff00fffffe00ff1ffe00ff1ffd00ff1ffc00ff1fec00ff1fd800ff1fc800ff1fb400ff1fa400ff1f9000ff1f8000ff178000ff108000ff088000ff000000ff648800ffea8000ff6bad00ff4f8100ffefbd00ffd48500ff94d200ff7ace00ff7be700ff7c8600ff1f8000ff1f8700ff5f9300ffdfa300ff80fc00ff
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 

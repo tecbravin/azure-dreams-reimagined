@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Fortune House
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_17_fortune_house
+  displayName: Fortune House
+  geometry: {fileID: 4900000, guid: a92e5f2323364907813b735d078e4fb5, type: 3}
+  heights: {fileID: 4900000, guid: 33bd4162c1454bb38e928e7e80c50798, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 7a6aec8306a34e1a9fb4060bfa2b953a, type: 2}
+  - {fileID: 2100000, guid: 6525ca5de62f4f01a156c34b4892ea87, type: 2}
+  - {fileID: 2100000, guid: 42a7c431624c48ca89fdee1c0a27c49d, type: 2}
+  - {fileID: 2100000, guid: fbcfbbb861364b748493af5d82cce990, type: 2}
+  - {fileID: 2100000, guid: b46336c2d1d04f50a6634eba38cd7bb0, type: 2}
+  - {fileID: 2100000, guid: bc74f8af4e104f6083f7c673fde30328, type: 2}
+  - {fileID: 2100000, guid: d08824da937e45d3998c97198bc5468e, type: 2}
+  - {fileID: 2100000, guid: 1022b969353a467da5b0b30127e68597, type: 2}
+  - {fileID: 2100000, guid: bc2ac5fda518465683f835aa185dd383, type: 2}
+  entryPosition: {x: 16, y: 2, z: 16.5}
+  useArrivalPosition: 1
+  arrivalPosition: {x: 16, y: 2, z: 14.5}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: 7d2adf6ab37f497b882514d5a85d7114, type: 3}
+  residentCells:
+  - {x: 16, y: 11}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

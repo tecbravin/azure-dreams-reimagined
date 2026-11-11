@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Cherrl House
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_18_cherrl_house
+  displayName: Cherrl House
+  geometry: {fileID: 4900000, guid: f65416fd182f430aac70fd0a9de617a6, type: 3}
+  heights: {fileID: 4900000, guid: 945b882db73f4423832bcf80d565a82a, type: 3}
+  materials:
+  - {fileID: 2100000, guid: b7ef626d1921413db823390ecc707f86, type: 2}
+  - {fileID: 2100000, guid: 3b66d5eb10ea4ef599ea2c3e69379445, type: 2}
+  - {fileID: 2100000, guid: 58c1d714620d4b98a0606aeafebb8cce, type: 2}
+  - {fileID: 2100000, guid: 1c64056e3afa4a3bbef2af9ebb1a88f4, type: 2}
+  - {fileID: 2100000, guid: 3e1449ad9f3e46ea95b30fed40964c60, type: 2}
+  - {fileID: 2100000, guid: 44b0730337034551a16bded63b58fd37, type: 2}
+  - {fileID: 2100000, guid: ca3c9db8378d4440b66ff0d1dc14a164, type: 2}
+  - {fileID: 2100000, guid: 7d1ef3ec52504b9aa50030264e3bceeb, type: 2}
+  - {fileID: 2100000, guid: 286212db445e4b45a7ed381fd227d505, type: 2}
+  - {fileID: 2100000, guid: db3a9f6b7a404711bad9a6c7a524affb, type: 2}
+  - {fileID: 2100000, guid: a6cfd49bb09e40f5a5237785dbc676e3, type: 2}
+  - {fileID: 2100000, guid: a5db8561104b4777ab4419421d45e63d, type: 2}
+  - {fileID: 2100000, guid: de0727ac4ae04c3b9ce8f8f7eda76313, type: 2}
+  - {fileID: 2100000, guid: df7c26d4b32d4264a35cdeddec71bf3a, type: 2}
+  - {fileID: 2100000, guid: 0c4670131c5b456394fadf9a15b81187, type: 2}
+  - {fileID: 2100000, guid: 0b1e2fe459f94e44975a809a08bc5c5e, type: 2}
+  - {fileID: 2100000, guid: 002af432f79c4d1a819cb8b1c16decc9, type: 2}
+  - {fileID: 2100000, guid: aa5c3513e13345229d7c41b3f9ee400d, type: 2}
+  - {fileID: 2100000, guid: 1ba6558e6bbe4bc79c73e89afb2326a5, type: 2}
+  - {fileID: 2100000, guid: a001d31efb2345558fa0b0dd9239398e, type: 2}
+  - {fileID: 2100000, guid: 03db44eb6ea642189ed03f607874d561, type: 2}
+  - {fileID: 2100000, guid: 269ad6651bcf465e815355e0a8fef025, type: 2}
+  - {fileID: 2100000, guid: ee7861992182494182712716f2565229, type: 2}
+  - {fileID: 2100000, guid: 3f1adb3f685a495e857afb299376b836, type: 2}
+  - {fileID: 2100000, guid: 3fd743cc67be4528a7b006807537173d, type: 2}
+  - {fileID: 2100000, guid: d019430ad2f8470b91ee18009a2d23ad, type: 2}
+  - {fileID: 2100000, guid: ed2ede8d15874c6fa0b4a15a83f330ab, type: 2}
+  - {fileID: 2100000, guid: 2aedfa7d87b24970837d011c39927cbf, type: 2}
+  - {fileID: 2100000, guid: 5fade51a59264dfa89fab94d23aa5ef4, type: 2}
+  - {fileID: 2100000, guid: f5b6b0d059ef48ea8edb7e2b7b12b9b4, type: 2}
+  - {fileID: 2100000, guid: 15e5b4fa852145d0a020bce1938b35ec, type: 2}
+  - {fileID: 2100000, guid: 71ef0ad4a2104138b78ac9ea0680c2b6, type: 2}
+  - {fileID: 2100000, guid: d02abc0a8ee34e11a7a272caab809436, type: 2}
+  - {fileID: 2100000, guid: ea28b4bfdddb424e84c467ab60f21f52, type: 2}
+  - {fileID: 2100000, guid: 428321f309184e4aa5dbcb75d533474d, type: 2}
+  - {fileID: 2100000, guid: dd22a784986a4b69a58e592ae656c6b7, type: 2}
+  - {fileID: 2100000, guid: 808ae23bc48a4cc987c1072dc859d58f, type: 2}
+  - {fileID: 2100000, guid: f104950ba47d439883a924562cf3face, type: 2}
+  - {fileID: 2100000, guid: 8661739913ba4ab485976ddfcc2d13f8, type: 2}
+  - {fileID: 2100000, guid: b52f97269eb6487fbeae348a97508a83, type: 2}
+  - {fileID: 2100000, guid: 835dfc3ebeaf49ad803a44213d3633d8, type: 2}
+  - {fileID: 2100000, guid: 6f6010cc49c2430ba495f70ea1e18228, type: 2}
+  - {fileID: 2100000, guid: c8d8faac53754f238de6ae081219c6d8, type: 2}
+  - {fileID: 2100000, guid: 95360759a8454cd4bcce9789a2bcf4ad, type: 2}
+  - {fileID: 2100000, guid: f80cc7e37bdc41e6b8a7ba0e85ef8693, type: 2}
+  - {fileID: 2100000, guid: c6e1e7ed94c241c9901aabc4a044cc72, type: 2}
+  - {fileID: 2100000, guid: 256e569c200b40d4b90a9279fab7af7c, type: 2}
+  entryPosition: {x: 16, y: 0, z: 18}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: fa8d55fef66940588ed69e2eae1b13e5, type: 3}
+  residentCells:
+  - {x: 14, y: 14}
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 18
+      y: 9
+      width: 1
+      height: 0.5
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 19
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 11
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 12
+      y: 9
+      width: 1
+      height: 0.5
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 14
+      y: 11
+      width: 1
+      height: 1
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 11
+      width: 1
+      height: 1
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 13
+      width: 3
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 18.140625
+      y: 13.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 9.140625
+      y: 16.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 21
+      y: 11
+      width: 1
+      height: 2
+    top: 0.75
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

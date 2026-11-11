@@ -1,0 +1,127 @@
+{
+  "doors": [
+    {
+      "x": 72.0,
+      "z": 38.0,
+      "style": "Residence",
+      "interior": "Interior_11_temple"
+    },
+    {
+      "x": 18.0,
+      "z": 40.0,
+      "style": "Residence"
+    },
+    {
+      "x": 112.0,
+      "z": 40.0,
+      "style": "Residence"
+    },
+    {
+      "x": 85.0,
+      "z": 51.0,
+      "style": "Residence",
+      "interior": "Interior_21_rhodes_house"
+    },
+    {
+      "x": 30.0,
+      "z": 54.0,
+      "style": "Residence"
+    },
+    {
+      "x": 16.0,
+      "z": 56.0,
+      "style": "Residence",
+      "interior": "Interior_18_cherrl_house"
+    },
+    {
+      "x": 42.0,
+      "z": 56.0,
+      "style": "Residence"
+    },
+    {
+      "x": 56.0,
+      "z": 56.0,
+      "style": "Residence",
+      "interior": "KohHome"
+    },
+    {
+      "x": 72.0,
+      "z": 56.0,
+      "style": "Residence",
+      "interior": "Interior_22_nico_house"
+    },
+    {
+      "x": 98.0,
+      "z": 56.0,
+      "style": "Residence"
+    },
+    {
+      "x": 112.0,
+      "z": 56.0,
+      "style": "Residence"
+    },
+    {
+      "x": 16.0,
+      "z": 68.0,
+      "style": "Residence",
+      "interior": "Interior_0f_hospital"
+    },
+    {
+      "x": 30.0,
+      "z": 68.0,
+      "style": "MonsterShop",
+      "interior": "Interior_14_monster_shop"
+    },
+    {
+      "x": 44.0,
+      "z": 68.0,
+      "style": "Blacksmith",
+      "interior": "Interior_15_blacksmith"
+    },
+    {
+      "x": 84.0,
+      "z": 68.0,
+      "style": "Furniture",
+      "interior": "Interior_13_carpenter"
+    },
+    {
+      "x": 100.0,
+      "z": 68.0,
+      "style": "Residence"
+    },
+    {
+      "x": 29.0,
+      "z": 80.0,
+      "style": "Fortune",
+      "interior": "Interior_17_fortune_house"
+    },
+    {
+      "x": 44.0,
+      "z": 80.0,
+      "style": "Furniture",
+      "interior": "Interior_16_general_store"
+    },
+    {
+      "x": 84.0,
+      "z": 80.0,
+      "style": "Residence",
+      "interior": "Interior_0e_restaurant"
+    },
+    {
+      "x": 98.0,
+      "z": 80.0,
+      "style": "Furniture",
+      "interior": "Interior_20_bar"
+    },
+    {
+      "x": 16.0,
+      "z": 98.0,
+      "style": "Residence"
+    },
+    {
+      "x": 112.0,
+      "z": 98.0,
+      "style": "Residence"
+    }
+  ]
+}

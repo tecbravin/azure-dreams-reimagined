@@ -1,0 +1,179 @@
+{
+  "source_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+  "module_file_offset": "0x3e5000",
+  "module_load_address": "0x80016000",
+  "records": [
+    {
+      "entry_id": 0,
+      "file_offset": "0x3e691c",
+      "value_word": 0,
+      "enabled_flag": 0,
+      "paired_flag": 0,
+      "tail_word": 0
+    },
+    {
+      "entry_id": 1,
+      "file_offset": "0x3e6928",
+      "value_word": 8,
+      "enabled_flag": 5230,
+      "paired_flag": 1015,
+      "tail_word": 1
+    },
+    {
+      "entry_id": 2,
+      "file_offset": "0x3e6934",
+      "value_word": 4,
+      "enabled_flag": 5234,
+      "paired_flag": 1016,
+      "tail_word": 1
+    },
+    {
+      "entry_id": 3,
+      "file_offset": "0x3e6940",
+      "value_word": 6,
+      "enabled_flag": 5232,
+      "paired_flag": 1017,
+      "tail_word": 1
+    },
+    {
+      "entry_id": 4,
+      "file_offset": "0x3e694c",
+      "value_word": 5,
+      "enabled_flag": 5242,
+      "paired_flag": 1018,
+      "tail_word": 0
+    },
+    {
+      "entry_id": 5,
+      "file_offset": "0x3e6958",
+      "value_word": 9,
+      "enabled_flag": 5238,
+      "paired_flag": 1019,
+      "tail_word": 0
+    },
+    {
+      "entry_id": 6,
+      "file_offset": "0x3e6964",
+      "value_word": 7,
+      "enabled_flag": 5236,
+      "paired_flag": 1020,
+      "tail_word": 1
+    },
+    {
+      "entry_id": 7,
+      "file_offset": "0x3e6970",
+      "value_word": 11,
+      "enabled_flag": 4605,
+      "paired_flag": 1021,
+      "tail_word": 0
+    }
+  ],
+  "cycling_order": [
+    1,
+    2,
+    3,
+    6,
+    5,
+    1,
+    2,
+    3,
+    6,
+    4,
+    1,
+    2,
+    3,
+    6,
+    7,
+    0
+  ],
+  "priority_order": [
+    1,
+    2,
+    3,
+    6,
+    0
+  ],
+  "service_argument_pairs": [
+    [
+      -1,
+      -1
+    ],
+    [
+      9,
+      512
+    ],
+    [
+      11,
+      512
+    ],
+    [
+      10,
+      512
+    ],
+    [
+      13,
+      512
+    ],
+    [
+      15,
+      512
+    ],
+    [
+      12,
+      512
+    ],
+    [
+      16,
+      512
+    ],
+    [
+      39,
+      512
+    ]
+  ],
+  "references": {
+    "0x1fef4": "0x3c02800d",
+    "0x1fef8": "0x24423cc8",
+    "0x1fefc": "0xae020020",
+    "0x56754": "0x800c23dc",
+    "0x5675c": "0x8008b550",
+    "0x56860": "0x800c17a0",
+    "0x3e8b1c": "0x244278fc",
+    "0x3e8b30": "0x24427918",
+    "0x3e8b44": "0x244278f8",
+    "0x3e8b5c": "0x244278f8",
+    "0x3e9304": "0x3c028001",
+    "0x3e9308": "0x2442791c",
+    "0x3e9448": "0x3c028001",
+    "0x3e944c": "0x2454791c",
+    "0x3e9450": "0x3c028001",
+    "0x3e9454": "0x24537bb0",
+    "0x3e94f0": "0x3c038001",
+    "0x3e94f4": "0x90627bc0",
+    "0x3ed578": "0x1080001b",
+    "0x3ed5e0": "0x621825",
+    "0x3ed5e4": "0xacc30000",
+    "0x3ed5f0": "0x24020001",
+    "0x3ed5f4": "0x1082001c",
+    "0x3ed654": "0x31827",
+    "0x3ed660": "0x621824",
+    "0x3ed670": "0x10800018",
+    "0x3ed678": "0x10820014"
+  },
+  "flag_helpers": {
+    "0x3ed578": "set bit; skip ID 0",
+    "0x3ed5f0": "clear bit; skip ID 1",
+    "0x3ed670": "query mask; ID 0 false, ID 1 true"
+  },
+  "native_audio_service": {
+    "table_address": "0x800d3cc8",
+    "table_file_offset": "0x56568",
+    "root_service_field": "0x20",
+    "slot": "0x2f8",
+    "native_call": 190,
+    "handler": "town_seq_reserve",
+    "handler_address": "0x800c17a0",
+    "handler_file_offset": "0x44040"
+  },
+  "limits": "Scene-specific table. Audio reservation callback resolved; audio asset IDs and narrative script execution are separate unresolved bindings."
+}

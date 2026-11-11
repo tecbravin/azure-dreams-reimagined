@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Blacksmith
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_15_blacksmith
+  displayName: Blacksmith
+  geometry: {fileID: 4900000, guid: c4870b89fd584748b81b7dda44bee5a8, type: 3}
+  heights: {fileID: 4900000, guid: 0a010681d0d146e6b03829393687046e, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 11f125dc17884e049d13661d3b5b6058, type: 2}
+  - {fileID: 2100000, guid: 9a033a84751d4109a5a8a3069597790b, type: 2}
+  - {fileID: 2100000, guid: b76ce90d3b9c4983a4e0fdad2148e4ba, type: 2}
+  - {fileID: 2100000, guid: 953bbeef3a0e48f68b797c7d21825165, type: 2}
+  - {fileID: 2100000, guid: aa44fad3b8bf4d4db0d588ead3208852, type: 2}
+  - {fileID: 2100000, guid: 29020da4e2df43e1b9231db9031d1b11, type: 2}
+  - {fileID: 2100000, guid: df32b05c1f6e411793a72fc65497da5a, type: 2}
+  - {fileID: 2100000, guid: 05dfd7b9ee8b487cb07daf07c7189268, type: 2}
+  - {fileID: 2100000, guid: 23a779db46654efca630c7512ab5b9a9, type: 2}
+  - {fileID: 2100000, guid: bda38021932e44e0983bfbe7bd5590e1, type: 2}
+  - {fileID: 2100000, guid: 9ba8558c611446a2a773ab3871f08ec7, type: 2}
+  - {fileID: 2100000, guid: 32717f6266df4f6b8f71634e9cb30aab, type: 2}
+  - {fileID: 2100000, guid: f114a5d6bb26459396e03d0d672f3e1f, type: 2}
+  - {fileID: 2100000, guid: 73acd92cb9c340c682a51e9ab9d3d6dd, type: 2}
+  - {fileID: 2100000, guid: 4486b6e76119442a861671367b579572, type: 2}
+  - {fileID: 2100000, guid: 94de49021aa2474f9ab7c6bb95c44e77, type: 2}
+  - {fileID: 2100000, guid: 4b31c139ed714968a5a063af223344df, type: 2}
+  - {fileID: 2100000, guid: 67d7fcc8a5e44d7e9bf67d1017b35ebb, type: 2}
+  - {fileID: 2100000, guid: 3cadb6a940be45fcaaab860a1331e324, type: 2}
+  - {fileID: 2100000, guid: c1dc5ca2785b4d759bf8734c71307573, type: 2}
+  - {fileID: 2100000, guid: 7976e62de2e44eab9de54d798ba2b932, type: 2}
+  - {fileID: 2100000, guid: 1e603be4afde432c83cb3a0a39fba60d, type: 2}
+  - {fileID: 2100000, guid: 0a30828b683e4b929da119b41482c0ec, type: 2}
+  - {fileID: 2100000, guid: c64022624f8046be80158d0be93d1e8e, type: 2}
+  - {fileID: 2100000, guid: 315a65ab398e47faa46912f78dfe650b, type: 2}
+  - {fileID: 2100000, guid: ffdf84a94c85464983528e0a8081267e, type: 2}
+  - {fileID: 2100000, guid: 384d6112c6714ea4aca3c9ee87f06ead, type: 2}
+  - {fileID: 2100000, guid: 096f615ccfac4202aed81874b50cd6bd, type: 2}
+  - {fileID: 2100000, guid: 564ef9bb8fb14753ad74ae5c5522956b, type: 2}
+  - {fileID: 2100000, guid: 8467605592884686b8120b2bdb22c3a4, type: 2}
+  - {fileID: 2100000, guid: 587b6130a8904432b93f5fd96f56cf7e, type: 2}
+  - {fileID: 2100000, guid: 9ef2e635d5cf4c488b6814717b470d66, type: 2}
+  entryPosition: {x: 15.5, y: 0, z: 17.5}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: f0ca31e892bb48978295b355de691158, type: 3}
+  residentCells:
+  - {x: 15, y: 10}
+  furnitureFootprints:
+  - serializedVersion: 2
+    x: 13
+    y: 11
+    width: 5
+    height: 1
+  - serializedVersion: 2
+    x: 17
+    y: 9
+    width: 2
+    height: 1
+  - serializedVersion: 2
+    x: 10
+    y: 8.984375
+    width: 11
+    height: 0.03125
+  - serializedVersion: 2
+    x: 9.984375
+    y: 9
+    width: 0.03125
+    height: 9
+  - serializedVersion: 2
+    x: 20.984375
+    y: 9
+    width: 0.03125
+    height: 9
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 20
+      y: 11
+      width: 1
+      height: 3
+    top: 1
+  - footprint:
+      serializedVersion: 2
+      x: 14
+      y: 9
+      width: 2
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 10
+      y: 11
+      width: 0.500032
+      height: 3
+    top: 2
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

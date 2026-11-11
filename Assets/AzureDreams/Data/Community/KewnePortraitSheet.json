@@ -1,0 +1,92 @@
+{
+  "character": "Kewne",
+  "source": "community/kewne.png",
+  "texture_asset": "Assets/AzureDreams/Sprites/Characters/Kewne/Community/kewne.png",
+  "coordinate_origin": "top_left",
+  "frames": [
+    {
+      "index": 0,
+      "x": 138,
+      "y": 38,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 1,
+      "x": 194,
+      "y": 38,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 2,
+      "x": 250,
+      "y": 38,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 3,
+      "x": 138,
+      "y": 94,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 4,
+      "x": 194,
+      "y": 94,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 5,
+      "x": 250,
+      "y": 94,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 6,
+      "x": 138,
+      "y": 150,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 7,
+      "x": 194,
+      "y": 150,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 8,
+      "x": 250,
+      "y": 150,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 9,
+      "x": 138,
+      "y": 206,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 10,
+      "x": 194,
+      "y": 206,
+      "width": 48,
+      "height": 50
+    },
+    {
+      "index": 11,
+      "x": 250,
+      "y": 206,
+      "width": 48,
+      "height": 50
+    }
+  ]
+}

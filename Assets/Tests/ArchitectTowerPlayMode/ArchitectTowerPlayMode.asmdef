@@ -1,0 +1,10 @@
+{
+  "name": "AzureDreams.ArchitectTowerPlayModeTests",
+  "references": ["AzureDreams.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "includePlatforms": [],
+  "overrideReferences": true,
+  "precompiledReferences": ["AzureDreams.Core.dll"],
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "autoReferenced": false
+}

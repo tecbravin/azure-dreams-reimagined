@@ -1,0 +1,1891 @@
+[
+  {
+    "sheet": "Girlfriends",
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "column": 1,
+            "text": "Day",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Location",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Nico",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Selfi",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Fur",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Patty",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Vivian",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Mia",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Cherrl",
+            "repeat": 1
+          },
+          {
+            "column": 14,
+            "text": "Temple, Alley & Casino\n[Casino can also be built in Vivian story]",
+            "repeat": 1
+          },
+          {
+            "column": 15,
+            "text": "Circuit",
+            "repeat": 1
+          },
+          {
+            "column": 16,
+            "text": "Arcade",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Gym",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Windmills",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "column": 5,
+            "text": "Path 1",
+            "repeat": 1
+          },
+          {
+            "column": 6,
+            "text": "Path 2",
+            "repeat": 1
+          },
+          {
+            "column": 7,
+            "text": "Path 3",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Path 1",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Path 2",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Path 1",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Path 2",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "column": 1,
+            "text": "0",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Go to Nico's House and talk to her dad. Nico will show up and talk about culture.",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Go to Fur Store and buy/sell any item.\n[STEP 0]",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Go to Restaurant and order all meals at least once and pay for them immediately.",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Bar and talk to Okami\n[STEP 0]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 0]\nGo to Pool and agree to get Water Medal. Needs to be done latest at day 9.",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Clinic and talk to Hush.",
+            "repeat": 1
+          },
+          {
+            "column": 14,
+            "text": "With at least 6000G go to Carpenter and Expand your house.",
+            "repeat": 1
+          },
+          {
+            "column": 16,
+            "text": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 1 (check „Buildings score” tab).",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Go to Blacksmith and talk to Barry. Say [No I'm not!].",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Enter tower.",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Get Blue Cape from 20F.",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Get to 25F and retrieve Water Medal from Picket. Needs to be done latest at day 9.",
+            "repeat": 1
+          },
+          {
+            "column": 15,
+            "text": "Enter tower.",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Reach at least 10F in any tower visit.",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Get to 5F.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "column": 1,
+            "text": "1",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Town lake and donate 1000G.\n[Check Note 1]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Go to Fur Store and buy/sell any item.\n[STEP 2]",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Go to Restaurant. Patti will be there on her own. Talk to her and order any meal.\n[STEP 3]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Bar with Blue Cape in inventory.\n[STEP 3]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 2]\nGo to Pool with Water Medal in inventory and give it to Wookie. Needs to be done latest at day 10 before you go to Library.",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "With at least 4000G go to Clinic and talk to Hush. Say [Yes, let me make a donation.] and [Money is not a factor.].",
+            "repeat": 1
+          },
+          {
+            "column": 14,
+            "text": "With at least 4000G go to Chappel and talk to Jorda. Say [To build a bigger temple.] and [I'll give you 4000G].\nWith 40000G go to Carpenter and build Alley.",
+            "repeat": 1
+          },
+          {
+            "column": 15,
+            "text": "Go to Silver's House and talk to any Nyuel. When you get the chance say [I'm building a race track!] and [Money is not a concern.].\nWith 30000G go to Carpenter and build Circuit.",
+            "repeat": 1
+          },
+          {
+            "column": 16,
+            "text": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 2 (check „Buildings score” tab).",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Go to Blacksmith and talk to Barry.",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Go to Town and talk to Issac. Say [I'll go and get it for you.].",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says Koh is handsome.",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Reach at least 20F in any tower visit.",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Get Guru's Pot from 15F",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "column": 1,
+            "text": "2",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Nico will wake you up thanking for your donation.\nTalk to Nico at Town lake and donate 1000G.\n[Check Note 1]",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Go to Fur Store and buy/sell any item.\n[STEP 4]",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Go to Restaurant and order any meal.\n[STEP 4]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Bar and talk to Barten.\n[STEP 5]\nGo to Bar. Cut-scene will play where you talk to Okami. If during dialogue you choose [Give me some booze!], you'll wake up at home.\n[STEP 6]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Dr. Hal's House and talk to him.\n[STEP 4]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "At Cherrl's House talk to her through window. She will drop Chappy. Pick him up and give him back to Cherrl. Say [I guess i could come in.] and enter Cherrl's House. Talk to her.\n[STEP 0]\nRe-enter Cherrl's House and talk to her. Say [I want you.] for faster dialogue. Say [I want to be your friend too.].\n[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 14,
+            "text": "Go to Temple and talk to Jorda. Re-enter Temple and talk to Jorda again.\nWith 100000G go to Carpenter and build a Casino.",
+            "repeat": 1
+          },
+          {
+            "column": 16,
+            "text": "Go to Carpenter and talk to Pen. Talk to Pen again. He'll say he's got a dream of building amusement center.\nUpgrade buildings so that total upgrades score is at least 3 (check „Buildings score” tab).",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Go to Blacksmith and talk to Barry.",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Give Guru's Pot to Issac.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Ghosh encounter.",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Reach at least 5F in any tower visit.",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Reach at least 30F in any tower visit.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "column": 1,
+            "text": "3",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Fountain.\n[STEP 0]",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Talk to Fur at her store.\n[STEP 6]",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Go to Restaurant and talk to Patty. She will ask whether she can order your meal and say [I'd love that!]. Choose any meal and pay for it.\n[STEP 5]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Bar and talk to Vivian.\n[STEP 7]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Dr. Hal's House and talk to him.\n[STEP 5]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Cherrl's House. She will be alone. Talk to her.\n[STEP 2]",
+            "repeat": 1
+          },
+          {
+            "column": 16,
+            "text": "With 30000G go to Carpenter and talk to Pen. Talk to him again and say [Do you want me to pay for it?] and [I'll hand you that money].",
+            "repeat": 1
+          },
+          {
+            "column": 17,
+            "text": "Go to Blacksmith and talk to Barry. Say [Just looking around.]. Talk to Barry again.\nWith 30000G go to Carpenter and build Gym.",
+            "repeat": 1
+          },
+          {
+            "column": 18,
+            "text": "Windmills are now working again.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 10,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says Koh is busy hunting treasure.",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Reach at least 10F in any tower visit.",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Reach at least 10F in any tower visit.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 11,
+        "cells": [
+          {
+            "column": 1,
+            "text": "4",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Talk to Fur at her store.\n[STEP 8]",
+            "repeat": 1
+          },
+          {
+            "column": 8,
+            "text": "Go to Restaurant for a cut-scene. Ghosh asks Patty to prepare meal for him. Talk to Patty.\n[Patty DONE]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Talk to Fon at the entrance to Carpenter and say [I am the entertainment!]. With 8000G, go to Carpenter and build a Theater.\nGo to Bar and talk to Okami.\n[STEP 8]\nRe-enter Bar for a cut-scene with Vivian dancing.Talk to Vivian again.\n[STEP 9]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Dr. Hal's House. Talk to him and say [I'll build it for you.].\n[STEP 6]\nWith 8000G, go to Carpenter and build a Library.",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Cherrl's House. You will see a cut-scene where Cherrl's mom asks you to take care of her, while she is gone. Say [Sure, I don't mind.]. At 2nd choice say [Still, no good to be selfish.] for faster dialogue.\nRe-enter Cherrl's house and talk to her. She will ask you to take her for a walk. Say [Okay. Deal.]. At Hospital say [Okay, I'm going.] for faster dialogue. When you're back at Cherrl's House, talk to her.\nRe-enter Cherrl's house and talk to her. This will trigger Healing Herb to show up in tower.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 12,
+        "cells": [
+          {
+            "column": 9,
+            "text": "When you don't have casino built yet, she will talk about her dancing dream.\nRe-enter Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "When you have casino built, she will talk about Casino in Haruka.\nRe-enter bar and Vivian will not be there.\n[STEP 10]\nGo to Casino and talk to Vivian. Answer [Don't you have to work?] and [I'd love to see you dance.].",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 13,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Ghosh and Selfi argue about coin.",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Get to 28F and find Healing Herb.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 14,
+        "cells": [
+          {
+            "column": 1,
+            "text": "5",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Talk to Fur at her store. She will show you Music Box.[STEP 10]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Bar and talk to Vivian. She will talk about about her dancing dream.\nGo to the Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia.\nRe-enter Library and talk to Miya again.\n[STEP 0]\nRe-enter Library and talk to Mia again. Say [It's quite interesting.].\n[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Hospital and give Healing Herb to Hush.\nPath choices:\n[Don't tell her anything] – Path 1\n[Yes. Go ahead!] - Path 2\n[STEP 6]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 15,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says she is an oasis.",
+            "repeat": 1
+          },
+          {
+            "column": 7,
+            "text": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 16,
+        "cells": [
+          {
+            "column": 1,
+            "text": "6",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Enter Fur's store for a scene with Ghosh. Talk to Fur.\nPath choices:\n[Hey that's too much!][Forget it.] – Path 1\n[Hey that's too much!][Apologize] – Path 2\n[You're absolutely right.][I don't] – Path 1\n[You're absolutely right.][You can apologize to me.] - Path 2\n[STEP 12]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia. Say [It's actually pretty amusing.].\n[STEP 3]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Hospital and talk to Cherrl. \n[STEP 7]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 17,
+        "cells": [
+          {
+            "column": 6,
+            "text": "Exit and enter Fur's store and talk to her again. Say [I'm just looking.] and you'll have another dialogue choice.\nPath choices:\n[I accept your apology.] - Path 2\n[I'll never forgive you.] - Path 3\n[STEP 13]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Say [Because I wanted to go.] for faster dialogue.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 18,
+        "cells": [
+          {
+            "column": 6,
+            "text": "Exit and enter Fur's store and talk to her again.\n[STEP 19]\nExit and enter Fur's store. Talk to her and say [I've come to see you.]. Talk to her again.\n[STEP 20]",
+            "repeat": 1
+          },
+          {
+            "column": 7,
+            "text": "Exit and enter Fur's store and talk to her again. Say [I'm done.].\n[STEP 17]\nExit and enter Fur's store. Talk to her and say [I'm done.]. Talk to her again and say [I liked the tomboy.].\n[STEP 18]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 19,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi is attacked by Pulunpa. Save her.",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 20,
+        "cells": [
+          {
+            "column": 1,
+            "text": "7",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "After Selfi gives you egg at Fountain, go to Nico's House and talk to Nico.\n[STEP 6]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Make sure you've got at least 1 empty slot in inventory and talk to Selfi south of Fountain.",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Talk to Fur at her store. Exit and enter the store again. Talk to Fur and say [I'm done.]. Talk to her again and say [I don't like you now.]. \n[STEP 14&15]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library for a cut-scene with Ghosh bumping into Mia. Pick up her glasses and give them to her.\n[STEP 5]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Hospital and talk to Cherrl.\nRe-enter Hospital and talk to Cherrl again.\n[STEP 8]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 21,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says Koh put fire on nails.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 22,
+        "cells": [
+          {
+            "column": 1,
+            "text": "8",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Nico's House.\n[STEP 7.0]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 5]",
+            "repeat": 1
+          },
+          {
+            "column": 5,
+            "text": "Enter Fur's store for a scene with Ghosh. Talk to Fur. Say [I'm a man] for faster dialogue.\n[Fur Done]\n[STEP 22].",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue.",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia. Say [Actually quite interesting.].\n[STEP 7]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Cherrl's House and talk to Cherrl. She will talk about becoming a nurse.\nPath choices:\n[That's a great idea.] - Path 1\n[It doesn't suite you.] - Path 2\nIf you choose Path 2, re-enter Cherrl's House and continue from this day Path 2.\n[STEP 8]\n",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Go to Cherrl's House and talk to Cherrl. Say [Super model.] for faster dialogue.\n[STEP 9]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 23,
+        "cells": [
+          {
+            "column": 12,
+            "text": "Go to Hospital for a cut-scene with Cherrl as a nurse. At 2nd dialogue choice, say [I've come to see Cherrl.].\n[STEP 11]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 24,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says Koh wet his pants in tower.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 25,
+        "cells": [
+          {
+            "column": 1,
+            "text": "9",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Nico's House.\n[STEP 7.1]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 6]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian.",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue.",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia. With 2nd choice say [Talk what you want to.].\n[STEP 8]",
+            "repeat": 1
+          },
+          {
+            "column": 12,
+            "text": "Go to Hospital for a cut-scene without Cherrl.\n[STEP 12]\nRe-enter Hospital and talk to Cherrl.\n[Cherrl DONE]",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Go to Cherrl's House and talk to Cherrl. Say [Thanks!] for faster dialogue.\n[STEP 10]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 26,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi says Koh can tell where the monster are with his nose.",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "[STEP 7]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 27,
+        "cells": [
+          {
+            "column": 1,
+            "text": "10",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Nico's House.\n[STEP 7.2]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 7]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian.",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia. When she asks to take her to Pool say [I'd be delighted to.]. At the pool say [You've got a poor figure.] for faster dialogue.\n[STEP 9]\nGo to Library and talk to Mia again.\n[STEP 10]",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Go to Cherrl's House and talk to Cherrl.\n[STEP 11]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 28,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "[STEP 9]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "[STEP 7]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 29,
+        "cells": [
+          {
+            "column": 1,
+            "text": "11",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Nico's House.\n[STEP 7.3]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 8]",
+            "repeat": 1
+          },
+          {
+            "column": 9,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia.\n[STEP 11]",
+            "repeat": 1
+          },
+          {
+            "column": 13,
+            "text": "Go to Cherrl's House and talk to Cherrl.\n[Cherrl DONE]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 30,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "[STEP 9]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 31,
+        "cells": [
+          {
+            "column": 1,
+            "text": "12",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at Nico's House.\n[STEP 7.4]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 9]",
+            "repeat": 1
+          },
+          {
+            "column": 10,
+            "text": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Go to Library and talk to Mia.\n[STEP 12]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 32,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Selfi jumps on you from behind the pillar and says Koh is her main interest.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 33,
+        "cells": [
+          {
+            "column": 1,
+            "text": "13",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Chero at Fountain. When Ghosh shows up say [Help him] and [The music was so beatiful].",
+            "repeat": 1
+          },
+          {
+            "column": 11,
+            "text": "Mia will start following you. Go to Library and enter/exit it 5 ftimes. After 5th time talk to Mia in Town and say [Why are you following me?] and [No.].\n[Mia DONE]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 34,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Get to 2F and watch cut-scene – Koh is attacked by U-Boat and saved by Selfi.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 35,
+        "cells": [
+          {
+            "column": 1,
+            "text": "14",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Nico will wake you up and say she is going to be honest with her feelings.\nGo to Nico's House. Ghosh will be in front of it. Nico will let you in. Enter her house.",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house.\n[STEP 12]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 36,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 37,
+        "cells": [
+          {
+            "column": 1,
+            "text": "15",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at her House.\n[STEP 10]",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Talk to Selfi in front of her house and say [You love me. Don't you?].\n[Selfi DONE] [STEP 13]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 38,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 39,
+        "cells": [
+          {
+            "column": 1,
+            "text": "16",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Talk to Nico at her House. [STEP 11]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 40,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 41,
+        "cells": [
+          {
+            "column": 1,
+            "text": "17",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Town",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Enter Nico's house.\n[Nico DONE]",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 42,
+        "cells": [
+          {
+            "column": 2,
+            "text": "Tower",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      }
+    ]
+  },
+  {
+    "sheet": "Buildings score",
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "column": 1,
+            "text": "Building ID",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Building ID hex",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Name",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "Score",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "column": 1,
+            "text": "2",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x02",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Koh's house LV 1",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          },
+          {
+            "column": 6,
+            "text": "Total score is just sum of all the buildings that you built.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "column": 1,
+            "text": "3",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x03",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Koh's house LV 2",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "2",
+            "repeat": 1
+          },
+          {
+            "column": 6,
+            "text": "In practice, every upgrade gives you +1 to score.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "column": 1,
+            "text": "5",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x05",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Founain",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          },
+          {
+            "column": 6,
+            "text": "The only exception is Monster Hut LV3, that does not add you any additonal score.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "column": 1,
+            "text": "6",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x06",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Casino",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "column": 1,
+            "text": "7",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x07",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Library",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "column": 1,
+            "text": "8",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x08",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Gym",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "column": 1,
+            "text": "9",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x09",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Arcade",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "column": 1,
+            "text": "10",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x0a",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Racetrack",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 10,
+        "cells": [
+          {
+            "column": 1,
+            "text": "11",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x0b",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Theater",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 11,
+        "cells": [
+          {
+            "column": 1,
+            "text": "12",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x0c",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Alley",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 12,
+        "cells": [
+          {
+            "column": 1,
+            "text": "16",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x10",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Hospital",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 13,
+        "cells": [
+          {
+            "column": 1,
+            "text": "18",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x12",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Temple",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 14,
+        "cells": [
+          {
+            "column": 1,
+            "text": "38",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x26",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Monster hut LV 1",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "1",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 15,
+        "cells": [
+          {
+            "column": 1,
+            "text": "39",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x27",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Monster hut LV 2",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "2",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 16,
+        "cells": [
+          {
+            "column": 1,
+            "text": "40",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x28",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Monster hut LV 3",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "2",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 17,
+        "cells": [
+          {
+            "column": 1,
+            "text": "41",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "0x29",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Monster hut LV 4",
+            "repeat": 1
+          },
+          {
+            "column": 4,
+            "text": "3",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      }
+    ]
+  },
+  {
+    "sheet": "Notes",
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "column": 1,
+            "text": "#",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Name",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Note",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "column": 1,
+            "text": "1",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Game fountain donation glitch",
+            "repeat": 1
+          },
+          {
+            "column": 3,
+            "text": "Donating more than you have still counts towards the target, as if you and Ghosh donated. E.g. If you have less than 1000G and decide to donate 1000G, game will still count a donation of 2001G (Ghosh matches your donation plus 1G). Fountain is built when total donations are at least 3000G after you make a donation which you can afford. If you make donations total go to 3000G+ without actually donating and leave town, Nico will not spawn anymore in Town and you will NOT be able to build Fountain. But if you have less than 1000G, you can donate 1000G twice and then immediately (without leaving town) donate 1G. That is enough to build Fountain and can be done in one day, rather than normal at least 2 days.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      }
+    ]
+  },
+  {
+    "sheet": "History log",
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "column": 1,
+            "text": "Version",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Log",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "column": 1,
+            "text": "0.1",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Initial version",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "column": 1,
+            "text": "0.2",
+            "repeat": 1
+          },
+          {
+            "column": 2,
+            "text": "Added the rest of building upgrades and quests.\nFixed a mistake where Carpented was called Blacksmith.",
+            "repeat": 1
+          }
+        ],
+        "repeat": 1
+      }
+    ]
+  }
+]

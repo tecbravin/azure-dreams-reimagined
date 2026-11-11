@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Generic Building
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_19_generic_building
+  displayName: Generic Building
+  geometry: {fileID: 4900000, guid: f2c902b0cd3a40ccb01c1586925c4fcc, type: 3}
+  heights: {fileID: 4900000, guid: c0f4093b4fe040598ed1354f5d8a4444, type: 3}
+  materials:
+  - {fileID: 2100000, guid: b75d44b7906a43ea9b329027523315f2, type: 2}
+  - {fileID: 2100000, guid: 117662b65dbe48e483425f87cfe9439a, type: 2}
+  - {fileID: 2100000, guid: 36fd2ba93c2e4804ba175efd197b8c97, type: 2}
+  - {fileID: 2100000, guid: 260b3dd5824244338fed6fad57591bd7, type: 2}
+  - {fileID: 2100000, guid: ae7f1d65a28c4321b98c0d966be8bab8, type: 2}
+  - {fileID: 2100000, guid: 5ea43d155c3d47bf8c051cffbd68a630, type: 2}
+  - {fileID: 2100000, guid: 0178dde9a175408d8eb9e6200f640328, type: 2}
+  - {fileID: 2100000, guid: 9aad9f0abb7345019714c9c4ed00675f, type: 2}
+  - {fileID: 2100000, guid: 9a2ee6bbde4f4700a44ea62d2a078a27, type: 2}
+  - {fileID: 2100000, guid: 538d3378cabf41cdb6c3e235d66ccf91, type: 2}
+  - {fileID: 2100000, guid: 1f5b7859b2b1458cb18dbcf7dc5d8b79, type: 2}
+  - {fileID: 2100000, guid: c86418532c544456a16575f5ff9eedf5, type: 2}
+  - {fileID: 2100000, guid: 59ff9a7648a24eac9445a569283b0602, type: 2}
+  - {fileID: 2100000, guid: c5941dadabe0413c972976d1393627f1, type: 2}
+  - {fileID: 2100000, guid: 32096a1a92c7475f822f2d4f6e4be2b1, type: 2}
+  - {fileID: 2100000, guid: 5597acd3578c46979cc36481157341a3, type: 2}
+  - {fileID: 2100000, guid: ab600d6a757b4665b9fc7335de07ac98, type: 2}
+  - {fileID: 2100000, guid: 5381d616337b48868faac6453848f158, type: 2}
+  - {fileID: 2100000, guid: aeb3b070c1ce4b6584425390fcba3fc3, type: 2}
+  - {fileID: 2100000, guid: 0700e53470cd4bca8adedbd34322b3eb, type: 2}
+  - {fileID: 2100000, guid: 0e87861b8ae04a598a27a30889200233, type: 2}
+  - {fileID: 2100000, guid: d1439138d6244e4fab8a44ad745ff2c3, type: 2}
+  - {fileID: 2100000, guid: a5e761d468b44245a52d1a6803bdd024, type: 2}
+  - {fileID: 2100000, guid: 701f25b899fe41baaa8a70919a693267, type: 2}
+  - {fileID: 2100000, guid: 5eae9dbb37994b92ba5d913401f70591, type: 2}
+  - {fileID: 2100000, guid: 6a7eef82960046d293e8b207265c2a4f, type: 2}
+  - {fileID: 2100000, guid: eaaa6149aa5645058a569f02511eee22, type: 2}
+  - {fileID: 2100000, guid: 472a0f45dd254182967f07efb7115a98, type: 2}
+  - {fileID: 2100000, guid: 11672842b6704e35b43f6465825a19a6, type: 2}
+  - {fileID: 2100000, guid: 706d6a52fbf746e8baed01cbc750651c, type: 2}
+  - {fileID: 2100000, guid: 31a263f4f3234d8a9de60edd0c01353b, type: 2}
+  - {fileID: 2100000, guid: d2841dbf353549b9b5c47b48b9b2fdad, type: 2}
+  - {fileID: 2100000, guid: 035a728d01b849e681575a1a4b6d768d, type: 2}
+  - {fileID: 2100000, guid: a30e74bb66a84aa79c8cdf8d412b4d8f, type: 2}
+  - {fileID: 2100000, guid: 70d3bb6703754844a6bb69f7a1bed756, type: 2}
+  - {fileID: 2100000, guid: a9538c2b021d4d1796a5b42535f8e999, type: 2}
+  - {fileID: 2100000, guid: 6882ab3b741a47ddacb733592c1759a8, type: 2}
+  - {fileID: 2100000, guid: c96ee9793fe943f8b90985ddfd867676, type: 2}
+  - {fileID: 2100000, guid: ff7fc72c667647f984ee1b45d85afbbd, type: 2}
+  - {fileID: 2100000, guid: 20a2ea9a7a934f6dbc0aaf0cc39f1544, type: 2}
+  - {fileID: 2100000, guid: fb240d40002a419da81d0e69512cb918, type: 2}
+  - {fileID: 2100000, guid: 17a9e7696d4742e385b8bec71f7a5720, type: 2}
+  - {fileID: 2100000, guid: 8c51f54696ea4f6283d610d8be4429cc, type: 2}
+  - {fileID: 2100000, guid: 2a0e65cf1aed4017ac9e57df1cdf105d, type: 2}
+  - {fileID: 2100000, guid: 1b6d2656753b4fb195cbf9162cc66805, type: 2}
+  - {fileID: 2100000, guid: 0dee5a73f18d4419b2d9e5100b812b5f, type: 2}
+  entryPosition: {x: 15, y: 0, z: 18}
+  residentPrefabs: []
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 18
+      y: 9
+      width: 1
+      height: 0.5
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 19
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 11
+      y: 9
+      width: 1
+      height: 0.5
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 12
+      y: 9
+      width: 1
+      height: 0.5
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 14
+      y: 11
+      width: 1
+      height: 1
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 11
+      width: 1
+      height: 1
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 15
+      y: 13
+      width: 3
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 18.140625
+      y: 13.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 9.140625
+      y: 16.140625
+      width: 0.71875
+      height: 0.71875
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 21
+      y: 11
+      width: 1
+      height: 2
+    top: 0.75
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

@@ -1,0 +1,520 @@
+{
+  "variant_texture_bank": 0,
+  "width_words": 1024,
+  "height": 512,
+  "byte_order": "little",
+  "town_sha256": "907725012d8d9e1deab18c28b62f4d304057e86a6415df605b9ffb87cfb2fe18",
+  "decoded_sha256": "04ebca6686c997429d65e7b783c6bea274fe25c151178ab864493f7096263b44",
+  "written_words": 110336,
+  "banks": [
+    {
+      "descriptor": "0x80080bb4",
+      "lba": 4981,
+      "sectors": 10,
+      "sha256": "b9f8f2a4aab784193442265b53d7b3d894845996531d8ab8fb1e9b4102a1d1dd",
+      "commands": [
+        {
+          "command": 1,
+          "command_offset": 0,
+          "data_offset": 116,
+          "upload_rect": [
+            384,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 16,
+          "data_offset": 5304,
+          "upload_rect": [
+            416,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 32,
+          "data_offset": 9072,
+          "upload_rect": [
+            384,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 48,
+          "data_offset": 13508,
+          "upload_rect": [
+            448,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 6,
+          "command_offset": 64,
+          "data_offset": 18696,
+          "upload_rect": [
+            0,
+            463,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 80,
+          "data_offset": 19208,
+          "upload_rect": [
+            0,
+            464,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 96,
+          "data_offset": 19720,
+          "upload_rect": [
+            0,
+            465,
+            256,
+            1
+          ],
+          "flags": 2
+        }
+      ]
+    },
+    {
+      "descriptor": "0x80080bbc",
+      "lba": 7968,
+      "sectors": 24,
+      "sha256": "d94098d93f44fd3caf3fe907bf4fda19d7b26e019b44265f0b0e41596c4d9721",
+      "commands": [
+        {
+          "command": 1,
+          "command_offset": 0,
+          "data_offset": 84,
+          "upload_rect": [
+            704,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 16,
+          "data_offset": 7164,
+          "upload_rect": [
+            576,
+            0,
+            64,
+            128
+          ],
+          "flags": 64
+        },
+        {
+          "command": 1,
+          "command_offset": 32,
+          "data_offset": 19704,
+          "upload_rect": [
+            576,
+            128,
+            64,
+            128
+          ],
+          "flags": 64
+        },
+        {
+          "command": 1,
+          "command_offset": 48,
+          "data_offset": 32876,
+          "upload_rect": [
+            640,
+            0,
+            64,
+            128
+          ],
+          "flags": 64
+        },
+        {
+          "command": 1,
+          "command_offset": 64,
+          "data_offset": 44948,
+          "upload_rect": [
+            640,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        }
+      ]
+    },
+    {
+      "descriptor": "0x80080bc4",
+      "lba": 7992,
+      "sectors": 24,
+      "sha256": "78af8b0c75a0beabfd41d9e5ffbc3e4e5fcbbe37326039ef8b7389205368868a",
+      "commands": [
+        {
+          "command": 1,
+          "command_offset": 0,
+          "data_offset": 116,
+          "upload_rect": [
+            480,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 16,
+          "data_offset": 7492,
+          "upload_rect": [
+            512,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 32,
+          "data_offset": 14688,
+          "upload_rect": [
+            544,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 48,
+          "data_offset": 21608,
+          "upload_rect": [
+            480,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 64,
+          "data_offset": 29092,
+          "upload_rect": [
+            512,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 80,
+          "data_offset": 36112,
+          "upload_rect": [
+            544,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 96,
+          "data_offset": 43244,
+          "upload_rect": [
+            672,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        }
+      ]
+    },
+    {
+      "descriptor": "0x80080bcc",
+      "lba": 8016,
+      "sectors": 22,
+      "sha256": "cca616b6cd4a0161963bbd349cb4b5ace3052e4815d7dbb1d37ecc06cbca11a9",
+      "commands": [
+        {
+          "command": 1,
+          "command_offset": 0,
+          "data_offset": 116,
+          "upload_rect": [
+            832,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 16,
+          "data_offset": 6736,
+          "upload_rect": [
+            864,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 32,
+          "data_offset": 12884,
+          "upload_rect": [
+            736,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 48,
+          "data_offset": 19400,
+          "upload_rect": [
+            704,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 64,
+          "data_offset": 25772,
+          "upload_rect": [
+            736,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 80,
+          "data_offset": 32592,
+          "upload_rect": [
+            832,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 1,
+          "command_offset": 96,
+          "data_offset": 38756,
+          "upload_rect": [
+            864,
+            128,
+            32,
+            128
+          ],
+          "flags": 32
+        }
+      ]
+    },
+    {
+      "descriptor": "0x80080bd4",
+      "lba": 8047,
+      "sectors": 6,
+      "sha256": "b04de30d885fa679407789839bc028aedba219a729077e09c067f85eb7eff4fa",
+      "commands": [
+        {
+          "command": 1,
+          "command_offset": 0,
+          "data_offset": 212,
+          "upload_rect": [
+            448,
+            0,
+            32,
+            128
+          ],
+          "flags": 32
+        },
+        {
+          "command": 6,
+          "command_offset": 16,
+          "data_offset": 5400,
+          "upload_rect": [
+            0,
+            448,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 32,
+          "data_offset": 5912,
+          "upload_rect": [
+            0,
+            449,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 48,
+          "data_offset": 6424,
+          "upload_rect": [
+            0,
+            450,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 64,
+          "data_offset": 6936,
+          "upload_rect": [
+            0,
+            451,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 80,
+          "data_offset": 7448,
+          "upload_rect": [
+            0,
+            452,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 96,
+          "data_offset": 7960,
+          "upload_rect": [
+            0,
+            453,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 112,
+          "data_offset": 8472,
+          "upload_rect": [
+            0,
+            454,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 128,
+          "data_offset": 8984,
+          "upload_rect": [
+            0,
+            455,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 144,
+          "data_offset": 9496,
+          "upload_rect": [
+            0,
+            456,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 160,
+          "data_offset": 10008,
+          "upload_rect": [
+            0,
+            457,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 176,
+          "data_offset": 10520,
+          "upload_rect": [
+            0,
+            458,
+            256,
+            1
+          ],
+          "flags": 2
+        },
+        {
+          "command": 6,
+          "command_offset": 192,
+          "data_offset": 11032,
+          "upload_rect": [
+            0,
+            459,
+            256,
+            1
+          ],
+          "flags": 2
+        }
+      ]
+    }
+  ],
+  "limits": "Only writes from the four shared banks and selected variant bank. Unwritten VRAM is unknown, not asserted black. Runtime palette animation and other upload paths are not included."
+}

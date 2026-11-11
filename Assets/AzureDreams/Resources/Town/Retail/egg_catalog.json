@@ -1,0 +1,1895 @@
+{
+  "species": [
+    {
+      "id": 1,
+      "name": "Hikewne",
+      "hp": 15,
+      "attack": 7,
+      "defense": 7,
+      "mp": 120,
+      "forSale": false
+    },
+    {
+      "id": 2,
+      "name": "Kewne",
+      "hp": 12,
+      "attack": 6,
+      "defense": 6,
+      "mp": 100,
+      "forSale": false
+    },
+    {
+      "id": 3,
+      "name": "Dragon",
+      "hp": 15,
+      "attack": 9,
+      "defense": 8,
+      "mp": 70,
+      "forSale": false
+    },
+    {
+      "id": 4,
+      "name": "Kid",
+      "hp": 12,
+      "attack": 7,
+      "defense": 5,
+      "mp": 60,
+      "forSale": true
+    },
+    {
+      "id": 5,
+      "name": "Ifrit",
+      "hp": 9,
+      "attack": 6,
+      "defense": 6,
+      "mp": 90,
+      "forSale": false
+    },
+    {
+      "id": 6,
+      "name": "Flame",
+      "hp": 9,
+      "attack": 5,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 7,
+      "name": "Grineut",
+      "hp": 10,
+      "attack": 6,
+      "defense": 6,
+      "mp": 80,
+      "forSale": false
+    },
+    {
+      "id": 8,
+      "name": "Griffon",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 9,
+      "name": "Saber",
+      "hp": 10,
+      "attack": 5,
+      "defense": 5,
+      "mp": 90,
+      "forSale": false
+    },
+    {
+      "id": 10,
+      "name": "Snowman",
+      "hp": 10,
+      "attack": 5,
+      "defense": 5,
+      "mp": 90,
+      "forSale": true
+    },
+    {
+      "id": 11,
+      "name": "Ashra",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": false
+    },
+    {
+      "id": 12,
+      "name": "Arachne",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 13,
+      "name": "Battnel",
+      "hp": 10,
+      "attack": 7,
+      "defense": 6,
+      "mp": 70,
+      "forSale": false
+    },
+    {
+      "id": 14,
+      "name": "Nyuel",
+      "hp": 10,
+      "attack": 4,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 15,
+      "name": "Death",
+      "hp": 8,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": false
+    },
+    {
+      "id": 16,
+      "name": "Clown",
+      "hp": 8,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 17,
+      "name": "Univern",
+      "hp": 10,
+      "attack": 6,
+      "defense": 6,
+      "mp": 80,
+      "forSale": false
+    },
+    {
+      "id": 18,
+      "name": "Unicorn",
+      "hp": 9,
+      "attack": 5,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 19,
+      "name": "Metal",
+      "hp": 10,
+      "attack": 6,
+      "defense": 8,
+      "mp": 80,
+      "forSale": false
+    },
+    {
+      "id": 20,
+      "name": "Block",
+      "hp": 10,
+      "attack": 6,
+      "defense": 8,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 21,
+      "name": "Pulunpa",
+      "hp": 8,
+      "attack": 4,
+      "defense": 4,
+      "mp": 40,
+      "forSale": true
+    },
+    {
+      "id": 22,
+      "name": "Troll",
+      "hp": 6,
+      "attack": 4,
+      "defense": 5,
+      "mp": 60,
+      "forSale": true
+    },
+    {
+      "id": 23,
+      "name": "Noise",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 24,
+      "name": "U-Boat",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 25,
+      "name": "Baloon",
+      "hp": 8,
+      "attack": 6,
+      "defense": 5,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 26,
+      "name": "Dreamin",
+      "hp": 8,
+      "attack": 3,
+      "defense": 5,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 27,
+      "name": "Blume",
+      "hp": 9,
+      "attack": 5,
+      "defense": 4,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 28,
+      "name": "Volcano",
+      "hp": 9,
+      "attack": 4,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 29,
+      "name": "Cyclone",
+      "hp": 9,
+      "attack": 5,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 30,
+      "name": "Manoeva",
+      "hp": 10,
+      "attack": 5,
+      "defense": 6,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 31,
+      "name": "Barong",
+      "hp": 6,
+      "attack": 5,
+      "defense": 4,
+      "mp": 60,
+      "forSale": true
+    },
+    {
+      "id": 32,
+      "name": "Picket",
+      "hp": 8,
+      "attack": 3,
+      "defense": 4,
+      "mp": 65,
+      "forSale": true
+    },
+    {
+      "id": 33,
+      "name": "Kraken",
+      "hp": 8,
+      "attack": 6,
+      "defense": 6,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 34,
+      "name": "Weadog",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 35,
+      "name": "Stealth",
+      "hp": 8,
+      "attack": 4,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 36,
+      "name": "Viper",
+      "hp": 9,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 37,
+      "name": "Naplass",
+      "hp": 11,
+      "attack": 6,
+      "defense": 6,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 38,
+      "name": "Zu",
+      "hp": 10,
+      "attack": 6,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 39,
+      "name": "Mandara",
+      "hp": 11,
+      "attack": 6,
+      "defense": 6,
+      "mp": 85,
+      "forSale": true
+    },
+    {
+      "id": 40,
+      "name": "Killer",
+      "hp": 10,
+      "attack": 8,
+      "defense": 5,
+      "mp": 60,
+      "forSale": true
+    },
+    {
+      "id": 41,
+      "name": "Garuda",
+      "hp": 10,
+      "attack": 5,
+      "defense": 5,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 42,
+      "name": "Glacier",
+      "hp": 10,
+      "attack": 5,
+      "defense": 6,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 43,
+      "name": "Tyrant",
+      "hp": 10,
+      "attack": 6,
+      "defense": 6,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 44,
+      "name": "Golem",
+      "hp": 14,
+      "attack": 7,
+      "defense": 10,
+      "mp": 70,
+      "forSale": true
+    },
+    {
+      "id": 45,
+      "name": "Maximum",
+      "hp": 16,
+      "attack": 8,
+      "defense": 9,
+      "mp": 80,
+      "forSale": true
+    },
+    {
+      "id": 46,
+      "name": "Frog",
+      "hp": 8,
+      "attack": 1,
+      "defense": 1,
+      "mp": 128,
+      "forSale": false
+    }
+  ],
+  "floors": [
+    {
+      "floor": 1,
+      "choices": [
+        {
+          "species": 6,
+          "weight": 20
+        },
+        {
+          "species": 21,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 16
+        },
+        {
+          "species": 23,
+          "weight": 24
+        },
+        {
+          "species": 25,
+          "weight": 16
+        },
+        {
+          "species": 27,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 12
+        },
+        {
+          "species": 30,
+          "weight": 8
+        }
+      ]
+    },
+    {
+      "floor": 2,
+      "choices": [
+        {
+          "species": 6,
+          "weight": 20
+        },
+        {
+          "species": 21,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 16
+        },
+        {
+          "species": 23,
+          "weight": 24
+        },
+        {
+          "species": 25,
+          "weight": 16
+        },
+        {
+          "species": 27,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 12
+        },
+        {
+          "species": 30,
+          "weight": 8
+        }
+      ]
+    },
+    {
+      "floor": 3,
+      "choices": [
+        {
+          "species": 6,
+          "weight": 20
+        },
+        {
+          "species": 21,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 16
+        },
+        {
+          "species": 23,
+          "weight": 24
+        },
+        {
+          "species": 25,
+          "weight": 16
+        },
+        {
+          "species": 27,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 12
+        },
+        {
+          "species": 30,
+          "weight": 8
+        }
+      ]
+    },
+    {
+      "floor": 4,
+      "choices": [
+        {
+          "species": 6,
+          "weight": 20
+        },
+        {
+          "species": 21,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 16
+        },
+        {
+          "species": 23,
+          "weight": 24
+        },
+        {
+          "species": 25,
+          "weight": 16
+        },
+        {
+          "species": 27,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 12
+        },
+        {
+          "species": 30,
+          "weight": 8
+        }
+      ]
+    },
+    {
+      "floor": 5,
+      "choices": [
+        {
+          "species": 6,
+          "weight": 20
+        },
+        {
+          "species": 21,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 16
+        },
+        {
+          "species": 23,
+          "weight": 24
+        },
+        {
+          "species": 25,
+          "weight": 16
+        },
+        {
+          "species": 27,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 12
+        },
+        {
+          "species": 30,
+          "weight": 8
+        }
+      ]
+    },
+    {
+      "floor": 6,
+      "choices": [
+        {
+          "species": 16,
+          "weight": 12
+        },
+        {
+          "species": 24,
+          "weight": 12
+        },
+        {
+          "species": 25,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 12
+        },
+        {
+          "species": 27,
+          "weight": 24
+        },
+        {
+          "species": 28,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 20
+        },
+        {
+          "species": 30,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "floor": 7,
+      "choices": [
+        {
+          "species": 16,
+          "weight": 12
+        },
+        {
+          "species": 24,
+          "weight": 12
+        },
+        {
+          "species": 25,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 12
+        },
+        {
+          "species": 27,
+          "weight": 24
+        },
+        {
+          "species": 28,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 20
+        },
+        {
+          "species": 30,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "choices": [
+        {
+          "species": 16,
+          "weight": 12
+        },
+        {
+          "species": 24,
+          "weight": 12
+        },
+        {
+          "species": 25,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 12
+        },
+        {
+          "species": 27,
+          "weight": 24
+        },
+        {
+          "species": 28,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 20
+        },
+        {
+          "species": 30,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "floor": 9,
+      "choices": [
+        {
+          "species": 16,
+          "weight": 12
+        },
+        {
+          "species": 24,
+          "weight": 12
+        },
+        {
+          "species": 25,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 12
+        },
+        {
+          "species": 27,
+          "weight": 24
+        },
+        {
+          "species": 28,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 20
+        },
+        {
+          "species": 30,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "floor": 10,
+      "choices": [
+        {
+          "species": 16,
+          "weight": 12
+        },
+        {
+          "species": 24,
+          "weight": 12
+        },
+        {
+          "species": 25,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 12
+        },
+        {
+          "species": 27,
+          "weight": 24
+        },
+        {
+          "species": 28,
+          "weight": 12
+        },
+        {
+          "species": 29,
+          "weight": 20
+        },
+        {
+          "species": 30,
+          "weight": 16
+        }
+      ]
+    },
+    {
+      "floor": 11,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 12
+        },
+        {
+          "species": 16,
+          "weight": 20
+        },
+        {
+          "species": 24,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 20
+        },
+        {
+          "species": 28,
+          "weight": 20
+        },
+        {
+          "species": 33,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 12,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 12
+        },
+        {
+          "species": 16,
+          "weight": 20
+        },
+        {
+          "species": 24,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 20
+        },
+        {
+          "species": 28,
+          "weight": 20
+        },
+        {
+          "species": 33,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 13,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 12
+        },
+        {
+          "species": 16,
+          "weight": 20
+        },
+        {
+          "species": 24,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 20
+        },
+        {
+          "species": 28,
+          "weight": 20
+        },
+        {
+          "species": 33,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 14,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 12
+        },
+        {
+          "species": 16,
+          "weight": 20
+        },
+        {
+          "species": 24,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 20
+        },
+        {
+          "species": 28,
+          "weight": 20
+        },
+        {
+          "species": 33,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 15,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 12
+        },
+        {
+          "species": 16,
+          "weight": 20
+        },
+        {
+          "species": 24,
+          "weight": 20
+        },
+        {
+          "species": 26,
+          "weight": 20
+        },
+        {
+          "species": 28,
+          "weight": 20
+        },
+        {
+          "species": 33,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 16,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 20
+        },
+        {
+          "species": 12,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 12
+        },
+        {
+          "species": 33,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "floor": 17,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 20
+        },
+        {
+          "species": 12,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 12
+        },
+        {
+          "species": 33,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "floor": 18,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 20
+        },
+        {
+          "species": 12,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 12
+        },
+        {
+          "species": 33,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "floor": 19,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 20
+        },
+        {
+          "species": 12,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 12
+        },
+        {
+          "species": 33,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "floor": 20,
+      "choices": [
+        {
+          "species": 8,
+          "weight": 20
+        },
+        {
+          "species": 12,
+          "weight": 12
+        },
+        {
+          "species": 14,
+          "weight": 20
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 12
+        },
+        {
+          "species": 33,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 12
+        },
+        {
+          "species": 41,
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "floor": 21,
+      "choices": [
+        {
+          "species": 12,
+          "weight": 20
+        },
+        {
+          "species": 18,
+          "weight": 12
+        },
+        {
+          "species": 20,
+          "weight": 12
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 30,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 12
+        },
+        {
+          "species": 36,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 22,
+      "choices": [
+        {
+          "species": 12,
+          "weight": 20
+        },
+        {
+          "species": 18,
+          "weight": 12
+        },
+        {
+          "species": 20,
+          "weight": 12
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 30,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 12
+        },
+        {
+          "species": 36,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 23,
+      "choices": [
+        {
+          "species": 12,
+          "weight": 20
+        },
+        {
+          "species": 18,
+          "weight": 12
+        },
+        {
+          "species": 20,
+          "weight": 12
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 30,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 12
+        },
+        {
+          "species": 36,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 24,
+      "choices": [
+        {
+          "species": 12,
+          "weight": 20
+        },
+        {
+          "species": 18,
+          "weight": 12
+        },
+        {
+          "species": 20,
+          "weight": 12
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 30,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 12
+        },
+        {
+          "species": 36,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 25,
+      "choices": [
+        {
+          "species": 12,
+          "weight": 20
+        },
+        {
+          "species": 18,
+          "weight": 12
+        },
+        {
+          "species": 20,
+          "weight": 12
+        },
+        {
+          "species": 22,
+          "weight": 8
+        },
+        {
+          "species": 30,
+          "weight": 8
+        },
+        {
+          "species": 31,
+          "weight": 4
+        },
+        {
+          "species": 32,
+          "weight": 20
+        },
+        {
+          "species": 34,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 12
+        },
+        {
+          "species": 36,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 26,
+      "choices": [
+        {
+          "species": 10,
+          "weight": 12
+        },
+        {
+          "species": 18,
+          "weight": 20
+        },
+        {
+          "species": 20,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 20
+        },
+        {
+          "species": 36,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 12
+        },
+        {
+          "species": 38,
+          "weight": 12
+        },
+        {
+          "species": 39,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 27,
+      "choices": [
+        {
+          "species": 10,
+          "weight": 12
+        },
+        {
+          "species": 18,
+          "weight": 20
+        },
+        {
+          "species": 20,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 20
+        },
+        {
+          "species": 36,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 12
+        },
+        {
+          "species": 38,
+          "weight": 12
+        },
+        {
+          "species": 39,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 28,
+      "choices": [
+        {
+          "species": 10,
+          "weight": 12
+        },
+        {
+          "species": 18,
+          "weight": 20
+        },
+        {
+          "species": 20,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 20
+        },
+        {
+          "species": 36,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 12
+        },
+        {
+          "species": 38,
+          "weight": 12
+        },
+        {
+          "species": 39,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 29,
+      "choices": [
+        {
+          "species": 10,
+          "weight": 12
+        },
+        {
+          "species": 18,
+          "weight": 20
+        },
+        {
+          "species": 20,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 20
+        },
+        {
+          "species": 36,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 12
+        },
+        {
+          "species": 38,
+          "weight": 12
+        },
+        {
+          "species": 39,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 30,
+      "choices": [
+        {
+          "species": 10,
+          "weight": 12
+        },
+        {
+          "species": 18,
+          "weight": 20
+        },
+        {
+          "species": 20,
+          "weight": 20
+        },
+        {
+          "species": 35,
+          "weight": 20
+        },
+        {
+          "species": 36,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 12
+        },
+        {
+          "species": 38,
+          "weight": 12
+        },
+        {
+          "species": 39,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 31,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 12
+        },
+        {
+          "species": 10,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 20
+        },
+        {
+          "species": 38,
+          "weight": 20
+        },
+        {
+          "species": 39,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 12
+        },
+        {
+          "species": 42,
+          "weight": 12
+        },
+        {
+          "species": 43,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 32,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 12
+        },
+        {
+          "species": 10,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 20
+        },
+        {
+          "species": 38,
+          "weight": 20
+        },
+        {
+          "species": 39,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 12
+        },
+        {
+          "species": 42,
+          "weight": 12
+        },
+        {
+          "species": 43,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 33,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 12
+        },
+        {
+          "species": 10,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 20
+        },
+        {
+          "species": 38,
+          "weight": 20
+        },
+        {
+          "species": 39,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 12
+        },
+        {
+          "species": 42,
+          "weight": 12
+        },
+        {
+          "species": 43,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 34,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 12
+        },
+        {
+          "species": 10,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 20
+        },
+        {
+          "species": 38,
+          "weight": 20
+        },
+        {
+          "species": 39,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 12
+        },
+        {
+          "species": 42,
+          "weight": 12
+        },
+        {
+          "species": 43,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 35,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 12
+        },
+        {
+          "species": 10,
+          "weight": 20
+        },
+        {
+          "species": 37,
+          "weight": 20
+        },
+        {
+          "species": 38,
+          "weight": 20
+        },
+        {
+          "species": 39,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 12
+        },
+        {
+          "species": 42,
+          "weight": 12
+        },
+        {
+          "species": 43,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 36,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 28
+        },
+        {
+          "species": 42,
+          "weight": 24
+        },
+        {
+          "species": 43,
+          "weight": 24
+        },
+        {
+          "species": 44,
+          "weight": 20
+        },
+        {
+          "species": 45,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 37,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 28
+        },
+        {
+          "species": 42,
+          "weight": 24
+        },
+        {
+          "species": 43,
+          "weight": 24
+        },
+        {
+          "species": 44,
+          "weight": 20
+        },
+        {
+          "species": 45,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 38,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 28
+        },
+        {
+          "species": 42,
+          "weight": 24
+        },
+        {
+          "species": 43,
+          "weight": 24
+        },
+        {
+          "species": 44,
+          "weight": 20
+        },
+        {
+          "species": 45,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 39,
+      "choices": [
+        {
+          "species": 4,
+          "weight": 20
+        },
+        {
+          "species": 40,
+          "weight": 28
+        },
+        {
+          "species": 42,
+          "weight": 24
+        },
+        {
+          "species": 43,
+          "weight": 24
+        },
+        {
+          "species": 44,
+          "weight": 20
+        },
+        {
+          "species": 45,
+          "weight": 12
+        }
+      ]
+    },
+    {
+      "floor": 40,
+      "choices": []
+    }
+  ]
+}

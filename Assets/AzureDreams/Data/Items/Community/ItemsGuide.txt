@@ -1,0 +1,441 @@
+                       AZURE DREAMS ITEMS LIST
+                      -------------------------
+
+                           by Incossee
+                           Version 1.1
+
+This is a list of all items found in Azure Dreams. It is 
+probably not yet 100% complete, so if you have additions,
+please e-mail me at: 
+
+incossee_1@excite.com
+
+Please send as complete and accurate information as possible
+to ensure the integrity of the list. Currently, town-based
+items are not included (like furniture, gifts, etc.), but
+will be listed in the complete FAQ and Strategy Guide. So
+far I have only included items I have found first hand,
+omitting any rumored items, like the dubious "Diamond Sword." 
+
+Symbols used in the list mean the following:
+
+~  Indicates relatively rare item (by category)
+#  Indicates exceptionally rare item
+!  Indicates unique item
+*  Indicates special notes about the item
+
+They are grouped by category, with in-game descriptions (listed 
+verbatim), resale values, and special notes about their use.  The GP
+value of weapons and shields is increased/decreased 10% per +/- bonus.
+Cursed equipment is worth five times the normal value.  Thus a +1 Iron
+Sword is worth 110 GP, a -1 Iron Sword is worth 90 GP, and a -1 Cursed
+Iron Sword is worth 450 GP.  The base GP value of magic balls is
+increased by 10% per charge.  Thus a Sleep Ball with 1 charge is worth
+880 GP, a Sleep Ball with 2 charges is worth 960 GP, and so forth.
+
+_______________________________________________________________________
+-~_-~_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-~-_-
+
+
+1. WANDS- Non-metal weapons which may be cursed but not enchanted
+   or tempered to improve (with one exception). They are most effective
+   when combined with mixture magic. They will not rust.
+
+========================================================================
+Wand      ATK  GP     Description
+========================================================================
+Wooden    1    10     A wand made of wood.
+Paralyze  1    100    Sometimes freezes Monster���s mobility.
+                     *Effective when combined with bind mixture magic.
+Gulf      1    150    A wand of wind.
+                     *Effective when combined with wind mixture magic.
+Scarlet   1    150    A wand of fire.
+                     *Effective when combined with fire mixture magic.
+Stream    1    150    A wand of water.
+                     *Effective when combined with water mixture magic.
+Seal      1    500    Sometimes seals the special powers of monsters.
+Life~     1    1000   Recovers HP slightly if an opponent is hit.
+Money~    1    1000   Sometimes changes killed Monsters into money.
+Trained#  1    5000   Can be tempered with Red Sand.
+                     *Only known wand that may be tempered.
+========================================================================
+
+2. SWORDS- Metallic weapons which may be cursed or enchanted when
+   found (+1 or +2), and tempered to improve. They are susceptible to 
+   rust (with one exception).
+
+========================================================================
+Sword     ATK  GP     Description
+========================================================================
+Gold      1    1000   Coated with gold.
+                     *Only known sword immune to rust.
+Copper    2    50     Made of copper.
+Iron      3    100    Made of iron.
+Steel     4    150    Made of steel.
+Blizzard  5    400    Water genus.
+                     *Effective against fire genus enemies.
+Fire      5    400    Fire genus.
+                     *Effective against wind genus enemies.
+Gulfwind  5    400    Wind genus.
+                     *Effective against water genus enemies.
+Vital~    5    800    Prevents opponent from multiplying.
+                     *Manoevas will not split when attacked.
+Holy#     7    10000  Holy sword with divine protection.
+                     *Not clear what the protection is... I believe one
+                      effect is immunity to certain special attacks, and
+                      this effect works once equipped, even when taken
+                      off later (lasts until the end of the expedition).
+Seraphim! 8    1000   Guy���s keepsake Sword. Seraphim ATK 8.
+                     *Received upon completion of 40th floor. Apparently
+                      just a normal sword with no special properties?
+Dark#     10   10000  A cursed sword.
+                     *The curse can be removed with a De-curse scroll,
+                      but loses 40K in GP value and still has low hit%.
+========================================================================
+
+3. TROLL WEAPONS- Weapons usable by troll-type species familiars. They
+   may possibly be cursed when found.
+
+========================================================================
+Troll     ATK  GP     Description
+========================================================================
+Hammer    N/A  1000   A mace-type club weapon. Exculsive to Troll-types.
+Sword     N/A  1000   Can���t be blocked by a Shield. Exclusive to Troll-
+                      types.
+Bow Gun~  N/A  4000   A long-range weapon. Exclusive to Troll-types.
+========================================================================
+
+4. SHIELDS- Your only piece of defensive equipment. They are susceptible
+   to rust (with two exceptions).
+
+========================================================================
+Shield    DEF  GP     Description
+========================================================================
+Leather   1    30     Tanned leather shield.
+Wood      2    50     Wooden shield.
+Mirror~   3    1000   Shield polished into a mirror.
+                     *Immune to rust. Sometimes reflects spells back on
+                      enemies (but not special attacks).
+Copper    4    100    A copper shield.
+Iron      5    150    An iron shield.
+Earth     5    600    Wind genus shield.
+                     *Effective against water-based attacks.
+Ice       5    600    Water genus shield.
+                     *Effective against fire-based attacks.
+Scorch    5    600    Fire genus shield.
+                     *Effective against wind-based attacks.
+Live~     5    600    Sometimes retaliates when it���s hit.
+                     *Will sometimes cause damage on an attacking enemy.
+Steel     6    300    A very tough steel shield.
+Diamond~  7    1500   Shield made of diamond.
+                     *Immune to rust.
+========================================================================
+
+5. CRYSTALS- One time use items with strong magical powers.
+
+========================================================================
+Crystal    GP    Description
+========================================================================
+Fire       400   Summons SALAMANDER, which burns up enemies one after 
+                 another.
+                *Creates a temporary ally who fights for several turns.
+Water      400   Restores status of familiar and recovers MP & HP to
+                 maximum.
+                *Works on all adjacent collared familiars , but not dead 
+                 ones.
+Wind       200   Makes it possible to return to a town.
+                *Instantly warps you back to mom. Seemingly appear more
+                 frequently, the longer you have played the game.
+========================================================================
+
+6. FRUITS- One time use items, mostly for familiars, can be used on Koh 
+   or familiar.  They may also be thrown as weapons.  Most have a side-
+   effect of recovering a few MP/HP for familiars.
+
+========================================================================
+Fruit      GP    Description
+========================================================================
+Big Pita~  10    Food for familiar. Recovers MP by 100.
+                *Permanently boosts MP by 1 if already at max.
+Geropita#  100   Vanishes MP of the monster ate this fruit.
+                *Reduces MP of target to zero.
+Laev       20    MP of monsters tends to decrease on that level.
+                *Causes recipient to lose MP faster than normal.
+Leva       20    Familiar will not change form after the next fusion.
+Leolam~    100   MP of the monster will not decrease for a while.
+                *Even high MP consumption actions cost 0 MP for a
+                 short period of time.
+Limit      100   Increase percentage of critical hits for a while.
+Pita       5     Food for familiar. Recovers MP by 50.
+                *Permanently boosts MP by 1 if already at max.
+Roche#     5000  Transforms monsters into eggs.
+                *Can be used on familiars also, though Kewne is
+                 immune, and evolved monsters revert to the egg of
+                 their original form. Some recommended uses are on
+                 enemy Barongs and Dragons, two of the more interesting
+                 types of familiars.
+Tumna      20    Turns into a frog for a while.
+                *Useful when thrown at an enemy.
+Oleem      100   Vanishes familiar, and the player escapes from the
+                 tower.
+                *This fruit is blue, not red and can be thrown to 
+                 eradicate an enemy (but no EXP received). You can
+                 feed it to a temporary familiar to warp home also.
+========================================================================
+
+7. HERBS- One time use curative items, used directly on Koh or familiar.
+   They may also be thrown as weapons. Most will recover some MP/HP for
+   a familiar as a side-effect.
+
+========================================================================
+Herb       GP    Description
+========================================================================
+Antichaos  20    Herb that restores chaos.
+Antidote   15    Herb neutralizes a poison.
+Cure-all~  200   Herb that restores everything.
+                *Restores all status ailments, but not your HP.
+Harash#    10    Weakens attacking power.
+Hazak      80    Recovers weakened attack.
+                *Counters temporary ATK loss, mainly caused by Vipers.
+Healing!   N/A   Can heal disease of Cherrl.
+                *Found on 28th floor of tower.
+Medicinal  7     Herb that restores HP.
+                *Permanently boosts HP by 1 if already at max.
+Paralyze#  10    Herb that freezes motion.        
+Roeam      20    Enables eye sight.
+Poison#    5     Toxic herb.
+Shomuro#   80    Restores weakened defense.
+Wake-up    20    Wakes up a sleeping familiar.
+========================================================================
+
+8. SEEDS- One time use enhancing items, used directly on Koh or 
+   familiar. They may also be thrown as weapons. Most will recover some
+   MP/HP for a familiar as a side-effect.
+
+========================================================================
+Seed       GP    Description
+========================================================================
+Hazak~     500   Increases attacking power.
+                *Permanent +1, best used for familiars. DO NOT SELL!
+Lar#       50    Eating this seed lowers a level.
+Light      150   Changes the genus of a familiar to fire.
+                *Also use to regain a few MP for your fire familiars.
+Mahell     50    Increases speed for a while.
+                *Allows you to take two actions per turn for about
+                 three turns.
+Mazarr     200   Increases the level.
+                *Permanent +1, best used for familiars. DO NOT SELL!
+Sea        150   Changes the genus of a familiar to water.
+                *Also use to regain a few MP for your water familiars.
+Shomuro~   500   Increases defensive power.
+                *Permanent +1, best used for familiars. DO NOT SELL!
+Slow#      50    Eating this seed decreased speed.
+Tovar#     1000  Eating this seed leads to good fortune.
+                *Increases "Luck" by 1 point. ?????
+Wind       150   Changes the genus of a familiar to wind.
+                *Also use to regain a few MP for your wind familiars.
+========================================================================
+
+9. SCROLLS- One time use special effect items. They usually affect the 
+   space where Koh is standing, or they can be thrown to affect enemies 
+   instead. Some have broad areas of affect.
+
+========================================================================
+SCROLLS    GP    Description
+========================================================================
+Alchemic#  80    The beam turns all items on the floor to gold coins.
+                *Affects all items on the entire level.
+De-curse   100   The beam removes a curse cast upon equipment.
+                *Permanently removes curses on anything equipped.
+Flat#      100   The beam removes steps and flattens the entire floor.
+                *Will not work on special levels, like 1st floor.
+Holy       150   Holy beam protects the reader from enemy attack for a
+                 while.
+                *Creates an impenetrable field, where nothing may
+                 attack you, cast spells against you, or use special
+                 attacks against you. You may still attack, etc. though.
+Malicious  150   Malicious beam bringing chaos for a while.
+                *Creates a confusion field, throw to use.
+Restore~   400   The beam resuscitates a fainted familiar.
+                *Be careful. Revived familiars return at low HP.
+Trap       400   All traps on the floor become visible.
+                *This actually resets all traps that have been
+                 triggered. Use, then lure monsters over known trap
+                 locations.
+========================================================================
+
+10. BELLS- One time use special effect items.
+
+========================================================================
+Bell       GP    Description
+========================================================================
+Familiar   400   Call back familiars to you.
+                *All "lost" familiars return.
+Holy       100   Chases a monster out of a room.
+                *All enemies are forced out of current room for a
+                 period of time.
+Malicious  800   Increases the level of enemy monsters.
+                *Nearby enemies become stronger and worth more EXP.
+========================================================================
+
+11.  BALLS- Multiple charge magical spell items, most fire in a straight 
+    line from Koh. Remember to add in +10% to GP value per charge
+    remaining. Small notes: Of the fire-attack Balls, the "Fire" Ball
+    has the least GP value, but is actually almost as strong as the
+    Pillar Ball and stronger than the Blaze and Flame Balls. Also,
+    the Recovery and Water Balls should either be used on your familiar,
+    or bounced off an enemy after using a Repel Ball on it.
+
+========================================================================
+Ball       GP    Description
+======================================================================== 
+Acid Rain~ 800   Contains acid rain and attacks enemies.
+                *All enemies in room or surrounding Koh in a hallway
+                 will be hit for heavy water damage. Can only be found
+                 with 1 charge (but may be increased with White
+Sand).    
+Binding    500   A ball that has the power to bind monsters with 
+                 thunder.
+                *Causes paralysis, fires in a straight line.
+Blaze      500   A ball that blazes along the ground in a straight line.
+                *Mild fire damage attack, fires in a straight line. 
+Blinder    500   Contains darkness which blinds the eyes of enemies.
+                *Causes blindness, fires in a straight line.
+Fire       300   A ball that contains a fire arrow.
+                *Mid-Heavy fire damage, fires in a straight line.
+Flame      800   A ball that contains a fireball.
+                *Moderate fire damage, fires in a straight line.
+Ice Rock   800   Contains a huge iceberg which blocks one���s way.
+                *Creates a rock barrier directly in front of Koh.
+Pillar     1000  Contains a fiery pillar which ascends from the ground.
+                *Heavy fire damage, fires in a straight line.
+Poison     800   Contains poison contagious to all enemies in the same
+                 room.
+                *(or enemies surrounding Koh in a hallway).
+Recovery   800   Contains a soap bubble which recovers HP.
+                *Heals small amount, fires in a straight line.
+Repel      500   A ball that has the power to repel magic.
+                *Struck target will reflect spells back at the caster,
+                 fires in a straight line. Use on familiar, or use
+                 on an enemy, then reflect spells from the Water and
+                 Recovery balls back upon yourself.
+Sleep      800   A ball that contains Morpheus and puts enemies to 
+                 sleep.
+                *Causes sleep, fires in a straight line.
+Water      500   A ball that contains a water wall which protects the
+                 user.
+                *Creates a protective water barrier around the
+                 target, fires in a straight line.
+Weak       500   Contains a beam which decreases level of enemies.
+                *Weaker enemies are also worth less EXP.
+========================================================================
+
+12.  LOUPES- One time use map enhancing items.
+
+========================================================================
+Loupe      GP    Description
+========================================================================
+Exit       50    Identifies the location of elevators.
+Monster    50    Identifies the location of monsters.
+                *Tracks all monsters for entire time spent on the level.
+Trap       100   Makes traps visible.
+                *All traps on floor revealed, but not disarmed. Disarm
+                 them by attacking (for 8 EXP) or lure enemies to them.
+Treasure   50    Loupe that identifies the location of items.
+                *Reveals all TRUE items on the level.
+========================================================================
+
+13.  GLASSES- One time use informational items.
+
+========================================================================
+Glasses    GP    Description
+========================================================================
+Star       50    Makes the current floor entirely visible.
+                *Reveals entire map, all items, and exits on the level.
+Truth      100   Identify items. Even types of eggs.
+                *Use on green-lettered items to reveal any unknown
+                 properties (curses, + bonuses, charges, egg types).
+========================================================================
+
+14.  SAND- One time use for improving the quality of other items.
+
+========================================================================
+Sand       GP    Description
+========================================================================
+Blue       100   Tempers a shield.
+                *Adds +1 to equipped shield. Does not work on cursed
+                 shields. DO NOT SELL!
+Red        100   Tempers a sword.
+                *Adds +1 to equipped sword. Does not work on wands or
+                 cursed swords. DO NOT SELL!
+White      100   Increases the number of times a ball can be used.
+                *Adds +1 charge to any magic ball.
+========================================================================
+
+15.  MONEY- Increases your GP count.
+
+========================================================================
+Money      GP       Description
+========================================================================
+Copper     16-24    Copper coins. Not very valuable.
+                   *Appears on all floors in the Tower.
+Silver     80-120   Silver coins. Moderately valuable.
+                   *Appears on floors 12 and higher in the Tower.
+Gold       160-240  Gold coins. Highly valuable.
+                   *Appears on floors 22 and higher in the Tower.
+========================================================================
+
+16.  MISCELLANEOUS- These are items that don���t fall into any particular
+    category. Most are quest items for people in town.
+
+========================================================================
+Item       GP    Description
+========================================================================
+B. Cape!   ?     ?
+                *Return this to the woman who owns the tavern. Found
+                 on the 20th floor.
+B. Collar! N/A   N/A
+                *Does not show up in inventory, allows you to collar
+                 two familiars simultaneously. Found on the 12th floor.
+Meat       N/A   Delicious meat that monsters love.
+                *Lures familiars/monsters. Thrown by Weadogs.
+Oil Pot!   ?     ?
+                *Return this to Issac to repair the windmills. Found
+                 on the 15th floor. 
+W. Medal!  1000  ?
+                *Return this to Wotta to repair the Wookie Wookie
+                 Swimming Pool. Found by killing the white Picket
+                 around the 25th floor.
+========================================================================
+
+17. EGGS- You may hatch these in the tower for a temporary familiar
+    which will leave you when you return to town unless fused with
+    another familiar, or (recommended) take them back to town. In
+    town, you may sell them (take them to the egg shop to make the
+    owner happy), store them for later use, or hatch them in your
+    monster den (in the basement of your home). Note that not all
+    monsters in the game hatch from eggs. Some must evolve, and
+    others are simply never familiars. Dragons are the one monster
+    you fight that actually are evolved monsters (hatched from a
+    Kid Egg). This should be the complete list of all possible eggs.
+
+========================================================================
+Egg        GP        Egg        GP        Egg        GP
+========================================================================
+Arachne    2400      Griffon    2000      Snowman    6000
+Balloon    1000      Kid        15000     Stealth    3600
+Barong     8000      Killer     8000      Troll      800
+Block      4000      Kraken     2200      Tyrant     10000
+Blume      800       Mandara    5000      U-Boat     1200
+Clown      1000      Manoeva    800       Ultimate!  50000
+Cyclone    800       Maximum    35000     Unicorn    3200
+Dreamin    1300      Naplass    7600      Viper      4500
+Flame      600       Noise      600       Volcano    1600
+Garuda     2400      Nyuel      1800      Weadog     3000
+Glacier    12000     Picket     2400      Zu         5000
+Golem      23000     Pulunpa    400
+========================================================================
+
+This is just a segment of a complete FAQ and Strategy Guide to
+Azure Dreams.  Please do NOT reprint this in any way shape or
+form elsewhere, without my prior expressed written consent.

@@ -1,0 +1,292 @@
+{
+  "scope": "Diagnostic catalogs, not the retail city layout. Original native ADScene sequential traversal retained; view-dependent retail branches are not reproduced. Variant-0 VRAM is partial and is not asserted correct for every geometry type.",
+  "results": [
+    {
+      "type": 0,
+      "exit_code": 0,
+      "output": "Exported 7096 quads",
+      "error": "",
+      "snapshot_sha256": "ac1f83fd875710825bad5c8f6b0e9af2beca691aa1f2bedd108676ae08239cb5"
+    },
+    {
+      "type": 10,
+      "exit_code": 0,
+      "output": "Exported 512 quads",
+      "error": "",
+      "snapshot_sha256": "ac49ebc2032f8da958f89ca2d37d101e22ddb74b11cbe778911c865d7b22db34"
+    },
+    {
+      "type": 11,
+      "exit_code": 0,
+      "output": "Exported 356 quads",
+      "error": "",
+      "snapshot_sha256": "7f6805fc546b4426b71c77a3b618d09541e274a763ba7fec81ba4d35bcd29b39"
+    },
+    {
+      "type": 12,
+      "exit_code": 0,
+      "output": "Exported 307 quads",
+      "error": "",
+      "snapshot_sha256": "4b90e6e001029586d504391ed815bdbcafb5abd7682bb253d3e8e077e33d47ff"
+    },
+    {
+      "type": 13,
+      "exit_code": 0,
+      "output": "Exported 355 quads",
+      "error": "",
+      "snapshot_sha256": "c0807b47588f630af5ada3ee2e852a43049684559c648cfc1384e9ee6b297cb2"
+    },
+    {
+      "type": 14,
+      "exit_code": 0,
+      "output": "Exported 1081 quads",
+      "error": "",
+      "snapshot_sha256": "d811cc1548297de2a4f8142466bf7a6af38817d5ebe6ce310687ce148b45e03c"
+    },
+    {
+      "type": 15,
+      "exit_code": 0,
+      "output": "Exported 655 quads",
+      "error": "",
+      "snapshot_sha256": "218a04e57cd48f51424bac66d85588bc811332ed780d5cfd636024c3e5e33432"
+    },
+    {
+      "type": 16,
+      "exit_code": 0,
+      "output": "Exported 952 quads",
+      "error": "",
+      "snapshot_sha256": "5985d6cd1c14deb506df0fc39d8596f2bc1b494a0f12f94dfa74d4448c6c03a6"
+    },
+    {
+      "type": 17,
+      "exit_code": 0,
+      "output": "Exported 342 quads",
+      "error": "",
+      "snapshot_sha256": "1123537e884faf35a5d926d67ed0747df450f4f96b721f3df666b1973a3f8299"
+    },
+    {
+      "type": 18,
+      "exit_code": 0,
+      "output": "Exported 448 quads",
+      "error": "",
+      "snapshot_sha256": "2615034823bc6f5d6d84d64c5a6ab20bb5e5e70c8545b9653a99657fb61feac1"
+    },
+    {
+      "type": 19,
+      "exit_code": 0,
+      "output": "Exported 732 quads",
+      "error": "",
+      "snapshot_sha256": "838b4fce3fc3562c3786f7b3b72d41492500667b56aefeb4af0a9e32589c18bc"
+    },
+    {
+      "type": 1,
+      "exit_code": 0,
+      "output": "Exported 570 quads",
+      "error": "",
+      "snapshot_sha256": "84473168413772e444e78775d7201618018d7de7fb4e29c5177ac8ccf59ce0e3"
+    },
+    {
+      "type": 20,
+      "exit_code": 0,
+      "output": "Exported 178 quads",
+      "error": "",
+      "snapshot_sha256": "e55fea248b42c4271f07e1fffe979f0728844e9687b3ff17b435c86ef88d1528"
+    },
+    {
+      "type": 21,
+      "exit_code": 0,
+      "output": "Exported 178 quads",
+      "error": "",
+      "snapshot_sha256": "e55fea248b42c4271f07e1fffe979f0728844e9687b3ff17b435c86ef88d1528"
+    },
+    {
+      "type": 22,
+      "exit_code": 0,
+      "output": "Exported 178 quads",
+      "error": "",
+      "snapshot_sha256": "e55fea248b42c4271f07e1fffe979f0728844e9687b3ff17b435c86ef88d1528"
+    },
+    {
+      "type": 23,
+      "exit_code": 0,
+      "output": "Exported 178 quads",
+      "error": "",
+      "snapshot_sha256": "e55fea248b42c4271f07e1fffe979f0728844e9687b3ff17b435c86ef88d1528"
+    },
+    {
+      "type": 24,
+      "exit_code": 0,
+      "output": "Exported 178 quads",
+      "error": "",
+      "snapshot_sha256": "e55fea248b42c4271f07e1fffe979f0728844e9687b3ff17b435c86ef88d1528"
+    },
+    {
+      "type": 25,
+      "exit_code": 0,
+      "output": "Exported 272 quads",
+      "error": "",
+      "snapshot_sha256": "624907cc03756fbe4288c8e487357fbb7d86970a2d8133eec1eea29f5a6ddf7b"
+    },
+    {
+      "type": 26,
+      "exit_code": 0,
+      "output": "Exported 427 quads",
+      "error": "",
+      "snapshot_sha256": "04b091115e62c24bced53ba1629cd11a12b62cd9aa35038cfb1b3f0b39bb85fe"
+    },
+    {
+      "type": 27,
+      "exit_code": 0,
+      "output": "Exported 484 quads",
+      "error": "",
+      "snapshot_sha256": "d9f3f8fe3f9bebf3659715b1a3b7fb685462f8ca5da1d236396e4a721b91ae7f"
+    },
+    {
+      "type": 28,
+      "exit_code": 0,
+      "output": "Exported 591 quads",
+      "error": "",
+      "snapshot_sha256": "e878e7ddd846acdfefac232464c9c92b7bc55e487c87ccb345a2cc6cd5fe7139"
+    },
+    {
+      "type": 29,
+      "exit_code": 0,
+      "output": "Exported 289 quads",
+      "error": "",
+      "snapshot_sha256": "aceac39d61fa6be6a53fbd9f910a00f5eb479d83f3009aa1c73b74730db61694"
+    },
+    {
+      "type": 2,
+      "exit_code": 0,
+      "output": "Exported 483 quads",
+      "error": "",
+      "snapshot_sha256": "1ded1a555e53c0964cd89200c752196f6bce6e2967c57a3419496552fdc4da1c"
+    },
+    {
+      "type": 30,
+      "exit_code": 0,
+      "output": "Exported 405 quads",
+      "error": "",
+      "snapshot_sha256": "94330563574125aa6fa936da5994c4f217953d9554707177d5cd2c8f1647f2d1"
+    },
+    {
+      "type": 31,
+      "exit_code": 0,
+      "output": "Exported 319 quads",
+      "error": "",
+      "snapshot_sha256": "f406c1eb748e07145ab20bfe108cb8faaf3b24e9033c4d8be6f68da2f062841b"
+    },
+    {
+      "type": 32,
+      "exit_code": 0,
+      "output": "Exported 348 quads",
+      "error": "",
+      "snapshot_sha256": "fe5650e2860c1c31274e3e2064e85e05a9b8490dab030953158efb8fd091ce05"
+    },
+    {
+      "type": 33,
+      "exit_code": 0,
+      "output": "Exported 273 quads",
+      "error": "",
+      "snapshot_sha256": "a8cf5f027e6a5726953c39152af93ff5e1a94033e88ae63354ee2872f6eed491"
+    },
+    {
+      "type": 34,
+      "exit_code": 0,
+      "output": "Exported 304 quads",
+      "error": "",
+      "snapshot_sha256": "3b6718a5c1555c838bbd18c7c678f05c64c860d41bb778501c554c1c6e2fe450"
+    },
+    {
+      "type": 35,
+      "exit_code": 0,
+      "output": "Exported 276 quads",
+      "error": "",
+      "snapshot_sha256": "41c1566ff7c11ba1fd649ecb4da14b39c970fac17b11d63e226a8f623cf9a9ae"
+    },
+    {
+      "type": 36,
+      "exit_code": 0,
+      "output": "Exported 569 quads",
+      "error": "",
+      "snapshot_sha256": "875dadabda0804dbd4d74c156f344d15ac0013e98b7a9c7b5e7f089f776bf825"
+    },
+    {
+      "type": 37,
+      "exit_code": 0,
+      "output": "Exported 245 quads",
+      "error": "",
+      "snapshot_sha256": "d5b0d134646abc840559625f95920a2c09698cd473d3a3389ea7ac9157513055"
+    },
+    {
+      "type": 38,
+      "exit_code": 0,
+      "output": "Exported 3192 quads",
+      "error": "",
+      "snapshot_sha256": "4d697bc08644e0228df366e1c8f0e2eccf0ea3c9a450cfb337975225402a7777"
+    },
+    {
+      "type": 39,
+      "exit_code": 0,
+      "output": "Exported 2133 quads",
+      "error": "",
+      "snapshot_sha256": "a59393c34526e6ff78c8c0d97a9e1cad520caa21def3cf733e87b1016a752a70"
+    },
+    {
+      "type": 3,
+      "exit_code": 0,
+      "output": "Exported 328 quads",
+      "error": "",
+      "snapshot_sha256": "5fbf9fefc0a7432bc63e2e67d6670553fbabc7d8f6e07b9aaa0d923e77600588"
+    },
+    {
+      "type": 40,
+      "exit_code": 0,
+      "output": "Exported 717 quads",
+      "error": "",
+      "snapshot_sha256": "1f4d5e62a6f614e5c9e1474f58cb32ed790316264b173a35a22558756212d0e0"
+    },
+    {
+      "type": 4,
+      "exit_code": 0,
+      "output": "Exported 285 quads",
+      "error": "",
+      "snapshot_sha256": "e157ea594d47b06ae3878f60a74c379f0fe3a7ab0e2bcddf8754305148bf514a"
+    },
+    {
+      "type": 5,
+      "exit_code": 0,
+      "output": "Exported 461 quads",
+      "error": "",
+      "snapshot_sha256": "c27b66445bc6d433f2a1315fba73d28ceeefb9c3428ba77c46980bc565584d70"
+    },
+    {
+      "type": 6,
+      "exit_code": 0,
+      "output": "Exported 450 quads",
+      "error": "",
+      "snapshot_sha256": "38d00d03d866a5926a4041c626f7ccbb1ad5023cfd075816df7073d13487fbec"
+    },
+    {
+      "type": 7,
+      "exit_code": 0,
+      "output": "Exported 450 quads",
+      "error": "",
+      "snapshot_sha256": "38d00d03d866a5926a4041c626f7ccbb1ad5023cfd075816df7073d13487fbec"
+    },
+    {
+      "type": 8,
+      "exit_code": 0,
+      "output": "Exported 301 quads",
+      "error": "",
+      "snapshot_sha256": "91209567d2b5ac59d74562de7ac2fa354d6d5003f415cdaba2bfc11e29f6fd23"
+    },
+    {
+      "type": 9,
+      "exit_code": 0,
+      "output": "Exported 453 quads",
+      "error": "",
+      "snapshot_sha256": "c2c2e4d9c05c3a0ecbc2dc06ed02d259db6b9323c6f99bafc1510a413e303c60"
+    }
+  ]
+}

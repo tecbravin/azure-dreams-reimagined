@@ -1,0 +1,200 @@
+{
+  "floors": [
+    {
+      "floor": 1,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 1F-2F.png",
+      "uvStatus": "implemented"
+    },
+    {
+      "floor": 2,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 1F-2F.png",
+      "uvStatus": "implemented"
+    },
+    {
+      "floor": 3,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 3F.png",
+      "uvStatus": "implemented"
+    },
+    {
+      "floor": 4,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 4F-5F.png",
+      "uvStatus": "implemented"
+    },
+    {
+      "floor": 5,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 4F-5F.png",
+      "uvStatus": "implemented"
+    },
+    {
+      "floor": 6,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 6F-7F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 7,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 6F-7F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 8,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 8F-9F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 9,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 8F-9F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 10,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 10F-11F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 11,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 10F-11F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 12,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 12F-13F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 13,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 12F-13F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 14,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 14F-15F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 15,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 14F-15F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 16,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 16F-17F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 17,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 16F-17F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 18,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 18F-19F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 19,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 18F-19F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 20,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 20F-21F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 21,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 20F-21F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 22,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 22F-23F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 23,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 22F-23F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 24,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 24F-25F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 25,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 24F-25F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 26,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 26F-27F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 27,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 26F-27F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 28,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 28F-29F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 29,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 28F-29F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 30,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 30F-31F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 31,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 30F-31F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 32,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 32F-33F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 33,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 32F-33F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 34,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 34F-35F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 35,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 34F-35F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 36,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 36F-37F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 37,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 36F-37F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 38,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 38F-39F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    },
+    {
+      "floor": 39,
+      "texture": "Assets/AzureDreams/SpritersResource/PlayStation - Azure Dreams - Tower - Monster Tower 38F-39F.png",
+      "uvStatus": "awaiting_tile_rectangle_mapping"
+    }
+  ],
+  "floor40": "No dedicated floor-40 sheet supplied."
+}

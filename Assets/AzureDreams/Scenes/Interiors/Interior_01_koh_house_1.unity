@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Koh House 1
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_01_koh_house_1
+  displayName: Koh House 1
+  geometry: {fileID: 4900000, guid: e1a490803965407bb868e8e2406f642a, type: 3}
+  heights: {fileID: 4900000, guid: b61c7cad85804e07aeeb0aeb8be27cf1, type: 3}
+  materials:
+  - {fileID: 2100000, guid: b80c2e340ca9475ba06e91db7b25c49a, type: 2}
+  - {fileID: 2100000, guid: d9289308d4174f07b6074601e90ddac4, type: 2}
+  - {fileID: 2100000, guid: 623d3799781241d5b53f32ddab74b53d, type: 2}
+  - {fileID: 2100000, guid: 6d2cc47e2c9d44a799607d597e023d40, type: 2}
+  - {fileID: 2100000, guid: 6641f253011c470ab959a04c52f6863d, type: 2}
+  - {fileID: 2100000, guid: 728caf1b99044355835a555036cd02a2, type: 2}
+  - {fileID: 2100000, guid: c284a3b5b5fc4b7398f94531ecbcc839, type: 2}
+  - {fileID: 2100000, guid: 9debd692fc5141afa36a9a5021972a57, type: 2}
+  - {fileID: 2100000, guid: 63f298ba70d94700a4d8656db26da11a, type: 2}
+  - {fileID: 2100000, guid: bb16cb54ec074a9693c3a272f6da4d4a, type: 2}
+  - {fileID: 2100000, guid: 40141f26cf814020a56613c05b2f6681, type: 2}
+  - {fileID: 2100000, guid: d60ad6014db5432aab3e0d0d7bf7d158, type: 2}
+  - {fileID: 2100000, guid: b8805142cf604c559e3d899cefe677f8, type: 2}
+  - {fileID: 2100000, guid: 850ca697793e4e989f68c42ebf819211, type: 2}
+  - {fileID: 2100000, guid: f650adcd418b4be193ee60d06dfee653, type: 2}
+  - {fileID: 2100000, guid: 7802f6a0f91e4b8faa3b12e4973d9bf9, type: 2}
+  - {fileID: 2100000, guid: 9d663ca60ca646c680eb44724cd0f219, type: 2}
+  - {fileID: 2100000, guid: 57b9cfe32f1c4dd6bc5d597d040a5c75, type: 2}
+  - {fileID: 2100000, guid: 728cad3755874940aa9d780159b1214a, type: 2}
+  - {fileID: 2100000, guid: da2a29a337ce427e89d44fb7d559091e, type: 2}
+  - {fileID: 2100000, guid: e795c06c71674e56b6171f204f01a97b, type: 2}
+  - {fileID: 2100000, guid: 0d099605a5e749159f1e7d44b76193e1, type: 2}
+  - {fileID: 2100000, guid: ecf9f9db163a4a9eb3456edb49fa8504, type: 2}
+  - {fileID: 2100000, guid: 475b34c639074dd1b64d37678b8309d2, type: 2}
+  entryPosition: {x: 12, y: 0, z: 13}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: ad76990d490a4c5bb4a1ab45b59a549a, type: 3}
+  - {fileID: 5151358256163527516, guid: 669b523089fc4d56ab64e8a15b14d5de, type: 3}
+  residentCells:
+  - {x: 19, y: 11}
+  - {x: 17, y: 11}
+  furnitureFootprints:
+  - serializedVersion: 2
+    x: 13.125
+    y: 9.125
+    width: 0.75
+    height: 0.75
+  - serializedVersion: 2
+    x: 20.125
+    y: 9.125
+    width: 0.75
+    height: 0.75
+  - serializedVersion: 2
+    x: 8.98438
+    y: 8
+    width: 0.03125
+    height: 3
+  - serializedVersion: 2
+    x: 8.98438
+    y: 13
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 15
+    y: 8
+    width: 1
+    height: 3.75
+  - serializedVersion: 2
+    x: 15
+    y: 13.25
+    width: 1
+    height: 1.75
+  - serializedVersion: 2
+    x: 21.9844
+    y: 8
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 21.9844
+    y: 11
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 21.9844
+    y: 14
+    width: 0.03125
+    height: 1
+  - serializedVersion: 2
+    x: 22.9844
+    y: 13
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 8
+    y: 7.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 12
+    y: 7.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 15
+    y: 7.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 22
+    y: 7.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 11.984375
+    y: 8
+    width: 0.03125
+    height: 1
+  - serializedVersion: 2
+    x: 12.984375
+    y: 8
+    width: 0.03125
+    height: 1
+  - serializedVersion: 2
+    x: 21.984375
+    y: 8
+    width: 0.03125
+    height: 1
+  - serializedVersion: 2
+    x: 22.984375
+    y: 8
+    width: 0.03125
+    height: 1
+  - serializedVersion: 2
+    x: 9
+    y: 8.98438
+    width: 3
+    height: 0.03125
+  - serializedVersion: 2
+    x: 13
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 16
+    y: 8.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 18
+    y: 8.98438
+    width: 4
+    height: 0.03125
+  - serializedVersion: 2
+    x: 8
+    y: 14.9844
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 15
+    y: 14.9844
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 22
+    y: 14.9844
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 17
+    y: 9
+    width: 1
+    height: 0.5
+  - serializedVersion: 2
+    x: 21
+    y: 10
+    width: 1
+    height: 1
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

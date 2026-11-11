@@ -1,0 +1,520 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Koh House 3
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_03_koh_house_3
+  displayName: Koh House 3
+  geometry: {fileID: 4900000, guid: 2dbfb4ae31b745f891ed6c316041bbbf, type: 3}
+  heights: {fileID: 4900000, guid: c31812e96a104cf783e01174f6a573f1, type: 3}
+  materials:
+  - {fileID: 2100000, guid: c1fa1fc455c04a0999d561e2f9f74d46, type: 2}
+  - {fileID: 2100000, guid: 52acad23f8364054bd8d798f68c00756, type: 2}
+  - {fileID: 2100000, guid: b610f8aa28144bbe899b8a92e4cf477f, type: 2}
+  - {fileID: 2100000, guid: 4f49a072cc81485586a00ef7555bd26a, type: 2}
+  - {fileID: 2100000, guid: cb237cc526b9423ea29c8a30f24c9363, type: 2}
+  - {fileID: 2100000, guid: 1a93c93b69a3489da4b1948d8a1da11c, type: 2}
+  - {fileID: 2100000, guid: b5ff68a1477f40b79eeca7484f87c538, type: 2}
+  - {fileID: 2100000, guid: 1ad536c394214c0598af969724d6a443, type: 2}
+  - {fileID: 2100000, guid: c53ae7ccbef6493982356df84069118c, type: 2}
+  - {fileID: 2100000, guid: 9907ff98d83c4a45a7f981bb8b1063b6, type: 2}
+  - {fileID: 2100000, guid: 85cfc85c36e04e209624d29a8ad96716, type: 2}
+  - {fileID: 2100000, guid: e4d707c625d843f197d5907581695992, type: 2}
+  - {fileID: 2100000, guid: 37ce7f92225a4c6d91769d3672f4b9d4, type: 2}
+  - {fileID: 2100000, guid: 12d5814250b14944a0766b955705b6cb, type: 2}
+  - {fileID: 2100000, guid: 436d421f459949dfbf9083c29a731e79, type: 2}
+  - {fileID: 2100000, guid: 1facd4169fae44ab8a7a1628a404d60c, type: 2}
+  - {fileID: 2100000, guid: ac6f6ebefd5546588e9c5ee781529d13, type: 2}
+  - {fileID: 2100000, guid: 797d85b281284d0082438406458097ee, type: 2}
+  - {fileID: 2100000, guid: d1e5ebc0b37944f5957491fcc4aaa6d9, type: 2}
+  - {fileID: 2100000, guid: bba7558a075944a4bda880fda5bcb168, type: 2}
+  - {fileID: 2100000, guid: 63ee1ed2911144698fe742d136169341, type: 2}
+  - {fileID: 2100000, guid: b296ce092ea749e78c1d252acb1ab6e6, type: 2}
+  - {fileID: 2100000, guid: e1889fdf5af44b6e88eafb55813f3f8a, type: 2}
+  - {fileID: 2100000, guid: e0875a31c743416fab699414f5fffe94, type: 2}
+  - {fileID: 2100000, guid: 8c20e67f551140548ebb9d00fe742d83, type: 2}
+  - {fileID: 2100000, guid: 262117b66c244a23b91d8027410d08a6, type: 2}
+  - {fileID: 2100000, guid: 85d63ca36c55432b8ea2361f2fc3c043, type: 2}
+  - {fileID: 2100000, guid: 7c4b9d93d03945dbbaf53f26dfbadec0, type: 2}
+  - {fileID: 2100000, guid: 8bb0374d7f634fe68c79326616d4d415, type: 2}
+  - {fileID: 2100000, guid: f0d1cf7971b14fef8071da2761d75aba, type: 2}
+  - {fileID: 2100000, guid: 4f95ccb0b32142ef84990b6439576f9f, type: 2}
+  - {fileID: 2100000, guid: 7cacb605db5541b2b1814626206c88f1, type: 2}
+  - {fileID: 2100000, guid: f5532e8a81134f2baffa72be6752db5c, type: 2}
+  - {fileID: 2100000, guid: f1c9e1a989c94a45a64030093f9582f9, type: 2}
+  - {fileID: 2100000, guid: 18152ba6f634499da3331c0bc410ec88, type: 2}
+  - {fileID: 2100000, guid: bf85a8140a9c4b3aa225465a73e65ce1, type: 2}
+  - {fileID: 2100000, guid: 976e9f11cf79454197fab0688a00ba38, type: 2}
+  - {fileID: 2100000, guid: ee98266377524c1eb40e0f9eca2b05e1, type: 2}
+  - {fileID: 2100000, guid: 2e6723c39c174d48bf7f66b865f15053, type: 2}
+  - {fileID: 2100000, guid: b96b1bcd0f6b4d1eaa9dcf9a3291958b, type: 2}
+  - {fileID: 2100000, guid: f3c53a70bae241bca7ab6f8d80d82de0, type: 2}
+  - {fileID: 2100000, guid: 3b2a5e0b44d943f5a3058c237c5c144b, type: 2}
+  - {fileID: 2100000, guid: cca6e48c8c8f4591af25403176045670, type: 2}
+  - {fileID: 2100000, guid: 37c8e2fbfb7a4dc1a5cd43b0524903e7, type: 2}
+  - {fileID: 2100000, guid: 0aec8b8f68264343b3ca4f0031a5dd80, type: 2}
+  - {fileID: 2100000, guid: 7be4ba87e7e14d91abfb787cbca93f94, type: 2}
+  - {fileID: 2100000, guid: 764a1fa231ba40f4996786de4bd763ed, type: 2}
+  - {fileID: 2100000, guid: bdc21b0f2fea4102acdd0d76d5815a5c, type: 2}
+  - {fileID: 2100000, guid: ea08e2c0b01948519623d9106e3b07fd, type: 2}
+  - {fileID: 2100000, guid: 6d4648e4130b429eb3a38f8109243001, type: 2}
+  - {fileID: 2100000, guid: 185e2ea2e28c41498a34f36036a4f294, type: 2}
+  - {fileID: 2100000, guid: bdefaff814b84da2be07f8a315d52fad, type: 2}
+  - {fileID: 2100000, guid: a790beb5c0754ecc8a14b6ef707725c3, type: 2}
+  - {fileID: 2100000, guid: e4b435e0c7f34fd3bfc41dfe6a2adea7, type: 2}
+  - {fileID: 2100000, guid: 7e6ebe226b8a498989214cfc8514df0e, type: 2}
+  - {fileID: 2100000, guid: af2df587e82f4357be29e8d781886e82, type: 2}
+  - {fileID: 2100000, guid: df3914e78e364f77a93872a3f4854660, type: 2}
+  - {fileID: 2100000, guid: d148e531cbcf4d079395abc7f0000518, type: 2}
+  - {fileID: 2100000, guid: 68f809a6036f42648bb3a06839387af3, type: 2}
+  - {fileID: 2100000, guid: 3540a3d4936348b5bf2741274301c113, type: 2}
+  - {fileID: 2100000, guid: 1c178224835d4af79885be2838b460db, type: 2}
+  - {fileID: 2100000, guid: be26ff78deff46d19824bf462ed465f9, type: 2}
+  - {fileID: 2100000, guid: 51b6d5e2bf724c2d90623cd3059e3371, type: 2}
+  entryPosition: {x: 50.5, y: 0, z: 19.5}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: ad76990d490a4c5bb4a1ab45b59a549a, type: 3}
+  - {fileID: 5151358256163527516, guid: 669b523089fc4d56ab64e8a15b14d5de, type: 3}
+  residentCells:
+  - {x: 53, y: 12}
+  - {x: 46, y: 15}
+  furnitureFootprints:
+  - serializedVersion: 2
+    x: 8.98438
+    y: 9
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 8.98438
+    y: 17
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 21.9844
+    y: 9
+    width: 0.03125
+    height: 5.75
+  - serializedVersion: 2
+    x: 21.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 22.9844
+    y: 9
+    width: 0.03125
+    height: 5.75
+  - serializedVersion: 2
+    x: 22.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 35.9844
+    y: 9
+    width: 0.03125
+    height: 5.75
+  - serializedVersion: 2
+    x: 35.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 36.9844
+    y: 9
+    width: 0.03125
+    height: 5.75
+  - serializedVersion: 2
+    x: 36.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 55.9844
+    y: 9
+    width: 0.03125
+    height: 2
+  - serializedVersion: 2
+    x: 55.9844
+    y: 14
+    width: 0.03125
+    height: 0.75
+  - serializedVersion: 2
+    x: 55.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 56.9844
+    y: 9
+    width: 0.03125
+    height: 5.75
+  - serializedVersion: 2
+    x: 56.9844
+    y: 16.25
+    width: 0.03125
+    height: 2.75
+  - serializedVersion: 2
+    x: 69.9844
+    y: 9
+    width: 0.03125
+    height: 10
+  - serializedVersion: 2
+    x: 9
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 13
+    y: 8.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 18
+    y: 8.98438
+    width: 1
+    height: 0.03125
+  - serializedVersion: 2
+    x: 20
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 23
+    y: 8.98438
+    width: 7
+    height: 0.03125
+  - serializedVersion: 2
+    x: 34
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 37
+    y: 8.98438
+    width: 4
+    height: 0.03125
+  - serializedVersion: 2
+    x: 45
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 54
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 57
+    y: 8.98438
+    width: 4
+    height: 0.03125
+  - serializedVersion: 2
+    x: 61
+    y: 8
+    width: 3
+    height: 0.5
+  - serializedVersion: 2
+    x: 64
+    y: 8.98438
+    width: 3
+    height: 0.03125
+  - serializedVersion: 2
+    x: 68
+    y: 8.98438
+    width: 2
+    height: 0.03125
+  - serializedVersion: 2
+    x: 41
+    y: 9
+    width: 4
+    height: 0.5
+  - serializedVersion: 2
+    x: 47
+    y: 9
+    width: 4
+    height: 0.5
+  - serializedVersion: 2
+    x: 51
+    y: 9
+    width: 3
+    height: 1
+  - serializedVersion: 2
+    x: 26
+    y: 9
+    width: 2
+    height: 0.5
+  - serializedVersion: 2
+    x: 55
+    y: 11
+    width: 1
+    height: 3
+  - serializedVersion: 2
+    x: 8
+    y: 8
+    width: 1
+    height: 12
+  - serializedVersion: 2
+    x: 70
+    y: 8
+    width: 1
+    height: 12
+  - serializedVersion: 2
+    x: 22
+    y: 8
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 22
+    y: 19
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 36
+    y: 8
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 36
+    y: 19
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 56
+    y: 8
+    width: 1
+    height: 1
+  - serializedVersion: 2
+    x: 56
+    y: 19
+    width: 1
+    height: 1
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 40
+      y: 12
+      width: 5
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 47
+      y: 12
+      width: 5
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 28
+      y: 13
+      width: 3
+      height: 2
+    top: 0.75
+  - footprint:
+      serializedVersion: 2
+      x: 41
+      y: 11.25
+      width: 1
+      height: 0.75
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 41
+      y: 11
+      width: 1
+      height: 0.25
+    top: 1.25
+  - footprint:
+      serializedVersion: 2
+      x: 43
+      y: 11.25
+      width: 1
+      height: 0.75
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 43
+      y: 11
+      width: 1
+      height: 0.25
+    top: 1.25
+  - footprint:
+      serializedVersion: 2
+      x: 48
+      y: 11.25
+      width: 1
+      height: 0.75
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 48
+      y: 11
+      width: 1
+      height: 0.25
+    top: 1.25
+  - footprint:
+      serializedVersion: 2
+      x: 50
+      y: 11.25
+      width: 1
+      height: 0.75
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 50
+      y: 11
+      width: 1
+      height: 0.25
+    top: 1.25
+  - footprint:
+      serializedVersion: 2
+      x: 29
+      y: 12.25
+      width: 1
+      height: 0.75
+    top: 0.5
+  - footprint:
+      serializedVersion: 2
+      x: 29
+      y: 12
+      width: 1
+      height: 0.25
+    top: 1.25
+  - footprint:
+      serializedVersion: 2
+      x: 48.125
+      y: 18.125
+      width: 0.75
+      height: 0.75
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 52.125
+      y: 18.125
+      width: 0.75
+      height: 0.75
+    top: 1.5
+  - footprint:
+      serializedVersion: 2
+      x: 39
+      y: 11
+      width: 1
+      height: 1
+    top: 1
+  - footprint:
+      serializedVersion: 2
+      x: 31
+      y: 13
+      width: 2
+      height: 1
+    top: 1
+  - footprint:
+      serializedVersion: 2
+      x: 11
+      y: 9
+      width: 2
+      height: 0.499968
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 14
+      y: 9
+      width: 4
+      height: 0.499968
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 21.499968
+      y: 10
+      width: 0.500032
+      height: 2
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 30
+      y: 9
+      width: 1
+      height: 0.499968
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 31
+      y: 9
+      width: 1
+      height: 0.499968
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 32
+      y: 9
+      width: 1
+      height: 0.499968
+    top: 2
+  - footprint:
+      serializedVersion: 2
+      x: 33
+      y: 9
+      width: 1
+      height: 0.499968
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 35.499968
+      y: 10
+      width: 0.500032
+      height: 2
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 69.499968
+      y: 10
+      width: 0.500032
+      height: 2
+    top: 3
+  - footprint:
+      serializedVersion: 2
+      x: 25
+      y: 11
+      width: 1
+      height: 1
+    top: 1
+  - footprint:
+      serializedVersion: 2
+      x: 39
+      y: 11
+      width: 1
+      height: 1
+    top: 1
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

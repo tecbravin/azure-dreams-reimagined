@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc835b58d4d157479143546f235eb48, type: 3}
+  m_Name: Mossling
+  m_EditorClassIdentifier: Assembly-CSharp::AzureDreamsReimagined.ActorDefinition
+  _displayName: Mossling
+  _kind: 3
+  _maxHealth: 12
+  _attackDamage: 3
+  _moveDelay: 0.16
+  _tint: {r: 0.82, g: 1, b: 0.89, a: 1}
+  _albedoTexture: {fileID: 2800000, guid: 0947f8f072bf09a41bd8c82b7bb32779, type: 3}

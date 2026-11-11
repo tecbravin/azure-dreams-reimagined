@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Racetrack Course
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_37_racetrack_course
+  displayName: Racetrack Course
+  geometry: {fileID: 4900000, guid: 21ce10c3e21d45cbb592c9b352362e39, type: 3}
+  heights: {fileID: 4900000, guid: d3301ece7b9e487f8c6563cca3db8876, type: 3}
+  materials:
+  - {fileID: 2100000, guid: b9996739b99c4db3b25f062af230f62c, type: 2}
+  - {fileID: 2100000, guid: ca66932e524649ed9bb26174b1f7fdf3, type: 2}
+  - {fileID: 2100000, guid: a376db29768f45e1aa7ab887bff5d1e2, type: 2}
+  - {fileID: 2100000, guid: b4d0a6234076409bb02961a071ee372f, type: 2}
+  - {fileID: 2100000, guid: df3784c2d1f94b148adecab353b2f2c7, type: 2}
+  - {fileID: 2100000, guid: a9a2923748664f1fba1497701e08aa8d, type: 2}
+  - {fileID: 2100000, guid: 39bf410ea4fd48648fe2a633f2c7d66f, type: 2}
+  - {fileID: 2100000, guid: ba648bceaf22480892bd78bfcc49d37f, type: 2}
+  - {fileID: 2100000, guid: e1c8a0e349464d4faaa2387352e3cc74, type: 2}
+  - {fileID: 2100000, guid: 326cbd62b4d8428a945a559fb523fa99, type: 2}
+  - {fileID: 2100000, guid: a4ff8e06b6414700ab4d029aae495430, type: 2}
+  - {fileID: 2100000, guid: 750578e7df10440fab4f650de52085af, type: 2}
+  - {fileID: 2100000, guid: 46936c08edf747b09b50f6a7913893f2, type: 2}
+  - {fileID: 2100000, guid: a0b5f25d66764e6284449e43aba13030, type: 2}
+  entryPosition: {x: 45, y: 0, z: 27}
+  residentPrefabs: []
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

@@ -1,0 +1,406 @@
+{
+  "pages": [
+    {
+      "number": 1,
+      "name": "Kewne",
+      "description": "A KEWNE is a dragon which was popular several hundred years ago for personal protection. However, it became extinct due to its poor reproductive ability. The name comes from their cry that sounds like \"KEWNE.\"",
+      "portrait": "portrait_01",
+      "descriptionPtBr": "O Kewne é um dragão que, séculos atrás, era muito procurado para proteção pessoal. A espécie foi extinta por ter dificuldade de se reproduzir. Seu nome vem do grito que soa como “Kewne”.",
+      "namePtBr": "Kewne"
+    },
+    {
+      "number": 2,
+      "name": "Dragon",
+      "description": "Its fame and strength won the name, \"King of the Monsters\". A wild dragon usually lives deep in a cave. Its intensely hot breath and hard scales distinguish it. It is extremely difficult for a human to raise one.",
+      "portrait": "portrait_02",
+      "descriptionPtBr": "A fama e a força do Dragon lhe renderam o título de “Rei dos Monstros”. Na natureza, vive no fundo de cavernas. Seu hálito abrasador e suas escamas duras o distinguem dos demais. É muito difícil para um humano criá-lo.",
+      "namePtBr": "Dragon"
+    },
+    {
+      "number": 3,
+      "name": "Kid",
+      "description": "The word \"KID\" in the Monsbaiya Region means an infant dragon. Compared to a dragon, a kid's magical power is weaker. Although it can be tamed by the person who hatched its egg, it is still difficult to raise one since it has a severe temper and it only eats metals.",
+      "portrait": "portrait_03",
+      "descriptionPtBr": "Na região de Monsbaiya, “Kid” significa filhote de dragão. Sua magia é mais fraca que a de um Dragon. Embora possa ser domado por quem chocou seu ovo, é difícil de criar, pois tem um temperamento agressivo e só come metais.",
+      "namePtBr": "Kid"
+    },
+    {
+      "number": 4,
+      "name": "Ifrit",
+      "description": "This is a malevolent deity that rules fire. It is a spirit of fire when it obtains a high magical power. In its body is a compressed flame, and its punch is said to melt even steel. It is highly loyal, absolutely obedient to it master, but will never listen to others.",
+      "portrait": "portrait_04",
+      "descriptionPtBr": "Ifrit é uma divindade maligna que governa o fogo. Surge quando um espírito de fogo adquire grande poder mágico. Dizem que a chama comprimida em seu corpo lhe dá um soco capaz de derreter aço. É fiel ao seu mestre e só obedece a ele.",
+      "namePtBr": "Ifrit"
+    },
+    {
+      "number": 5,
+      "name": "Flame",
+      "description": "A kind of a spirit of fire born from sparks. It is a common monster which can be spotted anywhere, and is used to build a fire in the Monsbaiya Region. Its appearance looks like a fire dressed in armor. Its knight-like appearance represents its loyalty to its master.",
+      "portrait": "portrait_05",
+      "descriptionPtBr": "Flame é um espírito de fogo que nasce de faíscas. É comum e pode ser encontrado em qualquer lugar. Em Monsbaiya, é usado para acender fogueiras. Parece uma chama vestida de armadura, e seu aspecto de cavaleiro reflete sua lealdade ao mestre.",
+      "namePtBr": "Flame"
+    },
+    {
+      "number": 6,
+      "name": "Grineut",
+      "description": "A GRINUET is a transformed GRIFFON which has lived with humans for an extended period of time. It is sometimes called a GRIFONUTE. Its wings are metamorphosed into arms, and therefore it cannot fly anymore. Still, its strength and courage remain strong.",
+      "portrait": "portrait_06",
+      "descriptionPtBr": "O Grineut, também chamado de Grifonute, é um Griffon que viveu muito tempo entre humanos e se transformou. Suas asas viraram braços. Ele perdeu a capacidade de voar, mas conservou a força e a coragem.",
+      "namePtBr": "Grineut"
+    },
+    {
+      "number": 7,
+      "name": "Griffon",
+      "description": "This is a monster that originally lived in nests in a rocky mountain area. It looks down from the top of a cliff for its prey. It will dive and attack with its sharp claws even if its prey is several times larger than itself. It has both strength and courage.",
+      "portrait": "portrait_07",
+      "descriptionPtBr": "O Griffon fazia seus ninhos em montanhas rochosas. Do alto dos penhascos, observa suas presas e mergulha para atacá-las com garras afiadas, mesmo quando são várias vezes maiores que ele. É forte e corajoso.",
+      "namePtBr": "Griffon"
+    },
+    {
+      "number": 8,
+      "name": "Troll",
+      "description": "This is a monster, curious about everything, and is very quick to learn how to use the tools humans use just by observing them. However, they can be a threat to travelers going over the mountains.",
+      "portrait": "portrait_08",
+      "descriptionPtBr": "O Troll é curioso e aprende rapidamente a usar ferramentas só de observar os humanos. Pode ser uma ameaça para quem atravessa as montanhas.",
+      "namePtBr": "Troll"
+    },
+    {
+      "number": 9,
+      "name": "Baloon",
+      "description": "A monster which floats in the air without its own nest. Its shape resembles a balloon. A balloon-like portion is its exposed lung which enables it to elevate by inhaling air. It is sturdier than it looks, and is difficult to be penetrated.",
+      "portrait": "portrait_09",
+      "descriptionPtBr": "O Baloon flutua pelo ar e não tem ninho. A parte que lembra um balão é seu pulmão exposto, que ele enche de ar para subir. É mais resistente do que parece e difícil de perfurar.",
+      "namePtBr": "Baloon"
+    },
+    {
+      "number": 10,
+      "name": "Volcano",
+      "description": "This monster lives on a volcano in a group. It is basically omnivorous, but favors lava. Once the lava is all consumed, the entire group moves onto another volcano. It secretes the stored lava from its behind to build a nest. Its temper is violent, and is considered to be dangerous.",
+      "portrait": "portrait_10",
+      "descriptionPtBr": "O Volcano vive em grupos nos vulcões. É onívoro, mas prefere lava. Quando ela acaba, o grupo inteiro se muda para outro vulcão. Expele pela parte traseira a lava que armazenou para construir o ninho. Seu temperamento violento o torna perigoso.",
+      "namePtBr": "Volcano"
+    },
+    {
+      "number": 11,
+      "name": "Barong",
+      "description": "A strange monster that consumes any substance, transforms it inside its body after ingesting enough nutrients, and then vomits out a new substance. Its internal constitution is currently unknown. It does not live in a pack, and is a loner.",
+      "portrait": "portrait_11",
+      "descriptionPtBr": "O Barong ingere qualquer substância, absorve os nutrientes de que precisa e depois vomita uma substância diferente. Ninguém sabe como funciona seu organismo. Vive sozinho.",
+      "namePtBr": "Barong"
+    },
+    {
+      "number": 12,
+      "name": "Weadog",
+      "description": "A kind of monster that has been protecting the Monster Tower since the days of antiquity. Why it protects the tower is unknown. It is skilled in taming other monsters, and is said to be capable of pacifying even the most atrocious monsters at once.",
+      "portrait": "portrait_12",
+      "descriptionPtBr": "O Weadog protege a Torre dos Monstros desde a antiguidade, por motivos desconhecidos. É hábil em domar outras criaturas. Dizem que consegue acalmar de imediato até os monstros mais ferozes.",
+      "namePtBr": "Weadog"
+    },
+    {
+      "number": 13,
+      "name": "Naplass",
+      "description": "Naplass spends most of the day napping. Its hearing is so sensitive that a loud noise will wake it and provoke an angry attack.",
+      "portrait": "portrait_13",
+      "descriptionPtBr": "O Naplass passa a maior parte do dia cochilando. Sua audição é tão sensível que um barulho alto o acorda e o faz atacar com fúria.",
+      "namePtBr": "Naplass"
+    },
+    {
+      "number": 14,
+      "name": "Killer",
+      "description": "This monster has a giant axe-like hump on each arm. The bumps used to be nails in ancient times, but are thought to have evolved to their present shape to cope with their fighting nature and environment. It can smash rocks with its awesome destructive power.",
+      "portrait": "portrait_14",
+      "descriptionPtBr": "O Killer tem uma protuberância em forma de machado em cada braço. Acredita-se que essas estruturas tenham evoluído de unhas para se adaptar ao ambiente e ao combate. Com elas, consegue despedaçar rochas.",
+      "namePtBr": "Killer"
+    },
+    {
+      "number": 15,
+      "name": "Tyrant",
+      "description": "A violent monster also known as a \"Desert Ruffian.\" It is extremely greedy, and is quick to jump to any feed given it. Male TYRANT fight duels over females. Once this monster starts rampaging, even the most famous tamer cannot stop it.",
+      "portrait": "portrait_15",
+      "descriptionPtBr": "O Tyrant é violento e conhecido como “Valentão do Deserto”. É guloso e avança sobre qualquer alimento que lhe ofereçam. Os machos duelam pelas fêmeas. Quando começa a atacar sem controle, nem o mais famoso domador consegue detê-lo.",
+      "namePtBr": "Tyrant"
+    },
+    {
+      "number": 16,
+      "name": "Maximum",
+      "description": "A MAXIMUM was born in the Monster Tower, the strongest of a completely new species. Since it lives near the top floor of the tower, no one has seen it in the past except the famous Beastmaster \"Guy\" from Monsbaiya.",
+      "portrait": "portrait_16",
+      "descriptionPtBr": "O Maximum nasceu na Torre dos Monstros e é o mais forte de uma espécie inteiramente nova. Vive perto do último andar e, no passado, só o famoso domador Guy, de Monsbaiya, chegou a vê-lo.",
+      "namePtBr": "Maximum"
+    },
+    {
+      "number": 17,
+      "name": "Saber",
+      "description": "A grown up SNOWMAN is called a SABER. Its name comes from its long sword-like canines. The teeth, however, don't seem to give such edge in hunting prey, and SABERS mostly use their strength for hunting.",
+      "portrait": "portrait_17",
+      "descriptionPtBr": "Um Snowman adulto é chamado de Saber. Seu nome vem dos longos caninos parecidos com espadas. Eles parecem ajudar pouco na caça, pois o Saber usa sobretudo sua força para abater as presas.",
+      "namePtBr": "Saber"
+    },
+    {
+      "number": 18,
+      "name": "Snowman",
+      "description": "This monster lives in the coldest and snowiest of mountains. Its body is covered with hair, protecting it from the cold. The monster is easily tamed, but has a tough life force that allows it to survive in severe weather condition, as well as the power of a wild monster.",
+      "portrait": "portrait_18",
+      "descriptionPtBr": "O Snowman vive nas montanhas mais frias e nevadas. Seus pelos o protegem do frio. É fácil de domar, mas tem a resistência para sobreviver a condições severas e a força de um monstro selvagem.",
+      "namePtBr": "Snowman"
+    },
+    {
+      "number": 19,
+      "name": "Ashra",
+      "description": "An ARACHNE metamorphoses into this figure over a long period of time. It has 3 faces and 6 arms, and has a powerful attacking force. Because of its belligerent nature, it is often worshiped among warriors as a god of war. It only appears to brave boys.",
+      "portrait": "portrait_19",
+      "descriptionPtBr": "Uma Arachne leva muito tempo para se transformar em Ashra. Com três rostos e seis braços, tem grande poder de ataque. Guerreiros a veneram como deusa da guerra por seu temperamento combativo. Só aparece para garotos corajosos.",
+      "namePtBr": "Ashra"
+    },
+    {
+      "number": 20,
+      "name": "Arachne",
+      "description": "ARACHNE is a Monster which has 8 limbs, resembling a spider. At water's edge, a typical habitat of ARACHNES, one can often see an ARACHNE weaving a spider's web on a tree to hunt prey. It eats prey that are larger than itself, but seldom attacks humans.",
+      "portrait": "portrait_20",
+      "descriptionPtBr": "A Arachne tem oito membros e lembra uma aranha. Perto da água, seu hábitat típico, pode ser vista tecendo teias nas árvores para caçar. Alimenta-se de presas maiores que ela e raramente ataca humanos.",
+      "namePtBr": "Arachne"
+    },
+    {
+      "number": 21,
+      "name": "Battnel",
+      "description": "A Battnel is a Nyuel raised for battles. Since Nyuel has superior adaptability, it will transform into this figure as long as it keeps fighting. However, as its natural fighting power is poor, it is difficult to raise one without it being killed in battle.",
+      "portrait": "portrait_21",
+      "descriptionPtBr": "Um Battnel é um Nyuel criado para a batalha. A grande capacidade de adaptação do Nyuel permite que se transforme se continuar lutando. Como sua força natural é pequena, é difícil criá-lo sem que morra em combate.",
+      "namePtBr": "Battnel"
+    },
+    {
+      "number": 22,
+      "name": "Nyuel",
+      "description": "A domestic monster used for traveling through desert and for pulling carriages. it is very friendly to people and even a wild one is not much a treat. It can adapt to almost any environment, and transforms differently depending on how it's raised. The monster represents the personality of its master.",
+      "portrait": "portrait_22",
+      "descriptionPtBr": "O Nyuel é um monstro domesticado, usado para atravessar desertos e puxar carroças. É dócil, e mesmo os selvagens oferecem pouco perigo. Adapta-se a quase todo ambiente e se transforma conforme é criado. Acaba refletindo a personalidade de seu mestre.",
+      "namePtBr": "Nyuel"
+    },
+    {
+      "number": 23,
+      "name": "Pulunpa",
+      "description": "The weakest and most timid kind of monster. It used to live on prairies and in deserts a long time ago, but now lives in a city since it is such easy prey for other monsters. One can be sometimes seen in a back alley.",
+      "portrait": "portrait_23",
+      "descriptionPtBr": "O Pulunpa é o mais fraco e tímido dos monstros. Antes vivia em pradarias e desertos. Por ser uma presa fácil, passou a viver na cidade, onde às vezes pode ser visto em becos.",
+      "namePtBr": "Pulunpa"
+    },
+    {
+      "number": 24,
+      "name": "U-Boat",
+      "description": "A monster submerged in water like a submarine. The periscope-like part is an eye, and it also has countless small holes from which it inhales air from above the water. It mainly feeds on small fish. In the Monster Tower, it can also go underground because the ground has some magical properties.",
+      "portrait": "portrait_24",
+      "descriptionPtBr": "O U-Boat fica submerso como um submarino. A estrutura parecida com um periscópio é seu olho. Ele respira por inúmeros orifícios e se alimenta sobretudo de peixes pequenos. Na Torre dos Monstros, consegue mergulhar no solo por causa das propriedades mágicas do terreno.",
+      "namePtBr": "U-Boat"
+    },
+    {
+      "number": 25,
+      "name": "Blume",
+      "description": "Although it is a insectivorous plant, it lays eggs. Its male flowers release pollen, and the pollinated female flowers lay eggs. The pollen have a special scent that control monsters as they wish. The purpose probably is to make the monsters carry the pollen. Its flower language is \"indiscretions of youth\".",
+      "portrait": "portrait_25",
+      "descriptionPtBr": "A Blume é uma planta insetívora que põe ovos. As flores masculinas soltam pólen e as femininas põem ovos depois de polinizadas. O perfume do pólen controla outros monstros, provavelmente para fazê-los transportá-lo. Na linguagem das flores, representa as “imprudências da juventude”.",
+      "namePtBr": "Blume"
+    },
+    {
+      "number": 26,
+      "name": "Manoeva",
+      "description": "An amoeba-like single cell life, the MANOEVA behaves as its instincts command. It is capable of transforming into the shape of what it has seen and is capable of dividing. It attacks animals that approach marshes by pulling them into the marsh, and absorbing them.",
+      "portrait": "portrait_26",
+      "descriptionPtBr": "A Manoeva é um ser unicelular parecido com uma ameba. Age por instinto, pode se dividir e imitar a forma do que viu. Quando um animal se aproxima do pântano, ela o arrasta para dentro e o absorve.",
+      "namePtBr": "Manoeva"
+    },
+    {
+      "number": 27,
+      "name": "Kraken",
+      "description": "A mollusk-like monster, resembling a squid. It surfaces in the sea, and occasionally attack ships. Its entire body is electrically charged and generates intense electricity when it senses danger. Since the electric current amplifies as it travels through metals, use of weapons resistant to electricity, or attacking from a long distance is recommended when fighting against one.",
+      "portrait": "portrait_27",
+      "descriptionPtBr": "O Kraken lembra uma lula. Sobe à superfície e às vezes ataca navios. Seu corpo é eletricamente carregado e produz descargas intensas ao detectar perigo. Como a corrente se intensifica ao passar por metais, recomenda-se lutar à distância ou com armas resistentes à eletricidade.",
+      "namePtBr": "Kraken"
+    },
+    {
+      "number": 28,
+      "name": "Viper",
+      "description": "A monster shaped like a viper and a human combined. It hides in a dense forest, and attacks invaders. Its claws and fangs have poisons that paralyze nerves, and the power of the attacker is weakened by it. This poison cannot be neutralized with the common Antidote Herb. Its favorite food is eggs, gulping them down no matter how big they may be.",
+      "portrait": "portrait_28",
+      "descriptionPtBr": "O Viper lembra uma mistura de víbora com humano. Esconde-se na mata fechada e ataca invasores. Suas garras e presas carregam veneno que paralisa os nervos e enfraquece quem o enfrenta. A erva antídoto comum não funciona contra ele. Engole ovos inteiros, por maiores que sejam.",
+      "namePtBr": "Viper"
+    },
+    {
+      "number": 29,
+      "name": "Mandara",
+      "description": "Incredible monsters that attack villages and cities in a group, and then live in the ruins. And yet, they are very territorial. They have their own language, incomprehensible to humans. Spotted patterns on their body can make humans go dizzy and fall over.",
+      "portrait": "portrait_29",
+      "descriptionPtBr": "As Mandaras atacam cidades e vilas em grupo e passam a viver nas ruínas. São muito territoriais e falam uma língua incompreensível para os humanos. As manchas de seu corpo podem causar tontura e fazer as pessoas caírem.",
+      "namePtBr": "Mandara"
+    },
+    {
+      "number": 30,
+      "name": "Glacier",
+      "description": "Its characteristics is the crystal shaped wart on its back, which helps to camouflage itself in its habitat : icebergs. Despite its frightful appearance, it is timid. It exhales air that is chilled inside its body, and creates ice walls to protect itself.",
+      "portrait": "portrait_30",
+      "descriptionPtBr": "O Glacier tem uma verruga em forma de cristal nas costas, que o camufla entre os icebergs. Apesar da aparência assustadora, é tímido. Para se defender, exala ar resfriado no corpo e forma paredes de gelo.",
+      "namePtBr": "Glacier"
+    },
+    {
+      "number": 31,
+      "name": "Takopoo",
+      "description": "It is often seen in a tidal pool on a beach, or hanging along rocks in shallow waters. What differentiates it from an ordinary octopus is that its ink comes out as a ball rather than liquid, as it tightly compresses the ink inside its body. It is edible.",
+      "portrait": "portrait_31",
+      "descriptionPtBr": "O Takopoo costuma aparecer em poças de maré ou agarrado às rochas em águas rasas. Ao contrário de um polvo comum, comprime a tinta dentro do corpo e a solta em forma de bola. É comestível.",
+      "namePtBr": "Takopoo"
+    },
+    {
+      "number": 32,
+      "name": "Mushrom",
+      "description": "A stationary monster clinging onto a decayed tree trunk with radiating foot-shaped roots. It does not harm people, or harbor any malicious intent. Still, it is hated as it glares at anything that comes close to them. It is used as pins in bowling alleys.",
+      "portrait": "portrait_32",
+      "descriptionPtBr": "O Mushrom fica preso a um tronco apodrecido, de onde irradiam raízes em forma de pés. Não faz mal às pessoas, mas seu olhar fixo incomoda quem se aproxima. É usado como pino nas pistas de boliche.",
+      "namePtBr": "Mushrom"
+    },
+    {
+      "number": 33,
+      "name": "Death",
+      "description": "An adult CLOWN tunrs into this shape. Its cruelty does not change, and is feared by travelers. Despite its doll-like appearance, swinging a sickle with an expressionless face gives it an eeriz aura.",
+      "portrait": "portrait_33",
+      "descriptionPtBr": "Death é a forma adulta do Clown e continua tão cruel quanto ele. Apesar de parecer um boneco, seu rosto impassível enquanto empunha uma foice assusta quem viaja pela região.",
+      "namePtBr": "Death"
+    },
+    {
+      "number": 34,
+      "name": "Clown",
+      "description": "A monster that lives in a windy place, mainly in ravines. It hovers in the air in high speed, and cuts off the neck of a prey with a large sickle. Its rather innocent look conceals its cruelty. It is also called \"Devil of the Wind,\" and is feared by people who travel through the valley.",
+      "portrait": "portrait_34",
+      "descriptionPtBr": "O Clown vive em lugares ventosos, principalmente em desfiladeiros. Voa a alta velocidade e usa uma grande foice para cortar o pescoço das presas. Seu aspecto inocente esconde a crueldade. Viajantes o temem e o chamam de “Diabo do Vento”.",
+      "namePtBr": "Clown"
+    },
+    {
+      "number": 35,
+      "name": "Univern",
+      "description": "A grow Unicorn is colled a Univern. Its wings are solid enough to support its body weight, and it can fly freely in the sky. The bond between parent and offspring is strong, and the parent will be protective to the death.",
+      "portrait": "portrait_35",
+      "descriptionPtBr": "Um Unicorn adulto se torna um Univern. Suas asas ficam fortes o suficiente para sustentar seu peso e ele voa livremente. O vínculo com os filhotes é tão forte que os pais os protegem até a morte.",
+      "namePtBr": "Univern"
+    },
+    {
+      "number": 36,
+      "name": "Unicorn",
+      "description": "This monster has horizontal stripes all over its body. It spends its childhood in a nest built by its parents on a tall tree. Since its wings are too weak to fly, it is fed by the parents. It lives exactly like a bird chick, but it fight bravely against invaders.",
+      "portrait": "portrait_36",
+      "descriptionPtBr": "O Unicorn tem listras horizontais pelo corpo. Passa a infância no ninho que os pais constroem no alto de uma árvore. Suas asas ainda são fracas demais para voar, então os pais o alimentam. Mesmo filhote, enfrenta invasores com coragem.",
+      "namePtBr": "Unicorn"
+    },
+    {
+      "number": 37,
+      "name": "Metal",
+      "description": "This is an aggressive Block monster. It is tempered in battles, and its guarder body is like a sharpened blade. It is a little more belligerent than Block, but still remains friendly to humans. It will be a rliable comrade in battle",
+      "portrait": "portrait_37",
+      "descriptionPtBr": "O Metal é um Block mais agressivo, endurecido pelo combate. Seu corpo protegido é como uma lâmina afiada. Ainda é amigável com humanos e se torna um companheiro confiável em batalha.",
+      "namePtBr": "Metal"
+    },
+    {
+      "number": 38,
+      "name": "Block",
+      "description": "This monster is a kind of magical one with a body made of metal. Although its movements ar slow and heavy, its body is extremely hard and resistant to conventional attack. Is is also very friendly to humans, and is indispensable for tasks requiring physical strength such as construction work.",
+      "portrait": "portrait_38",
+      "descriptionPtBr": "O Block é um ser mágico com corpo de metal. Seus movimentos são lentos e pesados, mas seu corpo é muito duro e resiste a ataques comuns. É dócil com humanos e indispensável em trabalhos que exigem força, como a construção civil.",
+      "namePtBr": "Block"
+    },
+    {
+      "number": 39,
+      "name": "Noise",
+      "description": "A music-loving cheerful monster. The sound of the flute it plays can block the magic of veteran magicians. However, even if you run to their recital in a forest, you should not be deceived by the cheerful music and approach carefully.",
+      "portrait": "portrait_39",
+      "descriptionPtBr": "O Noise é alegre e adora música. O som de sua flauta pode bloquear a magia de feiticeiros experientes. Se ouvir sua música alegre na floresta, aproxime-se com cuidado.",
+      "namePtBr": "Noise"
+    },
+    {
+      "number": 40,
+      "name": "Dreamin",
+      "description": "This monster used to ba a devil that gave nightmares to humans, but its magic is not as potent anymore and is just enough to put people to sleep. It is mainly nocturnal and active in darkness. It is so dazed in the daytime that it is difficult to believe it is a devil.",
+      "portrait": "portrait_40",
+      "descriptionPtBr": "O Dreamin já foi um demônio que provocava pesadelos. Sua magia perdeu força e hoje mal consegue fazer as pessoas dormirem. É ativo à noite e fica tão atordoado durante o dia que é difícil acreditar que seja um demônio.",
+      "namePtBr": "Dreamin"
+    },
+    {
+      "number": 41,
+      "name": "Cyclone",
+      "description": "This monster has a large eye. It is well known that anybody who meets its eyes cannot swallow any food. However, 12 years ago, it was discovered that if an anorexic person looks at the eye of a CYCLONE, the disease is cured. Since then, its eggs have sold like hot cakes to women on diets or to anorexic people.",
+      "portrait": "portrait_41",
+      "descriptionPtBr": "Quem encara o grande olho do Cyclone não consegue engolir nada. Há doze anos, descobriu-se que encará-lo podia curar a anorexia. Desde então, seus ovos passaram a vender muito entre pessoas em dieta ou com anorexia.",
+      "namePtBr": "Cyclone"
+    },
+    {
+      "number": 42,
+      "name": "Picket",
+      "description": "A monster that loves to steal. It steals anything wether it be money or other objects. It often hides in an ordinary bush, and if you step on it, your belongings could be stolen.",
+      "portrait": "portrait_42",
+      "descriptionPtBr": "O Picket adora roubar dinheiro e objetos. Costuma se esconder em arbustos comuns, pronto para furtar os pertences de quem pisa nele.",
+      "namePtBr": "Picket"
+    },
+    {
+      "number": 43,
+      "name": "Stealth",
+      "description": "This monster has a hard shell and a powerfull pair of scissors. It uses the scissors like a drill and moves by drilling holes in the ground. Since it live underground, its eyes have atrophied. Its shell act like the skin of a chameleon, wich can protect itself with its changing color.",
+      "portrait": "portrait_43",
+      "descriptionPtBr": "O Stealth tem uma carapaça dura e duas pinças fortes, que usa como broca para cavar. Como vive debaixo da terra, seus olhos atrofiaram. Sua carapaça muda de cor como a pele de um camaleão para protegê-lo.",
+      "namePtBr": "Stealth"
+    },
+    {
+      "number": 44,
+      "name": "Zu",
+      "description": "This monster is like a mix of lion and bird. It threatens its enemies with loud barking. Its barking seems to make the air tremble. It usually flies over wetlands like a dragonfly, but will persistently pursue prey, and expose its violent nature.",
+      "portrait": "portrait_44",
+      "descriptionPtBr": "O Zu lembra uma mistura de leão e ave. Ameaça seus inimigos com latidos tão fortes que parecem fazer o ar tremer. Costuma voar sobre áreas alagadas como uma libélula, mas persegue suas presas com persistência e violência.",
+      "namePtBr": "Zu"
+    },
+    {
+      "number": 45,
+      "name": "Garuda",
+      "description": "This is a kind of monster that has been protecting the Monster Tower since ancient times. Why they protect the tower is unknown. Its body is half machine and is thought to be a magical life form created by a magician. Once it detects danger, it attampts to divide the enemy.",
+      "portrait": "portrait_45",
+      "descriptionPtBr": "O Garuda protege a Torre dos Monstros desde a antiguidade, por motivos desconhecidos. Seu corpo é meio máquina e acredita-se que seja uma forma de vida mágica criada por um feiticeiro. Ao perceber perigo, tenta separar os inimigos.",
+      "namePtBr": "Garuda"
+    },
+    {
+      "number": 46,
+      "name": "Golem",
+      "description": "This monster has been protecting the Monster Tower since ancient times. Why they protect the tower is unknown. It is a magical life form created by a magician, has no emotion, and its executes commands of its creator alone. Its movements are slow and heavy, but it has a powerful defensive force and endures well.",
+      "portrait": "portrait_46",
+      "descriptionPtBr": "O Golem protege a Torre dos Monstros desde a antiguidade. Ninguém sabe por quê. Criado por um feiticeiro, não tem emoções e só obedece a seu criador. É lento e pesado, mas tem grande defesa e resistência.",
+      "namePtBr": "Golem"
+    },
+    {
+      "number": 47,
+      "name": "Maliling",
+      "description": "A quiet monster which likes to change into a ball and roll around. Since it cannot roll by itself once it is in the ball shape, it is often spotted at a top of a hill waiting for a wind to blow. As it generates electricity inside its body from rolling, it is also used as a generator.",
+      "portrait": "portrait_47",
+      "descriptionPtBr": "O Maliling é tranquilo e gosta de se transformar em bola e rolar. Como não consegue começar a rolar sozinho nessa forma, espera pelo vento no alto de colinas. O movimento produz eletricidade em seu corpo, por isso ele também é usado como gerador.",
+      "namePtBr": "Maliling"
+    },
+    {
+      "number": 48,
+      "name": "Soilclaw",
+      "description": "This is a subfamily of the monster, STEALTH. Since it eats garbage in the soil and converts it into energy within its body, this monster is overn used in vacuum machines. Since it is gentle, it does not get angry even if it is hit in a \"Hit-A-Mole\" game.",
+      "portrait": "portrait_48",
+      "descriptionPtBr": "O Soilclaw pertence a uma subfamília do Stealth. Come resíduos do solo e os transforma em energia, por isso é usado em aspiradores. É tão dócil que nem se irrita ao levar uma pancada no jogo de acertar a toupeira.",
+      "namePtBr": "Soilclaw"
+    },
+    {
+      "number": 49,
+      "name": "Hikewne",
+      "description": "This monster used to be an egg of KEWNE which was laid and left on the highest floor of the Monster Tower where the magical power is strongest. Over time, it has become \"the Ultimate Egg.\" The legend of \"The Ultimate Egg\" which is said to be capable of ruling the world, has now been unveiled in Monsbaiya.",
+      "portrait": "portrait_49",
+      "descriptionPtBr": "O Hikewne era um ovo de Kewne deixado no último andar da Torre dos Monstros, onde a magia é mais forte. Com o tempo, tornou-se o “Ovo Supremo”, que segundo a lenda pode dominar o mundo. Seu segredo enfim foi revelado em Monsbaiya.",
+      "namePtBr": "Hikewne"
+    },
+    {
+      "number": 50,
+      "name": "Frog",
+      "description": "The academic name is Monsbaiya Lazy Frog. Just like the name, it is a new species of frog discovered in Monsbaiya. Since it does not protect itself from enemies, it has earned this name.The frogs are traded frequently as an ingredient for magic.",
+      "portrait": "portrait_50",
+      "descriptionPtBr": "O sapo-preguiçoso de Monsbaiya é uma espécie descoberta na região. Ganhou esse nome porque não se defende de seus inimigos. É negociado com frequência como ingrediente de magia.",
+      "namePtBr": "Sapo"
+    }
+  ],
+  "sourceLanguage": "en",
+  "translationLanguage": "pt-BR"
+}

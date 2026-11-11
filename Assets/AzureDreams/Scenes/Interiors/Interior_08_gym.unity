@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  m_Layer: 0
+  m_Name: Gym
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadc554031c4deaa99bdfe29bb748b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  interiorId: Interior_08_gym
+  displayName: Gym
+  geometry: {fileID: 4900000, guid: 44f9c08a0bdf44e78013a45c51c70d74, type: 3}
+  heights: {fileID: 4900000, guid: 99aff16266514e67a2488fc29fc6ffe8, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 5ac196c0cefb44a3b1ccd64d6ea91f79, type: 2}
+  - {fileID: 2100000, guid: 1e8f98cd751c4eaf8b9f4fee1b91dafa, type: 2}
+  - {fileID: 2100000, guid: e3355342d1e34d79b35bfc0eeeab592d, type: 2}
+  - {fileID: 2100000, guid: 3d919032efde441caf70366f46148a4f, type: 2}
+  - {fileID: 2100000, guid: 2d37444a854342cea65bc362b50fbe7b, type: 2}
+  - {fileID: 2100000, guid: 340349a408744214884a0b3b828819dc, type: 2}
+  - {fileID: 2100000, guid: f5e7aa8c373a42d2a4321d3a5b0de976, type: 2}
+  - {fileID: 2100000, guid: a0cb5283ea34444e810513678e27ddf6, type: 2}
+  - {fileID: 2100000, guid: 15f11be8882b4e27a61a6960d64e89b7, type: 2}
+  - {fileID: 2100000, guid: 32bf535934ef4e488314f4823c73cd5b, type: 2}
+  - {fileID: 2100000, guid: 260345d4e9b643b092c6c7a6ad321df2, type: 2}
+  - {fileID: 2100000, guid: 2cae76925c84478eb7b5c1f3faaf7b2c, type: 2}
+  - {fileID: 2100000, guid: 62623c1568cb4225865363859116b82b, type: 2}
+  - {fileID: 2100000, guid: 19bacdace57b402dadb485b5c7fe901d, type: 2}
+  - {fileID: 2100000, guid: 5f8af5222cf445a7a68de398f93fb9e9, type: 2}
+  - {fileID: 2100000, guid: de0075c2c80945779179100547457254, type: 2}
+  entryPosition: {x: 14, y: 0, z: 13}
+  residentPrefabs: []
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}

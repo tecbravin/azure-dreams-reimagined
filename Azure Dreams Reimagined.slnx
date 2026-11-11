@@ -1,0 +1,10 @@
+﻿<Solution>
+  <Project Path="Unity.Timeline.csproj" />
+  <Project Path="AzureDreams.Editor.csproj" />
+  <Project Path="Unity.Timeline.Editor.csproj" />
+  <Project Path="AzureDreams.Runtime.csproj" />
+  <Project Path="AzureDreams.Reimagined.EditorTests.csproj" />
+  <Project Path="AzureDreams.Reimagined.PlayModeTests.csproj" />
+  <Project Path="AzureDreams.ArchitectTowerPlayModeTests.csproj" />
+  <Project Path="AzureDreams.CoderTower.Tests.csproj" />
+</Solution>

@@ -1,0 +1,1024 @@
+[
+  {
+    "retail_offset": "0x285c",
+    "retail_address": "0x8002f05c",
+    "text": "Wind",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x28e0",
+    "retail_address": "0x8002f0e0",
+    "text": "Water",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2968",
+    "retail_address": "0x8002f168",
+    "text": "Fire",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x29e8",
+    "retail_address": "0x8002f1e8",
+    "text": "Oleem",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2a98",
+    "retail_address": "0x8002f298",
+    "text": "Balloon",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2aec",
+    "retail_address": "0x8002f2ec",
+    "text": "Meat",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2ba4",
+    "retail_address": "0x8002f3a4",
+    "text": "B. Collar",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2eb4",
+    "retail_address": "0x8002f6b4",
+    "text": "B. Cape",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x2ff8",
+    "retail_address": "0x8002f7f8",
+    "text": "W. Medal",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x30c0",
+    "retail_address": "0x8002f8c0",
+    "text": "Gold",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3110",
+    "retail_address": "0x8002f910",
+    "text": "Silver",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3164",
+    "retail_address": "0x8002f964",
+    "text": "Copper",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x31d0",
+    "retail_address": "0x8002f9d0",
+    "text": "Bow Gun",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3244",
+    "retail_address": "0x8002fa44",
+    "text": "Hammer",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x32c4",
+    "retail_address": "0x8002fac4",
+    "text": "Troll",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3358",
+    "retail_address": "0x8002fb58",
+    "text": "Seraphim",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x33c0",
+    "retail_address": "0x8002fbc0",
+    "text": "Holy",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x33fc",
+    "retail_address": "0x8002fbfc",
+    "text": "Dark",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x345c",
+    "retail_address": "0x8002fc5c",
+    "text": "Vital",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3490",
+    "retail_address": "0x8002fc90",
+    "text": "Gulfwind",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x34cc",
+    "retail_address": "0x8002fccc",
+    "text": "Blizzard",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3534",
+    "retail_address": "0x8002fd34",
+    "text": "Steel",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x356c",
+    "retail_address": "0x8002fd6c",
+    "text": "Iron",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3648",
+    "retail_address": "0x8002fe48",
+    "text": "Seal",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3684",
+    "retail_address": "0x8002fe84",
+    "text": "Gulf",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x36c0",
+    "retail_address": "0x8002fec0",
+    "text": "Stream",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3700",
+    "retail_address": "0x8002ff00",
+    "text": "Scarlet",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3778",
+    "retail_address": "0x8002ff78",
+    "text": "Money",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x37dc",
+    "retail_address": "0x8002ffdc",
+    "text": "Paralyze",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3854",
+    "retail_address": "0x80030054",
+    "text": "Life",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x38b4",
+    "retail_address": "0x800300b4",
+    "text": "Trained",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x38fc",
+    "retail_address": "0x800300fc",
+    "text": "Wooden",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3960",
+    "retail_address": "0x80030160",
+    "text": "Live",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x39a0",
+    "retail_address": "0x800301a0",
+    "text": "Earth",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3a18",
+    "retail_address": "0x80030218",
+    "text": "Scorch",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3a68",
+    "retail_address": "0x80030268",
+    "text": "Diamond",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3b68",
+    "retail_address": "0x80030368",
+    "text": "Mirror",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3bb4",
+    "retail_address": "0x800303b4",
+    "text": "Leather",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3bf0",
+    "retail_address": "0x800303f0",
+    "text": "Wood",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3c08",
+    "retail_address": "0x80030408",
+    "text": "Rock",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3cb4",
+    "retail_address": "0x800304b4",
+    "text": "FROG",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3cf0",
+    "retail_address": "0x800304f0",
+    "text": "MAXIMUM",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3d2c",
+    "retail_address": "0x8003052c",
+    "text": "GOLEM",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3d64",
+    "retail_address": "0x80030564",
+    "text": "TYRANT",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3da4",
+    "retail_address": "0x800305a4",
+    "text": "GLACIER",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3de0",
+    "retail_address": "0x800305e0",
+    "text": "GARUDA",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3e1c",
+    "retail_address": "0x8003061c",
+    "text": "KILLER",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3e5c",
+    "retail_address": "0x8003065c",
+    "text": "MANDARA",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3ec0",
+    "retail_address": "0x800306c0",
+    "text": "NAPLASS",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3efc",
+    "retail_address": "0x800306fc",
+    "text": "VIPER",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3f38",
+    "retail_address": "0x80030738",
+    "text": "STEALTH",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3f74",
+    "retail_address": "0x80030774",
+    "text": "WEADOG",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3fb0",
+    "retail_address": "0x800307b0",
+    "text": "KRAKEN",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x3fec",
+    "retail_address": "0x800307ec",
+    "text": "PICKET",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4028",
+    "retail_address": "0x80030828",
+    "text": "BARONG",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4068",
+    "retail_address": "0x80030868",
+    "text": "MANOEVA",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x40a8",
+    "retail_address": "0x800308a8",
+    "text": "CYCLONE",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x40e8",
+    "retail_address": "0x800308e8",
+    "text": "VOLCANO",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4124",
+    "retail_address": "0x80030924",
+    "text": "BLUME",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4160",
+    "retail_address": "0x80030960",
+    "text": "DREAMIN",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4214",
+    "retail_address": "0x80030a14",
+    "text": "NOISE",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x424c",
+    "retail_address": "0x80030a4c",
+    "text": "TROLL",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4288",
+    "retail_address": "0x80030a88",
+    "text": "PULUNPA",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x42c4",
+    "retail_address": "0x80030ac4",
+    "text": "BLOCK",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x42fc",
+    "retail_address": "0x80030afc",
+    "text": "METAL",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4338",
+    "retail_address": "0x80030b38",
+    "text": "UNICORN",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x43b4",
+    "retail_address": "0x80030bb4",
+    "text": "CLOWN",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4424",
+    "retail_address": "0x80030c24",
+    "text": "NYUEL",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x44a0",
+    "retail_address": "0x80030ca0",
+    "text": "ARACHNE",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4518",
+    "retail_address": "0x80030d18",
+    "text": "SNOWMAN",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4590",
+    "retail_address": "0x80030d90",
+    "text": "GRIFFON",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x460c",
+    "retail_address": "0x80030e0c",
+    "text": "FLAME",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x46e0",
+    "retail_address": "0x80030ee0",
+    "text": "KEWNE",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x47b4",
+    "retail_address": "0x80030fb4",
+    "text": "Rust",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x48c0",
+    "retail_address": "0x800310c0",
+    "text": "Frog",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4988",
+    "retail_address": "0x80031188",
+    "text": "Poison",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x49d0",
+    "retail_address": "0x800311d0",
+    "text": "Blinder",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4a24",
+    "retail_address": "0x80031224",
+    "text": "Sleep",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4b0c",
+    "retail_address": "0x8003130c",
+    "text": "Chaos",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4be0",
+    "retail_address": "0x800313e0",
+    "text": "Warp",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4c2c",
+    "retail_address": "0x8003142c",
+    "text": "Slow",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4cc0",
+    "retail_address": "0x800314c0",
+    "text": "Enables eye sight.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4ce8",
+    "retail_address": "0x800314e8",
+    "text": "Roeam",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4d9c",
+    "retail_address": "0x8003159c",
+    "text": "Weakens attacking power.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4dd0",
+    "retail_address": "0x800315d0",
+    "text": "Harash",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4dec",
+    "retail_address": "0x800315ec",
+    "text": "Herb that freezes motion.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4e2c",
+    "retail_address": "0x8003162c",
+    "text": "Toxic herb.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4e50",
+    "retail_address": "0x80031650",
+    "text": "Can heal disease of Cherrl.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4e88",
+    "retail_address": "0x80031688",
+    "text": "Healing",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4e98",
+    "retail_address": "0x80031698",
+    "text": "Restores weakened defense.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4ed0",
+    "retail_address": "0x800316d0",
+    "text": "Shomuro",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4eec",
+    "retail_address": "0x800316ec",
+    "text": "Recovers weakened attack.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4f20",
+    "retail_address": "0x80031720",
+    "text": "Hazak",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4f2c",
+    "retail_address": "0x8003172c",
+    "text": "Herb that restores everything.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4f80",
+    "retail_address": "0x80031780",
+    "text": "Wakes up a sleeping familiar.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x4fd8",
+    "retail_address": "0x800317d8",
+    "text": "Herb that restores chaos.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x500c",
+    "retail_address": "0x8003180c",
+    "text": "Antichaos",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5020",
+    "retail_address": "0x80031820",
+    "text": "Herb neutralizes a poison.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5058",
+    "retail_address": "0x80031858",
+    "text": "Antidote",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x506c",
+    "retail_address": "0x8003186c",
+    "text": "Herb that restores HP.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x509c",
+    "retail_address": "0x8003189c",
+    "text": "Medicinal",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5110",
+    "retail_address": "0x80031910",
+    "text": "Geropita",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5204",
+    "retail_address": "0x80031a04",
+    "text": "Limit",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x525c",
+    "retail_address": "0x80031a5c",
+    "text": "Roche",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x52d0",
+    "retail_address": "0x80031ad0",
+    "text": "Laev",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5348",
+    "retail_address": "0x80031b48",
+    "text": "Leolam",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x53c0",
+    "retail_address": "0x80031bc0",
+    "text": "Leva",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x53cc",
+    "retail_address": "0x80031bcc",
+    "text": "Turns into a frog for a while.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x540c",
+    "retail_address": "0x80031c0c",
+    "text": "Tumna",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5464",
+    "retail_address": "0x80031c64",
+    "text": "Big Pita",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x54c4",
+    "retail_address": "0x80031cc4",
+    "text": "Pita",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x552c",
+    "retail_address": "0x80031d2c",
+    "text": "Tovar",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x56ec",
+    "retail_address": "0x80031eec",
+    "text": "Light",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x56f8",
+    "retail_address": "0x80031ef8",
+    "text": "Increases speed for a while.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5734",
+    "retail_address": "0x80031f34",
+    "text": "Mahell",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5744",
+    "retail_address": "0x80031f44",
+    "text": "Increases the level.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5770",
+    "retail_address": "0x80031f70",
+    "text": "Mazarr",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5780",
+    "retail_address": "0x80031f80",
+    "text": "Increases defensive power.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x57b8",
+    "retail_address": "0x80031fb8",
+    "text": "Increases attacking power.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5850",
+    "retail_address": "0x80032050",
+    "text": "Acid Rain",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x58d8",
+    "retail_address": "0x800320d8",
+    "text": "Weak",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x59e0",
+    "retail_address": "0x800321e0",
+    "text": "Binding",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5abc",
+    "retail_address": "0x800322bc",
+    "text": "Recovery",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5b30",
+    "retail_address": "0x80032330",
+    "text": "Ice Rock",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5ba4",
+    "retail_address": "0x800323a4",
+    "text": "Repel",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5d20",
+    "retail_address": "0x80032520",
+    "text": "Pillar",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5d70",
+    "retail_address": "0x80032570",
+    "text": "Flame",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5df8",
+    "retail_address": "0x800325f8",
+    "text": "Blaze",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5ecc",
+    "retail_address": "0x800326cc",
+    "text": "Alchemic",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x5f58",
+    "retail_address": "0x80032758",
+    "text": "Flat",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6048",
+    "retail_address": "0x80032848",
+    "text": "Restore",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x60b4",
+    "retail_address": "0x800328b4",
+    "text": "Trap",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6124",
+    "retail_address": "0x80032924",
+    "text": "Malicious",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x61c0",
+    "retail_address": "0x800329c0",
+    "text": "Call back familiars to you.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x61f8",
+    "retail_address": "0x800329f8",
+    "text": "Familiar",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6270",
+    "retail_address": "0x80032a70",
+    "text": "Chases a monster out of a room.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6310",
+    "retail_address": "0x80032b10",
+    "text": "Star",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6370",
+    "retail_address": "0x80032b70",
+    "text": "Truth",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x63e0",
+    "retail_address": "0x80032be0",
+    "text": "Treasure",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x6448",
+    "retail_address": "0x80032c48",
+    "text": "Monster",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x64b4",
+    "retail_address": "0x80032cb4",
+    "text": "Makes traps visible.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x653c",
+    "retail_address": "0x80032d3c",
+    "text": "Exit",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x65ac",
+    "retail_address": "0x80032dac",
+    "text": "White",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x65b8",
+    "retail_address": "0x80032db8",
+    "text": "Tempers a shield.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x65dc",
+    "retail_address": "0x80032ddc",
+    "text": "Blue",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  },
+  {
+    "retail_offset": "0x65e8",
+    "retail_address": "0x80032de8",
+    "text": "Tempers a sword.",
+    "match": "normalized phrase occurs in community guide",
+    "validation": "lexical_reference_only_not_item_id_binding"
+  }
+]

@@ -1,0 +1,162 @@
+{
+  "source": "community/town.mp4",
+  "durationSeconds": 966.53,
+  "townSegmentSeconds": [
+    290,
+    675
+  ],
+  "method": "Visual frames and on-screen text only. Timestamps are seek points, not event boundaries. Incomplete text is summarized. Kysup is the recording’s player-selected name.",
+  "locations": [
+    {
+      "location": "Koh’s house",
+      "timeSeconds": [
+        290,
+        298,
+        306,
+        322,
+        338,
+        346,
+        370,
+        378
+      ],
+      "people": [
+        "Wreath",
+        "Weedy"
+      ],
+      "capture": "ad_model_building_01_koh_house_1",
+      "placementEvidence": "Interior exit opens onto an east–west stone path. Exterior at 666s is a candidate for the house, not a confirmed match.",
+      "observations": [
+        "Wreath explains the five-item/familiar entry limit, suggests selling at the general store, and offers item storage.",
+        "A wake-up scene shows Koh in bed and Weedy inside. Wreath later thanks someone for waking him."
+      ],
+      "visibleLines": [
+        "If you’re not taking items to the tower, you can always leave them with me.",
+        "Get up!"
+      ]
+    },
+    {
+      "location": "Shop with Master",
+      "timeSeconds": [
+        386,
+        394,
+        402,
+        410,
+        418,
+        426,
+        434
+      ],
+      "people": [
+        "Master"
+      ],
+      "captureCandidate": "ad_model_building_14_monster_shop",
+      "placementEvidence": "At 386s the route passes a hedge-fronted stone facade near a paved intersection. The shop opens by 394s. The exact entrance and plot are unresolved.",
+      "observations": [
+        "Master refers to familiars from Koh’s father. Selling opens a stock list and a price offer.",
+        "The selected sale offer in this visit is 400G. The choices are accept, mistake, and decline."
+      ],
+      "visibleLines": [
+        "Have you come again to bother me? Go home, go home!"
+      ]
+    },
+    {
+      "location": "Shiela’s consultation",
+      "timeSeconds": [
+        450,
+        458,
+        466,
+        474,
+        483,
+        490,
+        498
+      ],
+      "people": [
+        "Shiela"
+      ],
+      "captureCandidate": "ad_model_building_11_temple",
+      "placementEvidence": "Interior has a red carpet, a recessed brick alcove, and symmetrical foreground fixtures. Exterior not confirmed.",
+      "observations": [
+        "The choice tree offers advice on love life, fighting, and enjoying life. Shiela asks whether Koh likes animals and whether he feels an urge to use magic.",
+        "Fighting advice emphasizes choosing weapons based on who Koh is fighting."
+      ]
+    },
+    {
+      "location": "Blacksmith",
+      "timeSeconds": [
+        506,
+        514,
+        522,
+        530,
+        546,
+        554,
+        650,
+        658
+      ],
+      "people": [
+        "Barry"
+      ],
+      "capture": "ad_model_building_15_blacksmith",
+      "placementEvidence": "At 506s Koh leaves a low weathered building; the 514s interior title explicitly reads Blacksmith. The earlier exterior alone does not prove the Blacksmith plot.",
+      "observations": [
+        "Barry works behind a counter with shelves and red and blue pots. Buy, sell, and look-around are separate choices.",
+        "Barry says he started looking after the store at fifteen."
+      ],
+      "visibleLines": [
+        "I was fifteen when I started looking after this store."
+      ]
+    },
+    {
+      "location": "Fur’s shop",
+      "timeSeconds": [
+        562,
+        570,
+        578,
+        586,
+        594
+      ],
+      "people": [
+        "Fur"
+      ],
+      "captureCandidate": "ad_model_building_16_general_store",
+      "placementEvidence": "The stone-front entrance at 562s has a blue pot and low flanking walls; Fur is at the counter immediately afterward.",
+      "observations": [
+        "Fur opens a selling interface with item prices, wallet total, and item description. Pita is shown at 5G in this sale list.",
+        "The Pita description says it restores 5 MP to a familiar."
+      ]
+    },
+    {
+      "location": "Clinic",
+      "timeSeconds": [
+        602,
+        610,
+        618,
+        626,
+        634,
+        642
+      ],
+      "people": [
+        "Hush"
+      ],
+      "captureCandidate": "ad_model_building_0f_hospital",
+      "placementEvidence": "Low dark roof, round wall ornaments, and a central door facing a broad paved approach. At 642s, a blue cross banner is visible by a paved junction.",
+      "observations": [
+        "Hush says a patient could not be saved because he lacked equipment. A later prompt offers a 15G payment with confirm and cancel choices. The purpose of that payment needs the preceding text."
+      ]
+    }
+  ],
+  "uiObservations": [
+    {
+      "timeSeconds": 354,
+      "observation": "Home storage displays two side-by-side item lists, a wallet readout, and a lower description panel."
+    },
+    {
+      "timeSeconds": 410,
+      "observation": "Shop sale view shows selected stock, individual prices, a money readout, and a separate dialogue panel."
+    },
+    {
+      "timeSeconds": 650,
+      "observation": "Blacksmith menu uses a highlighted text row and presents buy, sell, and browsing options in one dialogue panel."
+    }
+  ],
+  "mappingLimits": "Named capture links identify matching or candidate building models. The recording does not expose the 128x128 tile coordinates. Comparing raw interior-capture tile IDs to the outdoor grid did not establish exact matches. No plot or runtime placement changes were made.",
+  "scopeNote": "The first Tower segment shows combat on a floor labeled 2F in this save. The footage records that observation only and does not override the project’s explicit monster-free floor 2 rule."
+}

@@ -1,0 +1,405 @@
+{
+  "source": "AzureDreams.Core.Leveling.BuildExperienceTable",
+  "thresholds": [
+    {
+      "level": 0,
+      "cumulativeExperience": 0
+    },
+    {
+      "level": 1,
+      "cumulativeExperience": 8
+    },
+    {
+      "level": 2,
+      "cumulativeExperience": 23
+    },
+    {
+      "level": 3,
+      "cumulativeExperience": 50
+    },
+    {
+      "level": 4,
+      "cumulativeExperience": 92
+    },
+    {
+      "level": 5,
+      "cumulativeExperience": 156
+    },
+    {
+      "level": 6,
+      "cumulativeExperience": 247
+    },
+    {
+      "level": 7,
+      "cumulativeExperience": 372
+    },
+    {
+      "level": 8,
+      "cumulativeExperience": 538
+    },
+    {
+      "level": 9,
+      "cumulativeExperience": 754
+    },
+    {
+      "level": 10,
+      "cumulativeExperience": 1028
+    },
+    {
+      "level": 11,
+      "cumulativeExperience": 1371
+    },
+    {
+      "level": 12,
+      "cumulativeExperience": 1792
+    },
+    {
+      "level": 13,
+      "cumulativeExperience": 2304
+    },
+    {
+      "level": 14,
+      "cumulativeExperience": 2918
+    },
+    {
+      "level": 15,
+      "cumulativeExperience": 3647
+    },
+    {
+      "level": 16,
+      "cumulativeExperience": 4504
+    },
+    {
+      "level": 17,
+      "cumulativeExperience": 5504
+    },
+    {
+      "level": 18,
+      "cumulativeExperience": 6661
+    },
+    {
+      "level": 19,
+      "cumulativeExperience": 7992
+    },
+    {
+      "level": 20,
+      "cumulativeExperience": 9512
+    },
+    {
+      "level": 21,
+      "cumulativeExperience": 11272
+    },
+    {
+      "level": 22,
+      "cumulativeExperience": 13353
+    },
+    {
+      "level": 23,
+      "cumulativeExperience": 15838
+    },
+    {
+      "level": 24,
+      "cumulativeExperience": 18810
+    },
+    {
+      "level": 25,
+      "cumulativeExperience": 22354
+    },
+    {
+      "level": 26,
+      "cumulativeExperience": 26554
+    },
+    {
+      "level": 27,
+      "cumulativeExperience": 31497
+    },
+    {
+      "level": 28,
+      "cumulativeExperience": 37268
+    },
+    {
+      "level": 29,
+      "cumulativeExperience": 43956
+    },
+    {
+      "level": 30,
+      "cumulativeExperience": 51648
+    },
+    {
+      "level": 31,
+      "cumulativeExperience": 60433
+    },
+    {
+      "level": 32,
+      "cumulativeExperience": 70400
+    },
+    {
+      "level": 33,
+      "cumulativeExperience": 81640
+    },
+    {
+      "level": 34,
+      "cumulativeExperience": 94243
+    },
+    {
+      "level": 35,
+      "cumulativeExperience": 108302
+    },
+    {
+      "level": 36,
+      "cumulativeExperience": 123908
+    },
+    {
+      "level": 37,
+      "cumulativeExperience": 141156
+    },
+    {
+      "level": 38,
+      "cumulativeExperience": 160139
+    },
+    {
+      "level": 39,
+      "cumulativeExperience": 180952
+    },
+    {
+      "level": 40,
+      "cumulativeExperience": 203690
+    },
+    {
+      "level": 41,
+      "cumulativeExperience": 228450
+    },
+    {
+      "level": 42,
+      "cumulativeExperience": 255328
+    },
+    {
+      "level": 43,
+      "cumulativeExperience": 284423
+    },
+    {
+      "level": 44,
+      "cumulativeExperience": 315832
+    },
+    {
+      "level": 45,
+      "cumulativeExperience": 349656
+    },
+    {
+      "level": 46,
+      "cumulativeExperience": 385994
+    },
+    {
+      "level": 47,
+      "cumulativeExperience": 424947
+    },
+    {
+      "level": 48,
+      "cumulativeExperience": 466616
+    },
+    {
+      "level": 49,
+      "cumulativeExperience": 511104
+    },
+    {
+      "level": 50,
+      "cumulativeExperience": 558513
+    },
+    {
+      "level": 51,
+      "cumulativeExperience": 608948
+    },
+    {
+      "level": 52,
+      "cumulativeExperience": 662512
+    },
+    {
+      "level": 53,
+      "cumulativeExperience": 719312
+    },
+    {
+      "level": 54,
+      "cumulativeExperience": 779453
+    },
+    {
+      "level": 55,
+      "cumulativeExperience": 843042
+    },
+    {
+      "level": 56,
+      "cumulativeExperience": 910186
+    },
+    {
+      "level": 57,
+      "cumulativeExperience": 980994
+    },
+    {
+      "level": 58,
+      "cumulativeExperience": 1055574
+    },
+    {
+      "level": 59,
+      "cumulativeExperience": 1134037
+    },
+    {
+      "level": 60,
+      "cumulativeExperience": 1216492
+    },
+    {
+      "level": 61,
+      "cumulativeExperience": 1303052
+    },
+    {
+      "level": 62,
+      "cumulativeExperience": 1393828
+    },
+    {
+      "level": 63,
+      "cumulativeExperience": 1488933
+    },
+    {
+      "level": 64,
+      "cumulativeExperience": 1588480
+    },
+    {
+      "level": 65,
+      "cumulativeExperience": 1692584
+    },
+    {
+      "level": 66,
+      "cumulativeExperience": 1801359
+    },
+    {
+      "level": 67,
+      "cumulativeExperience": 1914922
+    },
+    {
+      "level": 68,
+      "cumulativeExperience": 2033388
+    },
+    {
+      "level": 69,
+      "cumulativeExperience": 2156876
+    },
+    {
+      "level": 70,
+      "cumulativeExperience": 2285503
+    },
+    {
+      "level": 71,
+      "cumulativeExperience": 2419388
+    },
+    {
+      "level": 72,
+      "cumulativeExperience": 2558650
+    },
+    {
+      "level": 73,
+      "cumulativeExperience": 2703410
+    },
+    {
+      "level": 74,
+      "cumulativeExperience": 2853788
+    },
+    {
+      "level": 75,
+      "cumulativeExperience": 3009907
+    },
+    {
+      "level": 76,
+      "cumulativeExperience": 3171888
+    },
+    {
+      "level": 77,
+      "cumulativeExperience": 3339856
+    },
+    {
+      "level": 78,
+      "cumulativeExperience": 3513934
+    },
+    {
+      "level": 79,
+      "cumulativeExperience": 3694247
+    },
+    {
+      "level": 80,
+      "cumulativeExperience": 3880920
+    },
+    {
+      "level": 81,
+      "cumulativeExperience": 4074080
+    },
+    {
+      "level": 82,
+      "cumulativeExperience": 4273853
+    },
+    {
+      "level": 83,
+      "cumulativeExperience": 4480368
+    },
+    {
+      "level": 84,
+      "cumulativeExperience": 4693752
+    },
+    {
+      "level": 85,
+      "cumulativeExperience": 4914136
+    },
+    {
+      "level": 86,
+      "cumulativeExperience": 5141649
+    },
+    {
+      "level": 87,
+      "cumulativeExperience": 5376422
+    },
+    {
+      "level": 88,
+      "cumulativeExperience": 5618586
+    },
+    {
+      "level": 89,
+      "cumulativeExperience": 5868274
+    },
+    {
+      "level": 90,
+      "cumulativeExperience": 6125618
+    },
+    {
+      "level": 91,
+      "cumulativeExperience": 6390753
+    },
+    {
+      "level": 92,
+      "cumulativeExperience": 6663812
+    },
+    {
+      "level": 93,
+      "cumulativeExperience": 6944932
+    },
+    {
+      "level": 94,
+      "cumulativeExperience": 7234248
+    },
+    {
+      "level": 95,
+      "cumulativeExperience": 7531897
+    },
+    {
+      "level": 96,
+      "cumulativeExperience": 7838016
+    },
+    {
+      "level": 97,
+      "cumulativeExperience": 8152744
+    },
+    {
+      "level": 98,
+      "cumulativeExperience": 8476219
+    },
+    {
+      "level": 99,
+      "cumulativeExperience": 8808582
+    }
+  ]
+}

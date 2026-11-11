@@ -1,0 +1,3535 @@
+{
+  "source": "community/AzureDreams_GameObjectives.ods",
+  "sheet": "Girlfriends",
+  "scope": "Workbook reference. State keys are proposed Unity keys, not retail flags. NPC mentions include supporting participants. Gold and floor numbers retain their conditions in source_condition.",
+  "quests": [
+    {
+      "quest_id": "nico",
+      "affected_npc": "Nico",
+      "state_keys": [
+        "quest.nico.completed_steps",
+        "quest.nico.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "C3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico",
+            "Nico's father"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Nico's House and talk to her dad. Nico will show up and talk about culture."
+        },
+        {
+          "source_cell": "C5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              1000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Town lake and donate 1000G.\n[Check Note 1]"
+        },
+        {
+          "source_cell": "C7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              1000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Nico will wake you up thanking for your donation.\nTalk to Nico at Town lake and donate 1000G.\n[Check Note 1]"
+        },
+        {
+          "source_cell": "C9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Fountain.\n[STEP 0]"
+        },
+        {
+          "source_cell": "C20",
+          "day_label": "7",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico",
+            "Selfi"
+          ],
+          "step_labels": [
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "After Selfi gives you egg at Fountain, go to Nico's House and talk to Nico.\n[STEP 6]"
+        },
+        {
+          "source_cell": "C22",
+          "day_label": "8",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "7.0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Nico's House.\n[STEP 7.0]"
+        },
+        {
+          "source_cell": "C25",
+          "day_label": "9",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "7.1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Nico's House.\n[STEP 7.1]"
+        },
+        {
+          "source_cell": "C27",
+          "day_label": "10",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "7.2"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Nico's House.\n[STEP 7.2]"
+        },
+        {
+          "source_cell": "C29",
+          "day_label": "11",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "7.3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Nico's House.\n[STEP 7.3]"
+        },
+        {
+          "source_cell": "C31",
+          "day_label": "12",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "7.4"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at Nico's House.\n[STEP 7.4]"
+        },
+        {
+          "source_cell": "C33",
+          "day_label": "13",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Chero",
+            "Ghosh"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Help him",
+              "The music was so beatiful"
+            ]
+          },
+          "source_condition": "Talk to Chero at Fountain. When Ghosh shows up say [Help him] and [The music was so beatiful]."
+        },
+        {
+          "source_cell": "C35",
+          "day_label": "14",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Nico"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Nico will wake you up and say she is going to be honest with her feelings.\nGo to Nico's House. Ghosh will be in front of it. Nico will let you in. Enter her house."
+        },
+        {
+          "source_cell": "C37",
+          "day_label": "15",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "10"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at her House.\n[STEP 10]"
+        },
+        {
+          "source_cell": "C39",
+          "day_label": "16",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Nico at her House. [STEP 11]"
+        },
+        {
+          "source_cell": "C41",
+          "day_label": "17",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Nico",
+          "named_npc_mentions": [
+            "Nico"
+          ],
+          "step_labels": [],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Enter Nico's house.\n[Nico DONE]"
+        }
+      ]
+    },
+    {
+      "quest_id": "fur",
+      "affected_npc": "Fur",
+      "state_keys": [
+        "quest.fur.completed_steps",
+        "quest.fur.complete",
+        "quest.fur.route"
+      ],
+      "steps": [
+        {
+          "source_cell": "E3",
+          "day_label": "0",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Fur Store and buy/sell any item.\n[STEP 0]"
+        },
+        {
+          "source_cell": "E5",
+          "day_label": "1",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "2"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Fur Store and buy/sell any item.\n[STEP 2]"
+        },
+        {
+          "source_cell": "E7",
+          "day_label": "2",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "4"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Fur Store and buy/sell any item.\n[STEP 4]"
+        },
+        {
+          "source_cell": "E8",
+          "day_label": "2",
+          "location": "Tower",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              5
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 5F in any tower visit."
+        },
+        {
+          "source_cell": "E9",
+          "day_label": "3",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Fur at her store.\n[STEP 6]"
+        },
+        {
+          "source_cell": "E10",
+          "day_label": "3",
+          "location": "Tower",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              10
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 10F in any tower visit."
+        },
+        {
+          "source_cell": "E11",
+          "day_label": "4",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "8"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Fur at her store.\n[STEP 8]"
+        },
+        {
+          "source_cell": "E14",
+          "day_label": "5",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "10"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Music Box"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Fur at her store. She will show you Music Box.[STEP 10]"
+        },
+        {
+          "source_cell": "G15",
+          "day_label": "5",
+          "location": "Tower",
+          "route": "path_3",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              26,
+              26
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing."
+        },
+        {
+          "source_cell": "E16",
+          "day_label": "6",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur",
+            "Ghosh"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Hey that's too much!",
+              "Forget it.",
+              "Hey that's too much!",
+              "Apologize",
+              "You're absolutely right.",
+              "I don't",
+              "You're absolutely right.",
+              "You can apologize to me."
+            ]
+          },
+          "source_condition": "Enter Fur's store for a scene with Ghosh. Talk to Fur.\nPath choices:\n[Hey that's too much!][Forget it.] – Path 1\n[Hey that's too much!][Apologize] – Path 2\n[You're absolutely right.][I don't] – Path 1\n[You're absolutely right.][You can apologize to me.] - Path 2\n[STEP 12]"
+        },
+        {
+          "source_cell": "F17",
+          "day_label": "6",
+          "location": null,
+          "route": "path_2",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "13"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'm just looking.",
+              "I accept your apology.",
+              "I'll never forgive you."
+            ]
+          },
+          "source_condition": "Exit and enter Fur's store and talk to her again. Say [I'm just looking.] and you'll have another dialogue choice.\nPath choices:\n[I accept your apology.] - Path 2\n[I'll never forgive you.] - Path 3\n[STEP 13]"
+        },
+        {
+          "source_cell": "F18",
+          "day_label": "6",
+          "location": null,
+          "route": "path_2",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "19",
+            "20"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I've come to see you."
+            ]
+          },
+          "source_condition": "Exit and enter Fur's store and talk to her again.\n[STEP 19]\nExit and enter Fur's store. Talk to her and say [I've come to see you.]. Talk to her again.\n[STEP 20]"
+        },
+        {
+          "source_cell": "G18",
+          "day_label": "6",
+          "location": null,
+          "route": "path_3",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "17",
+            "18"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'm done.",
+              "I'm done.",
+              "I liked the tomboy."
+            ]
+          },
+          "source_condition": "Exit and enter Fur's store and talk to her again. Say [I'm done.].\n[STEP 17]\nExit and enter Fur's store. Talk to her and say [I'm done.]. Talk to her again and say [I liked the tomboy.].\n[STEP 18]"
+        },
+        {
+          "source_cell": "E19",
+          "day_label": "6",
+          "location": "Tower",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              26,
+              26
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 26F in any tower visit. It is not mandatory, but it will save one tower visit. If you never reached 26F, then in next step after talking to Fur you need to take another tower trip before continuing."
+        },
+        {
+          "source_cell": "E20",
+          "day_label": "7",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur"
+          ],
+          "step_labels": [
+            "14&15"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'm done.",
+              "I don't like you now."
+            ]
+          },
+          "source_condition": "Talk to Fur at her store. Exit and enter the store again. Talk to Fur and say [I'm done.]. Talk to her again and say [I don't like you now.]. \n[STEP 14&15]"
+        },
+        {
+          "source_cell": "E22",
+          "day_label": "8",
+          "location": "Town",
+          "route": "shared_or_path_1",
+          "affected_npc": "Fur",
+          "named_npc_mentions": [
+            "Fur",
+            "Ghosh"
+          ],
+          "step_labels": [
+            "22"
+          ],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'm a man"
+            ]
+          },
+          "source_condition": "Enter Fur's store for a scene with Ghosh. Talk to Fur. Say [I'm a man] for faster dialogue.\n[Fur Done]\n[STEP 22]."
+        }
+      ]
+    },
+    {
+      "quest_id": "patty",
+      "affected_npc": "Patty",
+      "state_keys": [
+        "quest.patty.completed_steps",
+        "quest.patty.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "H3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Patty",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Restaurant and order all meals at least once and pay for them immediately."
+        },
+        {
+          "source_cell": "H5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Patty",
+          "named_npc_mentions": [
+            "Patty"
+          ],
+          "step_labels": [
+            "3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Restaurant. Patti will be there on her own. Talk to her and order any meal.\n[STEP 3]"
+        },
+        {
+          "source_cell": "H7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Patty",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "4"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Restaurant and order any meal.\n[STEP 4]"
+        },
+        {
+          "source_cell": "H9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Patty",
+          "named_npc_mentions": [
+            "Patty"
+          ],
+          "step_labels": [
+            "5"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'd love that!"
+            ]
+          },
+          "source_condition": "Go to Restaurant and talk to Patty. She will ask whether she can order your meal and say [I'd love that!]. Choose any meal and pay for it.\n[STEP 5]"
+        },
+        {
+          "source_cell": "H11",
+          "day_label": "4",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Patty",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Patty"
+          ],
+          "step_labels": [],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Restaurant for a cut-scene. Ghosh asks Patty to prepare meal for him. Talk to Patty.\n[Patty DONE]"
+        }
+      ]
+    },
+    {
+      "quest_id": "vivian",
+      "affected_npc": "Vivian",
+      "state_keys": [
+        "quest.vivian.completed_steps",
+        "quest.vivian.complete",
+        "quest.vivian.route"
+      ],
+      "steps": [
+        {
+          "source_cell": "I3",
+          "day_label": "0",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Okami"
+          ],
+          "step_labels": [
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar and talk to Okami\n[STEP 0]"
+        },
+        {
+          "source_cell": "I4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              20
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Blue Cape"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get Blue Cape from 20F."
+        },
+        {
+          "source_cell": "I5",
+          "day_label": "1",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Blue Cape"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar with Blue Cape in inventory.\n[STEP 3]"
+        },
+        {
+          "source_cell": "I7",
+          "day_label": "2",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Barten",
+            "Okami"
+          ],
+          "step_labels": [
+            "5",
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Give me some booze!"
+            ]
+          },
+          "source_condition": "Go to Bar and talk to Barten.\n[STEP 5]\nGo to Bar. Cut-scene will play where you talk to Okami. If during dialogue you choose [Give me some booze!], you'll wake up at home.\n[STEP 6]"
+        },
+        {
+          "source_cell": "I9",
+          "day_label": "3",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar and talk to Vivian.\n[STEP 7]"
+        },
+        {
+          "source_cell": "I10",
+          "day_label": "3",
+          "location": "Tower",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              10
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 10F in any tower visit."
+        },
+        {
+          "source_cell": "I11",
+          "day_label": "4",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Fon",
+            "Okami",
+            "Vivian"
+          ],
+          "step_labels": [
+            "8",
+            "9"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              8000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I am the entertainment!"
+            ]
+          },
+          "source_condition": "Talk to Fon at the entrance to Carpenter and say [I am the entertainment!]. With 8000G, go to Carpenter and build a Theater.\nGo to Bar and talk to Okami.\n[STEP 8]\nRe-enter Bar for a cut-scene with Vivian dancing.Talk to Vivian again.\n[STEP 9]"
+        },
+        {
+          "source_cell": "I12",
+          "day_label": "4",
+          "location": null,
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Fon",
+            "Vivian"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "When you don't have casino built yet, she will talk about her dancing dream.\nRe-enter Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]"
+        },
+        {
+          "source_cell": "J12",
+          "day_label": "4",
+          "location": null,
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "10"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Don't you have to work?",
+              "I'd love to see you dance."
+            ]
+          },
+          "source_condition": "When you have casino built, she will talk about Casino in Haruka.\nRe-enter bar and Vivian will not be there.\n[STEP 10]\nGo to Casino and talk to Vivian. Answer [Don't you have to work?] and [I'd love to see you dance.]."
+        },
+        {
+          "source_cell": "I14",
+          "day_label": "5",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Fon"
+          ],
+          "step_labels": [
+            "13",
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]"
+        },
+        {
+          "source_cell": "J14",
+          "day_label": "5",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Fon",
+            "Vivian"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar and talk to Vivian. She will talk about about her dancing dream.\nGo to the Bar and you will see a cut-scene with Fon scouting Vivian.\n[STEP 12]"
+        },
+        {
+          "source_cell": "I16",
+          "day_label": "6",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]"
+        },
+        {
+          "source_cell": "J16",
+          "day_label": "6",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Fon"
+          ],
+          "step_labels": [
+            "13",
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Bar.\n[STEP 13]\nTalk to Fon in front of Theater.\n[STEP 0]"
+        },
+        {
+          "source_cell": "I20",
+          "day_label": "7",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]"
+        },
+        {
+          "source_cell": "J20",
+          "day_label": "7",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 1]"
+        },
+        {
+          "source_cell": "I22",
+          "day_label": "8",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Why don't you dance?",
+              "Let's go for a walk!",
+              "Let's go to the Bar!",
+              "You're kidding."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue."
+        },
+        {
+          "source_cell": "J22",
+          "day_label": "8",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue.\n[STEP 3]"
+        },
+        {
+          "source_cell": "I25",
+          "day_label": "9",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian."
+        },
+        {
+          "source_cell": "J25",
+          "day_label": "9",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Why don't you dance?",
+              "Let's go for a walk!",
+              "Let's go to the Bar!",
+              "You're kidding."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian not dancing. Talk to her and say [Why don't you dance?][Let's go for a walk!] for faster dialogue. You'll go for a walk. When Ghosh shows say [Let's go to the Bar!]. In the Bar, when Ghosh asks, answer [You're kidding.] for faster dialogue."
+        },
+        {
+          "source_cell": "I26",
+          "day_label": "9",
+          "location": "Tower",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "[STEP 7]"
+        },
+        {
+          "source_cell": "I27",
+          "day_label": "10",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue."
+        },
+        {
+          "source_cell": "J27",
+          "day_label": "10",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue. Ghosh will show up and give roses to Vivian."
+        },
+        {
+          "source_cell": "I28",
+          "day_label": "10",
+          "location": "Tower",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "9"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "[STEP 9]"
+        },
+        {
+          "source_cell": "J28",
+          "day_label": "10",
+          "location": "Tower",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "[STEP 7]"
+        },
+        {
+          "source_cell": "I29",
+          "day_label": "11",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't say you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]"
+        },
+        {
+          "source_cell": "J29",
+          "day_label": "11",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't see you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't see you.] for faster dialogue."
+        },
+        {
+          "source_cell": "J30",
+          "day_label": "11",
+          "location": "Tower",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "9"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "[STEP 9]"
+        },
+        {
+          "source_cell": "J31",
+          "day_label": "12",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Vivian",
+          "named_npc_mentions": [
+            "Vivian"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I didn't say you."
+            ]
+          },
+          "source_condition": "Go to Theater and watch cut-scene with Vivian dancing. Talk to her. Say [I didn't say you.] for faster dialogue.\n[STEP 11]\n[Vivian DONE]"
+        }
+      ]
+    },
+    {
+      "quest_id": "mia",
+      "affected_npc": "Mia",
+      "state_keys": [
+        "quest.mia.completed_steps",
+        "quest.mia.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "K3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "0"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [
+              9
+            ],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Water Medal"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 0]\nGo to Pool and agree to get Water Medal. Needs to be done latest at day 9."
+        },
+        {
+          "source_cell": "K4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              25
+            ],
+            "deadline_days": [
+              9
+            ],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Water Medal"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 25F and retrieve Water Medal from Picket. Needs to be done latest at day 9."
+        },
+        {
+          "source_cell": "K5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Wookie"
+          ],
+          "step_labels": [
+            "2"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [
+              10
+            ],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Water Medal"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Dr. Hal's House. Talk to him and ask about tower.\n[STEP 2]\nGo to Pool with Water Medal in inventory and give it to Wookie. Needs to be done latest at day 10 before you go to Library."
+        },
+        {
+          "source_cell": "K7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "4"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Dr. Hal's House and talk to him.\n[STEP 4]"
+        },
+        {
+          "source_cell": "K9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "5"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Dr. Hal's House and talk to him.\n[STEP 5]"
+        },
+        {
+          "source_cell": "K11",
+          "day_label": "4",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              8000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'll build it for you."
+            ]
+          },
+          "source_condition": "Go to Dr. Hal's House. Talk to him and say [I'll build it for you.].\n[STEP 6]\nWith 8000G, go to Carpenter and build a Library."
+        },
+        {
+          "source_cell": "K14",
+          "day_label": "5",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "0",
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "It's quite interesting."
+            ]
+          },
+          "source_condition": "Go to Library and talk to Mia.\nRe-enter Library and talk to Miya again.\n[STEP 0]\nRe-enter Library and talk to Mia again. Say [It's quite interesting.].\n[STEP 1]"
+        },
+        {
+          "source_cell": "K16",
+          "day_label": "6",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "3"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "It's actually pretty amusing."
+            ]
+          },
+          "source_condition": "Go to Library and talk to Mia. Say [It's actually pretty amusing.].\n[STEP 3]"
+        },
+        {
+          "source_cell": "K17",
+          "day_label": "6",
+          "location": null,
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "[STEP 1]"
+        },
+        {
+          "source_cell": "K20",
+          "day_label": "7",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Mia"
+          ],
+          "step_labels": [
+            "5"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Library for a cut-scene with Ghosh bumping into Mia. Pick up her glasses and give them to her.\n[STEP 5]"
+        },
+        {
+          "source_cell": "K22",
+          "day_label": "8",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Actually quite interesting."
+            ]
+          },
+          "source_condition": "Go to Library and talk to Mia. Say [Actually quite interesting.].\n[STEP 7]"
+        },
+        {
+          "source_cell": "K25",
+          "day_label": "9",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "8"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Talk what you want to."
+            ]
+          },
+          "source_condition": "Go to Library and talk to Mia. With 2nd choice say [Talk what you want to.].\n[STEP 8]"
+        },
+        {
+          "source_cell": "K27",
+          "day_label": "10",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "9",
+            "10"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'd be delighted to.",
+              "You've got a poor figure."
+            ]
+          },
+          "source_condition": "Go to Library and talk to Mia. When she asks to take her to Pool say [I'd be delighted to.]. At the pool say [You've got a poor figure.] for faster dialogue.\n[STEP 9]\nGo to Library and talk to Mia again.\n[STEP 10]"
+        },
+        {
+          "source_cell": "K29",
+          "day_label": "11",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Library and talk to Mia.\n[STEP 11]"
+        },
+        {
+          "source_cell": "K31",
+          "day_label": "12",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Library and talk to Mia.\n[STEP 12]"
+        },
+        {
+          "source_cell": "K33",
+          "day_label": "13",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Mia",
+          "named_npc_mentions": [
+            "Mia"
+          ],
+          "step_labels": [],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Why are you following me?",
+              "No."
+            ]
+          },
+          "source_condition": "Mia will start following you. Go to Library and enter/exit it 5 ftimes. After 5th time talk to Mia in Town and say [Why are you following me?] and [No.].\n[Mia DONE]"
+        }
+      ]
+    },
+    {
+      "quest_id": "cherrl",
+      "affected_npc": "Cherrl",
+      "state_keys": [
+        "quest.cherrl.completed_steps",
+        "quest.cherrl.complete",
+        "quest.cherrl.route"
+      ],
+      "steps": [
+        {
+          "source_cell": "L3",
+          "day_label": "0",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Hush"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Clinic and talk to Hush."
+        },
+        {
+          "source_cell": "L5",
+          "day_label": "1",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Hush"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              4000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Yes, let me make a donation.",
+              "Money is not a factor."
+            ]
+          },
+          "source_condition": "With at least 4000G go to Clinic and talk to Hush. Say [Yes, let me make a donation.] and [Money is not a factor.]."
+        },
+        {
+          "source_cell": "L7",
+          "day_label": "2",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "0",
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I guess i could come in.",
+              "I want you.",
+              "I want to be your friend too."
+            ]
+          },
+          "source_condition": "At Cherrl's House talk to her through window. She will drop Chappy. Pick him up and give him back to Cherrl. Say [I guess i could come in.] and enter Cherrl's House. Talk to her.\n[STEP 0]\nRe-enter Cherrl's House and talk to her. Say [I want you.] for faster dialogue. Say [I want to be your friend too.].\n[STEP 1]"
+        },
+        {
+          "source_cell": "L9",
+          "day_label": "3",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [],
+          "step_labels": [
+            "2"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Cherrl's House. She will be alone. Talk to her.\n[STEP 2]"
+        },
+        {
+          "source_cell": "L11",
+          "day_label": "4",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl",
+            "Cherrl's mother"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Healing Herb"
+            ],
+            "bracketed_dialogue": [
+              "Sure, I don't mind.",
+              "Still, no good to be selfish.",
+              "Okay. Deal.",
+              "Okay, I'm going."
+            ]
+          },
+          "source_condition": "Go to Cherrl's House. You will see a cut-scene where Cherrl's mom asks you to take care of her, while she is gone. Say [Sure, I don't mind.]. At 2nd choice say [Still, no good to be selfish.] for faster dialogue.\nRe-enter Cherrl's house and talk to her. She will ask you to take her for a walk. Say [Okay. Deal.]. At Hospital say [Okay, I'm going.] for faster dialogue. When you're back at Cherrl's House, talk to her.\nRe-enter Cherrl's house and talk to her. This will trigger Healing Herb to show up in tower."
+        },
+        {
+          "source_cell": "L13",
+          "day_label": "4",
+          "location": "Tower",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              28
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Healing Herb"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 28F and find Healing Herb."
+        },
+        {
+          "source_cell": "L14",
+          "day_label": "5",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Hush"
+          ],
+          "step_labels": [
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Healing Herb"
+            ],
+            "bracketed_dialogue": [
+              "Don't tell her anything",
+              "Yes. Go ahead!"
+            ]
+          },
+          "source_condition": "Go to Hospital and give Healing Herb to Hush.\nPath choices:\n[Don't tell her anything] – Path 1\n[Yes. Go ahead!] - Path 2\n[STEP 6]"
+        },
+        {
+          "source_cell": "L16",
+          "day_label": "6",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Hospital and talk to Cherrl. \n[STEP 7]"
+        },
+        {
+          "source_cell": "M17",
+          "day_label": "6",
+          "location": null,
+          "route": "path_2",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Because I wanted to go."
+            ]
+          },
+          "source_condition": "Say [Because I wanted to go.] for faster dialogue."
+        },
+        {
+          "source_cell": "L20",
+          "day_label": "7",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "8"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Hospital and talk to Cherrl.\nRe-enter Hospital and talk to Cherrl again.\n[STEP 8]"
+        },
+        {
+          "source_cell": "L22",
+          "day_label": "8",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "8"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "That's a great idea.",
+              "It doesn't suite you."
+            ]
+          },
+          "source_condition": "Go to Cherrl's House and talk to Cherrl. She will talk about becoming a nurse.\nPath choices:\n[That's a great idea.] - Path 1\n[It doesn't suite you.] - Path 2\nIf you choose Path 2, re-enter Cherrl's House and continue from this day Path 2.\n[STEP 8]\n"
+        },
+        {
+          "source_cell": "M22",
+          "day_label": "8",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "9"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Super model."
+            ]
+          },
+          "source_condition": "Go to Cherrl's House and talk to Cherrl. Say [Super model.] for faster dialogue.\n[STEP 9]"
+        },
+        {
+          "source_cell": "L23",
+          "day_label": "8",
+          "location": null,
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I've come to see Cherrl."
+            ]
+          },
+          "source_condition": "Go to Hospital for a cut-scene with Cherrl as a nurse. At 2nd dialogue choice, say [I've come to see Cherrl.].\n[STEP 11]"
+        },
+        {
+          "source_cell": "L25",
+          "day_label": "9",
+          "location": "Town",
+          "route": "path_1",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Hospital for a cut-scene without Cherrl.\n[STEP 12]\nRe-enter Hospital and talk to Cherrl.\n[Cherrl DONE]"
+        },
+        {
+          "source_cell": "M25",
+          "day_label": "9",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "10"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Thanks!"
+            ]
+          },
+          "source_condition": "Go to Cherrl's House and talk to Cherrl. Say [Thanks!] for faster dialogue.\n[STEP 10]"
+        },
+        {
+          "source_cell": "M27",
+          "day_label": "10",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [
+            "11"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Cherrl's House and talk to Cherrl.\n[STEP 11]"
+        },
+        {
+          "source_cell": "M29",
+          "day_label": "11",
+          "location": "Town",
+          "route": "path_2",
+          "affected_npc": "Cherrl",
+          "named_npc_mentions": [
+            "Cherrl"
+          ],
+          "step_labels": [],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Cherrl's House and talk to Cherrl.\n[Cherrl DONE]"
+        }
+      ]
+    },
+    {
+      "quest_id": "temple_alley_casino",
+      "affected_npc": null,
+      "state_keys": [
+        "quest.temple_alley_casino.completed_steps",
+        "quest.temple_alley_casino.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "N3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              6000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "With at least 6000G go to Carpenter and Expand your house."
+        },
+        {
+          "source_cell": "N5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Jorda"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              4000,
+              4000,
+              40000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "To build a bigger temple.",
+              "I'll give you 4000G"
+            ]
+          },
+          "source_condition": "With at least 4000G go to Chappel and talk to Jorda. Say [To build a bigger temple.] and [I'll give you 4000G].\nWith 40000G go to Carpenter and build Alley."
+        },
+        {
+          "source_cell": "N7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Jorda"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              100000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Temple and talk to Jorda. Re-enter Temple and talk to Jorda again.\nWith 100000G go to Carpenter and build a Casino."
+        }
+      ]
+    },
+    {
+      "quest_id": "arcade",
+      "affected_npc": null,
+      "state_keys": [
+        "quest.arcade.completed_steps",
+        "quest.arcade.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "P3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Pen"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [
+              1
+            ],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 1 (check „Buildings score” tab)."
+        },
+        {
+          "source_cell": "P5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Pen"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [
+              2
+            ],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Carpenter and talk to Pen.\nUpgrade buildings so that total upgrades score is at least 2 (check „Buildings score” tab)."
+        },
+        {
+          "source_cell": "P7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Pen"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [
+              3
+            ],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Carpenter and talk to Pen. Talk to Pen again. He'll say he's got a dream of building amusement center.\nUpgrade buildings so that total upgrades score is at least 3 (check „Buildings score” tab)."
+        },
+        {
+          "source_cell": "P9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Pen"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              30000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Do you want me to pay for it?",
+              "I'll hand you that money"
+            ]
+          },
+          "source_condition": "With 30000G go to Carpenter and talk to Pen. Talk to him again and say [Do you want me to pay for it?] and [I'll hand you that money]."
+        }
+      ]
+    },
+    {
+      "quest_id": "gym",
+      "affected_npc": null,
+      "state_keys": [
+        "quest.gym.completed_steps",
+        "quest.gym.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "Q3",
+          "day_label": "0",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Barry"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "No I'm not!"
+            ]
+          },
+          "source_condition": "Go to Blacksmith and talk to Barry. Say [No I'm not!]."
+        },
+        {
+          "source_cell": "Q4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              10
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 10F in any tower visit."
+        },
+        {
+          "source_cell": "Q5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Barry"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Blacksmith and talk to Barry."
+        },
+        {
+          "source_cell": "Q6",
+          "day_label": "1",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              20
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 20F in any tower visit."
+        },
+        {
+          "source_cell": "Q7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Barry"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Go to Blacksmith and talk to Barry."
+        },
+        {
+          "source_cell": "Q8",
+          "day_label": "2",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              30
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Reach at least 30F in any tower visit."
+        },
+        {
+          "source_cell": "Q9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Barry"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              30000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "Just looking around."
+            ]
+          },
+          "source_condition": "Go to Blacksmith and talk to Barry. Say [Just looking around.]. Talk to Barry again.\nWith 30000G go to Carpenter and build Gym."
+        }
+      ]
+    },
+    {
+      "quest_id": "selfi",
+      "affected_npc": "Selfi",
+      "state_keys": [
+        "quest.selfi.completed_steps",
+        "quest.selfi.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "D4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Enter tower."
+        },
+        {
+          "source_cell": "D5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "1"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 1]"
+        },
+        {
+          "source_cell": "D6",
+          "day_label": "1",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says Koh is handsome."
+        },
+        {
+          "source_cell": "D8",
+          "day_label": "2",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Ghosh"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Ghosh encounter."
+        },
+        {
+          "source_cell": "D10",
+          "day_label": "3",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says Koh is busy hunting treasure."
+        },
+        {
+          "source_cell": "D13",
+          "day_label": "4",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Ghosh",
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Ghosh and Selfi argue about coin."
+        },
+        {
+          "source_cell": "D15",
+          "day_label": "5",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says she is an oasis."
+        },
+        {
+          "source_cell": "D19",
+          "day_label": "6",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi is attacked by Pulunpa. Save her."
+        },
+        {
+          "source_cell": "D20",
+          "day_label": "7",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [
+              1
+            ],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Make sure you've got at least 1 empty slot in inventory and talk to Selfi south of Fountain."
+        },
+        {
+          "source_cell": "D21",
+          "day_label": "7",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says Koh put fire on nails."
+        },
+        {
+          "source_cell": "D22",
+          "day_label": "8",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "5"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 5]"
+        },
+        {
+          "source_cell": "D24",
+          "day_label": "8",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says Koh wet his pants in tower."
+        },
+        {
+          "source_cell": "D25",
+          "day_label": "9",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "6"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 6]"
+        },
+        {
+          "source_cell": "D26",
+          "day_label": "9",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi says Koh can tell where the monster are with his nose."
+        },
+        {
+          "source_cell": "D27",
+          "day_label": "10",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "7"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 7]"
+        },
+        {
+          "source_cell": "D29",
+          "day_label": "11",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "8"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 8]"
+        },
+        {
+          "source_cell": "D31",
+          "day_label": "12",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "9"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 9]"
+        },
+        {
+          "source_cell": "D32",
+          "day_label": "12",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Selfi jumps on you from behind the pillar and says Koh is her main interest."
+        },
+        {
+          "source_cell": "D34",
+          "day_label": "13",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              2
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 2F and watch cut-scene – Koh is attacked by U-Boat and saved by Selfi."
+        },
+        {
+          "source_cell": "D35",
+          "day_label": "14",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "12"
+          ],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Talk to Selfi in front of her house.\n[STEP 12]"
+        },
+        {
+          "source_cell": "D37",
+          "day_label": "15",
+          "location": "Town",
+          "route": null,
+          "affected_npc": "Selfi",
+          "named_npc_mentions": [
+            "Selfi"
+          ],
+          "step_labels": [
+            "13"
+          ],
+          "completion_marker": true,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "You love me. Don't you?"
+            ]
+          },
+          "source_condition": "Talk to Selfi in front of her house and say [You love me. Don't you?].\n[Selfi DONE] [STEP 13]"
+        }
+      ]
+    },
+    {
+      "quest_id": "circuit",
+      "affected_npc": null,
+      "state_keys": [
+        "quest.circuit.completed_steps",
+        "quest.circuit.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "O4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Enter tower."
+        },
+        {
+          "source_cell": "O5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [
+              30000
+            ],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'm building a race track!",
+              "Money is not a concern."
+            ]
+          },
+          "source_condition": "Go to Silver's House and talk to any Nyuel. When you get the chance say [I'm building a race track!] and [Money is not a concern.].\nWith 30000G go to Carpenter and build Circuit."
+        }
+      ]
+    },
+    {
+      "quest_id": "windmills",
+      "affected_npc": null,
+      "state_keys": [
+        "quest.windmills.completed_steps",
+        "quest.windmills.complete"
+      ],
+      "steps": [
+        {
+          "source_cell": "R4",
+          "day_label": "0",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              5
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get to 5F."
+        },
+        {
+          "source_cell": "R5",
+          "day_label": "1",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Issac"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": [
+              "I'll go and get it for you."
+            ]
+          },
+          "source_condition": "Go to Town and talk to Issac. Say [I'll go and get it for you.]."
+        },
+        {
+          "source_cell": "R6",
+          "day_label": "1",
+          "location": "Tower",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [
+              15
+            ],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Guru's Pot"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Get Guru's Pot from 15F"
+        },
+        {
+          "source_cell": "R7",
+          "day_label": "2",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [
+            "Issac"
+          ],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [
+              "Guru's Pot"
+            ],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Give Guru's Pot to Issac."
+        },
+        {
+          "source_cell": "R9",
+          "day_label": "3",
+          "location": "Town",
+          "route": null,
+          "affected_npc": null,
+          "named_npc_mentions": [],
+          "step_labels": [],
+          "completion_marker": false,
+          "variables": {
+            "gold_amounts_gp": [],
+            "floor_numbers": [],
+            "deadline_days": [],
+            "minimum_building_score": [],
+            "minimum_empty_inventory_slots": [],
+            "named_items": [],
+            "bracketed_dialogue": []
+          },
+          "source_condition": "Windmills are now working again."
+        }
+      ]
+    }
+  ]
+}

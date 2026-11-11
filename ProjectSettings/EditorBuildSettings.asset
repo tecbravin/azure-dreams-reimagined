@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/ReimaginedDemo.unity
+    guid: 7d2622fdc43669248a4de7d2387c19d8
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Monsbaiya.unity
+    guid: 7693fa8f550a451c95065be677835491
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/MonsterTower.unity
+    guid: 6a599c8d6c8c42888a3e502e97591372
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_01_koh_house_1.unity
+    guid: 5905f66acc914c8797e2efd452df0264
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_02_koh_house_2.unity
+    guid: dac5707f89024289a08a7a5976adfca3
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_03_koh_house_3.unity
+    guid: e38ebf9aa33e49fbbc0bd65bbc337124
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_06_casino_2.unity
+    guid: 9a099f5d02c2451b8fdc8c085230e85c
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_07_library.unity
+    guid: fc92f9f2a0524fb8bd3cc71a3347dfa7
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_08_gym.unity
+    guid: cfc4c71075234e0eb0e9c8412e71875b
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_09_arcade_1.unity
+    guid: f862ac874ad846c6bc2b178c2613d910
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0a_racetrack_entrance.unity
+    guid: 6146676e6e4e4c7ca7829b6b4a77df46
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0b_theater.unity
+    guid: 546f8d099d174cab9ce0b776fc8ff643
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0c_alley.unity
+    guid: 6171b6f0e68a4c9cbc8d5438a26e192d
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0d_pool_quest_done.unity
+    guid: a46544dbb0434dd98b558d1a7b102694
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0d_pool_quest_not_done.unity
+    guid: fad7d63d8fa44e8f92f83a9a16f3db38
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0e_restaurant.unity
+    guid: c56177b0afab49c5bb9fe7d801627c9c
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_0f_hospital.unity
+    guid: bbcf2c7d1d2749d7b3e9d76838e2cb62
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_10_hospital_2.unity
+    guid: 2a68357eeb354c66ba6c201285c852a9
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_11_temple.unity
+    guid: 261e9a69f4834c58aa2d1d4f201004ef
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_12_temple_2.unity
+    guid: 9921792a5db5480fa487d67ed5190387
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_13_carpenter.unity
+    guid: 4083c98718ef44ceb691bb8655fca7ae
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_14_monster_shop.unity
+    guid: 726e049f11824a4cbe1107840adf5016
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_15_blacksmith.unity
+    guid: 6b3585aed8ca450eb64a24c1fe7b691f
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_16_general_store.unity
+    guid: 19305ab80882476a90f4be04fdbbccdd
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_17_fortune_house.unity
+    guid: d6b2cafafe97414eb21ea762ba024ad2
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_18_cherrl_house.unity
+    guid: 899d7cf867d34b8aabf31eb3841f4392
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_19_generic_building.unity
+    guid: 13d08bbf25954a629d5bc7ab51f7e556
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_1a_generic_building.unity
+    guid: ab319e3ced5d4d6fbb1b321663142903
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_1b_generic_building.unity
+    guid: 61c15cdeeb1d4f4980c7b37dac61bb86
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_1c_generic_building.unity
+    guid: 7d08d8de4b4f4cffb860a588d64b2660
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_1d_generic_building.unity
+    guid: 0c5da8adcaf24baabf61a952e8acdb4d
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_20_bar.unity
+    guid: 889d37c85b49436388cc54476a408969
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_21_rhodes_house.unity
+    guid: 7c0f6950bbd441579144f115240506ac
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_22_nico_house.unity
+    guid: e70849d50efc456f8b857fb892cd2805
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_23_generic_house.unity
+    guid: 687216f2b2db470fb7b6b5098e19838e
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_24_dr_hal_house.unity
+    guid: 72316b429aa34360b3f52c6ab7ebfbdf
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_25_monster_hut_2x2.unity
+    guid: d1dbbb25b5294af99d6139b02195ed25
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_26_monster_hut_3x3.unity
+    guid: 16cfca8341314aba89b3f09c41a363dd
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_27_monster_hut_4x4.unity
+    guid: 4b979d61bfa54fb3ad23c5a8adcd4c14
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_28_monster_hut_6x6.unity
+    guid: 9a6b79ef98214f1a8bebaee2a25c53aa
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_29_monster_hut_8x8.unity
+    guid: 85724a43cb4f42698945ccf955df970c
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_2a_arcade_2.unity
+    guid: 798f2e127f034b32b6f5cddffecfb1d4
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_2b_casino_1.unity
+    guid: 97912898abd248b4b59bc3fa7d9c60c8
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_2c_silver_house.unity
+    guid: 790493eff73c4e4f9ea46a1e3ac0a5c7
+  - enabled: 1
+    path: Assets/AzureDreams/Scenes/Interiors/Interior_37_racetrack_course.unity
+    guid: 1c84d30dead943c9b915fbf1be99689c
+  m_configObjects: {}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feffe5029ce51364ba52a7fd0e5d3b16, type: 3}
+  m_Name: Tilemap_StoneDungeon
+  m_EditorClassIdentifier: AzureDreams.Editor::AzureDreamsReimagined.Editor.TilemapData
+  theme: 0
+  floorMaterial: {fileID: 2100000, guid: b3dedb3d3f345664881eefad26eca541, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 61577b165e38eed4d9f353967908abf8, type: 2}
+  backgroundMaterial: {fileID: 2100000, guid: 411b676028bf6244caca87873d865cb8, type: 2}
+  floorTexture: {fileID: 0}
+  wallTexture: {fileID: 0}
+  tileSize: 1
+  mapWidth: 32
+  mapHeight: 32

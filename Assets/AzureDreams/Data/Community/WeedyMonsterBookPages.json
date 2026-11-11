@@ -1,0 +1,456 @@
+{
+  "source": "User-supplied identification of Familiar Portrait 01\u201350 as Weedy\u2019s monster book artwork.",
+  "notes": "Image numbering is preserved. It is not used as a PS1 species ID. Unlock conditions, book ordering, and descriptions still require decompiled data.",
+  "pages": [
+    {
+      "page": 1,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 01.png",
+      "textureGuid": "0b5c45f6c30e8ee43905503658b228b0",
+      "species": "KEWNE",
+      "ps1SpeciesId": 2,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 2,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 02.png",
+      "textureGuid": "7242221c7a1b39c45bb72d29c6189f5f",
+      "species": "DRAGON",
+      "ps1SpeciesId": 3,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 3,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 03.png",
+      "textureGuid": "7594f3e35a16cde4a828cec876e7b8e3",
+      "species": "KID",
+      "ps1SpeciesId": 4,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 4,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 04.png",
+      "textureGuid": "b33d770f9cb818246a9f73725712611a",
+      "species": "IFRIT",
+      "ps1SpeciesId": 5,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 5,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 05.png",
+      "textureGuid": "4ac126d36d4a1ff438004f18cdc86783",
+      "species": "FLAME",
+      "ps1SpeciesId": 6,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 6,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 06.png",
+      "textureGuid": "6cda39d0405e2724bbca846e478c8e30",
+      "species": "GRINEUT",
+      "ps1SpeciesId": 7,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 7,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 07.png",
+      "textureGuid": "dc70102427689174b8e3317a90775eae",
+      "species": "GRIFFON",
+      "ps1SpeciesId": 8,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 8,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 08.png",
+      "textureGuid": "40db5fd8676271444b9e2fb401ebad03",
+      "species": "SABER",
+      "ps1SpeciesId": 9,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 9,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 09.png",
+      "textureGuid": "35aba753de118cc4db3bafdfa2d104b1",
+      "species": "BALOON",
+      "ps1SpeciesId": 25,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 10,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 10.png",
+      "textureGuid": "5a88e6492a4152943846c88084406fd6",
+      "species": "UNIVERN",
+      "ps1SpeciesId": 17,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 11,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 11.png",
+      "textureGuid": "e085713b60c88ed48a5e1c4c75733439",
+      "species": "ASHRA",
+      "ps1SpeciesId": 11,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 12,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 12.png",
+      "textureGuid": "7b2b8285374256542a8306474f09865e",
+      "species": "ARACHNE",
+      "ps1SpeciesId": 12,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 13,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 13.png",
+      "textureGuid": "972d81a1f5f767344a321738bfc8e5d0",
+      "species": "BATTNEL",
+      "ps1SpeciesId": 13,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 14,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 14.png",
+      "textureGuid": "d91746b04b4faef4c8140e5f08b351eb",
+      "species": "DEATH",
+      "ps1SpeciesId": 15,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 15,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 15.png",
+      "textureGuid": "31ef9a2b02b956c45bb1abfb85ed584e",
+      "species": "TYRANT",
+      "ps1SpeciesId": 43,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 16,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 16.png",
+      "textureGuid": "d2dafb5cde206ce45a66663d21f700f2",
+      "species": "MAXIMUM",
+      "ps1SpeciesId": 45,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 17,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 17.png",
+      "textureGuid": "8d9372f34f6fb4143a475a44a3242c50",
+      "species": "SNOWMAN",
+      "ps1SpeciesId": 10,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 18,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 18.png",
+      "textureGuid": "9b310f1652505b14cbb553030b89c54c",
+      "species": "NAPLASS",
+      "ps1SpeciesId": 37,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 19,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 19.png",
+      "textureGuid": "ad3a693b3469e784a8ae1dc6a6bcfba4",
+      "species": "CLOWN",
+      "ps1SpeciesId": 16,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 20,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 20.png",
+      "textureGuid": "c0752198ce8852b488a4ea4bb57b2ab2",
+      "species": "BLOCK",
+      "ps1SpeciesId": 20,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 21,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 21.png",
+      "textureGuid": "7a08633e1cacbaa418ed0a26f3c10aa1",
+      "species": "TROLL",
+      "ps1SpeciesId": 22,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 22,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 22.png",
+      "textureGuid": "abd7d2f79a51ef446be15e65b2e1fab0",
+      "species": "VIPER",
+      "ps1SpeciesId": 36,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 23,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 23.png",
+      "textureGuid": "5a8da0cd4f2c05648af8452c2607d0ad",
+      "species": "BARONG",
+      "ps1SpeciesId": 31,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 24,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 24.png",
+      "textureGuid": "e8c33d1f7efdd9b43ac026a253867a57",
+      "species": "CYCLONE",
+      "ps1SpeciesId": 29,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 25,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 25.png",
+      "textureGuid": "a3fbe6d02677e8c4eb12023e691903a8",
+      "species": "BLUME",
+      "ps1SpeciesId": 27,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 26,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 26.png",
+      "textureGuid": "2c63cd7e6b00a18448719b49f81765d2",
+      "species": "VOLCANO",
+      "ps1SpeciesId": 28,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 27,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 27.png",
+      "textureGuid": "9973cfd223a602b45b9cecd6472d9942",
+      "species": "KRAKEN",
+      "ps1SpeciesId": 33,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 28,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 28.png",
+      "textureGuid": "3c213be708e31174f9f9172a244aabc3",
+      "species": "MANDARA",
+      "ps1SpeciesId": 39,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 29,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 29.png",
+      "textureGuid": "04e1ab5ac0a497f4f97fe06d973e148b",
+      "species": "GARUDA",
+      "ps1SpeciesId": 41,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 30,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 30.png",
+      "textureGuid": "be9e0bb8f35043c4b96e1f3e4316060a",
+      "species": "GLACIER",
+      "ps1SpeciesId": 42,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 31,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 31.png",
+      "textureGuid": "46c9e4544d3ff5a44b710d2514f0ac8a",
+      "species": "NOISE",
+      "ps1SpeciesId": 23,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 32,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 32.png",
+      "textureGuid": "53c547a6adf0e6844b07a16cdb8426e2",
+      "species": "DREAMIN",
+      "ps1SpeciesId": 26,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 33,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 33.png",
+      "textureGuid": "edf897074253d874ea48c79d775608f9",
+      "species": "STEALTH",
+      "ps1SpeciesId": 35,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 34,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 34.png",
+      "textureGuid": "a13481cadf7e3aa4596283769390b834",
+      "species": "WEADOG",
+      "ps1SpeciesId": 34,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 35,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 35.png",
+      "textureGuid": "7f01e8afe8885c545984aabc42816126",
+      "species": "ZU",
+      "ps1SpeciesId": 38,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 36,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 36.png",
+      "textureGuid": "bb9714654fcadf9428865cbf00c2846d",
+      "species": "UNICORN",
+      "ps1SpeciesId": 18,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 37,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 37.png",
+      "textureGuid": "33f24f6e9ae32994e8e36e353db57d82",
+      "species": "METAL",
+      "ps1SpeciesId": 19,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 38,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 38.png",
+      "textureGuid": "2433f386d3d759749bd8df3b721e4d34",
+      "species": "KILLER",
+      "ps1SpeciesId": 40,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 39,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 39.png",
+      "textureGuid": "4fb1f67e7827a52498fa858041968fbd",
+      "species": "MANOEVA",
+      "ps1SpeciesId": 30,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 40,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 40.png",
+      "textureGuid": "e02d841e206226b47a5d284ee850d7cd",
+      "species": "U_BOAT",
+      "ps1SpeciesId": 24,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 41,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 41.png",
+      "textureGuid": "330db0f1d26c68d429239fd47fe7d2ec",
+      "species": "PULUNPA",
+      "ps1SpeciesId": 21,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 42,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 42.png",
+      "textureGuid": "106c4d2d24239704792c4745b25a4340",
+      "species": "PICKET",
+      "ps1SpeciesId": 32,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 43,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 43.png",
+      "textureGuid": "c98c83660e0d5cf4bad8036edf8b7f72",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 44,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 44.png",
+      "textureGuid": "8ace2e64eed75f9418eda14a572bbb83",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 45,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 45.png",
+      "textureGuid": "386f3affbffa6f542abba53a2d1ee890",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 46,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 46.png",
+      "textureGuid": "798fa17ded9b5694485e073404f2cea1",
+      "species": "GOLEM",
+      "ps1SpeciesId": 44,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 47,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 47.png",
+      "textureGuid": "5a6f0965062ba214e966d2425ec061ac",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 48,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 48.png",
+      "textureGuid": "5b40bff1a8d593942a9718e1d976320f",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 49,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 49.png",
+      "textureGuid": "5d17d9e43b5bae64c9454e33c3ab2b20",
+      "species": null,
+      "ps1SpeciesId": null,
+      "identification": "unresolved",
+      "use": "WeedyMonsterBook"
+    },
+    {
+      "page": 50,
+      "image": "Assets/AzureDreams/SpritersResource/Familiar Portrait 50.png",
+      "textureGuid": "ce876788bb61aea43b820a5d7da478dd",
+      "species": "FROG",
+      "ps1SpeciesId": 46,
+      "identification": "visual_match_pending_retail_page_table",
+      "use": "WeedyMonsterBook"
+    }
+  ]
+}

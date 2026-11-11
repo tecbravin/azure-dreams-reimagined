@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8636BB91-3C22-043D-59DF-7567C60565FD}|AzureDreams.Runtime.csproj|c:\\users\\tecbr\\documents\\projetos pessoais\\azure\\azure dreams reimagined\\assets\\azuredreams\\scripts\\towertilemapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8636BB91-3C22-043D-59DF-7567C60565FD}|AzureDreams.Runtime.csproj|solutionrelative:assets\\azuredreams\\scripts\\towertilemapgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{48171C7E-168D-FDF1-2642-4736EA2E6409}|AzureDreams.Reimagined.EditorTests.csproj|c:\\users\\tecbr\\documents\\projetos pessoais\\azure\\azure dreams reimagined\\assets\\tests\\editor\\editortests.asmdef||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{48171C7E-168D-FDF1-2642-4736EA2E6409}|AzureDreams.Reimagined.EditorTests.csproj|solutionrelative:assets\\tests\\editor\\editortests.asmdef||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DDA95A81-F199-39C1-9913-54EB000B8900}|AzureDreams.Editor.csproj|c:\\users\\tecbr\\documents\\projetos pessoais\\azure\\azure dreams reimagined\\assets\\editor\\audioimportpostprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DDA95A81-F199-39C1-9913-54EB000B8900}|AzureDreams.Editor.csproj|solutionrelative:assets\\editor\\audioimportpostprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TowerTilemapGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\AzureDreams\\Scripts\\TowerTilemapGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\AzureDreams\\Scripts\\TowerTilemapGenerator.cs",
+              "ToolTip": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\AzureDreams\\Scripts\\TowerTilemapGenerator.cs",
+              "RelativeToolTip": "Assets\\AzureDreams\\Scripts\\TowerTilemapGenerator.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAQwEEAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-03T20:11:24.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EditorTests.asmdef",
+              "DocumentMoniker": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\Tests\\Editor\\EditorTests.asmdef",
+              "RelativeDocumentMoniker": "Assets\\Tests\\Editor\\EditorTests.asmdef",
+              "ToolTip": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\Tests\\Editor\\EditorTests.asmdef",
+              "RelativeToolTip": "Assets\\Tests\\Editor\\EditorTests.asmdef",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001874|",
+              "WhenOpened": "2026-11-01T18:29:56.498Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AudioImportPostprocessor.cs",
+              "DocumentMoniker": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\Editor\\AudioImportPostprocessor.cs",
+              "RelativeDocumentMoniker": "Assets\\Editor\\AudioImportPostprocessor.cs",
+              "ToolTip": "C:\\Users\\tecbr\\Documents\\Projetos Pessoais\\Azure\\Azure Dreams Reimagined\\Assets\\Editor\\AudioImportPostprocessor.cs",
+              "RelativeToolTip": "Assets\\Editor\\AudioImportPostprocessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-01T18:29:47.352Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
