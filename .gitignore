@@ -19,4 +19,7 @@ Recordings/
 *.VC.db
 .DS_Store
 Thumbs.db
-/Build-Cloudflare/
+Build-Cloudflare/
+Build/
+Builds/
+*.zip
