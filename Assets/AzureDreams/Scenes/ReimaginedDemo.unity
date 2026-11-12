@@ -260,6 +260,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: cb07e076765f3994d83daf6ed91af68a, type: 3}
   - {fileID: 2800000, guid: 60cc0dec8524a52459eb92a9c19d6c2b, type: 3}
   _storyResidents:
+  - {fileID: 5151358256163527516, guid: 0ce4b08aa70141fab4b7b5bd140ed015, type: 3}
   - {fileID: 5151358256163527516, guid: b8c171662b9a425495774ce7a18013bd, type: 3}
   - {fileID: 5151358256163527516, guid: 072f76782cdf4562b38fb8dd19b3047c, type: 3}
   - {fileID: 5151358256163527516, guid: b8002e503856446fb3a399524b7dcfb4, type: 3}

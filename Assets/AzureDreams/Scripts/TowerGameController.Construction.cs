@@ -12,6 +12,17 @@ namespace AzureDreamsReimagined
         private const string CarpenterInterior = "Interior_13_carpenter";
         private const string ConstructionResources = "Town/Retail/Construction/";
         private const string ConstructionKey = "town.construction.";
+        // Availability halfwords from town_building_records at TOWN.BIN 0x54EE4.
+        private const int CasinoPlanFlag = 4807; // F_casino_build
+        private const int LibraryPlanFlag = 4800; // F_hal_build
+        private const int GymPlanFlag = 4808; // F_gym_build
+        private const int ArcadePlanFlag = 4809; // F_playland_build
+        private const int CircuitPlanFlag = 2865; // F_sbs44_pad03
+        private const int TheaterPlanFlag = 4802; // F_engei_build
+        private const int BowlingPlanFlag = 4810; // F_bowling_build
+        private const int HushClinicTalkFlag = 4003; // F_shospital_first_hush
+        private const string TempleRequestKey = ConstructionKey + "temple_requested";
+        private const string GymRequestKey = ConstructionKey + "gym_requested";
 
         private sealed class BuildingProject
         {
@@ -84,18 +95,115 @@ namespace AzureDreamsReimagined
             _ => project.HutRank > 0 ? hutRank >= project.HutRank : completed
         };
 
-        private static string ProjectRequirement(BuildingProject project) => project.Id switch
+        private static int ConstructionPlanFlag(string id) => id switch
         {
-            "home_2" or "temple" when CurrentHomeRank == 0 =>
-                T("Expand Koh's house first.", "Amplie a casa do Koh primeiro."),
-            "alley" when !TownSaveVariables.GetBool(ConstructionKey + "temple") =>
-                T("Renovate the temple first.", "Reforme o templo primeiro."),
-            "casino" when !TownSaveVariables.GetBool(ConstructionKey + "alley") =>
-                T("Build the bowling alley first.", "Construa o boliche primeiro."),
-            _ when project.HutRank > CurrentHutRank + 1 =>
-                T("Order the previous hut expansion first.", "Encomende a ampliação anterior do alojamento primeiro."),
-            _ => null
+            "hospital" => HushClinicTalkFlag,
+            "library" => LibraryPlanFlag,
+            "alley" => BowlingPlanFlag,
+            "gym" => GymPlanFlag,
+            "circuit" => CircuitPlanFlag,
+            "theater" => TheaterPlanFlag,
+            "casino" => CasinoPlanFlag,
+            "arcade" => ArcadePlanFlag,
+            _ => 0
         };
+
+        private static string ProjectRequirement(BuildingProject project)
+        {
+            int flag = ConstructionPlanFlag(project.Id);
+            if (flag != 0 && !TownRetailScriptFlags.CreatePersistent().IsFlagSet(flag))
+                return T("Talk to the resident who requested this project.", "Fale com o morador que pediu esta obra.");
+
+            return project.Id switch
+            {
+                // Nico's donations complete the fountain directly.
+                "fountain" => T("Help Nico with her fundraiser.", "Ajude a Nico na arrecadação."),
+                "temple" when !TownSaveVariables.GetBool(TempleRequestKey) =>
+                    T("Talk to Jorda about the temple.", "Fale com Jorda sobre o templo."),
+                "home_2" or "temple" when CurrentHomeRank == 0 =>
+                    T("Expand Koh's house first.", "Amplie a casa do Koh primeiro."),
+                _ when project.HutRank > CurrentHutRank + 1 =>
+                    T("Order the previous hut expansion first.", "Encomende a ampliação anterior do alojamento primeiro."),
+                _ => null
+            };
+        }
+
+        private void UnlockConstructionPlan(int flag)
+        {
+            TownRetailScriptFlags.CreatePersistent().SetBit(flag);
+            PersistTownProgress();
+        }
+
+        private bool OfferConstructionPlan(NPCController npc, int flag, string english, string portuguese) =>
+            StoryAsk(npc, english, portuguese,
+                (T("Ask Tonka to build it", "Pedir ao Tonka para construir"), () => UnlockConstructionPlan(flag)),
+                (T("Later", "Depois"), null));
+
+        private bool TryConstructionStory(NPCController npc)
+        {
+            var flags = TownRetailScriptFlags.CreatePersistent();
+            int highestFloor = TownSaveVariables.GetInt(TownReputation.HighestFloorKey);
+            switch (npc.npcId)
+            {
+                case "hush" when StoryRoom == "Interior_0f_hospital" && highestFloor > 0 &&
+                    !StoryBuilding("hospital") && !flags.IsFlagSet(HushClinicTalkFlag):
+                    return OfferConstructionPlan(npc, HushClinicTalkFlag,
+                        "Will you help us turn this clinic into a proper hospital?",
+                        "Você pode ajudar a transformar esta clínica em um hospital?");
+                case "jorda" when CurrentHomeRank > 0 && StoryRoom == "Interior_11_temple" &&
+                    !StoryBuilding("temple") && !TownSaveVariables.GetBool(TempleRequestKey):
+                    return StoryAsk(npc, "Will you help us build a bigger temple?", "Você pode ajudar a ampliar o templo?",
+                        (T("Help rebuild the temple", "Ajudar a reformar o templo"), () =>
+                        {
+                            TownSaveVariables.SetBool(TempleRequestKey, true);
+                            PersistTownProgress();
+                        }), (T("Later", "Depois"), null));
+                case "jorda" when StoryRoom == "Interior_12_temple_2":
+                    if (!StoryBuilding("alley") && !flags.IsFlagSet(BowlingPlanFlag))
+                        return OfferConstructionPlan(npc, BowlingPlanFlag, "How about a bowling alley for Monsbaiya?",
+                            "Que tal uma pista de boliche para Monsbaiya?");
+                    if (StoryBuilding("alley") && !StoryBuilding("casino") && !flags.IsFlagSet(CasinoPlanFlag))
+                        return OfferConstructionPlan(npc, CasinoPlanFlag, "What do you think about building a casino?",
+                            "O que você acha de construir um cassino?");
+                    break;
+                case "construction_fon" when !StoryBuilding("theater") && !flags.IsFlagSet(TheaterPlanFlag):
+                    return OfferConstructionPlan(npc, TheaterPlanFlag, "Monsbaiya needs a theater. Would you help build one?",
+                        "Monsbaiya precisa de um teatro. Você pode ajudar a construir um?");
+                case "construction_hal" when !StoryBuilding("library") && !flags.IsFlagSet(LibraryPlanFlag):
+                    return OfferConstructionPlan(npc, LibraryPlanFlag, "Would you build a library where people can study the Tower?",
+                        "Você construiria uma biblioteca onde as pessoas possam estudar a Torre?");
+                case "construction_silver" when !StoryBuilding("circuit") && !flags.IsFlagSet(CircuitPlanFlag):
+                    return OfferConstructionPlan(npc, CircuitPlanFlag, "Would you build a track where we can race monsters?",
+                        "Você construiria uma pista para corridas de monstros?");
+                case "construction_pen" when !StoryBuilding("arcade") && !flags.IsFlagSet(ArcadePlanFlag):
+                    return OfferConstructionPlan(npc, ArcadePlanFlag, "My dream is to open an amusement center.",
+                        "Meu sonho é abrir um centro de diversão.");
+                case "barry" when StoryRoom == BlacksmithInterior && highestFloor >= 30 &&
+                    !StoryBuilding("gym") && !flags.IsFlagSet(GymPlanFlag):
+                    if (!TownSaveVariables.GetBool(GymRequestKey))
+                        return StoryTalk(npc, "You've climbed high enough to know how important it is to train.",
+                            "Você já subiu o bastante para saber como é importante treinar.", () =>
+                            {
+                                TownSaveVariables.SetBool(GymRequestKey, true);
+                                PersistTownProgress();
+                            });
+                    return OfferConstructionPlan(npc, GymPlanFlag, "Would you help build a gym for the hunters?",
+                        "Você pode ajudar a construir uma academia para os caçadores?");
+            }
+            return false;
+        }
+
+        private void SpawnConstructionResidents()
+        {
+            var flags = TownRetailScriptFlags.CreatePersistent();
+            if (StoryStage("vivian") >= 4 && !StoryBuilding("theater") && !flags.IsFlagSet(TheaterPlanFlag))
+                SpawnStoryResident("dar", "construction_fon", "Fon", new Vector2Int(87, 70));
+            if (PoolRestored && !StoryBuilding("library") && !flags.IsFlagSet(LibraryPlanFlag))
+                SpawnStoryResident("dar", "construction_hal", "Dr. Hal", new Vector2Int(68, 78));
+            if (TownSaveVariables.GetInt(TownReputation.HighestFloorKey) > 0 &&
+                !StoryBuilding("circuit") && !flags.IsFlagSet(CircuitPlanFlag))
+                SpawnStoryResident("dar", "construction_silver", "Silver", new Vector2Int(21, 45));
+        }
 
         private void OpenCarpenter()
         {

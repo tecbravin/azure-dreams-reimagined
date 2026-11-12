@@ -69,6 +69,7 @@ namespace AzureDreamsReimagined
         private void SpawnOutdoorStoryResidents()
         {
             if (!UsingRetailTown) return;
+            SpawnConstructionResidents();
             if (StoryStage("nico") is 1 or 2)
                 SpawnStoryResident("nico", "nico", "Nico", new Vector2Int(58, 72));
             if (StoryStage("nico") == 3)
@@ -98,6 +99,9 @@ namespace AzureDreamsReimagined
         {
             switch (room)
             {
+                case CarpenterInterior when CurrentHomeRank + CurrentHutRank >= 3 && !StoryBuilding("arcade"):
+                    SpawnStoryResident("dar", "construction_pen", "Pen", default);
+                    break;
                 case CasinoRoom when StoryStage("vivian") == 4:
                     SpawnStoryResident("vivian", "vivian", "Vivian", default);
                     break;

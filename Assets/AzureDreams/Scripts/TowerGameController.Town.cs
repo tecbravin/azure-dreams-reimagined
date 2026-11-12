@@ -420,7 +420,7 @@ namespace AzureDreamsReimagined
                 if (facing.sqrMagnitude > 0.0001f) speaker.transform.rotation = Quaternion.LookRotation(facing);
                 if (speaker.npcId == "barry" && _interior && _interior.interiorId == BlacksmithInterior)
                 {
-                    SetBarryShopPage(BarryShopPage.Services);
+                    if (!TryConstructionStory(speaker)) SetBarryShopPage(BarryShopPage.Services);
                     return true;
                 }
                 if (TryTownStory(speaker) || TheaterService(speaker)) return true;

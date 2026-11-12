@@ -179,7 +179,7 @@ namespace AzureDreamsReimagined
             if (!_kewneSkipIcon) _kewneSkipIcon = Resources.Load<Texture2D>(EntranceResources + "KewneDialogueSkip");
 
             string binding = _mapAction?.GetBindingDisplayString() ?? "Right Shift";
-            string label = T($"Skip Dialogue [{binding}]", $"Pular diálogo [{binding}]");
+            string label = T($"Skip [{binding}]", $"Pular [{binding}]");
             _dialogueSkipStyle ??= new GUIStyle(_messageStyle) { fontSize = 14, wordWrap = false };
             float labelWidth = _retailFont && !GameLanguage.Portuguese
                 ? 8f * label.Length : _dialogueSkipStyle.CalcSize(new GUIContent(label)).x;

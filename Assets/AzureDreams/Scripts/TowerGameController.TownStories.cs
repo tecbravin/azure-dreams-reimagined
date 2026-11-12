@@ -120,7 +120,7 @@ namespace AzureDreamsReimagined
 
         private bool TryTownStory(NPCController npc)
         {
-            if (PoolService(npc)) return true;
+            if (TryConstructionStory(npc) || PoolService(npc)) return true;
             return npc.npcId switch
             {
                 "nico" or "chero" => NicoStory(npc),
@@ -280,6 +280,10 @@ namespace AzureDreamsReimagined
             if (stage == 3 && StoryRoom == BarRoom)
                 return StoryTalk(npc, "I'm Vivian Merca. I dance here, but I've always wanted to perform in a theater.",
                     "Sou Vivian Merca. Danço aqui, mas sempre quis me apresentar em um teatro.", () => AdvanceTownStory(route, 4));
+            if (stage == 4 && StoryRoom == BarRoom && !StoryBuilding("casino") &&
+                !TownRetailScriptFlags.CreatePersistent().IsFlagSet(CasinoPlanFlag))
+                return OfferConstructionPlan(npc, CasinoPlanFlag, "I'd love to dance at a casino someday.",
+                    "Eu adoraria dançar em um cassino um dia.");
             if (stage == 4 && StoryNewDay(route) && StoryBuilding("theater") &&
                 (StoryRoom == CasinoRoom || !StoryBuilding("casino") && StoryRoom == BarRoom))
                 return StoryAsk(npc, "Do you really think I'd be welcome on the theater stage?",
