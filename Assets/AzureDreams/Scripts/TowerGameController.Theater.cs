@@ -214,7 +214,7 @@ namespace AzureDreamsReimagined
                 ? (_comedyMistakes < 3 ? T("The audience applauds!", "A plateia aplaude!") : T("Three bonks! The show is over.", "Três pancadas! Fim do espetáculo."))
                 : _theaterAnswerReady ? T(ComedyLines[_comedyLine].En, ComedyLines[_comedyLine].Pt)
                     : T($"Fon and Dodo · Bonks: {_comedyMistakes}/3", $"Fon e Dodo · Pancadas: {_comedyMistakes}/3");
-            DrawHudText(new Rect(box.x + 12f, box.y + 8f, box.width - 24f, 52f), text, _messageStyle);
+            DrawHudText(new Rect(box.x + 12f, box.y + 8f, box.width - 24f, 52f), text, _messageStyle, dialogue: true);
             if (_theaterAnswerReady)
             {
                 float timeLeft = Mathf.Clamp01((_comedyNextAt - Time.unscaledTime) / 5f);

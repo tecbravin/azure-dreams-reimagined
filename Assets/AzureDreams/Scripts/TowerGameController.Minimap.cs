@@ -24,7 +24,9 @@ namespace AzureDreamsReimagined
 
         private void DiscoverMinimapItems()
         {
-            if (_area != Area.Tower || KohIsBlind || (!_seeAllItems && !_gameCamera)) return;
+            // The entrance camera orbits the whole first floor. Wait for gameplay framing
+            // before permanently recording which items Koh has actually seen.
+            if (_area != Area.Tower || KohIsBlind || _towerArrivalPlaying || (!_seeAllItems && !_gameCamera)) return;
             if (!_seeAllItems) GeometryUtility.CalculateFrustumPlanes(_gameCamera, _itemVisibilityPlanes);
             foreach (var pair in _itemMarkers)
                 DiscoverItem(pair.Key, pair.Value);
@@ -207,7 +209,7 @@ namespace AzureDreamsReimagined
             GUI.color = Color.white;
             if (_mapBlackout > 0f)
                 GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture,
-                    ScaleMode.StretchToFill, true, 0f, new Color(0f, 0f, 0f, _mapBlackout), 0f, 0f);
+                    ScaleMode.StretchToFill, true, 0f, new Color(0f, 0f, 0f, Mathf.Min(_mapBlackout, 0.5f)), 0f, 0f);
 
             GUI.DrawTexture(new Rect(map.x - 5f, map.y - 5f, map.width + 10f, map.height + 10f),
                 Texture2D.whiteTexture, ScaleMode.StretchToFill, true, 0f,

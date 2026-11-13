@@ -164,8 +164,12 @@ namespace AzureDreamsReimagined
                             "Que tal uma pista de boliche para Monsbaiya?");
                     if (StoryBuilding("alley") && !StoryBuilding("casino") && !flags.IsFlagSet(CasinoPlanFlag))
                         return OfferConstructionPlan(npc, CasinoPlanFlag, "What do you think about building a casino?",
-                            "O que você acha de construir um cassino?");
-                    break;
+"O que você acha de construir um cassino?");
+                    if (StoryBuilding("casino"))
+                        return StoryTalk(npc, "Monsbaiya has a casino and a bowling alley now. The town is livelier already!",
+                            "Monsbaiya agora tem um cassino e um boliche. A cidade já está mais animada!");
+                    return StoryTalk(npc, "Take the plans to the carpenter when you are ready to build.",
+                        "Quando estiver pronto para construir, fale com o carpinteiro.");
                 case "construction_fon" when !StoryBuilding("theater") && !flags.IsFlagSet(TheaterPlanFlag):
                     return OfferConstructionPlan(npc, TheaterPlanFlag, "Monsbaiya needs a theater. Would you help build one?",
                         "Monsbaiya precisa de um teatro. Você pode ajudar a construir um?");
@@ -244,7 +248,7 @@ namespace AzureDreamsReimagined
             }
             else if (!_constructionConfirm && _availableConstructionProjects.Count > 0 && Keyboard.current is { } keys)
             {
-                int step = keys.upArrowKey.wasPressedThisFrame ? -1 : keys.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
                 int next = Mathf.Clamp(_constructionRow + step, 0, _availableConstructionProjects.Count - 1);
                 if (next != _constructionRow) PlayRetailSound(RetailSfx.Cursor);
                 _constructionRow = next;
@@ -438,7 +442,7 @@ namespace AzureDreamsReimagined
         private void EnterConstruction(BuildingProject project)
         {
             string interior = project.Interior == "KohHome" ? CurrentHomeScene() : project.Interior;
-            StartCoroutine(LoadInterior(interior, ConstructionReturnPosition(project)));
+            StartCoroutine(LoadInterior(interior, ConstructionReturnPosition(project), spawnAboveExitMarker: true));
         }
 
         private bool TryConstructionEntrance()

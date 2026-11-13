@@ -44,6 +44,17 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d08824da937e45d3998c97198bc5468e, type: 2}
   - {fileID: 2100000, guid: 1022b969353a467da5b0b30127e68597, type: 2}
   - {fileID: 2100000, guid: bc2ac5fda518465683f835aa185dd383, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: ca3db480695421f45aeace6221119ee3, type: 3}
+  - {fileID: 2800000, guid: b63bca0e144633a44825e937dfac2a04, type: 3}
+  - {fileID: 2800000, guid: 624a9e36a20003149b2b3346c34cd824, type: 3}
+  - {fileID: 2800000, guid: 1d98abb3b1b1ea7489d25130ff30258a, type: 3}
+  - {fileID: 2800000, guid: 03ae8b075796dce4c996a60b52c81747, type: 3}
+  - {fileID: 2800000, guid: 0d02ad93b47e70747959b31c3531e892, type: 3}
+  - {fileID: 2800000, guid: e41145066bd62c645b3d4b42e3eeabca, type: 3}
+  - {fileID: 2800000, guid: dfa0ec8aa50287a4dbe7fb1cb291e8f0, type: 3}
+  - {fileID: 2800000, guid: 6085f97544ac64447bd22330909435c2, type: 3}
   entryPosition: {x: 16, y: 2, z: 16.5}
   useArrivalPosition: 1
   arrivalPosition: {x: 16, y: 2, z: 14.5}

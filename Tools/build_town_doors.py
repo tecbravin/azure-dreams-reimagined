@@ -110,7 +110,8 @@ for index in range(len(doorway_faces)):
     if len(points) != 22 or min(y) != 0 or max(y) != 1.75 or max(x)-min(x) != 1 or max(z)-min(z) != 1:
         continue
     center = (min(x)+max(x))/2, max(z)
-    door = dict(x=center[0], z=center[1], style=shop_styles.get(center, "Residence"))
+    door = dict(x=center[0], z=center[1], width=max(x)-min(x), height=max(y)-min(y),
+                style=shop_styles.get(center, "Residence"))
     if center in interiors:
         door["interior"] = interiors[center]
     doors.append(door)

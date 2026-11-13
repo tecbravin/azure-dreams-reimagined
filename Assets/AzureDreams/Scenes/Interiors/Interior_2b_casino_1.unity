@@ -64,6 +64,37 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 33f8608b90334761aee6339b62e8d199, type: 2}
   - {fileID: 2100000, guid: 02436507c927438fa0b96ee9003ff7c1, type: 2}
   - {fileID: 2100000, guid: 70ef2274cade49b289c678e0438e75e8, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: 4e4b0874d99c9e548a5d04923ce37af9, type: 3}
+  - {fileID: 2800000, guid: a9b213f55a6057043a159d13833a2604, type: 3}
+  - {fileID: 2800000, guid: 4eb8690bb78c5e74b8caf18af7ad1680, type: 3}
+  - {fileID: 2800000, guid: 55c9f2c8324325d48b9f5593ba026b14, type: 3}
+  - {fileID: 2800000, guid: cafddac34121b9a40abaf8b1ccddf939, type: 3}
+  - {fileID: 2800000, guid: 19e875ebad2b50b428860a3e94a2bdc2, type: 3}
+  - {fileID: 2800000, guid: 4a9e1c34e9e4e2c479e8a99d6c7d0f01, type: 3}
+  - {fileID: 2800000, guid: a1c8692000334054aad84d3490a54abf, type: 3}
+  - {fileID: 2800000, guid: 9ae68d5aa46550540ac7c0aa58f48b96, type: 3}
+  - {fileID: 2800000, guid: 8a37c508e494203469f7ce8d0a7bd9bc, type: 3}
+  - {fileID: 2800000, guid: 3aaef1e6af4849549b72993944ac20df, type: 3}
+  - {fileID: 2800000, guid: 8b96c3c1db095254490d5e3e9443e4ec, type: 3}
+  - {fileID: 2800000, guid: c3b8cf8ff148b6f4691182352625c8d7, type: 3}
+  - {fileID: 2800000, guid: af8198e5248b7124f8bdade9b0f93074, type: 3}
+  - {fileID: 2800000, guid: a7c1fb5d74f007b4180ea2d01ecd5368, type: 3}
+  - {fileID: 2800000, guid: e7f4aba234dd73b4a86b880f7173fdde, type: 3}
+  - {fileID: 2800000, guid: d015cdd23c4e23e47aec3f0f4fb7369c, type: 3}
+  - {fileID: 2800000, guid: b3380e79c1024044993985fb46612c6a, type: 3}
+  - {fileID: 2800000, guid: a533837316d05ff419ebd3618e6d3676, type: 3}
+  - {fileID: 2800000, guid: d87e770a6e0e90042b96ad847e717ffb, type: 3}
+  - {fileID: 2800000, guid: 5b58d338e823cb948814da07bf17ad0a, type: 3}
+  - {fileID: 2800000, guid: b9793b68042298f4a928c9793560edd2, type: 3}
+  - {fileID: 2800000, guid: 42489f315c5dc6d44ab45a0fabb025ca, type: 3}
+  - {fileID: 2800000, guid: 82fd2a448cb757c47ba4efb4f66cce07, type: 3}
+  - {fileID: 2800000, guid: 2a0041aece200a2448d8902be4c78632, type: 3}
+  - {fileID: 2800000, guid: ea729d714ae2a1c41ab32c584a32b545, type: 3}
+  - {fileID: 2800000, guid: 8b70a6912ad5db145b513da702cd0b1f, type: 3}
+  - {fileID: 2800000, guid: 020dc444191d6f84ebbcb24e13a91db4, type: 3}
+  - {fileID: 2800000, guid: 514cb17a083f64d4494dbc19c259db07, type: 3}
   entryPosition: {x: 16, y: 0, z: 16}
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}

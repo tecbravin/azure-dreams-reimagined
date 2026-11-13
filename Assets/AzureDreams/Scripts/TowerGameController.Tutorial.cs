@@ -134,8 +134,8 @@ namespace AzureDreamsReimagined
             _kewneSkipHeld = 0f;
             if (_kewneMeeting == KewneMeeting.Question && Keyboard.current is { } keys)
             {
-                if (keys.leftArrowKey.wasPressedThisFrame || keys.upArrowKey.wasPressedThisFrame) _kewneMeetingSelection = 0;
-                if (keys.rightArrowKey.wasPressedThisFrame || keys.downArrowKey.wasPressedThisFrame) _kewneMeetingSelection = 1;
+                if (MenuDirectionPressed(3) || MenuDirectionPressed(1)) _kewneMeetingSelection = 0;
+                if (MenuDirectionPressed(4) || MenuDirectionPressed(2)) _kewneMeetingSelection = 1;
             }
             if (KewneMeetingSpeaking && _interact?.WasPressedThisFrame() == true) AdvanceKewneMeeting(_kewneMeetingSelection);
             return true;
@@ -181,28 +181,31 @@ namespace AzureDreamsReimagined
             string binding = _mapAction?.GetBindingDisplayString() ?? "Right Shift";
             string label = T($"Skip [{binding}]", $"Pular [{binding}]");
             _dialogueSkipStyle ??= new GUIStyle(_messageStyle) { fontSize = 14, wordWrap = false };
-            float labelWidth = _retailFont && !GameLanguage.Portuguese
-                ? 8f * label.Length : _dialogueSkipStyle.CalcSize(new GUIContent(label)).x;
+            float labelWidth = _dialogueSkipStyle.CalcSize(new GUIContent(label)).x;
             float rightEdge = width - 50f * (width / Screen.width);
             var labelRect = new Rect(rightEdge - labelWidth - 1f, 31f, labelWidth, 24f);
 
             float opacity = Mathf.Lerp(0.75f, 1f, progress);
+            const float iconSize = 48f;
             var center = new Vector2(labelRect.x - 34f, 43f);
+            var iconRect = new Rect(center.x - iconSize * 0.5f, center.y - iconSize * 0.5f, iconSize, iconSize);
             var previousColor = GUI.color;
             GUI.color = new Color(1f, 1f, 1f, previousColor.a * opacity);
             if (_kewneSkipIcon)
-                GUI.DrawTexture(new Rect(center.x - 24f, center.y - 24f, 48f, 48f), _kewneSkipIcon, ScaleMode.ScaleToFit);
+                GUI.DrawTexture(iconRect, _kewneSkipIcon, ScaleMode.ScaleToFit);
             DrawHudText(labelRect, label, _dialogueSkipStyle);
             GUI.color = previousColor;
 
             const int segments = 48;
-            const float radius = 28f;
+            // Keep the progress arc tight to the pendant's edge; it should not
+            // extend into the gap beside the Skip label.
+            float radius = iconSize * 0.46f;
             var matrix = GUI.matrix;
             var gold = new Color(1f, 0.76f, 0.26f, opacity);
             for (int i = 0; i < Mathf.FloorToInt(progress * segments); i++)
             {
                 GUIUtility.RotateAroundPivot(i * (360f / segments), center);
-                DrawHudFill(new Rect(center.x - 2f, center.y - radius, 4f, 2.5f), gold);
+                DrawHudFill(new Rect(center.x - 1.6f, center.y - radius, 3.2f, 2f), gold);
                 GUI.matrix = matrix;
             }
         }
@@ -258,7 +261,7 @@ namespace AzureDreamsReimagined
             void Place(int x, int y, byte kind, byte id, sbyte param)
             {
                 var item = kind is ItemSystem.Kind.Sword or ItemSystem.Kind.Shield
-                    ? TowerItemTrapManager.CreateTowerEquipment(kind, id, roll: 0)
+                    ? TowerItemTrapManager.CreateTowerEquipment(kind, id, roll: 184)
                     : ItemSystem.CreateFloorItem(id, kind, param);
                 _towerItemTraps.TryPlaceItem(new Vector2Int(x, y), item);
             }
@@ -360,8 +363,8 @@ namespace AzureDreamsReimagined
             var panel = new Rect(width * 0.1f, height - 120f, width * 0.8f, 104f);
             DrawDialogueFrame(panel);
             DrawDialoguePortrait(FindDialoguePortrait("Kewne"), panel);
-            DrawHudText(new Rect(panel.x + 13, panel.y + 8, panel.width - 26, 22), "Kewne", _bodyStyle);
-            DrawHudText(new Rect(panel.x + 13, panel.y + 31, panel.width - 26, 49), line, _messageStyle);
+            DrawHudText(new Rect(panel.x + 13, panel.y + 8, panel.width - 26, 22), "Kewne", _bodyStyle, dialogue: true);
+            DrawHudText(new Rect(panel.x + 13, panel.y + 31, panel.width - 26, 49), line, _messageStyle, dialogue: true);
             if (GUI.Button(new Rect(panel.xMax - 146, panel.yMax - 28, 136, 22), WithInteractHint("Continue", "Continuar")))
                 FinishTutorialDialogue();
         }

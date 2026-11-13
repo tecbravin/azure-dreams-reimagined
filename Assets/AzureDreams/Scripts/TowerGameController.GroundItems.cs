@@ -61,7 +61,7 @@ namespace AzureDreamsReimagined
             var keyboard = Keyboard.current;
             if (_groundItemActionsOpen && keyboard != null)
             {
-                int delta = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
                 _groundItemSelection = (GroundItemAction)Mathf.Clamp((int)_groundItemSelection + delta, 0, CanRearmUnderKoh ? 3 : 2);
             }
             if (_interact?.WasPressedThisFrame() == true)
@@ -153,7 +153,7 @@ namespace AzureDreamsReimagined
         private bool CheckGroundItemBagSpace(DungeonItemEntry item)
         {
             if (IsBlueCollar(item) || item.Kind == ItemKind.Coin || _runInventory == null || _runInventory.HasSpace()) return true;
-            _message = T("Too many belongings in the bag", "Há itens demais na bolsa");
+            _message = T($"{InventoryItemName(item)}, but there is no room in the inventory", $"{InventoryItemName(item)}, mas não há espaço no inventário");
             return false;
         }
 
@@ -223,7 +223,7 @@ namespace AzureDreamsReimagined
             if (item == null) return;
             if (item.Kind == MonsterEgg.Kind)
             {
-                var warmed = MonsterEgg.Warm(item, 2 + RollSpawnRange(7));
+                var warmed = MonsterEgg.Warm(item, 1 + RollSpawnRange(4));
                 item.Param = warmed.Param;
                 item.Flags = warmed.Flags;
                 if (_itemMarkers.TryGetValue(cell, out var view) && view && view.TryGetComponent<MonsterEgg>(out var egg))

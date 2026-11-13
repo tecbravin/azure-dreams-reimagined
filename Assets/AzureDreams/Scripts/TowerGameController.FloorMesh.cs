@@ -36,6 +36,13 @@ namespace AzureDreamsReimagined
         private GameObject _managedFloorMesh, _managedWallMesh;
         private const float TowerWallHeight = 2.2f;
         private const float CutawayWallHeight = 0.16f;
+        private const int TowerBackdropTextureSize = 128;
+        private const int TowerBackdropScrollWrapPixels = 32;
+        private const int TowerBackdropSegments = TowerBackdropTextureSize;
+        private const float RetailBackdropScrollPixelsPerFrame = 2f;
+        private const float RetailFrameRate = 30f;
+        private const float TowerBackdropSpeedScale = 0.02f;
+        private Transform _towerBackdrop;
         private List<Vector3> _towerWallVertices;
         private readonly List<int> _towerCutawayFaces = new();
         private Mesh _towerCutawayMesh;
@@ -189,6 +196,7 @@ namespace AzureDreamsReimagined
                 _floor == 3 ? _thirdFloorTiles : _floor <= 5 ? _fourthFifthFloorTiles :
                 _floor <= 7 ? _sixthSeventhFloorTiles : _floor <= 9 ? _eighthNinthFloorTiles :
                 _floor <= 11 ? _tenthEleventhFloorTiles :
+                _floor == TowerFloorRules.BeldoFloor && (_upperTowerTiles?.Length ?? 0) > 0 ? _upperTowerTiles[^1] :
                 upperIndex >= 0 && upperIndex < (_upperTowerTiles?.Length ?? 0) ? _upperTowerTiles[upperIndex] : null;
             bool retail = retailTiles != null;
             var floorVertices = new List<Vector3>();
@@ -270,24 +278,118 @@ namespace AzureDreamsReimagined
             _towerWallVertices = wallVertices;
             _towerCutawayMesh = _managedWallMesh.GetComponent<MeshFilter>().sharedMesh;
             _towerCutawayMesh.MarkDynamic();
-            if (includeBackdrop && retail && (_floor <= 3 || _floor >= 6)) BuildTowerBackdrop(retailTiles);
+            if (includeBackdrop && retail) BuildTowerBackdrop(retailTiles);
         }
 
         private void BuildTowerBackdrop(Material material)
         {
+            var openCells = _towerFloorLayout?.OpenCells;
+            if (!material || openCells == null || openCells.Count == 0) return;
+
+            int minX = int.MaxValue, maxX = int.MinValue;
+            int minZ = int.MaxValue, maxZ = int.MinValue;
+            float baseY = float.PositiveInfinity;
+            foreach (var cell in openCells)
+            {
+                minX = Mathf.Min(minX, cell.x); maxX = Mathf.Max(maxX, cell.x);
+                minZ = Mathf.Min(minZ, cell.y); maxZ = Mathf.Max(maxZ, cell.y);
+                baseY = Mathf.Min(baseY, TowerGroundY(cell));
+            }
+
+            float centerX = (minX + maxX) * 0.5f;
+            float centerZ = (minZ + maxZ) * 0.5f;
+            // Generated layouts can expand close to the grid boundary. Keep the
+            // enclosing wall well beyond their outermost walkable cells.
+            float radius = Mathf.Max(maxX - minX, maxZ - minZ) * 0.5f + 12f;
+            const float wallBottom = -3.5f;
+            const float wallTop = 18.5f;
+            const float textureRepeatHeight = 8f;
+            const int bowlBands = 12;
+            const float bowlDepth = 8f;
+
             var vertices = new List<Vector3>();
             var indices = new List<int>();
             var uvs = new List<Vector2>();
-            int size = AzureDreams.Core.DungeonGenerator.GridSize;
-            for (int z = -8; z < size + 8; z += 8)
-            for (int x = -8; x < size + 8; x += 8)
+            float atlasHeight = material.mainTexture ? material.mainTexture.height : 256f;
+            float atlasWidth = material.mainTexture ? material.mainTexture.width : 256f;
+            float left = (128f + 0.5f) / atlasWidth;
+            float right = (128f + TowerBackdropTextureSize - 0.5f) / atlasWidth;
+            float top = 1f - (128f + 0.5f) / atlasHeight;
+            float bottom = 1f - (128f + TowerBackdropTextureSize - 0.5f) / atlasHeight;
+            int verticalBands = Mathf.CeilToInt((wallTop - wallBottom) / textureRepeatHeight);
+
+            for (int band = 0; band < verticalBands; band++)
             {
-                const float depth = -3.5f;
-                AppendFloorQuad(vertices, indices, uvs, new Vector3(x, depth, z), new Vector3(x, depth, z + 8),
-                    new Vector3(x + 8, depth, z + 8), new Vector3(x + 8, depth, z));
-                SetTowerTileUvs(uvs, 128, 128, 128, _floor <= 2 ? 384 : 256);
+                float y0 = wallBottom + band * textureRepeatHeight;
+                float y1 = Mathf.Min(wallBottom + (band + 1) * textureRepeatHeight, wallTop);
+                for (int segment = 0; segment < TowerBackdropSegments; segment++)
+                {
+                    float a0 = segment * (Mathf.PI * 2f / TowerBackdropSegments);
+                    float a1 = (segment + 1) * (Mathf.PI * 2f / TowerBackdropSegments);
+                    int start = vertices.Count;
+                    // Winding faces inward so the camera sees the tower wall from inside.
+                    vertices.Add(new Vector3(Mathf.Sin(a0) * radius, y0, Mathf.Cos(a0) * radius));
+                    vertices.Add(new Vector3(Mathf.Sin(a0) * radius, y1, Mathf.Cos(a0) * radius));
+                    vertices.Add(new Vector3(Mathf.Sin(a1) * radius, y1, Mathf.Cos(a1) * radius));
+                    vertices.Add(new Vector3(Mathf.Sin(a1) * radius, y0, Mathf.Cos(a1) * radius));
+                    indices.Add(start); indices.Add(start + 1); indices.Add(start + 2);
+                    indices.Add(start); indices.Add(start + 2); indices.Add(start + 3);
+
+                    float u0 = Mathf.Lerp(left, right, segment / (float)TowerBackdropSegments);
+                    float u1 = Mathf.Lerp(left, right, (segment + 1f) / TowerBackdropSegments);
+                    uvs.Add(new Vector2(u0, bottom));
+                    uvs.Add(new Vector2(u0, top));
+                    uvs.Add(new Vector2(u1, top));
+                    uvs.Add(new Vector2(u1, bottom));
+                }
             }
-            CreateManagedMesh("Tower backdrop", vertices, indices, uvs, material, false);
+
+            // Continue the tower shell below the wall as a concave bowl. The rim
+            // joins the wall's lower edge and the center dips beneath the floor,
+            // so the camera sees a closed environment instead of the outside void.
+            for (int band = 0; band < bowlBands; band++)
+            {
+                float r0 = radius * band / bowlBands;
+                float r1 = radius * (band + 1) / bowlBands;
+                float y0 = wallBottom - bowlDepth * (1f - r0 / radius) * (1f - r0 / radius);
+                float y1 = wallBottom - bowlDepth * (1f - r1 / radius) * (1f - r1 / radius);
+                float v0 = Mathf.Lerp(bottom, top, band / (float)bowlBands);
+                float v1 = Mathf.Lerp(bottom, top, (band + 1f) / bowlBands);
+                for (int segment = 0; segment < TowerBackdropSegments; segment++)
+                {
+                    float a0 = segment * (Mathf.PI * 2f / TowerBackdropSegments);
+                    float a1 = (segment + 1) * (Mathf.PI * 2f / TowerBackdropSegments);
+                    int start = vertices.Count;
+                    vertices.Add(new Vector3(Mathf.Sin(a0) * r0, y0, Mathf.Cos(a0) * r0));
+                    vertices.Add(new Vector3(Mathf.Sin(a0) * r1, y1, Mathf.Cos(a0) * r1));
+                    vertices.Add(new Vector3(Mathf.Sin(a1) * r1, y1, Mathf.Cos(a1) * r1));
+                    vertices.Add(new Vector3(Mathf.Sin(a1) * r0, y0, Mathf.Cos(a1) * r0));
+                    indices.Add(start); indices.Add(start + 1); indices.Add(start + 2);
+                    indices.Add(start); indices.Add(start + 2); indices.Add(start + 3);
+
+                    float u0 = Mathf.Lerp(left, right, segment / (float)TowerBackdropSegments);
+                    float u1 = Mathf.Lerp(left, right, (segment + 1f) / TowerBackdropSegments);
+                    uvs.Add(new Vector2(u0, v0));
+                    uvs.Add(new Vector2(u0, v1));
+                    uvs.Add(new Vector2(u1, v1));
+                    uvs.Add(new Vector2(u1, v0));
+                }
+            }
+
+            var backdrop = CreateManagedMesh("Tower backdrop", vertices, indices, uvs, material, false);
+            backdrop.transform.localPosition = new Vector3(centerX, baseY, centerZ);
+            _towerBackdrop = backdrop.transform;
+        }
+
+        private void UpdateTowerBackdropRotation()
+        {
+            if (!_towerBackdrop || _area != Area.Tower) return;
+            // Retail floor setup calls create_wrapped_texture_scroll(2). Its source
+            // offset wraps with a 0x1F mask, so two pixels advance through a 32 px
+            // cycle on each 30 Hz game frame. Map that cycle to one full wall turn.
+            float degreesPerSecond = 360f * RetailBackdropScrollPixelsPerFrame * RetailFrameRate /
+                TowerBackdropScrollWrapPixels * TowerBackdropSpeedScale;
+            _towerBackdrop.Rotate(Vector3.up, degreesPerSecond * Time.deltaTime, Space.Self);
         }
 
         private static void SetTowerTileUvs(List<Vector2> uvs, int x, int y, int size, int atlasHeight, int start = -1)

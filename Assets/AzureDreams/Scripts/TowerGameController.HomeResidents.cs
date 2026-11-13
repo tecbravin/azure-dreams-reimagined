@@ -52,10 +52,10 @@ namespace AzureDreamsReimagined
             if (!_weedyOffer && !_weedyReading) return false;
             var keyboard = Keyboard.current;
             if (keyboard == null) return true;
-            if (keyboard.escapeKey.wasPressedThisFrame) ResetWeedyBook();
+            if (keyboard.qKey.wasPressedThisFrame) ResetWeedyBook();
             else if (_weedyOffer && _interact != null && _interact.WasPressedThisFrame()) OpenWeedyBook();
-            else if (_weedyReading && keyboard.leftArrowKey.wasPressedThisFrame) SelectWeedyPage(_weedyPage - 1);
-            else if (_weedyReading && keyboard.rightArrowKey.wasPressedThisFrame) SelectWeedyPage(_weedyPage + 1);
+            else if (_weedyReading && MenuDirectionPressed(3)) SelectWeedyPage(_weedyPage - 1);
+            else if (_weedyReading && MenuDirectionPressed(4)) SelectWeedyPage(_weedyPage + 1);
             return true;
         }
 

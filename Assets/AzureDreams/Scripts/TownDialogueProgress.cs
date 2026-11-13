@@ -125,6 +125,13 @@ namespace AzureDreamsReimagined
                         GameLanguage.Text("I’m Mademoiselle Shiela, known as the mother of Monsbaiya.", "Sou Mademoiselle Shiela, conhecida como a mãe de Monsbaiya.") };
                     break;
                 case "hush": // 0x59C8AC, 0x59C916
+                    if (TownSaveVariables.GetBool("town.hush_bought_herb"))
+                    {
+                        npc.dialogueLines = new[] { GameLanguage.Text(
+                            "Keep a medicinal herb with you in the tower. Use it before your injuries get too serious.",
+                            "Leve uma erva medicinal para a torre. Use antes que os ferimentos fiquem graves.") };
+                        break;
+                    }
                     npc.dialogueLines = new[] { GameLanguage.Text("How are you doing? I haven’t seen you in a while.", "Como você está? Faz tempo que não vejo você."),
                         GameLanguage.Text("In your case, germs and illnesses would want to run away from you, so you probably have little concern for a clinic.",
                             "No seu caso, os germes e as doenças devem fugir de você, então é provável que você nem pense muito na clínica.") };

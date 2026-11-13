@@ -44,7 +44,8 @@ namespace AzureDreamsReimagined
             TownEventBus.Publish(TownEventBus.EventId.GoldChanged, _gold);
             TownEventBus.Publish(TownEventBus.EventId.TownLevelChanged, _townLevel);
             _runInventory = null;
-            _townInventory.IdentifyEggs();
+            _townInventory.IdentifyAllDungeonItems();
+            _townStorage.IdentifyAllDungeonItems();
             _message = survived
                 ? T($"You returned with {carried} salvage. You now have {_gold} G.", $"Você voltou com {carried} em tesouros. Agora tem {_gold} G.")
                 : T($"You were rescued from the Tower and kept {reward} G of the {carried} you found.", $"Você foi resgatado da torre e ficou com {reward} G dos {carried} G que encontrou.");

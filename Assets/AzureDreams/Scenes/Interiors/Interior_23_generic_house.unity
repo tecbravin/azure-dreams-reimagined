@@ -81,6 +81,54 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dcde21069d444a5dab14b10dacb89469, type: 2}
   - {fileID: 2100000, guid: a40f2e4436a64cab8915de2dbefb00c2, type: 2}
   - {fileID: 2100000, guid: 95dcfb3d8352421f93bbb1a30787680f, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: 8b011878b19e688449356d5ab5e09da5, type: 3}
+  - {fileID: 2800000, guid: 62536f48529dc0940a86ad5d308e6dea, type: 3}
+  - {fileID: 2800000, guid: bab2cedf09e1e0a4ba88d551b591f2de, type: 3}
+  - {fileID: 2800000, guid: 297b26516ea7147429d17d6456e9f617, type: 3}
+  - {fileID: 2800000, guid: 8f7ada93c47f93742aeacf24d2f2351e, type: 3}
+  - {fileID: 2800000, guid: d416291612679054b8431e708e9e0ac3, type: 3}
+  - {fileID: 2800000, guid: 81c561fef1001aa4a82bccb006d603dc, type: 3}
+  - {fileID: 2800000, guid: 1534da129029f5642a5d18028fe8006d, type: 3}
+  - {fileID: 2800000, guid: 5187cb53956f8364a95e12d5f0c62510, type: 3}
+  - {fileID: 2800000, guid: 9331857e372dca045af79cf93c849f3a, type: 3}
+  - {fileID: 2800000, guid: 4aca1f561a2ba8a478b1fa641b9c0b70, type: 3}
+  - {fileID: 2800000, guid: 6d1de2dec1357954db5fc2bd72362495, type: 3}
+  - {fileID: 2800000, guid: 56fba415f0eaf1f48afdf034e7815267, type: 3}
+  - {fileID: 2800000, guid: 14f9c0a405dfb0543b0e76bf8c68c98c, type: 3}
+  - {fileID: 2800000, guid: 1ae2de7c4fc3a0141b758e2c1cfd9180, type: 3}
+  - {fileID: 2800000, guid: 3e9ddc8a62199d441b0d9c36f694cd56, type: 3}
+  - {fileID: 2800000, guid: 3807e4e18a72fbf4283398bfce741b8a, type: 3}
+  - {fileID: 2800000, guid: 692b13d39bb7a684fa1f09a21841cfee, type: 3}
+  - {fileID: 2800000, guid: 4931a2046399ea843aa9cd560c4695f5, type: 3}
+  - {fileID: 2800000, guid: 21a3615837cd01f4f93b5b9a79d04fbb, type: 3}
+  - {fileID: 2800000, guid: 503f267d1bbe22542a230024b7510d8c, type: 3}
+  - {fileID: 2800000, guid: 72954b86f73e8c1498bbbf4572e42241, type: 3}
+  - {fileID: 2800000, guid: 90363a8409cfcb74195cf11246a6820e, type: 3}
+  - {fileID: 2800000, guid: 05b894e2533ed84449049ab30487b539, type: 3}
+  - {fileID: 2800000, guid: e58f5992cffe43b4c85bfb6d6cb9a05e, type: 3}
+  - {fileID: 2800000, guid: 0b273ec0171d40a498d5679984c82247, type: 3}
+  - {fileID: 2800000, guid: 3edddc430b98c9e4f815916bef9a6a6c, type: 3}
+  - {fileID: 2800000, guid: 49f7ac730e76334428e81402c479dcd9, type: 3}
+  - {fileID: 2800000, guid: 4290e8a9dfbcfa14faea63a3421d6b82, type: 3}
+  - {fileID: 2800000, guid: d5a5f464def6b31429bb9631017b7ddc, type: 3}
+  - {fileID: 2800000, guid: 76f15f87cf34e2146bc08c17952f1694, type: 3}
+  - {fileID: 2800000, guid: 6f1a42a0d505bf1439f2a63318712c0d, type: 3}
+  - {fileID: 2800000, guid: b744aa2b457e41047aa2030d8048d09b, type: 3}
+  - {fileID: 2800000, guid: 7de130cac01e5bb46b04c6de23b4a42c, type: 3}
+  - {fileID: 2800000, guid: 0a50fdfd2bdff8848a92aa6926ea80d8, type: 3}
+  - {fileID: 2800000, guid: deaa8c85881bcf54382c189889f9bfd8, type: 3}
+  - {fileID: 2800000, guid: fffc02edccebafe4084cb307f9051fff, type: 3}
+  - {fileID: 2800000, guid: dcbbc918eca804643b1fde45f1eeff24, type: 3}
+  - {fileID: 2800000, guid: aec91331ae9586e45a55f7dcc281aebd, type: 3}
+  - {fileID: 2800000, guid: 6697728598678844e9fe720efcd43a4a, type: 3}
+  - {fileID: 2800000, guid: 05f69979126534b4fb97b9ced90d30cf, type: 3}
+  - {fileID: 2800000, guid: 6bd974d102578904284a81eab7faa506, type: 3}
+  - {fileID: 2800000, guid: f695a31ebf014f14dbec53a5028116e9, type: 3}
+  - {fileID: 2800000, guid: a8a39623ee9dd7649a021aec7ad9f8b4, type: 3}
+  - {fileID: 2800000, guid: 1be89aee6ce0f6745bc470491832210f, type: 3}
+  - {fileID: 2800000, guid: bb50cb9f75e5a1a4082d55a89711673c, type: 3}
   entryPosition: {x: 15, y: 0, z: 18}
   residentPrefabs: []
   furnitureSurfaces:

@@ -13,8 +13,57 @@ namespace AzureDreamsReimagined
         private bool _beldoIntroduced;
         private bool OnBeldoFloor => _area == Area.Tower && _floor == TowerFloorRules.BeldoFloor;
 
+        private GameObject _beldoVision;
+        private Vector2Int _beldoVisionCell;
+        private int _beldoVisionLine;
+
+        private void PlaceBeldoVision()
+        {
+            if (TownRetailScriptFlags.CreatePersistent().IsFlagSet(0x1389)) return;
+            _beldoVisionCell = _stairCell;
+            int nearest = int.MaxValue;
+            foreach (var offset in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right })
+            {
+                var cell = _stairCell + offset;
+if (!_towerFloorLayout.IsWalkable(cell.x, cell.y) || cell == _playerCell || TrapAt(cell) != null) continue;
+                int distance = Distance(cell, _playerCell);
+                if (distance >= nearest) continue;
+                nearest = distance;
+                _beldoVisionCell = cell;
+            }
+            int count = _creatures.Count;
+            _beldoVision = SpawnManagedCreature(_beldoVisionCell, BeldoBossSpecies, allowSpawnSleep: false);
+            if (_creatures.Count > count) _creatures.RemoveAt(count);
+        }
+
+        private bool HandleBeldoVision()
+        {
+            if (_area != Area.Tower || _floor != 31 || !_beldoVision || _turnBusy) return false;
+            if (_beldoVisionLine == 0)
+            {
+                if (Distance(_playerCell, _beldoVisionCell) > 2 && _playerCell != _stairCell) return false;
+                _beldoVisionLine = 1;
+                _message = T("Beldo: So, you have made it this far.", "Beldo: Então, você conseguiu chegar até aqui.");
+                return true;
+            }
+            if (_interact?.WasPressedThisFrame() != true) return true;
+            if (++_beldoVisionLine == 2)
+                _message = T("Beldo: I will be waiting at the top of the Tower.", "Beldo: Estarei esperando no topo da Torre.");
+            else
+            {
+                RemoveGenerated(_beldoVision);
+                _beldoVision = null;
+TownRetailScriptFlags.CreatePersistent().ApplyOneTimeFlagOperation(0x1389);
+                PersistTownProgress();
+                _message = "";
+            }
+            return true;
+        }
+
         private void ResetBeldoEncounter()
         {
+            _beldoVision = null;
+            _beldoVisionLine = 0;
             _beldoScene = BeldoScene.None;
             _beldoDialoguePage = 0;
             _beldoIntroduced = false;
@@ -128,8 +177,8 @@ namespace AzureDreamsReimagined
             };
             var panel = new Rect(width * 0.1f, height * 0.75f, width * 0.8f, height * 0.21f);
             DrawHudPanel(panel);
-            DrawHudText(new Rect(panel.x + 12f, panel.y + 7f, panel.width - 24f, 22f), speaker, _bodyStyle);
-            DrawHudText(new Rect(panel.x + 12f, panel.y + 30f, panel.width - 24f, panel.height - 39f), line, _messageStyle);
+            DrawHudText(new Rect(panel.x + 12f, panel.y + 7f, panel.width - 24f, 22f), speaker, _bodyStyle, dialogue: true);
+            DrawHudText(new Rect(panel.x + 12f, panel.y + 30f, panel.width - 24f, panel.height - 39f), line, _messageStyle, dialogue: true);
             if (GUI.Button(new Rect(panel.xMax - 112f, panel.yMax - 26f, 103f, 21f), WithInteractHint("Next", "Avançar")))
                 AdvanceBeldoDialogue();
         }

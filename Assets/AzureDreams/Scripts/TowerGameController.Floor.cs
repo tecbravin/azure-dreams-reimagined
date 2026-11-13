@@ -39,7 +39,7 @@ namespace AzureDreamsReimagined
         private const int WindmillQuestCompleteFlag = 0x1460; // Ftt_fkoya_isaku_scene01_ok
         private const int TavernQuestCompleteFlag = 4806;
         private const int PoolQuestCompleteFlag = 150;
-        private bool UsesManagedTowerLayout => _useGeneratedTowerFloors || _floor is 2 or BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor or TowerFloorRules.BeldoFloor;
+        private bool UsesManagedTowerLayout => _useGeneratedTowerFloors || _floor is 2 or BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor or 31 or TowerFloorRules.BeldoFloor;
         private int ActiveMapSize => _area == Area.Tower && UsesManagedTowerLayout ? CoreDungeon.GridSize : MapSize;
         private int TowerTileHeight(Vector2Int cell) => _area == Area.Tower && UsesManagedTowerLayout &&
             !InTowerTutorial && _towerFloorLayout != null ? _towerFloorLayout.GroundHeight(cell.x, cell.y) : 0;
@@ -52,14 +52,38 @@ namespace AzureDreamsReimagined
             _useGeneratedTowerFloors = enabled;
         }
 
+        private const string WindCrystalFindProtection = "wind crystal find protection";
+
+        private void ApplyWindCrystalFindProtection()
+        {
+            if (_runInventory == null) return;
+            int count = 0;
+            foreach (var item in _runInventory.DungeonItems)
+                if (item.Kind == AzureDreams.Core.ItemSystem.Kind.Crystal && item.Subtype == 3) count++;
+            if (count > 2) return;
+
+            var random = new System.Random(_towerFloorLayout.Seed ^ WindCrystalFindProtection.Length);
+            if (random.Next(4) == 0)
+                _towerItemTraps.TryPlaceGeneratedRoomItem(new AzureDreams.Core.DungeonItemEntry(
+                    3, AzureDreams.Core.ItemSystem.Kind.Crystal, 0, 0), seedSalt: 0x5743);
+        }
+
         private void BuildManagedTowerFloor()
         {
             ClearGenerated();
             if (_towerFloorLayout == null) _towerFloorLayout = new TowerFloorManager();
             if (InTowerTutorial)
-                _towerFloorLayout.GenerateTutorial(Resources.Load<TextAsset>("Town/Retail/tutorial_floor").bytes,
-                    TutorialEntrance, TutorialElevator);
-            else _towerFloorLayout.Generate(_floor, _towerRun.Rng.Next());
+            {
+                var tutorialMap = Resources.Load<TextAsset>("Town/Retail/tutorial_floor");
+                if (tutorialMap && tutorialMap.bytes is { Length: CoreDungeon.GridSize * CoreDungeon.GridSize * 6 } terrain)
+                    _towerFloorLayout.GenerateTutorial(terrain, TutorialEntrance, TutorialElevator);
+                else
+                {
+                    Debug.LogWarning("Tutorial terrain is unavailable. Generating a regular first floor.");
+                    _tutorialRun = false;
+                }
+            }
+            if (!InTowerTutorial) _towerFloorLayout.Generate(_floor, _towerRun.Rng.Next());
             if (_floor == 1) PrepareManagedTowerEntrance();
             _towerItemTraps = new TowerItemTrapManager(_towerFloorLayout, _towerRun.Rng);
             if (InTowerTutorial) PlaceTutorialContents();
@@ -77,7 +101,8 @@ namespace AzureDreamsReimagined
                 if (_floor == BlueCollarFloor && !HasBlueCollar)
                     _towerItemTraps.TryPlaceGeneratedRoomItem(new AzureDreams.Core.DungeonItemEntry(
                         AzureDreams.Core.ItemSystem.Id.BlueCollar, CollarKind, 0, 0), seedSalt: 0x12C4);
-                _towerItemTraps.SpawnTraps(4 + _floor);
+                ApplyWindCrystalFindProtection();
+                _towerItemTraps.SpawnTraps((4 + _floor) / 2);
             }
             _npcCells.Clear();
             for (int y = 0; y < CoreDungeon.GridSize; y++)
@@ -101,6 +126,7 @@ namespace AzureDreamsReimagined
             RestoreBlueCollarSummon();
             RestoreSalamanderSummons();
             _creatures.Clear();
+            if (_floor == 31) PlaceBeldoVision();
             if (InTowerTutorial)
                 SpawnManagedCreature(new Vector2Int(50, 44), AzureDreams.Core.MonsterSpecies.PULUNPA,
                     levelOverride: 1, allowSpawnSleep: false);

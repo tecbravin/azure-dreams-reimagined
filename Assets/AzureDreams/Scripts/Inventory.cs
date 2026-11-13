@@ -61,11 +61,16 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        internal void IdentifyEggs()
+        internal void IdentifyAllDungeonItems()
         {
             for (int i = 0; i < _dungeonItems.Count; i++)
-                if (_dungeonItems[i].Kind == MonsterEgg.Kind && !MonsterEgg.IdentifiedInTower(_dungeonItems[i]))
-                    _dungeonItems[i] = MonsterEgg.Identify(_dungeonItems[i]);
+            {
+                var item = _dungeonItems[i];
+                if (item.Kind == MonsterEgg.Kind && !MonsterEgg.IdentifiedInTower(item))
+                    _dungeonItems[i] = MonsterEgg.Identify(item);
+                else if (IsUnrevealedEquipment(item))
+                    item.Flags = (byte)(item.Flags & ~UnrevealedEquipmentFlag);
+            }
         }
 
         internal bool ConsumeDungeonItem(int index, byte kind)

@@ -45,6 +45,18 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 0bd7c304b06e4e2389cc1c1d038fcaaf, type: 2}
   - {fileID: 2100000, guid: 8e9c3c653a3b429f955c92a0cbb59880, type: 2}
   - {fileID: 2100000, guid: 9c2888331e384781ba66edd3e6f68f63, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: 385a103881bf22a47a98ff403c6df7e8, type: 3}
+  - {fileID: 2800000, guid: b20f2430f10baa14683e62c7b312f9ec, type: 3}
+  - {fileID: 2800000, guid: 183ffe1f1b5e1f247add6b2ba171ea5c, type: 3}
+  - {fileID: 2800000, guid: 48856824da48f9e4aa9f8db9e934697d, type: 3}
+  - {fileID: 2800000, guid: f11bdff49333b454c960e6bcbe495d93, type: 3}
+  - {fileID: 2800000, guid: 455d6cfd9c2c83e43ae95f19c45cb2c3, type: 3}
+  - {fileID: 2800000, guid: 39c495ef6b094854a84dbdfd3e109fdd, type: 3}
+  - {fileID: 2800000, guid: 6fa86d44e7760d344b1bd3823af6ee33, type: 3}
+  - {fileID: 2800000, guid: a5b7980e9a24fcc42a39c1a78780da96, type: 3}
+  - {fileID: 2800000, guid: 2c02b3d8a44ad6e4586f3a550a18d645, type: 3}
   entryPosition: {x: 21, y: 0, z: 18}
   residentPrefabs: []
 --- !u!1660057539 &9223372036854775807

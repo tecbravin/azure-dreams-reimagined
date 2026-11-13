@@ -9,6 +9,7 @@ from PIL import Image
 
 ASSETS = Path(__file__).resolve().parents[1] / "Assets/AzureDreams"
 SOURCE = ASSETS / "Sprites/Monsters/Community/fullmonsters.json"
+COMMUNITY_SOURCE = ASSETS.parents[2] / "monsterPalettes.json"
 DESTINATION = ASSETS / "Resources/Town/Retail/monster_palettes.json"
 ROLES = {"enemy": 0, "fire": 4, "water": 8, "wind": 12}
 
@@ -57,6 +58,8 @@ def source_color_indices(species, rows, texture_paths):
 
 def build():
     monsters = json.loads(SOURCE.read_text(encoding="utf-8"))["monsters"]
+    if COMMUNITY_SOURCE.exists():
+        monsters.update(json.loads(COMMUNITY_SOURCE.read_text(encoding="utf-8"))["monsters"])
     registry = json.loads((ASSETS / "Resources/Town/Retail/egg_catalog.json").read_text(encoding="utf-8"))
     names = {entry["id"]: entry["name"] for entry in registry["species"]}
     assert set(map(int, monsters)) == set(range(1, 46))

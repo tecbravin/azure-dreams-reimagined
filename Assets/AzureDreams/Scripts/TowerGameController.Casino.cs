@@ -151,11 +151,11 @@ namespace AzureDreamsReimagined
             var keys = Keyboard.current;
             if (_casinoRound == CasinoRound.Bet && keys != null)
             {
-                if (keys.upArrowKey.wasPressedThisFrame) ChangeCasinoBet(1);
-                if (keys.downArrowKey.wasPressedThisFrame) ChangeCasinoBet(-1);
-                if (AtCasinoRoulette && keys.leftArrowKey.wasPressedThisFrame)
+                if (MenuDirectionPressed(1)) ChangeCasinoBet(1);
+                if (MenuDirectionPressed(2)) ChangeCasinoBet(-1);
+                if (AtCasinoRoulette && MenuDirectionPressed(3))
                     _casinoWagerPocket = (_casinoWagerPocket + CasinoPocketCount - 1) % CasinoPocketCount;
-                if (AtCasinoRoulette && keys.rightArrowKey.wasPressedThisFrame)
+                if (AtCasinoRoulette && MenuDirectionPressed(4))
                     _casinoWagerPocket = (_casinoWagerPocket + 1) % CasinoPocketCount;
             }
             if (_interact?.WasPressedThisFrame() == true) AdvanceCasinoRound();

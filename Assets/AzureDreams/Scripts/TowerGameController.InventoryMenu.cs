@@ -33,6 +33,20 @@ namespace AzureDreamsReimagined
             RefreshInventoryCommands();
         }
 
+        private static int ReadFamiliarAiNumber(Keyboard keys)
+        {
+            if (keys == null) return 0;
+            if (keys.digit1Key.wasPressedThisFrame || keys.numpad1Key.wasPressedThisFrame) return 1;
+            if (keys.digit2Key.wasPressedThisFrame || keys.numpad2Key.wasPressedThisFrame) return 2;
+            if (keys.digit3Key.wasPressedThisFrame || keys.numpad3Key.wasPressedThisFrame) return 3;
+            if (keys.digit4Key.wasPressedThisFrame || keys.numpad4Key.wasPressedThisFrame) return 4;
+            if (keys.digit5Key.wasPressedThisFrame || keys.numpad5Key.wasPressedThisFrame) return 5;
+            return 0;
+        }
+
+        private ActorRecord RootFamiliar => _inventoryMenu == InventoryMenu.Main
+            ? InventoryCollarActor(InventoryActorCollar(_inventoryActorSlot)) : null;
+
         private bool HandleInventoryRoot(Keyboard keyboard, bool switchingWindows)
         {
             if (!switchingWindows && _inventoryAction?.WasPressedThisFrame() == true && !_inventoryOpen)
@@ -46,21 +60,24 @@ namespace AzureDreamsReimagined
             if (_inventoryMenu == InventoryMenu.Closed) return false;
             if (_cancel?.WasPressedThisFrame() == true)
             {
-                BackInventoryMenu();
+                if (_familiarOrderPicker != FamiliarOrderPicker.None) _familiarOrderPicker = FamiliarOrderPicker.None;
+                else BackInventoryMenu();
                 return true;
             }
             int characterDelta = InventoryCharacterDelta(keyboard);
             if (_inventoryMenu != InventoryMenu.Direction && characterDelta != 0)
             {
                 CycleInventoryActor(characterDelta);
+                _inventoryMenuRow = 0;
+                _familiarOrderPicker = FamiliarOrderPicker.None;
                 return true;
             }
-            int vertical = keyboard?.upArrowKey.wasPressedThisFrame == true ? -1 :
-                keyboard?.downArrowKey.wasPressedThisFrame == true ? 1 : 0;
+            int vertical = MenuDirectionPressed(1) ? -1 :
+                MenuDirectionPressed(2) ? 1 : 0;
             if (_inventoryMenu == InventoryMenu.Direction)
             {
-                int horizontal = keyboard?.leftArrowKey.wasPressedThisFrame == true ? -1 :
-                    keyboard?.rightArrowKey.wasPressedThisFrame == true ? 1 : 0;
+                int horizontal = MenuDirectionPressed(3) ? -1 :
+                    MenuDirectionPressed(4) ? 1 : 0;
                 var direction = new Vector2Int(horizontal, -vertical);
                 if (direction != Vector2Int.zero)
                 {
@@ -72,6 +89,11 @@ namespace AzureDreamsReimagined
                 if (_interact?.WasPressedThisFrame() == true) ConfirmManualOrder();
                 return true;
             }
+            if (RootFamiliar is { } selected && _familiarOrderPicker != FamiliarOrderPicker.None)
+            {
+                HandleFamiliarOrders(selected, 0, vertical, _interact?.WasPressedThisFrame() == true);
+                return true;
+            }
             int count = InventoryMenuRowCount();
             if (count > 0)
             {
@@ -79,6 +101,20 @@ namespace AzureDreamsReimagined
                 _inventoryMenuRow = Mathf.Clamp(_inventoryMenuRow + vertical, 0, count - 1);
                 if (_inventoryMenuRow != previousRow) PlayRetailSound(RetailSfx.Cursor);
                 if (_interact?.WasPressedThisFrame() == true) SelectInventoryMenuRow(_inventoryMenuRow);
+            }
+            if (_familiarOrderPicker == FamiliarOrderPicker.Ai && keyboard != null)
+            {
+                int num = keyboard.numpad1Key.wasPressedThisFrame ? 1 : keyboard.numpad2Key.wasPressedThisFrame ? 2 :
+                    keyboard.numpad3Key.wasPressedThisFrame ? 3 : keyboard.numpad4Key.wasPressedThisFrame ? 4 :
+                    keyboard.numpad5Key.wasPressedThisFrame ? 5 : 0;
+                if (num != 0)
+                {
+                    _familiarAiCursor = (FamiliarAi)Mathf.Clamp(num, 1, 5);
+                    _familiarOrderPicker = FamiliarOrderPicker.None;
+                    var actor = InventoryCollarActor(1);
+                    if (actor != null) SetFamiliarAi(actor, _familiarAiCursor);
+                    return true;
+                }
             }
             return true;
         }
@@ -101,7 +137,7 @@ namespace AzureDreamsReimagined
             InventoryMenu.Main => 3,
             InventoryMenu.Commands => InventoryCollarActor(_commandCollar)?.Species == (byte)MonsterSpecies.U_BOAT
                 ? 7 : HasSpeciesCommand(InventoryCollarActor(_commandCollar)) ? 6 : 5,
-            InventoryMenu.Familiar => 2,
+            InventoryMenu.Familiar => _area == Area.Tower && (_familiar || _blueCollarAlly?.View) ? 4 : 2,
             InventoryMenu.Ground => CanRearmUnderKoh ? 1 : 0,
             _ => 0
         };
@@ -110,6 +146,28 @@ namespace AzureDreamsReimagined
         {
             switch (_inventoryMenu)
             {
+                case InventoryMenu.Main when RootFamiliar is { } selected:
+                    if (IsFamiliarLost(selected)) return;
+                    if (row == 0)
+                    {
+                        _commandCollar = InventoryActorCollar(_inventoryActorSlot);
+                        _inventoryMenu = InventoryMenu.Commands;
+                        _inventoryMenuRow = 0;
+                    }
+                    else if (row == 1)
+                    {
+                        _familiarAiCursor = OrdersFor(selected).Ai;
+                        _familiarOrderPicker = FamiliarOrderPicker.Ai;
+                    }
+                    else if (HasBlueCollar && _familiar && _blueCollarAlly?.View &&
+                        !IsFamiliarLost(_familiarActor) && !IsFamiliarLost(_blueCollarAlly.Actor))
+                    {
+                        _fusionFirst = FindBagFamiliar(_familiarActor);
+                        _fusionSecond = _blueCollarFamiliar;
+                        _fusionPreview = BuildFusionPreview(_fusionFirst, _fusionSecond);
+                        _familiarOrderPicker = FamiliarOrderPicker.Fusion;
+                    }
+                    break;
                 case InventoryMenu.Main:
                     if (row == 0)
                         OpenInventoryItems();
@@ -137,10 +195,28 @@ namespace AzureDreamsReimagined
                     PlayRetailSound(RetailSfx.Confirm);
                     break;
                 case InventoryMenu.Familiar:
-                    PlayRetailSound(RetailSfx.Confirm);
-                    _commandCollar = row + 1;
-                    _inventoryMenu = InventoryMenu.Commands;
-                    _inventoryMenuRow = 0;
+                    if (row == 0 || row == 1)
+                    {
+                        PlayRetailSound(RetailSfx.Confirm);
+                        _commandCollar = row + 1;
+                        _inventoryMenu = InventoryMenu.Commands;
+                        _inventoryMenuRow = 0;
+                    }
+                    else
+                    {
+                        PlayRetailSound(RetailSfx.Confirm);
+                        _inventoryActorSlot = row - 2;
+                        _familiarOrderPicker = FamiliarOrderPicker.None;
+                        _commandCollar = row + 1;
+                        _inventoryMenu = InventoryMenu.Commands;
+                        _inventoryMenuRow = 0;
+                        if (row == 2)
+                        {
+                            var actor = InventoryCollarActor(1);
+                            if (actor != null && !IsFamiliarLost(actor))
+                                OpenFamiliarOrderPicker(OrdersFor(actor));
+                        }
+                    }
                     break;
                 case InventoryMenu.Commands:
                     _selectedManualOrder = (ManualOrder)row;
@@ -213,27 +289,45 @@ namespace AzureDreamsReimagined
             {
                 var status = new Rect(width - statusWidth - 18f, panel.y, statusWidth, 207f);
                 DrawDialogueFrame(status);
+                if (RootFamiliar is { } familiar && _familiarOrderPicker != FamiliarOrderPicker.None)
+                {
+                    DrawInventoryCollarOrders(panel, status, familiar);
+                    return true;
+                }
                 DrawInventoryActorStatus(status, InventoryActorRow(_inventoryActorSlot));
-                DrawHudText(new Rect(status.x + 10f, status.yMax + 3f, status.width - 20f, 22f),
+                DrawInventoryText(new Rect(status.x + 10f, status.yMax + 3f, status.width - 20f, 22f),
                     T("PgUp/PgDn: character", "PgUp/PgDn: personagem"), _messageStyle);
             }
             if (count == 0)
-                DrawHudText(new Rect(panel.x + 8f, panel.y + 8f, panel.width - 16f, 46f),
+                DrawInventoryText(new Rect(panel.x + 8f, panel.y + 8f, panel.width - 16f, 46f),
                     T("Nothing to use here.", "Não há nada para usar aqui."), _messageStyle);
             for (int row = 0; row < count; row++)
             {
                 string label = _inventoryMenu switch
                 {
+                    InventoryMenu.Main when RootFamiliar != null => row == 0 ? T("Command", "Comandar") :
+                        row == 1 ? T("Change AI", "Mudar IA") : T("Fuse", "Fundir"),
                     InventoryMenu.Main => row == 0 ? T("Items", "Itens") : row == 1 ? T("Command", "Comandar") : T("Ground", "Chão"),
-                    InventoryMenu.Familiar => row == 0 ? FamiliarDisplayName : _blueCollarFamiliar?.Name,
+                    InventoryMenu.Familiar => row switch
+                    {
+                        0 => FamiliarDisplayName,
+                        1 => _blueCollarFamiliar?.Name,
+                        2 => IsFamiliarLost(InventoryCollarActor(1)) ? T("Lost", "Perdido") : T("Command", "Comandar"),
+                        3 => IsFamiliarLost(InventoryCollarActor(1)) ? T("Lost", "Perdido") : T("Change AI", "Mudar IA"),
+                        _ => IsFamiliarLost(InventoryCollarActor(1)) ? T("Lost", "Perdido") : T("Fusion", "Fusão")
+                    },
                     InventoryMenu.Commands => ManualOrderLabel((ManualOrder)row),
                     _ => T("Rearm", "Reativar")
                 };
                 var button = new Rect(panel.x + 8f, panel.y + 8f + row * 30f, panel.width - 16f, 27f);
                 bool enabled = GUI.enabled;
-                if (_inventoryMenu == InventoryMenu.Main && row == 1)
+                if (RootFamiliar is { } familiarActor)
+                    GUI.enabled = enabled && !IsFamiliarLost(familiarActor) && (row != 2 ||
+                        (HasBlueCollar && _familiar && _blueCollarAlly?.View && !IsFamiliarLost(_familiarActor) &&
+                        !IsFamiliarLost(_blueCollarAlly.Actor)));
+                else if (_inventoryMenu == InventoryMenu.Main && row == 1)
                     GUI.enabled = enabled && _area == Area.Tower && (_familiar || _blueCollarAlly?.View);
-                bool clicked = GUI.Button(button, (row == _inventoryMenuRow ? "▸ " : "") + label);
+                bool clicked = DrawInventoryButton(button, label, row == _inventoryMenuRow);
                 GUI.enabled = enabled;
                 if (clicked) { SelectInventoryMenuRow(row); break; }
             }
@@ -268,7 +362,7 @@ namespace AzureDreamsReimagined
                 }
             var hint = new Rect(18f, 76f, 210f, 55f);
             DrawDialogueFrame(hint);
-            DrawHudText(new Rect(hint.x + 8f, hint.y + 5f, hint.width - 16f, 43f),
+            DrawInventoryText(new Rect(hint.x + 8f, hint.y + 5f, hint.width - 16f, 43f),
                 ManualOrderLabel(_selectedManualOrder) + "\n" + T("Arrows · Confirm · Esc", "Setas · Confirmar · Esc"), _messageStyle);
         }
 

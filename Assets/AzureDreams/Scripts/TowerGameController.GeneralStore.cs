@@ -102,7 +102,7 @@ namespace AzureDreamsReimagined
             }
             else if (!_generalStoreConfirm && GeneralStoreOptionCount > 0 && Keyboard.current is { } keyboard)
             {
-                int step = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
                 int row = Mathf.Clamp(_generalStoreSelection + step, 0, GeneralStoreOptionCount - 1);
                 if (row != _generalStoreSelection) PlayRetailSound(RetailSfx.Cursor);
                 _generalStoreSelection = row;

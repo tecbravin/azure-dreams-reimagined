@@ -294,10 +294,10 @@ namespace AzureDreamsReimagined
             var (itemKind, subtype) = choices[RollSpawnRange(choices.Count)];
             if (itemKind == MonsterEgg.Kind) return MonsterEgg.Create(subtype, identified: false);
             if (itemKind is ItemKind.Sword or ItemKind.Wand or ItemKind.Shield)
-                return TowerItemTrapManager.CreateTowerEquipment(itemKind, subtype, RollSpawnRange(100));
+                return TowerItemTrapManager.CreateTowerEquipment(itemKind, subtype, RollSpawnRange(1024));
             sbyte param = itemKind switch
             {
-                ItemKind.Ball => (sbyte)(1 + RollSpawnRange(5)),
+                ItemKind.Ball => subtype == 17 ? (sbyte)1 : (sbyte)(4 + RollSpawnRange(4)),
                 ItemKind.Coin => 10,
                 _ => 0
             };

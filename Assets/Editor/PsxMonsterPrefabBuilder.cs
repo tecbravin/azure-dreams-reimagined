@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using AzureDreamsReimagined.Rendering;
 
@@ -45,9 +46,19 @@ namespace AzureDreamsReimagined.Editor
                 if (name == "Barong")
                 {
                     var existing = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-                    if (existing && existing.GetComponentInChildren<SpriteRenderer>()) continue;
+                    if (existing && existing.GetComponentInChildren<SpriteRenderer>() is { sprite: var existingSprite } && existingSprite) continue;
                     var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(BarongSpritePath);
-                    if (!sprite) throw new InvalidDataException("Missing Barong sprite at " + BarongSpritePath);
+                    if (!sprite && File.Exists(Path.Combine(projectRoot, BarongSpritePath)))
+                    {
+                        AssetDatabase.ImportAsset(BarongSpritePath,
+                            ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
+                        sprite = AssetDatabase.LoadAssetAtPath<Sprite>(BarongSpritePath);
+                    }
+                    if (!sprite)
+                    {
+                        Debug.LogError("Barong sprite could not be imported: " + BarongSpritePath);
+                        continue;
+                    }
                     var barong = new GameObject(name);
                     var visual = new GameObject("Sprite");
                     visual.transform.SetParent(barong.transform, false);
@@ -84,6 +95,34 @@ namespace AzureDreamsReimagined.Editor
             }
 
             Debug.Log("[PsxMonsterPrefabBuilder] Created " + created + " monster prefabs in " + prefabDir);
+        }
+
+        [MenuItem("Azure Dreams/Rendering/Audit Scene Sprites")]
+        private static void AuditSceneSprites()
+        {
+            int missing = 0;
+            foreach (var guid in AssetDatabase.FindAssets("t:Scene", new[] { "Assets" }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var scene = EditorSceneManager.OpenPreviewScene(path);
+                try
+                {
+                    foreach (var root in scene.GetRootGameObjects())
+                    foreach (var renderer in root.GetComponentsInChildren<SpriteRenderer>(true))
+                    {
+                        var sprite = new SerializedObject(renderer).FindProperty("m_Sprite");
+                        if (sprite == null || sprite.objectReferenceValue ||
+                            sprite.objectReferenceEntityIdValue == default(UnityEngine.EntityId)) continue;
+                        Debug.LogWarning($"{path}: {renderer.name} has a broken sprite reference.");
+                        missing++;
+                    }
+                }
+                finally
+                {
+                    EditorSceneManager.ClosePreviewScene(scene);
+                }
+            }
+            Debug.Log($"Scene sprite audit found {missing} broken SpriteRenderer references.");
         }
     }
 }

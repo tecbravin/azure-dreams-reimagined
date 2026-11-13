@@ -51,6 +51,24 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 19bacdace57b402dadb485b5c7fe901d, type: 2}
   - {fileID: 2100000, guid: 5f8af5222cf445a7a68de398f93fb9e9, type: 2}
   - {fileID: 2100000, guid: de0075c2c80945779179100547457254, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: 050a4d418bf08914ca8d1abe57f6f5db, type: 3}
+  - {fileID: 2800000, guid: d2cd64243d828d14fa226c48d7fd73e4, type: 3}
+  - {fileID: 2800000, guid: 3e6450d0535b0234981f9bcaf9e001bf, type: 3}
+  - {fileID: 2800000, guid: 7f8791d1e32f97244a331621d6a2c9b7, type: 3}
+  - {fileID: 2800000, guid: f54def0b22d9ce74b8d519df17e4b7fc, type: 3}
+  - {fileID: 2800000, guid: cfb140b2c05389143bb01edda4ae0f64, type: 3}
+  - {fileID: 2800000, guid: 4cfb96061e30797419b298899e29df9a, type: 3}
+  - {fileID: 2800000, guid: e36e115e00698b2428d70331ede84857, type: 3}
+  - {fileID: 2800000, guid: e89682bbadd566746853962ab8987ebf, type: 3}
+  - {fileID: 2800000, guid: 3172eeaac520abb4091ad2ec3783b5d8, type: 3}
+  - {fileID: 2800000, guid: 62c78dd6c59ce5a46b2b60e34ceac428, type: 3}
+  - {fileID: 2800000, guid: a8e4cd0e2a0f1bb43855cf9e5128a1df, type: 3}
+  - {fileID: 2800000, guid: 09e72fefb4bb87f4f9354d9f79948ce1, type: 3}
+  - {fileID: 2800000, guid: cbc0acc1af6cf5340b421249d4e3839e, type: 3}
+  - {fileID: 2800000, guid: b3bc561472fc04342b3649c9bfb22f7d, type: 3}
+  - {fileID: 2800000, guid: a8130c434903fa8459093664458052f2, type: 3}
   entryPosition: {x: 14, y: 0, z: 13}
   residentPrefabs: []
 --- !u!1660057539 &9223372036854775807

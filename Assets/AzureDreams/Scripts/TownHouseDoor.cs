@@ -14,10 +14,29 @@ namespace AzureDreamsReimagined
         public Vector3 Threshold => _hinge ? transform.TransformPoint(_closedCenter) : transform.position;
         private Vector3 _closedCenter;
 
+        internal static TownHouseDoor CreateFacadeLeaf(Transform parent, Vector3 position, string label,
+            float width, float height, Material material, Texture2D texture)
+        {
+            var root = new GameObject(label);
+            root.transform.SetParent(parent, false);
+            root.transform.position = position;
+            var leaf = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            leaf.name = "Door leaf";
+            leaf.transform.SetParent(root.transform, false);
+            leaf.transform.localPosition = Vector3.up * (height * 0.5f);
+            leaf.transform.localScale = new Vector3(width, height, 0.04f);
+            leaf.GetComponent<Collider>().enabled = false;
+            var door = root.AddComponent<TownHouseDoor>();
+            door._leaf = leaf.transform;
+            door._degreesPerSecond = 90f * 30f / 16f;
+            door.FitFacade(material, texture);
+            door.InitializeHinge();
+            return door;
+        }
+
         internal void FitFacade(Material material, Texture2D texture)
         {
             if (!_leaf || !_leaf.TryGetComponent<Renderer>(out var renderer)) return;
-            transform.localScale = new Vector3(1.04f / 0.95f, 1.77f / 1.52f, 0.55f);
             renderer.sharedMaterial = material;
             var properties = new MaterialPropertyBlock();
             properties.SetTexture("_MainTex", texture);
@@ -28,13 +47,15 @@ namespace AzureDreamsReimagined
         {
             if (IsPassable) return false;
             var threshold = Threshold;
-            return Mathf.Abs(point.x - threshold.x) < 0.52f + radius &&
+            return Mathf.Abs(point.x - threshold.x) < (_leaf ? _leaf.localScale.x * 0.5f : 0.52f) + radius &&
                 Mathf.Abs(point.z - threshold.z) < 0.022f + radius;
         }
 
-        private void Awake()
+        private void Awake() => InitializeHinge();
+
+        private void InitializeHinge()
         {
-            if (!_leaf) return;
+            if (!_leaf || _hinge) return;
             _closedCenter = transform.InverseTransformPoint(_leaf.position);
             var parent = _leaf.parent;
             _hinge = new GameObject("Door hinge").transform;

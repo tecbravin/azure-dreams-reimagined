@@ -13,6 +13,31 @@ namespace AzureDreamsReimagined
         private readonly Dictionary<Vector2Int, (int Original, int Until)> _trapTerrainChanges = new();
         private int _trapReversalUntil;
         private bool _trapGoUp;
+        private bool _goUpTransition;
+
+        private System.Collections.IEnumerator PlayGoUpTransition()
+        {
+            _goUpTransition = true;
+            try
+            {
+                const float fadeSeconds = 0.3f;
+                for (float elapsed = 0f; elapsed < fadeSeconds; elapsed += Time.unscaledDeltaTime * 0.7f)
+                {
+                    _fadeToBlack = elapsed / fadeSeconds;
+                    yield return null;
+                }
+                _fadeToBlack = 1f;
+                yield return new WaitForSecondsRealtime(2f);
+                CompleteElevatorAscent();
+            }
+            finally
+            {
+                _fadeToBlack = 0f;
+                _goUpTransition = false;
+                _trapAnimationSpeed = TowerAnimationSpeed;
+            }
+        }
+        private float _trapAnimationSpeed = TowerAnimationSpeed;
         private const int TerrainTrapTurns = 20;
         private const float TrapMarkerWidth = 1.10f;
         private static readonly Vector2Int[] TrapCross =
@@ -23,8 +48,13 @@ namespace AzureDreamsReimagined
         private Sprite TrapSprite(TowerTrapEffect effect)
         {
             if (_trapSprites.TryGetValue(effect, out var sprite)) return sprite;
-            string name = effect == TowerTrapEffect.GoUp ? "Go_up" : effect.ToString();
-            var texture = Resources.Load<Texture2D>($"Tower/Traps/{name}_trap");
+            string resourceName = effect switch
+            {
+                TowerTrapEffect.GoUp => "Go_up_trap",
+                TowerTrapEffect.Upheaval => "Upheaval",
+                _ => $"{effect}_trap"
+            };
+            var texture = Resources.Load<Texture2D>($"Tower/Traps/{resourceName}");
             if (texture)
             {
                 texture.filterMode = FilterMode.Point;
@@ -144,7 +174,11 @@ namespace AzureDreamsReimagined
                     break;
                 case TowerTrapEffect.GoUp:
                     if (actor == _playerActor && _floor < TowerFloorRules.BeldoFloor &&
-                        _towerRun?.CurrentState == TowerRunManager.State.InTower) _trapGoUp = true;
+                        _towerRun?.CurrentState == TowerRunManager.State.InTower)
+                    {
+                        _trapGoUp = true;
+                        _trapAnimationSpeed = TowerAnimationSpeed * 0.7f; // GoUp traps work 30% slower
+                    }
                     break;
                 case TowerTrapEffect.Reversal:
                     if (actor == _playerActor) _trapReversalUntil = _completedTowerTurns + 21;

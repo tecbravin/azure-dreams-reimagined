@@ -101,6 +101,24 @@ namespace AzureDreamsReimagined
         private bool CanFeedCarriedFamiliar(DungeonItemEntry item) =>
             _carriedFamiliar && item.Kind == ItemKind.Fruit && item.Subtype is 3 or 7;
 
+        private bool IsGiveableToFamiliar(DungeonItemEntry item) =>
+            item != null && item.Kind switch
+            {
+                ItemKind.Herb => true,
+                ItemKind.Seed => true,
+                ItemKind.Fruit => true,
+                ItemKind.Ball => true,
+                ItemKind.Sword => IsTrollWeapon(item),
+                _ => false
+            };
+
+        private bool CanGiveToFamiliar(DungeonItemEntry item) =>
+            (_area == Area.Town && _familiarDefinition && item != null &&
+                item.Kind != ItemKind.Ball && (!IsTrollWeapon(item) || IsTroll(_familiarActor))) ||
+            _familiar != null ||
+            (item != null && IsGiveableToFamiliar(item) && CanFeedCarriedFamiliar(item)) ||
+            (IsTrollWeapon(item) && IsTroll(_blueCollarAlly?.Actor));
+
         private void OpenItemCommands()
         {
             if (SelectedRawIndex <= FamiliarInventoryRow)
@@ -124,8 +142,7 @@ namespace AzureDreamsReimagined
             else if (!IsPitaFruit(item)) _availableItemCommands.Add(ItemCommand.Use);
             _availableItemCommands.Add(ItemCommand.Drop);
             _availableItemCommands.Add(ItemCommand.Hold);
-            if (_area == Area.Tower && (_familiar || CanFeedCarriedFamiliar(item) ||
-                (IsTrollWeapon(item) && IsTroll(_blueCollarAlly?.Actor))))
+            if (IsGiveableToFamiliar(item) && CanGiveToFamiliar(item))
                 _availableItemCommands.Add(ItemCommand.Give);
             _itemCommandIndex = 0;
             PlayRetailSound(RetailSfx.Confirm);
@@ -151,12 +168,12 @@ namespace AzureDreamsReimagined
             if (!_inventoryOpen || _itemCommandIndex < 0) return;
             float x = width / 2f + 10f;
             float y = height * 0.24f;
-            DrawHudPanel(new Rect(x, y, 224, 36 + _availableItemCommands.Count * 31));
-            GUI.Label(new Rect(x + 10, y + 6, 210, 24), SelectedRawIndex <= FamiliarInventoryRow ?
-                T("Familiar actions", "Ações do familiar") : T("Item actions", "Ações do item"));
+            DrawDialogueFrame(new Rect(x, y, 224, 36 + _availableItemCommands.Count * 31));
+            DrawInventoryText(new Rect(x + 10, y + 6, 210, 24), SelectedRawIndex <= FamiliarInventoryRow ?
+                T("Familiar actions", "Ações do familiar") : T("Item actions", "Ações do item"), _bodyStyle);
             for (int i = 0; i < _availableItemCommands.Count; i++)
-                if (GUI.Button(new Rect(x + 10, y + 31 + i * 31, 204, 28),
-                    (i == _itemCommandIndex ? "> " : "") + CommandText(_availableItemCommands[i])))
+                if (DrawInventoryButton(new Rect(x + 10, y + 31 + i * 31, 204, 28),
+                    CommandText(_availableItemCommands[i]), i == _itemCommandIndex))
                 { ExecuteItemCommand(_availableItemCommands[i]); break; }
         }
 
@@ -263,7 +280,7 @@ namespace AzureDreamsReimagined
             bool giving = command == ItemCommand.Give;
             if (giving && IsTrollWeapon(item))
             {
-                bool redTroll = _familiar && IsTroll(_familiarActor);
+                bool redTroll = (_familiar || (!inTower && _familiarDefinition)) && IsTroll(_familiarActor);
                 bool blueTroll = IsTroll(_blueCollarAlly?.Actor);
                 bool useBlue = blueTroll && (!redTroll ||
                     (inventory.HasEquipped(FamiliarEquipped, false) && !inventory.HasEquipped(BlueFamiliarEquipped, false)));
@@ -279,7 +296,7 @@ namespace AzureDreamsReimagined
                     ScheduleInventoryAction(() =>
                     {
                         bool active = useBlue ? _blueCollarAlly?.Actor == recipient && recipient.Hp > 0 :
-                            _familiar && _familiarActor == recipient && _familiarHealth > 0;
+                            (_familiar || (!inTower && _familiarDefinition)) && _familiarActor == recipient && recipient.Hp > 0;
                         if (!active || !inventory.SetEquipped(index, wearer, lockCursed: true)) return;
                         PlayRetailSound(RetailSfx.Equip);
                         _message = T($"{TowerCombatName(recipient)} equipped {InventoryItemName(item)}.",
@@ -289,7 +306,7 @@ namespace AzureDreamsReimagined
                     return;
                 }
             }
-            if (giving && !_familiar && !CanFeedCarriedFamiliar(item)) return;
+            if (giving && !_familiar && (inTower || !_familiarDefinition) && !CanFeedCarriedFamiliar(item)) return;
             if (giving && Equipment(item)) command = ItemCommand.Drop;
             if (command == ItemCommand.Drop)
             {
@@ -361,7 +378,8 @@ namespace AzureDreamsReimagined
                 (item.Subtype == 5 || (item.Subtype == 4 && Combat.HasStatus(_playerActor, StatusId.SLEEP)));
             ScheduleInventoryAction(() =>
             {
-                if (giving && (_familiarActor != target || (!_familiar && !CanFeedCarriedFamiliar(item)))) return;
+                if (giving && (_familiarActor != target || (!_familiar &&
+                    (inTower || !_familiarDefinition) && !CanFeedCarriedFamiliar(item)))) return;
                 if (giving && item.Kind == ItemKind.Fruit && item.Subtype == 7 && !CanRevertToEgg(target)) return;
                 if (item.Kind == ItemKind.Crystal && item.Subtype == 1 && !TryFindHatchCell(out _)) return;
                 var upgradeTarget = usingSand ? SandUpgradeTarget(item) : null;
@@ -401,6 +419,7 @@ namespace AzureDreamsReimagined
             }
 
             actor.Hp = StatByte(Mathf.Max(1, (current ? FamiliarMaxHealth : actor.MaxHp) * 3 / 10));
+            PlayRetailSound(RetailSfx.Restore);
             string name = reserve?.Name ?? FamiliarDisplayName;
             if (current)
             {
@@ -429,6 +448,7 @@ namespace AzureDreamsReimagined
             if (!inventory.ReplaceDungeonItem(targetIndex, item.Kind, identified)) return;
             if (groundCell.HasValue) ConsumeGroundItem(groundCell.Value);
             else inventory.ConsumeDungeonItem(sourceIndex, ItemKind.Glasses);
+            PlayRetailSound(RetailSfx.Spell);
             string name = InventoryItemName(identified);
             _message = T($"Identified: {name}.", $"Item identificado: {name}.");
             RefreshInventoryCommands();
@@ -449,6 +469,7 @@ namespace AzureDreamsReimagined
             if (!inventory.ReplaceDungeonItem(ballIndex, ItemKind.Ball, ball)) return;
             if (groundCell.HasValue) ConsumeGroundItem(groundCell.Value);
             else inventory.ConsumeDungeonItem(sandIndex, ItemKind.Sand);
+            PlayRetailSound(RetailSfx.Equip);
             _message = $"{InventoryItemName(ball)} — {BallChargeText(ball)}";
             RefreshInventoryCommands();
         }
@@ -462,25 +483,74 @@ namespace AzureDreamsReimagined
             }
 
             Vector2 facing = _area == Area.Tower ? _towerFacing : _townFacing;
-            // Try the four tiles sharing an edge with Koh's tile.
             var front = Mathf.Abs(facing.x) > Mathf.Abs(facing.y)
-                ? new Vector2Int(facing.x > 0f ? 1 : -1, 0)
+                ? new Vector2Int(facing.x >= 0f ? 1 : -1, 0)
                 : new Vector2Int(0, facing.y >= 0f ? 1 : -1);
             var left = new Vector2Int(-front.y, front.x);
-            foreach (var step in new[] { front, -front, left, -left })
+            var preferredSteps = new[] { front, -front, left, -left };
+
+            if (_area == Area.Tower)
             {
-                Vector2Int cell = origin + step;
-                bool reachable = _area == Area.Tower
-                    ? CanTowerStep(origin, step) && CanLandObject(cell) &&
-                      !_thrownEggs.Exists(ally => ally.View && ally.Turns > 0 && ally.Cell == cell)
-                    : TownPositionOpen(CellPosition(cell));
-                if (!reachable || !DiscardCellHasRoom(cell)) continue;
-                destination = cell;
-                return true;
+                // Search outward over walkable tower tiles so distant free spots are
+                // reachable without placing the item through a wall or onto a unit.
+                var visited = new HashSet<Vector2Int> { origin };
+                var pending = new Queue<Vector2Int>();
+                pending.Enqueue(origin);
+                while (pending.Count > 0)
+                {
+                    var cell = pending.Dequeue();
+                    foreach (var step in preferredSteps)
+                    {
+                        var next = cell + step;
+                        if (!visited.Add(next) || !CanTowerStep(cell, step)) continue;
+                        if (DiscardCellHasRoom(next) && CanLandObject(next))
+                        {
+                            destination = next;
+                            return true;
+                        }
+                        if (CreatureAt(next) >= 0 || (_familiar && next == _familiarCell) ||
+                            (_blueCollarAlly?.View && next == _blueCollarAlly.Cell) ||
+                            _thrownEggs.Exists(ally => ally.View && ally.Turns > 0 && ally.Cell == next)) continue;
+                        pending.Enqueue(next);
+                    }
+                }
+            }
+            else
+            {
+                // Town layouts are authored in world cells, so inspect each Manhattan
+                // ring and choose the first open cell, preserving facing as a tie-break.
+                int maxRadius = UsingRetailTown ? RetailTownSize : MapSize;
+                for (int radius = 1; radius <= maxRadius; radius++)
+                {
+                    var candidates = new List<Vector2Int>(radius * 4);
+                    for (int x = -radius; x <= radius; x++)
+                    {
+                        int y = radius - Mathf.Abs(x);
+                        candidates.Add(origin + new Vector2Int(x, y));
+                        if (y != 0) candidates.Add(origin + new Vector2Int(x, -y));
+                    }
+                    candidates.Sort((a, b) => FacingPreference(a - origin, b - origin, front));
+                    foreach (var cell in candidates)
+                    {
+                        if (!DiscardCellHasRoom(cell) || !TownPositionOpen(CellPosition(cell))) continue;
+                        destination = cell;
+                        return true;
+                    }
+                }
             }
 
             destination = default;
             return false;
+        }
+
+        private static int FacingPreference(Vector2Int a, Vector2Int b, Vector2Int front)
+        {
+            int aForward = a.x * front.x + a.y * front.y;
+            int bForward = b.x * front.x + b.y * front.y;
+            if (aForward != bForward) return bForward.CompareTo(aForward);
+            int aSide = a.x * -front.y + a.y * front.x;
+            int bSide = b.x * -front.y + b.y * front.x;
+            return aSide.CompareTo(bSide);
         }
 
         private bool DiscardCellHasRoom(Vector2Int cell) =>

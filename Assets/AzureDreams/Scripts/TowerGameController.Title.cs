@@ -149,7 +149,7 @@ namespace AzureDreamsReimagined
             var keys = Keyboard.current;
             bool confirm = keys != null && (keys.enterKey.wasPressedThisFrame || keys.numpadEnterKey.wasPressedThisFrame) ||
                 _interact?.WasPressedThisFrame() == true;
-            bool back = keys != null && keys.escapeKey.wasPressedThisFrame;
+            bool back = keys != null && keys.qKey.wasPressedThisFrame;
             if (_titlePage == TitlePage.Opening)
             {
                 if (confirm || back || (!_openingPlayer.isPrepared && Time.realtimeSinceStartup > _openingPrepareDeadline))
@@ -159,40 +159,50 @@ namespace AzureDreamsReimagined
             if (_settingsOpen) { HandleSettingsInput(); return true; }
             if (back) { BackFromTitlePage(); return true; }
             if (keys == null) return true;
-            int step = (keys.downArrowKey.wasPressedThisFrame ? 1 : 0) - (keys.upArrowKey.wasPressedThisFrame ? 1 : 0);
+            int step = (MenuDirectionPressed(2) ? 1 : 0) - (MenuDirectionPressed(1) ? 1 : 0);
             if (_titlePage == TitlePage.Main)
             {
+                int previous = _titleSelection;
                 if (step != 0)
                 {
                     do { _titleSelection = (_titleSelection + step + 4) % 4; }
                     while (_titleSelection == 1 && !_titleHasSave);
                 }
+                if (_titleSelection != previous) PlayRetailSound(RetailSfx.Cursor);
                 if (confirm) SelectTitleOption(_titleSelection);
             }
             else if (_titlePage == TitlePage.Options)
             {
                 if (step != 0) _titleSubSelection = 1 - _titleSubSelection;
+                if (step != 0) PlayRetailSound(RetailSfx.Cursor);
                 if (confirm) SelectTitleSettings(_titleSubSelection);
             }
             else if (_titlePage == TitlePage.Continue)
             {
+                int previous = _titleSubSelection;
                 if (step != 0)
                 {
                     int count = _titleSlots.Length + 1;
                     do { _titleSubSelection = (_titleSubSelection + step + count) % count; }
                     while (!CanLoadTitleEntry(_titleSubSelection));
                 }
+                if (_titleSubSelection != previous) PlayRetailSound(RetailSfx.Cursor);
                 if (confirm) LoadTitleEntry(_titleSubSelection);
             }
-            else if (_titlePage == TitlePage.NewGame && confirm) BeginNewGame();
+            else if (_titlePage == TitlePage.NewGame && confirm)
+            {
+                PlayRetailSound(RetailSfx.Confirm);
+                BeginNewGame();
+            }
             else if (_titlePage == TitlePage.Manual)
-                ChangeManualPage((keys.rightArrowKey.wasPressedThisFrame ? 1 : 0) - (keys.leftArrowKey.wasPressedThisFrame ? 1 : 0));
+                ChangeManualPage((MenuDirectionPressed(4) ? 1 : 0) - (MenuDirectionPressed(3) ? 1 : 0));
             return true;
         }
 
         private void SelectTitleOption(int row)
         {
             _titleSelection = row;
+            PlayRetailSound(RetailSfx.Confirm);
             switch (row)
             {
                 case 0:
@@ -217,12 +227,15 @@ namespace AzureDreamsReimagined
 
         private void LoadTitleEntry(int row)
         {
-            if (CanLoadTitleEntry(row)) BeginTitleGame(row == 0 ? null : _titleSlots[row - 1]);
+            if (!CanLoadTitleEntry(row)) return;
+            PlayRetailSound(RetailSfx.Confirm);
+            BeginTitleGame(row == 0 ? null : _titleSlots[row - 1]);
         }
 
         private void SelectTitleSettings(int row)
         {
             _titleSubSelection = row;
+            PlayRetailSound(RetailSfx.Confirm);
             switch (row)
             {
                 case 0: OpenSettings(); break;
@@ -249,6 +262,7 @@ namespace AzureDreamsReimagined
         private void BackFromTitlePage()
         {
             if (_titlePage == TitlePage.Main) return;
+            PlayRetailSound(RetailSfx.Cancel);
             _titleImageScroll = Vector2.zero;
             _titlePage = _titlePage == TitlePage.Manual ? TitlePage.Options : TitlePage.Main;
         }
@@ -257,6 +271,7 @@ namespace AzureDreamsReimagined
         {
             int next = Mathf.Clamp(_manualPage + step, 1, ManualPageCount);
             if (next == _manualPage) return;
+            PlayRetailSound(RetailSfx.Cursor);
             _manualPage = next;
             _titleImageScroll = Vector2.zero;
         }

@@ -8,6 +8,20 @@ namespace AzureDreamsReimagined.Editor
  {
   private void OnPreprocessTexture()
   {
+   if(assetPath.StartsWith("Assets/AzureDreams/Resources/Monsters/Community/", StringComparison.Ordinal))
+   {
+    var atlas=(TextureImporter)assetImporter;
+    atlas.textureType=TextureImporterType.Default;
+    atlas.sRGBTexture=false;
+    atlas.isReadable=true;
+    atlas.alphaSource=TextureImporterAlphaSource.FromInput;
+    atlas.mipmapEnabled=false;
+    atlas.filterMode=FilterMode.Point;
+    atlas.textureCompression=TextureImporterCompression.Uncompressed;
+    atlas.npotScale=TextureImporterNPOTScale.None;
+    atlas.maxTextureSize=4096;
+    return;
+   }
    bool sprite=assetPath.StartsWith("Assets/AzureDreams/Sprites/Monsters/Community/") || assetPath.StartsWith("Assets/AzureDreams/Sprites/Characters/") && assetPath.Contains("/Community/") || assetPath.StartsWith("Assets/AzureDreams/Sprites/Portraits/ADStateDisplay/") || assetPath.StartsWith("Assets/AzureDreams/Sprites/Items/ADStateDisplay/") || assetPath.StartsWith("Assets/AzureDreams/Sprites/UI/ADStateDisplay/");
    bool texture=assetPath.StartsWith("Assets/AzureDreams/Textures/Town/CapturedScenes/");
    if(!sprite&&!texture)return;

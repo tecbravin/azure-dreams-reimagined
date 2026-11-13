@@ -63,6 +63,7 @@ namespace AzureDreamsReimagined
     /// <summary>Tracks items and traps for the current dungeon and uses the run RNG to place them.</summary>
     public sealed class TowerItemTrapManager
     {
+        private const int RetailMaxTrapsPerFloor = 32;
         private readonly TowerFloorManager _floor;
         private CoreRng _rng;
         private System.Random _rareLootRng;
@@ -192,26 +193,38 @@ namespace AzureDreamsReimagined
                 var rare = RollRareFloorItem();
                 if (roll < 5)
                     items[i] = CreateTowerEquipment(CoreItems.Kind.Sword,
-                        ProceduralSwords[random.Next(ProceduralSwords.Length)], random.Next(100));
+                        ProceduralSwords[random.Next(ProceduralSwords.Length)], random.Next(1024));
                 else if (roll < 10)
                     items[i] = CreateTowerEquipment(CoreItems.Kind.Shield,
-                        ProceduralShields[random.Next(ProceduralShields.Length)], random.Next(100));
+                        ProceduralShields[random.Next(ProceduralShields.Length)], random.Next(1024));
                 else if (roll < 15)
                     items[i] = CoreItems.CreateFloorItem(5, CoreItems.Kind.Scroll, 0);
                 if (rare != null) items[i] = rare;
+
+                // Retail floor balls have discrete charge counts. Acid Rain is
+                // the one exception and always spawns with a single charge.
+                if (items[i]?.Kind == CoreItems.Kind.Ball)
+                {
+                    int charges = items[i].Subtype == AcidRainBall ? 1 : 4 + random.Next(4);
+                    items[i] = new CoreItem(items[i].Subtype, items[i].Kind, (sbyte)charges, items[i].Flags);
+                }
             }
         }
 
+        private const byte AcidRainBall = 17;
+
         internal static CoreItem CreateTowerEquipment(byte kind, byte subtype, int roll)
         {
-            sbyte modifier = roll switch
-            {
-                < 60 => 0,
-                < 75 => 1,
-                < 85 => 2,
-                < 90 => 3,
-                _ => -1
-            };
+            // The equipment data is recorded in 1/1024 probability steps.
+            // Swords/shields: -1 184/1024, 0 728/1024, +1/+2 56/1024 each.
+            // Wands: -1 128/1024, otherwise 0.
+            int sample = Mathf.Clamp(roll, 0, 1023);
+            sbyte modifier = kind == CoreItems.Kind.Wand
+                ? sample < 128 ? (sbyte)-1 : (sbyte)0
+                : sample < 184 ? (sbyte)-1
+                : sample < 912 ? (sbyte)0
+                : sample < 968 ? (sbyte)1
+                : (sbyte)2;
             byte flags = Inventory.UnrevealedEquipmentFlag;
             if (modifier == -1 || (kind == CoreItems.Kind.Sword && subtype == TowerGameController.DarkSword))
                 flags |= Inventory.CursedEquipmentFlag;
@@ -267,7 +280,7 @@ namespace AzureDreamsReimagined
         {
             var result = new List<Vector2Int>();
             if (_floor.Dungeon == null) return result;
-            if (count < 0) count = 0;
+            count = Mathf.Clamp(count, 0, RetailMaxTrapsPerFloor);
 
             RegisterExistingItems();
             var candidates = PlacementCandidates(allowCorridors: true);
@@ -421,11 +434,11 @@ namespace AzureDreamsReimagined
             // Five distinct outcomes out of 5,000, one per rare item.
             return _rareLootRng.Next(5000) switch
             {
-                0 => CreateTowerEquipment(CoreItems.Kind.Sword, 15, _rareLootRng.Next(100)), // Bow Gun
-                1 => CreateTowerEquipment(CoreItems.Kind.Sword, TowerGameController.DarkSword, _rareLootRng.Next(100)),
-                2 => CreateTowerEquipment(CoreItems.Kind.Sword, 10, _rareLootRng.Next(100)), // Holy Sword
+                0 => CreateTowerEquipment(CoreItems.Kind.Sword, 15, _rareLootRng.Next(1024)), // Bow Gun
+                1 => CreateTowerEquipment(CoreItems.Kind.Sword, TowerGameController.DarkSword, _rareLootRng.Next(1024)),
+                2 => CreateTowerEquipment(CoreItems.Kind.Sword, 10, _rareLootRng.Next(1024)), // Holy Sword
                 3 => CoreItems.CreateFloorItem(7, CoreItems.Kind.Fruit, 0), // Roche Fruit
-                4 => CreateTowerEquipment(CoreItems.Kind.Wand, 2, _rareLootRng.Next(100)), // Trained Wand
+                4 => CreateTowerEquipment(CoreItems.Kind.Wand, 2, _rareLootRng.Next(1024)), // Trained Wand
                 _ => null
             };
         }

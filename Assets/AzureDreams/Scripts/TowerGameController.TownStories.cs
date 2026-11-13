@@ -83,7 +83,7 @@ namespace AzureDreamsReimagined
             if (_cancel?.WasPressedThisFrame() == true) { CloseStoryPrompt(); return true; }
             if (Keyboard.current is { } keys)
             {
-                int step = (keys.downArrowKey.wasPressedThisFrame ? 1 : 0) - (keys.upArrowKey.wasPressedThisFrame ? 1 : 0);
+                int step = (MenuDirectionPressed(2) ? 1 : 0) - (MenuDirectionPressed(1) ? 1 : 0);
                 _storyChoice = (_storyChoice + step + _storyChoices.Length) % _storyChoices.Length;
                 if (step != 0)
                 {

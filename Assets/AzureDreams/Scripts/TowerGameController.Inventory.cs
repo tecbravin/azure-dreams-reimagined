@@ -74,8 +74,8 @@ namespace AzureDreamsReimagined
                 return true;
             }
             var keyboard = Keyboard.current;
-            int delta = keyboard?.upArrowKey.wasPressedThisFrame == true ? -1 :
-                keyboard?.downArrowKey.wasPressedThisFrame == true ? 1 : 0;
+            int delta = MenuDirectionPressed(1) ? -1 :
+                MenuDirectionPressed(2) ? 1 : 0;
             if (delta != 0)
             {
                 _itemTargetSelection = Mathf.Clamp(_itemTargetSelection + delta, 0, _itemTargets.Count - 1);
@@ -113,7 +113,7 @@ namespace AzureDreamsReimagined
                 ItemTargetMode.Identify => T("Choose an item to identify", "Escolha um item para identificar"),
                 _ => T("Choose a magic ball", "Escolha uma bola de cristal")
             };
-            DrawHudText(new Rect(panel.x + 10f, panel.y + 6f, panel.width - 20f, 24f), title, _bodyStyle);
+            DrawInventoryText(new Rect(panel.x + 10f, panel.y + 6f, panel.width - 20f, 24f), title, _bodyStyle);
             var viewport = new Rect(panel.x + 10f, panel.y + 31f, panel.width - 20f, ItemTargetListHeight);
             float rowWidth = viewport.width - 17f;
             _itemTargetScroll = GUI.BeginScrollView(viewport, _itemTargetScroll,
@@ -138,11 +138,11 @@ namespace AzureDreamsReimagined
                 if (focused) DrawInventoryFocusMarker(row);
                 var text = row;
                 text.xMin += 28f;
-                DrawHudText(text, label, InventoryNameStyle(item));
+                DrawInventoryText(text, label, InventoryNameStyle(item));
                 if (GUI.Button(row, GUIContent.none, GUIStyle.none)) clicked = i;
             }
             GUI.EndScrollView();
-            if (GUI.Button(new Rect(viewport.x, viewport.yMax + 5f, viewport.width, 25f), T("Cancel", "Cancelar")))
+            if (DrawInventoryButton(new Rect(viewport.x, viewport.yMax + 5f, viewport.width, 25f), T("Cancel", "Cancelar")))
                 _itemTargetSource = null;
             else if (clicked >= 0) ConfirmItemTarget(clicked);
         }
@@ -211,7 +211,8 @@ namespace AzureDreamsReimagined
             if (_inventoryActorSlot == 0 && _itemCommandIndex < 0 && !_familiarStatus && _liftAction?.WasPressedThisFrame() == true)
             { SortInventory(); return true; }
             bool confirm = _interact != null && _interact.WasPressedThisFrame();
-            int delta = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+            int delta = (MenuDirectionPressed(1) ? -1 :
+                MenuDirectionPressed(2) ? 1 : 0);
             if (_itemCommandIndex >= 0)
             {
                 int previousCommand = _itemCommandIndex;
@@ -220,8 +221,8 @@ namespace AzureDreamsReimagined
                 if (confirm) ExecuteItemCommand(_availableItemCommands[_itemCommandIndex]);
                 return true;
             }
-            int horizontal = keyboard.leftArrowKey.wasPressedThisFrame ? -1 :
-                keyboard.rightArrowKey.wasPressedThisFrame ? 1 : 0;
+            int horizontal = (MenuDirectionPressed(3) ? -1 :
+                MenuDirectionPressed(4) ? 1 : 0);
             if (_inventoryActorSlot > FamiliarInventoryCount)
             {
                 _inventoryActorSlot = 0;
@@ -297,12 +298,11 @@ namespace AzureDreamsReimagined
             }
             int count = VisibleItemCount;
             int itemCount = count - FamiliarInventoryCount;
-            DrawHudText(new Rect(items.x + 10f, items.y + 6f, panelWidth - 20f, 22f),
+            DrawInventoryText(new Rect(items.x + 10f, items.y + 6f, panelWidth - 20f, 22f),
                 _familiarStatus ? T("Familiars", "Familiares") :
                     T("Items", "Itens") + $" {itemCount}/{Inventory.SlotCapacity}", _bodyStyle);
-            if (!_familiarStatus && _itemCommandIndex < 0 && itemCount > 1 && GUI.Button(new Rect(items.xMax - 88, items.y + 6, 78, 24),
-                T($"Sort [{_liftAction?.GetBindingDisplayString()}]",
-                    $"Ordenar [{_liftAction?.GetBindingDisplayString()}]"))) SortInventory();
+            if (!_familiarStatus && _itemCommandIndex < 0 && itemCount > 1 && DrawInventoryButton(
+                new Rect(items.xMax - 88, items.y + 6, 78, 24), T("Sort", "Ordenar"))) SortInventory();
             DrawInventoryTabs(items);
             int first = _familiarStatus ? Mathf.Max(0, _inventoryOffset) / InventoryRowsPerPage * InventoryRowsPerPage :
                 FirstItemRowOnPage;
@@ -316,7 +316,7 @@ namespace AzureDreamsReimagined
                     {
                         DrawHudFill(row, new Color(0.08f, 0.12f, 0.19f, 0.30f));
                         row.xMin += 27f;
-                        DrawHudText(row, "-", _messageStyle);
+                        DrawInventoryText(row, "-", _messageStyle);
                     }
                     continue;
                 }
@@ -352,7 +352,7 @@ namespace AzureDreamsReimagined
                 if (focused) DrawInventoryFocusMarker(hitArea);
                 row.xMin = Mathf.Max(row.xMin, hitArea.x + 27f);
                 if (familiarRow) DrawFamiliarInventoryName(row, label, labelStyle, reserve);
-                else DrawHudText(row, label, labelStyle);
+                else DrawInventoryText(row, label, labelStyle);
                 if (_itemCommandIndex < 0 && GUI.Button(hitArea, GUIContent.none, GUIStyle.none))
                 { _inventoryOffset = i; OpenItemCommands(); }
             }
@@ -365,10 +365,10 @@ namespace AzureDreamsReimagined
                 DrawDialogueFrame(description);
                 var selected = SelectedInventoryItem(out _);
                 if (SelectedRawIndex <= FamiliarInventoryRow)
-                    DrawHudText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
+                    DrawInventoryText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
                         T("E: Familiar actions", "E: Ações do familiar"), _messageStyle);
                 else if (selected != null)
-                    DrawHudText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
+                    DrawInventoryText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
                         ItemDescription(selected) + (selected.Kind == ItemKind.Ball ?
                             "  " + BallChargeText(selected) + T(" · Spell Lv. ", " · Nív. da magia ") +
                             BallSpellLevel(selected.Param) : ""), _messageStyle);
@@ -378,17 +378,17 @@ namespace AzureDreamsReimagined
             bool viewingFamiliar = actorRow <= FamiliarInventoryRow;
             var actor = DrawInventoryActorStatus(stats, actorRow);
             if (FamiliarInventoryCount > 0 && _itemCommandIndex < 0 &&
-                GUI.Button(new Rect(stats.x + 10f, viewingFamiliar ? (_familiarStatus ? descriptionY + 52f : stats.yMax + 8f) :
+                DrawInventoryButton(new Rect(stats.x + 10f, viewingFamiliar ? (_familiarStatus ? descriptionY + 52f : stats.yMax + 8f) :
                     stats.yMax - 51f, stats.width - 20f, 21f),
                     _familiarStatus ? T("Items [F]", "Itens [F]") : T("Familiars [F]", "Familiares [F]")))
                 ToggleInventoryFamiliars();
-            if (!viewingFamiliar) DrawHudText(new Rect(stats.x + 10f, stats.yMax - 29f, panelWidth - 20f, 27f),
+            if (!viewingFamiliar) DrawInventoryText(new Rect(stats.x + 10f, stats.yMax - 29f, panelWidth - 20f, 27f),
                 T("Left/Right: tabs\nPgUp/PgDn: character", "Esq./Dir.: abas\nPgUp/PgDn: personagem"), _messageStyle);
             if (_familiarStatus && actor != null && _itemCommandIndex < 0)
             {
                 var talents = new Rect(stats.x, stats.yMax + 88f, stats.width, 67f);
                 DrawDialogueFrame(talents);
-                DrawHudText(new Rect(talents.x + 8f, talents.y + 5f, talents.width - 16f, talents.height - 10f),
+                DrawInventoryText(new Rect(talents.x + 8f, talents.y + 5f, talents.width - 16f, talents.height - 10f),
                     T("Talents: ", "Talentos: ") + DescribeTalents(actor), _messageStyle);
             }
             DrawItemCommands(width, height);
@@ -414,7 +414,7 @@ namespace AzureDreamsReimagined
             int count = FamiliarInventoryCount;
             var panel = new Rect(items.x, items.yMax + 6f, items.width, 28f + Mathf.Min(count, 3) * rowHeight);
             DrawDialogueFrame(panel);
-            DrawHudText(new Rect(panel.x + 9f, panel.y + 3f, panel.width - 18f, 20f), T("Familiars", "Familiares"), _bodyStyle);
+            DrawInventoryText(new Rect(panel.x + 9f, panel.y + 3f, panel.width - 18f, 20f), T("Familiars", "Familiares"), _bodyStyle);
             var list = new Rect(panel.x + 9f, panel.y + 22f, panel.width - 18f, panel.height - 25f);
             float rowWidth = list.width - (count > 3 ? 16f : 0f);
             _inventoryFamiliarScroll = GUI.BeginScrollView(list, _inventoryFamiliarScroll,
@@ -449,7 +449,7 @@ namespace AzureDreamsReimagined
             for (int page = 0; page < OccupiedInventoryPageCount; page++)
             {
                 var tab = new Rect(panel.x + 10f + page * (tabWidth + gap), panel.y + 33f, tabWidth, 22f);
-                if (GUI.Button(tab, (page + 1).ToString()) && _itemCommandIndex < 0)
+                if (DrawInventoryButton(tab, (page + 1).ToString(), !_familiarStatus && page == _inventoryPage) && _itemCommandIndex < 0)
                     SelectInventoryPage(page);
                 if (!_familiarStatus && page == _inventoryPage)
                     DrawHudFill(new Rect(tab.x + 2f, tab.yMax - 3f, tab.width - 4f, 2f),
@@ -469,7 +469,7 @@ namespace AzureDreamsReimagined
 
             if (collarSlot == 0)
             {
-                DrawHudText(row, label, style);
+                DrawInventoryText(row, label, style);
                 return;
             }
 
@@ -477,14 +477,36 @@ namespace AzureDreamsReimagined
             var badge = new Rect(row.xMax - badgeSize, row.center.y - badgeSize * 0.5f, badgeSize, badgeSize);
             if (Event.current.type == EventType.Repaint)
             {
-                var icon = SuppliedItemSprite(GroundIconNames[collarSlot]);
+                bool lost = IsFamiliarLost(reserve?.Actor ?? _familiarActor);
+                var icon = SuppliedItemSprite(lost
+                    ? (collarSlot == RedCollarIconSlot ? "lost_red_collar" : "lost_blue_collar")
+                    : GroundIconNames[collarSlot]);
                 if (!icon) icon = RetailGroundItemSprite(collarSlot);
                 if (icon) DrawItemSprite(badge, icon);
             }
             row.xMax = badge.x - 4f;
             GUI.BeginGroup(row);
-            DrawHudText(new Rect(Vector2.zero, row.size), label, style);
+            DrawInventoryText(new Rect(Vector2.zero, row.size), label, style);
             GUI.EndGroup();
+        }
+
+        private void DrawInventoryText(Rect rect, string value, GUIStyle style) =>
+            DrawHudText(rect, value, style, dialogue: true);
+
+        private bool DrawInventoryButton(Rect rect, string value, bool selected = false)
+        {
+            if (Event.current.type == EventType.Repaint)
+            {
+                DrawHudFill(rect, new Color(0.02f, 0.035f, 0.13f, 0.64f));
+                if (selected) DrawInventoryFocusBand(rect);
+                var gold = new Color(0.76f, 0.61f, 0.32f, selected ? 0.9f : 0.45f);
+                DrawHudFill(new Rect(rect.x, rect.y, rect.width, 1f), gold);
+                DrawHudFill(new Rect(rect.x, rect.yMax - 1f, rect.width, 1f), gold);
+            }
+            bool clicked = GUI.Button(rect, GUIContent.none, GUIStyle.none);
+            var text = new Rect(rect.x + 5f, rect.y, rect.width - 10f, rect.height);
+            DrawInventoryText(text, value, _bodyStyle);
+            return clicked;
         }
 
         private static void DrawInventoryFocusBand(Rect row) =>
@@ -540,7 +562,7 @@ namespace AzureDreamsReimagined
             if (!icon && item != null) icon = ItemDisplaySprite(item.Kind, 1);
             if (!icon)
             {
-                DrawHudText(rect, "?", _bodyStyle);
+                DrawInventoryText(rect, "?", _bodyStyle);
                 return;
             }
             DrawItemSprite(rect, icon);
@@ -568,7 +590,7 @@ namespace AzureDreamsReimagined
             }
             if (actor == null)
             {
-                DrawHudText(new Rect(stats.x + 10f, stats.y + 6f, stats.width - 20f, 22f), name, _bodyStyle);
+                DrawInventoryText(new Rect(stats.x + 10f, stats.y + 6f, stats.width - 20f, 22f), name, _bodyStyle);
                 return;
             }
             float left = stats.x + 10f, top = stats.y + 8f, width = stats.width - 20f;
@@ -589,13 +611,13 @@ namespace AzureDreamsReimagined
                         new Rect(x / 160f, 1f - (y + 32f) / 64f, 32f / 160f, 0.5f));
                 }
             }
-            DrawHudText(new Rect(left + 53f, top, width - 53f, 20f), HeroName, _bodyStyle);
-            DrawHudText(new Rect(left + 53f, top + 23f, width - 105f, 20f), T("TAMER", "DOMADOR"), _messageStyle);
-            DrawHudText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
+            DrawInventoryText(new Rect(left + 53f, top, width - 53f, 20f), HeroName, _bodyStyle);
+            DrawInventoryText(new Rect(left + 53f, top + 23f, width - 105f, 20f), T("TAMER", "DOMADOR"), _messageStyle);
+            DrawInventoryText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
                 T("LV ", "NÍV ") + Mathf.Max(1, actor.Level), _messageStyle);
-            DrawHudText(new Rect(left, top + 50f, 50f, 33f), T("HLTH", "VIDA"), _bodyStyle);
+            DrawInventoryText(new Rect(left, top + 50f, 50f, 33f), T("HLTH", "VIDA"), _bodyStyle);
             DrawFamiliarStatusIcon(new Rect(left + 50f, top + 51f, 14f, 14f), "hp");
-            DrawHudText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
+            DrawInventoryText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
                 T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", _messageStyle);
 
             var inventory = CarriedInventory;
@@ -615,7 +637,7 @@ namespace AzureDreamsReimagined
                     if (icon) DrawItemSprite(iconRect, icon);
                 }
                 int strength = IsFrog(actor) ? 0 : shield ? PlayerShieldDefense() : EquipmentBonus(inventory, PlayerEquipped, false);
-                DrawHudText(new Rect(iconRect.xMax + 4f, iconRect.y - 1f, 32f, 17f), strength.ToString(), _messageStyle);
+                DrawInventoryText(new Rect(iconRect.xMax + 4f, iconRect.y - 1f, 32f, 17f), strength.ToString(), _messageStyle);
             }
         }
 
@@ -645,18 +667,18 @@ namespace AzureDreamsReimagined
             DrawFamiliarStatusIcon(new Rect(left + 53f, top + 2f, 17f, 17f), FamiliarGenusIcon(genus));
             GUI.BeginGroup(new Rect(left + 74f, top, width - 74f, 20f));
             string displayName = (actor.Flags14 & LevaFusionProtection) != 0 ? name + " [Leva]" : name;
-            DrawHudText(new Rect(0f, 0f, width - 74f, 20f), displayName, _bodyStyle);
+            DrawInventoryText(new Rect(0f, 0f, width - 74f, 20f), displayName, _bodyStyle);
             GUI.EndGroup();
-            DrawHudText(new Rect(left + 53f, top + 23f, width - 105f, 20f), species.ToUpperInvariant(), _messageStyle);
-            DrawHudText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
+            DrawInventoryText(new Rect(left + 53f, top + 23f, width - 105f, 20f), species.ToUpperInvariant(), _messageStyle);
+            DrawInventoryText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
                 T("LV ", "NÍV ") + Mathf.Max(1, actor.Level), _messageStyle);
 
-            DrawHudText(new Rect(left, top + 51f, 51f, 34f), T("HLTH", "VIDA"), _bodyStyle);
+            DrawInventoryText(new Rect(left, top + 51f, 51f, 34f), T("HLTH", "VIDA"), _bodyStyle);
             DrawFamiliarStatusIcon(new Rect(left + 50f, top + 52f, 14f, 14f), "hp");
             DrawFamiliarStatusIcon(new Rect(left + 50f, top + 69f, 14f, 14f), "mp");
-            DrawHudText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
+            DrawInventoryText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
                 T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", _messageStyle);
-            DrawHudText(new Rect(left + 68f, top + 66f, width - 68f, 17f),
+            DrawInventoryText(new Rect(left + 68f, top + 66f, width - 68f, 17f),
                 T("MP ", "PM ") + $"{actor.CurrentMp} / {actor.MaxMp}", _messageStyle);
 
             DrawStatusAttributes(left, top, width, actor, attack, defense);
@@ -669,11 +691,11 @@ namespace AzureDreamsReimagined
         private void DrawStatusAttributes(float left, float top, float width, ActorRecord actor, int attack, int defense)
         {
             float half = width * 0.5f;
-            DrawHudText(new Rect(left, top + 85f, half, 17f), T("ATK ", "ATQ ") + attack, _messageStyle);
-            DrawHudText(new Rect(left + half, top + 85f, half, 17f), "DEF " + (IsFrog(actor) ? Mathf.Max(1, defense / 2) : defense), _messageStyle);
-            DrawHudText(new Rect(left, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveAttack, _messageStyle);
-            DrawHudText(new Rect(left + half, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveDefense, _messageStyle);
-            DrawHudText(new Rect(left, top + 119f, 35f, 16f), "EXP", _messageStyle);
+            DrawInventoryText(new Rect(left, top + 85f, half, 17f), T("ATK ", "ATQ ") + attack, _messageStyle);
+            DrawInventoryText(new Rect(left + half, top + 85f, half, 17f), "DEF " + (IsFrog(actor) ? Mathf.Max(1, defense / 2) : defense), _messageStyle);
+            DrawInventoryText(new Rect(left, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveAttack, _messageStyle);
+            DrawInventoryText(new Rect(left + half, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveDefense, _messageStyle);
+            DrawInventoryText(new Rect(left, top + 119f, 35f, 16f), "EXP", _messageStyle);
             DrawExperienceStars(new Rect(left + 38f, top + 120f, width - 38f, 13f), ExperienceHalfStars(actor.Level, actor.Experience));
         }
 
@@ -758,7 +780,7 @@ namespace AzureDreamsReimagined
                 DrawSpell(actor.U8(offset), actor.U8(offset + 1));
             }
             if (row == 0) DrawSpell(UnitProfile(actor.Species)?.nativeSpellId ?? 0, actor.Level);
-            if (row == 0) DrawHudText(new Rect(panel.x + 6f, panel.y + 6f, panel.width - 12f, 17f),
+            if (row == 0) DrawInventoryText(new Rect(panel.x + 6f, panel.y + 6f, panel.width - 12f, 17f),
                 T("No spells", "Sem magias"), _messageStyle);
 
             void DrawSpell(int id, int level)
@@ -769,8 +791,8 @@ namespace AzureDreamsReimagined
                 int element = id == 49 ? Element.Water : (id - 1) % 3 == 0 ? Element.Fire :
                     (id - 1) % 3 == 1 ? Element.Water : Element.Wind;
                 DrawFamiliarStatusIcon(new Rect(panel.x + 6f, y + 1f, 13f, 13f), FamiliarGenusIcon(element));
-                DrawHudText(new Rect(panel.x + 23f, y, panel.width - 79f, 16f), FamiliarSpellNames[family], _messageStyle);
-                DrawHudText(new Rect(panel.xMax - 49f, y, 45f, 16f), T("LV ", "NÍV ") + Mathf.Clamp(level, 1, 99), _messageStyle);
+                DrawInventoryText(new Rect(panel.x + 23f, y, panel.width - 79f, 16f), FamiliarSpellNames[family], _messageStyle);
+                DrawInventoryText(new Rect(panel.xMax - 49f, y, 45f, 16f), T("LV ", "NÍV ") + Mathf.Clamp(level, 1, 99), _messageStyle);
             }
         }
 

@@ -74,6 +74,8 @@ namespace AzureDreamsReimagined
         private void CreateTowerElevator()
         {
             if (!HasRetailElevatorArt)
+                _elevatorSheet = Resources.Load<Texture2D>("Tower/ElevatorSheet");
+            if (!HasRetailElevatorArt)
             {
                 _elevatorPlatform = CreateMarker(_stairCell, "Tower Stairs", _accentMaterial, PrimitiveType.Cylinder, 0.7f).transform;
                 return;
@@ -266,11 +268,13 @@ namespace AzureDreamsReimagined
 
         private void AnimateTowerElevator()
         {
-            if (!_elevatorBase || !_elevatorGlow) return;
-            float cycle = Mathf.PingPong(Time.time * TowerAnimationSpeed * 3.5f, _elevatorFrames.Length - 1);
-            int first = Mathf.FloorToInt(cycle);
+            if (!_elevatorBase || !_elevatorGlow || _elevatorFrames == null || _elevatorFrames.Length == 0) return;
+            float speed = _trapGoUp ? _trapAnimationSpeed : TowerAnimationSpeed;
+            int last = _elevatorFrames.Length - 1;
+            float cycle = last > 0 ? Mathf.PingPong(Time.time * speed * 3.5f, last) : 0f;
+            int first = Mathf.Clamp(Mathf.FloorToInt(cycle), 0, last);
             _elevatorBase.sprite = _elevatorFrames[first];
-            _elevatorGlow.sprite = _elevatorFrames[Mathf.Min(first + 1, _elevatorFrames.Length - 1)];
+            _elevatorGlow.sprite = _elevatorFrames[Mathf.Min(first + 1, last)];
             _elevatorGlow.color = new Color(1f, 1f, 1f, Mathf.SmoothStep(0f, 1f, cycle - first));
         }
     }

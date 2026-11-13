@@ -121,6 +121,8 @@ namespace AzureDreamsReimagined
                         new Vector2(0.5f, 0.125f), 54f, 0, SpriteMeshType.FullRect);
         }
 
+        private float _stationarySeconds;
+
         private void LateUpdate()
         {
             if (!_renderer || _frames == null) return;
@@ -130,7 +132,10 @@ namespace AzureDreamsReimagined
             delta.y = 0f;
             bool moving = !_carried && (_townFlight || (_locomotion && _locomotion.IsMoving)) && delta.sqrMagnitude > 0.000001f;
             if (moving && !_townFlight && _attackProgress < 0f) _facing = delta;
-            _phase = moving ? (_phase + delta.magnitude * 8f) % 8f : 0f;
+            _phase = moving ? (_phase + delta.magnitude * 5.6f) % 8f : 0f;
+            bool canIdle = !moving && !_carried && _attackProgress < 0f && _castProgress >= 1f && !_exhausted && !_paralyzed;
+            _stationarySeconds = canIdle ? _stationarySeconds + Time.deltaTime : 0f;
+            bool groundedIdle = _stationarySeconds >= 30f;
             var camera = Camera.main;
             float angle = Mathf.Atan2(_facing.x, _facing.z) * Mathf.Rad2Deg;
             if (camera)
@@ -141,13 +146,13 @@ namespace AzureDreamsReimagined
             int octant = Mathf.RoundToInt(angle / 45f) & 7;
             _renderer.flipX = octant >= 1 && octant <= 3;
             float lunge = !_carried && _attackProgress >= 0f ? Mathf.Sin(_attackProgress * Mathf.PI) : 0f;
-            float idleBob = !moving && !_carried && _attackProgress < 0f
+            float idleBob = !groundedIdle && !moving && !_carried && _attackProgress < 0f
                 ? (1f - Mathf.Cos(AnimationTime * 4f)) * 0.022f : 0f;
             // Retail switches uphill at +32 and downhill below -16.
             int heightAttackColumn = _attackHeightOffset >= 32 ? 0 : _attackHeightOffset < -16 ? 6 : -1;
             float attackRise = heightAttackColumn < 0 ? 0f : Mathf.Clamp(_attackHeightOffset, -64, 64) / 128f;
             if (_townFlight)
-                _visual.position = transform.position + Vector3.up * (Mathf.Sin(AnimationTime * 6f) * 0.06f);
+                _visual.position = transform.position + Vector3.up * (Mathf.Lerp(Mathf.Sin(AnimationTime * 6f) * 0.06f, -0.55f, Mathf.Clamp01(_stationarySeconds - 30f)));
             else if (_visual)
                 _visual.position = transform.position + Vector3.up * (-0.55f + 0.08f * _visual.localScale.y)
                     + _facing.normalized * lunge * 0.32f + Vector3.up * (lunge * (0.12f + attackRise) + idleBob)
@@ -186,7 +191,8 @@ namespace AzureDreamsReimagined
                 _renderer.sprite = _actions[row * 9 + Mathf.Min(5, (int)(_attackProgress * 6f))];
                 return;
             }
-            int frame = _townFlight ? (int)(AnimationTime * (moving ? 12f : 8f)) % 8 :
+            int frame = groundedIdle ? ((int)((_stationarySeconds - 30f) * 5f) & 1) :
+                _townFlight ? (int)(AnimationTime * (moving ? 8.4f : 8f)) % 8 :
                 _attackProgress >= 0f ? Mathf.Min(7, (int)(_attackProgress * 8f)) : (int)_phase;
             _renderer.sprite = _frames[row * 8 + frame];
         }

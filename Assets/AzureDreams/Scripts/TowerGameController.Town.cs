@@ -254,8 +254,18 @@ namespace AzureDreamsReimagined
                 _townObjects.Add(fountain);
                 _townBuildings.Add(new Rect(fountainObject.transform.position.x - 0.45f, fountainObject.transform.position.z - 0.45f, 0.9f, 0.9f));
             }
-            var signObject = CreateTownAssetOrFallback("Guild_Sign", "Town Guild Sign", UsingRetailTown ? new Vector3(66, 0f, 29) : new Vector3(6, 0f, 8),
-                Quaternion.Euler(0f, 180f, 0f), PrimitiveType.Cube, new Vector3(0.55f, 0.9f, 0.15f), _accentMaterial, false);
+            // Monsbaiya's captured mesh already supplies the sign and its original texture.
+            GameObject signObject;
+            if (UsingRetailTown)
+            {
+                signObject = new GameObject("Town Guild Sign interaction");
+                signObject.transform.SetParent(transform, false);
+                signObject.transform.position = new Vector3(66, 0f, 29);
+                _generated.Add(signObject);
+            }
+            else
+                signObject = CreateTownAssetOrFallback("Guild_Sign", "Town Guild Sign", new Vector3(6, 0f, 8),
+                    Quaternion.Euler(0f, 180f, 0f), PrimitiveType.Cube, new Vector3(0.55f, 0.9f, 0.15f), _accentMaterial, false);
             var sign = signObject.GetComponent<TownObject>();
             if (!sign) sign = signObject.AddComponent<TownObject>();
             sign.objectId = "guild_sign";

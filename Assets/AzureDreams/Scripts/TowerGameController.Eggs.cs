@@ -92,7 +92,9 @@ namespace AzureDreamsReimagined
 
         private void PlaceGeneratedEgg()
         {
-            if (!TowerFloorRules.AllowsRandomMonsters(_floor)) return;
+            // The previous implementation rolled 50% on each floor. Apply the
+            // requested 50% reduction while keeping the tower's seeded RNG.
+            if (!TowerFloorRules.AllowsRandomMonsters(_floor) || RollSpawnRange(4) != 0) return;
             var floors = GetEggCatalog()?.floors;
             var choices = floors == null ? null : Array.Find(floors, e => e.floor == _floor)?.choices;
             if (choices == null || choices.Length == 0) return;
@@ -116,7 +118,8 @@ namespace AzureDreamsReimagined
                 roll -= Mathf.Max(0, choice.weight);
                 if (roll >= 0) continue;
                 _towerItemTraps.TryPlaceItem(candidates[RollSpawnRange(candidates.Count)],
-                    MonsterEgg.Create((byte)choice.species, identified: false));
+                    MonsterEgg.CreateTowerSpawn((byte)choice.species, identified: false,
+                        color: RollSpawnRange(8), heat: 1 + RollSpawnRange(40)));
                 return;
             }
         }
@@ -178,7 +181,7 @@ namespace AzureDreamsReimagined
             if (index < 0 || _runInventory == null) return;
             var items = _runInventory.DungeonItems;
             if (index >= items.Count || items[index].Kind != MonsterEgg.Kind) return;
-            var egg = MonsterEgg.Warm(items[index], 2 + RollSpawnRange(7));
+            var egg = MonsterEgg.Warm(items[index], 1 + RollSpawnRange(4));
             _runInventory.ReplaceDungeonItem(index, MonsterEgg.Kind, egg);
             HatchWarmedEgg(egg, () => _runInventory.ConsumeDungeonItem(index, MonsterEgg.Kind));
         }

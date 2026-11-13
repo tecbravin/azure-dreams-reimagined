@@ -39,7 +39,8 @@ namespace AzureDreamsReimagined
         private void PreloadCommonSounds()
         {
             foreach (var sound in new[] { RetailSfx.Cursor, RetailSfx.Confirm, RetailSfx.Cancel,
-                         RetailSfx.Hit, RetailSfx.WeaponSwing, RetailSfx.MonsterAttack, RetailSfx.Pickup, RetailSfx.CoinPickup })
+                         RetailSfx.Hit, RetailSfx.WeaponSwing, RetailSfx.MonsterAttack, RetailSfx.Spell,
+                         RetailSfx.Pickup, RetailSfx.CoinPickup, RetailSfx.Equip, RetailSfx.Eat, RetailSfx.MonsterDefeat })
             {
                 var clip = Resources.Load<AudioClip>($"Sfx/Retail/{(int)sound:X3}");
                 if (!clip) continue;

@@ -274,8 +274,8 @@ namespace AzureDreamsReimagined
             }
             var keys = Keyboard.current;
             if (keys != null && PrologueChoices().First != null &&
-                (keys.leftArrowKey.wasPressedThisFrame || keys.rightArrowKey.wasPressedThisFrame ||
-                 keys.upArrowKey.wasPressedThisFrame || keys.downArrowKey.wasPressedThisFrame))
+                (MenuDirectionPressed(3) || MenuDirectionPressed(4) ||
+                 MenuDirectionPressed(1) || MenuDirectionPressed(2)))
                 _prologueChoice = 1 - _prologueChoice;
             bool enter = keys != null && (keys.enterKey.wasPressedThisFrame || keys.numpadEnterKey.wasPressedThisFrame);
             if (enter || (!EditingPrologueName && _interact?.WasPressedThisFrame() == true))
@@ -411,7 +411,7 @@ namespace AzureDreamsReimagined
                 ClearPrologueCast();
                 Vector3 bed = CellPosition(WakeUpBeds[HouseIndex]);
                 _player.transform.position = bed;
-                PlacePrologueActor("guy", bed + Vector3.forward * 0.65f + Vector3.right * 0.45f);
+                PlacePrologueActor("guy", bed + Vector3.forward * 0.65f + Vector3.right * 0.15f);
                 Vector3 mattress = bed + Vector3.up * MattressHeight;
                 PlaceBirthSprite("WreathResting", mattress);
                 PlaceBirthSprite("Newborn", mattress - Vector3.forward * 0.38f);
@@ -428,7 +428,15 @@ namespace AzureDreamsReimagined
             pose.transform.SetParent(_prologueCast.transform, false);
             pose.transform.position = position;
             pose.AddComponent<Rendering.CameraFacingSprite>();
-            pose.AddComponent<SpriteRenderer>().sprite = sprite;
+            var renderer = pose.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            if (name == "WreathResting")
+            {
+                // The resting sprite uses a centered pivot. Raise it by half its
+                // height so her body lies on top of the mattress instead of
+                // intersecting the bed geometry.
+                pose.transform.position += Vector3.up * sprite.bounds.extents.y;
+            }
         }
 
         private void ClearPrologueCast()
@@ -450,6 +458,20 @@ namespace AzureDreamsReimagined
             if (!prefab) return null;
             var actor = Instantiate(prefab, RetailTownActorPosition(point, 0f), Quaternion.identity, _prologueCast.transform);
             foreach (var collider in actor.GetComponentsInChildren<Collider>()) collider.enabled = false;
+            if (id == "guy")
+            {
+                var facing = actor.GetComponentInChildren<Rendering.CameraFacingSprite>(true);
+                if (facing) facing.FaceMonster(Camera.main ? Camera.main.transform.right : Vector3.right);
+            }
+            if (id is "youngkoh" or "youngnico")
+            {
+                var adult = _player ? _player.GetComponentInChildren<SpriteRenderer>(true) : null;
+                var child = actor.GetComponentInChildren<SpriteRenderer>();
+                if (adult && adult.sprite && child && child.sprite && child.bounds.size.y > 0f)
+                    actor.transform.localScale *= adult.bounds.size.y * 0.5f / child.bounds.size.y;
+                else actor.transform.localScale *= 0.5f;
+                if (id == "youngkoh") actor.transform.localScale *= 0.5f;
+            }
             return actor;
         }
 
@@ -462,7 +484,7 @@ namespace AzureDreamsReimagined
             _player.transform.position = home;
             _player.SetActive(false);
             PlacePrologueActor("youngkoh", home + Vector3.right * 2f);
-            PlacePrologueActor("youngnico", home + Vector3.right);
+            PlacePrologueActor("youngnico", home + Vector3.left + Vector3.forward * 0.75f);
             PlacePrologueActor("guy", home);
             UpdateCameraFollow(snap: true);
             SetPrologue(Prologue.Childhood);
@@ -669,7 +691,7 @@ namespace AzureDreamsReimagined
                 };
                 DrawPrologueLine(box, speaker, T(en, pt).Replace("{name}", name), portrait);
                 if (_prologue == Prologue.Childhood && _prologueLine == ChildhoodLines.Length - 1)
-                    DrawDialoguePortrait(StreamPortrait("Dialogue/YoungKoh"), box, rightAligned: true);
+                    DrawDialoguePortrait(StreamPortrait("Dialogue/YoungKoh"), box, rightAligned: true, scale: 0.25f);
                 if (!editingName && PrologueChoices().First == null &&
                     GUI.Button(new Rect(box.xMax - 40f, box.yMax - 29f, 32f, 22f), "▸"))
                     AdvancePrologue();
@@ -787,9 +809,9 @@ namespace AzureDreamsReimagined
             if (!string.IsNullOrEmpty(speaker))
             {
                 DrawDialogueFrame(name);
-                DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height), T(speaker, speaker switch { "Angel" => "Anjo", "Aunt" => "Tia", "Grandpa" => "Vovô", _ => speaker }), _messageStyle);
+                DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height), T(speaker, speaker switch { "Angel" => "Anjo", "Aunt" => "Tia", "Grandpa" => "Vovô", _ => speaker }), _messageStyle, dialogue: true);
             }
-            DrawHudText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f), line, _messageStyle);
+            DrawHudText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f), line, _messageStyle, dialogue: true);
         }
     }
 }

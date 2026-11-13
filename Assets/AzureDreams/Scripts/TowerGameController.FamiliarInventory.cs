@@ -94,13 +94,14 @@ namespace AzureDreamsReimagined
         private Action _finishFamiliarAction;
         private const string BagRosterKey = "traveling_familiar_reserves";
         private readonly List<BagFamiliar> _bagFamiliars = new();
-        private sealed class BagFamiliar
+        public sealed class BagFamiliar
         {
             internal ActorDefinition Definition;
             internal ActorRecord Actor;
             internal int Species;
             internal string Nickname;
             internal bool Defeated, Temporary;
+            internal GameObject View;
             internal string Name => string.IsNullOrEmpty(Nickname) ? Definition.DisplayName : Nickname;
         }
 
@@ -398,6 +399,13 @@ namespace AzureDreamsReimagined
             catch (FormatException) { return false; }
         }
 
+        private static void RestoreTownFamiliarVitals(ActorRecord actor)
+        {
+            if (actor == null) return;
+            actor.Hp = actor.MaxHp;
+            actor.CurrentMp = actor.MaxMp;
+        }
+
         private ActorRecord ReadStoredFamiliarActor(string slot, ActorDefinition definition)
         {
             var actor = new ActorRecord();
@@ -419,7 +427,11 @@ namespace AzureDreamsReimagined
             if (!_familiarPrompt.HasValue) return false;
             if (_cancel?.WasPressedThisFrame() == true) _familiarPrompt = null;
             else if (_familiarPrompt == ItemCommand.Return && _interact?.WasPressedThisFrame() == true)
+            {
+                var reserve = ReserveForRow(SelectedRawIndex);
+                if (reserve != null && IsFamiliarLost(reserve.Actor)) return true;
                 ConfirmFamiliarInventoryPrompt();
+            }
             else if (_familiarPrompt == ItemCommand.Rename && Keyboard.current?.enterKey.wasPressedThisFrame == true)
                 ConfirmFamiliarInventoryPrompt();
             return true;
@@ -430,7 +442,7 @@ namespace AzureDreamsReimagined
             var prompt = _familiarPrompt;
             _familiarPrompt = null;
             var reserve = ReserveForRow(SelectedRawIndex);
-            if (prompt == ItemCommand.Return) ReturnFamiliarToHut(reserve);
+            if (prompt == ItemCommand.Return && !IsFamiliarLost(reserve?.Actor ?? _familiarActor)) ReturnFamiliarToHut(reserve);
             else if (prompt == ItemCommand.Rename)
             {
                 string name = _familiarNameDraft.Trim();

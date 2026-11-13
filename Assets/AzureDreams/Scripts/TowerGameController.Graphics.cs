@@ -32,7 +32,11 @@ namespace AzureDreamsReimagined
                 T("Post-processing", "Pós-processamento"));
             bool previouslyEnabled = GUI.enabled;
             GUI.enabled = previouslyEnabled && effects.RetroSupported;
-            if (GUILayout.Button(T("Pixel Art Preset", "Predefinição Pixel Art"))) effects.ApplyPixelArtPreset();
+            if (GUILayout.Button(T("Pixel Art Preset", "Predefinição Pixel Art")))
+            {
+                PlayRetailSound(RetailSfx.Confirm);
+                effects.ApplyPixelArtPreset();
+            }
             GUI.enabled = GUI.enabled && effects.enablePostProcessing;
             effects.lowResolution = GUILayout.Toggle(effects.lowResolution,
                 T("Low resolution (point filter)", "Baixa resolução (pixels nítidos)"));
@@ -78,7 +82,11 @@ namespace AzureDreamsReimagined
             GUI.enabled = previouslyEnabled;
             effects.msaa = GUILayout.Toggle(effects.msaa, "MSAA");
             GUILayout.EndScrollView();
-            if (GUILayout.Button(T("Reset to preset", "Restaurar padrão"))) effects.ApplyPrefabPreset(_postProcessPrefab);
+            if (GUILayout.Button(T("Reset to preset", "Restaurar padrão")))
+            {
+                PlayRetailSound(RetailSfx.Confirm);
+                effects.ApplyPrefabPreset(_postProcessPrefab);
+            }
         }
 
         private static bool GraphicsEffect(string label, bool enabled, ref float intensity)

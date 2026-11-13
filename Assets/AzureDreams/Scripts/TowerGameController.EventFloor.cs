@@ -78,8 +78,31 @@ namespace AzureDreamsReimagined
             if (_visitorEvent != VisitorEvent.Ghosh)
                 _towerEventSelfi = SpawnVisitor(_floorTwoSelfi,
                     _visitorEvent == VisitorEvent.Argument ? secondCell : FloorTwoVisitorCell, "Selfi");
+            if (_towerEventGhosh) StartCoroutine(MatchGhoshHeightToKoh(_towerEventGhosh, _player));
             BuildVisitorTriggerCells(secondCell);
             _visitorStage = VisitorStage.Waiting;
+        }
+
+        private System.Collections.IEnumerator MatchGhoshHeightToKoh(TowerEventNpc visitor, GameObject koh)
+        {
+            // Both sprite views need a frame assigned before measuring their height.
+            yield return null;
+            if (!visitor || !koh || visitor != _towerEventGhosh || koh != _player) yield break;
+
+            var kohSprite = koh.GetComponentInChildren<SpriteRenderer>();
+            var ghoshSprite = visitor.GetComponentInChildren<SpriteRenderer>();
+            if (!kohSprite || !kohSprite.sprite || !ghoshSprite || !ghoshSprite.sprite) yield break;
+
+            float kohHeight = kohSprite.sprite.bounds.size.y * Mathf.Abs(kohSprite.transform.lossyScale.y);
+            float ghoshHeight = ghoshSprite.sprite.bounds.size.y * Mathf.Abs(ghoshSprite.transform.lossyScale.y);
+            if (kohHeight <= 0f || ghoshHeight <= 0f) yield break;
+
+            // Keep the sprite's foot point fixed when scaling its parent.
+            var feet = new Vector3(0f, ghoshSprite.sprite.bounds.min.y, 0f);
+            float footHeight = ghoshSprite.transform.TransformPoint(feet).y;
+            visitor.transform.localScale *= kohHeight / ghoshHeight;
+            ghoshSprite.transform.position += Vector3.up *
+                (footHeight - ghoshSprite.transform.TransformPoint(feet).y);
         }
 
         private void BuildVisitorTriggerCells(Vector2Int secondCell)
@@ -193,8 +216,8 @@ namespace AzureDreamsReimagined
                 var keyboard = Keyboard.current;
                 if (keyboard != null)
                 {
-                    if (keyboard.leftArrowKey.wasPressedThisFrame) _visitorReply = false;
-                    if (keyboard.rightArrowKey.wasPressedThisFrame) _visitorReply = true;
+                    if (MenuDirectionPressed(3)) _visitorReply = false;
+                    if (MenuDirectionPressed(4)) _visitorReply = true;
                 }
                 if (_interact != null && _interact.WasPressedThisFrame()) AnswerVisitor(_visitorReply);
                 return true;
@@ -362,6 +385,9 @@ namespace AzureDreamsReimagined
 
         private void ShowVisitorLine()
         {
+            // Floor 2 visitor conversations use the same single-line dialogue
+            // presentation as town NPCs, not the tower's combat message history.
+            _message = string.Empty;
             var line = _visitorHasAnswered
                 ? new VisitorLine(false, "Then draw your sword, {name}. Do you accept my challenge?",
                     "Então saque sua espada, {name}. Você aceita o meu desafio?")
@@ -377,7 +403,6 @@ namespace AzureDreamsReimagined
             if (speaker && speaker.TryGetComponent<CharacterStats>(out var stats)) portrait = stats.portraitTexture;
             if (speaker) speaker.MarkSpoken();
             ShowTownDialogue(line.Selfi ? "Selfi" : "Ghosh", T(line.English, line.Portuguese), portrait);
-            _message = _dialogueLine;
         }
 
         private Vector3 FrameVisitorEvent(Vector3 playerTarget)

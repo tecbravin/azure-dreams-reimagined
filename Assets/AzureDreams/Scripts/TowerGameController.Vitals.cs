@@ -51,8 +51,18 @@ namespace AzureDreamsReimagined
             }
             if ((_familiar || _carriedFamiliar) && _familiarHealth > 0)
             {
-                if (recover) _familiarHealth = Mathf.Min(FamiliarMaxHealth, _familiarHealth + 1);
-                if (drain) SpendMonsterMp(_familiarActor, 256);
+                if (_area == Area.Tower)
+                {
+                    if (recover) _familiarHealth = Mathf.Min(FamiliarMaxHealth, _familiarHealth + 1);
+                    if (drain) SpendMonsterMp(_familiarActor, 256);
+                }
+                else
+                {
+                    // Town: keep familiar at full health and MP
+                    _familiarHealth = FamiliarMaxHealth;
+                    if (_familiarActor.MaxMp > 0)
+                        _familiarActor.CurrentMp = _familiarActor.MaxMp;
+                }
                 _familiarActor.Hp = StatByte(_familiarHealth);
             }
             for (int i = 0; i < _creatures.Count; i++)

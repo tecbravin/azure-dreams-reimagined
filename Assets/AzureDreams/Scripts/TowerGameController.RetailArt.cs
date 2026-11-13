@@ -41,8 +41,10 @@ namespace AzureDreamsReimagined
             {
                 Items.Kind.Egg => "egg",
                 Items.Kind.Trap => "trap",
-                _ => slot < GroundIconNames.Length ? GroundIconNames[slot] : null
+                _ => InventoryText.IconName(kind, subtype)
             };
+            if (string.IsNullOrEmpty(name) && slot < GroundIconNames.Length)
+                name = GroundIconNames[slot];
             var supplied = name == null ? null : SuppliedItemSprite(name);
             return supplied ? supplied : RetailGroundItemSprite(slot);
         }
@@ -65,8 +67,12 @@ namespace AzureDreamsReimagined
 
         private static int GroundIconSlot(int kind, int subtype)
         {
-            _groundIconSlots ??= Resources.Load<TextAsset>("Tower/GroundItemMap")?.bytes
-                ?? System.Array.Empty<byte>();
+            if (_groundIconSlots == null || _groundIconSlots.Length == 0)
+            {
+                var map = Resources.Load<TextAsset>("Tower/GroundItemMap");
+                if (map) _groundIconSlots = map.bytes;
+            }
+            if (_groundIconSlots == null) return 0;
             int key = kind * 256 + subtype;
             return key >= 0 && key < _groundIconSlots.Length ? _groundIconSlots[key] : 0;
         }
@@ -136,6 +142,20 @@ namespace AzureDreamsReimagined
                 '“' or '”' => '"',
                 '–' or '—' => '-',
                 '▸' => '>',
+                'À' or 'Á' or 'Â' or 'Ã' or 'Ä' => 'A',
+                'à' or 'á' or 'â' or 'ã' or 'ä' => 'a',
+                'È' or 'É' or 'Ê' or 'Ë' => 'E',
+                'è' or 'é' or 'ê' or 'ë' => 'e',
+                'Ì' or 'Í' or 'Î' or 'Ï' => 'I',
+                'ì' or 'í' or 'î' or 'ï' => 'i',
+                'Ò' or 'Ó' or 'Ô' or 'Õ' or 'Ö' => 'O',
+                'ò' or 'ó' or 'ô' or 'õ' or 'ö' => 'o',
+                'Ù' or 'Ú' or 'Û' or 'Ü' => 'U',
+                'ù' or 'ú' or 'û' or 'ü' => 'u',
+                'Ç' => 'C',
+                'ç' => 'c',
+                'Ñ' => 'N',
+                'ñ' => 'n',
                 _ => character
             };
         }
@@ -178,7 +198,7 @@ namespace AzureDreamsReimagined
                 {
                     int code = character >= ' ' && character <= '~' ? character : '?';
                     int u = palette * 128 + (code & 15) * 8;
-                    int v = 80 + (code / 16 - 2) * 16;
+                    int v = 40 + (code / 16 - 2) * 16;
                     var uv = new Rect(u / (float)_retailFont.width, 1f - (v + 16f) / _retailFont.height,
                         8f / _retailFont.width, 16f / _retailFont.height);
                     GUI.DrawTextureWithTexCoords(new Rect(x, y, advance, glyphHeight), _retailFont, uv);

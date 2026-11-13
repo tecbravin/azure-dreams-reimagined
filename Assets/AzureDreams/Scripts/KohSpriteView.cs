@@ -409,7 +409,7 @@ namespace AzureDreamsReimagined
             Sprite shieldFrame = EquipmentFrame(_shieldRow, facingRow);
             SetHandSprite(ref _rightWeapon, weaponFrame ? weaponFrame : _weaponIcon, "Koh right-hand weapon");
             SetHandSprite(ref _leftShield, shieldFrame ? shieldFrame : _shieldIcon, "Koh left-arm shield");
-            PositionHand(_rightWeapon, false, weaponFrame, 0.255f, 0.25f, 0.34f, handsFree, swing);
+            PositionHand(_rightWeapon, false, weaponFrame, 0.255f, 0.20f, 0.43f, handsFree, swing);
             PositionHand(_leftShield, true, shieldFrame, 0.195f, 0.22f, 0.39f, handsFree && !_lifting, 0f);
 
             void PositionHand(SpriteRenderer hand, bool shield, bool retail, float size, float width, float height,
@@ -422,13 +422,18 @@ namespace AzureDreamsReimagined
                 float anatomicalSide = shield ? 1f : -1f;
                 if (retail)
                 {
-                    // Each frame already includes the original hand offset relative to Koh's feet.
+                    // Equipment and body use the same 64-pixel retail cell coordinates.
+                    // Match their pivots so the run-frame corrections do not move the
+                    // hands away from the original equipment positions.
                     hand.transform.localScale = Vector3.one;
-                    hand.transform.localPosition = new Vector3(side * (anatomicalSide * stride * 0.075f + attack * 0.23f),
-                        anatomicalSide * stride * 0.045f + attack * 0.16f, 0f);
+                    Vector2 bodyPivot = _renderer.sprite ? _renderer.sprite.pivot : new Vector2(32f, 11f);
+                    Vector2 equipmentPivot = hand.sprite.pivot;
+                    Vector2 pixelOffset = (equipmentPivot - bodyPivot) / RetailPixelsPerUnit;
+                    hand.transform.localPosition = new Vector3(pixelOffset.x, pixelOffset.y, 0f);
                     hand.transform.localRotation = Quaternion.identity;
-                    hand.sortingOrder = _renderer.sortingOrder + (shield ? 2 : facingRow >= 2 ? -1 : 1);
-                    hand.flipX = octant is >= 1 and <= 3;
+                    bool isBehindBody = side * anatomicalSide > 0.25f;
+                    hand.sortingOrder = _renderer.sortingOrder + (isBehindBody ? -1 : 1);
+                    hand.flipX = _renderer.flipX;
                     return;
                 }
 
@@ -438,7 +443,11 @@ namespace AzureDreamsReimagined
                     + side * (0.08f + anatomicalSide * stride * 0.075f + attack * 0.23f);
                 float y = height + anatomicalSide * stride * 0.045f + attack * 0.16f;
                 hand.transform.localPosition = new Vector3(x, y, 0f);
-                float yaw = shield ? 75f * depth : 0f;
+                // Equipment sheets face Koh's current direction in the retail game.
+                // Keep the blade edge upright in front/rear views, and turn it into
+                // profile only for side-facing views instead of mirroring the blade
+                // into the character's body.
+                float yaw = shield ? 75f * depth : (Mathf.Abs(depth) < 0.38f ? 90f : 0f);
                 hand.transform.localRotation = Quaternion.Euler(0f, yaw, -side * attack * 65f);
                 hand.sortingOrder = _renderer.sortingOrder + (farHand ? -1 : 1);
                 bool sideProfile = Mathf.Abs(side) >= 0.92388f;

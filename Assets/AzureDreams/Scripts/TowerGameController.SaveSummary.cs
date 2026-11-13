@@ -52,10 +52,12 @@ namespace AzureDreamsReimagined
             float panelWidth = Mathf.Min(width - 16f, 508f);
             float panelHeight = Mathf.Min(height - 16f, count * SaveSlotPitch + 59f);
             var panel = new Rect((width - panelWidth) * 0.5f, (height - panelHeight) * 0.5f, panelWidth, panelHeight);
-            DrawHudPanel(panel);
-            _saveSlotLabel ??= new GUIStyle(_messageStyle) { fontSize = 13, wordWrap = false, clipping = TextClipping.Clip };
+            DrawDialogueFrame(panel);
+            _saveSlotLabel ??= new GUIStyle(_messageStyle)
+                { fontSize = 13, wordWrap = false, clipping = TextClipping.Clip };
             _saveSlotHeading ??= new GUIStyle(_saveSlotLabel) { fontStyle = FontStyle.Bold };
-            GUI.Label(new Rect(panel.x + 12f, panel.y + 6f, panel.width - 24f, 22f), title, _saveSlotHeading);
+            DrawHudText(new Rect(panel.x + 12f, panel.y + 6f, panel.width - 24f, 22f), title,
+                _saveSlotHeading, dialogue: true);
 
             var viewport = new Rect(panel.x + 9f, panel.y + 30f, panel.width - 18f, panel.height - 59f);
             float contentHeight = count * SaveSlotPitch;
@@ -84,7 +86,7 @@ namespace AzureDreamsReimagined
             GUI.EndScrollView();
 
             if (clicked != int.MinValue) select(clicked);
-            else if (GUI.Button(new Rect(panel.x + 10f, panel.yMax - 25f, panel.width - 20f, 20f),
+            else if (DrawInventoryButton(new Rect(panel.x + 10f, panel.yMax - 25f, panel.width - 20f, 20f),
                 T("Back [Esc]", "Voltar [Esc]"))) cancel();
         }
 
@@ -96,8 +98,8 @@ namespace AzureDreamsReimagined
             string marker = selected ? "\u25b8 " : "";
             if (data == null)
             {
-                GUI.Label(new Rect(card.x + 10f, card.y + 8f, card.width - 20f, 21f),
-                    marker + label + "   " + T("Empty", "Vazio"), _saveSlotHeading);
+                DrawHudText(new Rect(card.x + 10f, card.y + 8f, card.width - 20f, 21f),
+                    marker + label + "   " + T("Empty", "Vazio"), _saveSlotHeading, dialogue: true);
                 DrawSaveProgressIcons(card, 0);
                 return;
             }
@@ -132,12 +134,19 @@ namespace AzureDreamsReimagined
                     $"Torre {Mathf.Max(1, data.floor - 1)}\u00ba andar  \u2192  Retomar no {data.floor}\u00ba");
 
             float half = (card.width - 22f) * 0.5f;
-            GUI.Label(new Rect(card.x + 10f, card.y + 3f, half, 18f), marker + label + " " + hero + "  \u00b7  " + T($"Gold {gold} G", $"Ouro {gold} G"), _saveSlotHeading);
-            GUI.Label(new Rect(card.x + half + 10f, card.y + 3f, half, 18f), T($"Time {playTime}", $"Tempo {playTime}"), _saveSlotLabel);
-            GUI.Label(new Rect(card.x + 10f, card.y + 19f, half, 18f), T($"Saves {saves}  \u00b7  Top floor {highest}", $"Salvamentos {saves}  \u00b7  Maior andar {highest}"), _saveSlotLabel);
-            GUI.Label(new Rect(card.x + half + 10f, card.y + 19f, half, 18f), T($"Buildings {buildings}", $"Obras {buildings}"), _saveSlotLabel);
+            DrawHudText(new Rect(card.x + 10f, card.y + 3f, half, 18f),
+                marker + label + " " + hero + "  \u00b7  " + T($"Gold {gold} G", $"Ouro {gold} G"),
+                _saveSlotHeading, dialogue: true);
+            DrawHudText(new Rect(card.x + half + 10f, card.y + 3f, half, 18f),
+                T($"Time {playTime}", $"Tempo {playTime}"), _saveSlotLabel, dialogue: true);
+            DrawHudText(new Rect(card.x + 10f, card.y + 19f, half, 18f),
+                T($"Saves {saves}  \u00b7  Top floor {highest}", $"Salvamentos {saves}  \u00b7  Maior andar {highest}"),
+                _saveSlotLabel, dialogue: true);
+            DrawHudText(new Rect(card.x + half + 10f, card.y + 19f, half, 18f),
+                T($"Buildings {buildings}", $"Obras {buildings}"), _saveSlotLabel, dialogue: true);
             DrawSaveProgressIcons(card, milestones);
-            GUI.Label(new Rect(card.x + 10f, card.y + 63f, card.width - 20f, 19f), location, _saveSlotLabel);
+            DrawHudText(new Rect(card.x + 10f, card.y + 63f, card.width - 20f, 19f), location,
+                _saveSlotLabel, dialogue: true);
         }
 
         private void DrawSaveProgressIcons(Rect card, int milestones)
@@ -150,7 +159,8 @@ namespace AzureDreamsReimagined
                 var texture = _saveSlotIcons != null && textureIndex < _saveSlotIcons.Length ? _saveSlotIcons[textureIndex] : null;
                 var rect = new Rect(card.x + 10f + i * (size + 2f), card.y + 39f, size, size);
                 if (texture) GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit);
-                else GUI.Label(rect, unlocked ? SaveIconNames[i].Substring(0, 1) : "?", _saveSlotLabel);
+                else DrawHudText(rect, unlocked ? SaveIconNames[i].Substring(0, 1) : "?",
+                    _saveSlotLabel, dialogue: true);
             }
         }
     }

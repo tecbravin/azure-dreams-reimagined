@@ -43,6 +43,8 @@ namespace AzureDreamsReimagined
         private readonly List<GameObject> _hutViews = new();
         private string _homeBeforeHut;
         private int _homePanel;
+        private int _hutFusionTarget = -1;
+        private Vector2 _hutFusionScroll;
         private int HutIndex => _interior ? Array.IndexOf(HutScenes, _interior.interiorId) : -1;
         private bool InHomeHut => HutIndex >= 0;
         private int HouseIndex => _interior ? Array.IndexOf(HomeScenes, _interior.interiorId) : -1;
@@ -114,7 +116,7 @@ namespace AzureDreamsReimagined
 
             if (_homeEntranceDoor && _homeEntranceDoor.IsPassable && NearHomeCell(HomeDoorCell, 0.52f))
             {
-                StartCoroutine(LoadInterior(CurrentHomeScene()));
+                StartCoroutine(LoadInterior(CurrentHomeScene(), spawnAboveExitMarker: true));
                 return;
             }
 
@@ -146,18 +148,9 @@ namespace AzureDreamsReimagined
                 var outside = new Vector3(threshold.x, 0f, threshold.z + 1f);
                 outside.y = TownTerrainHeight(outside) + TownActorFootOffset;
                 string destination = interior == "KohHome" ? CurrentHomeScene() : interior;
-                StartCoroutine(LoadInterior(destination, outside));
+                StartCoroutine(LoadInterior(destination, outside, spawnAboveExitMarker: true));
                 return;
             }
-        }
-
-        private bool BedroomPassageOpen(Vector3 position)
-        {
-            int house = HouseIndex;
-            if (house < 0) return true;
-            var cell = BedroomDoors[house];
-            if (Mathf.Abs(position.x - cell.x) >= 0.28f) return true;
-            return Mathf.Abs(position.z - cell.y) < 0.65f;
         }
 
         private void PlaceHomeMarker(string label, Vector3 position, Material material)
@@ -271,7 +264,7 @@ namespace AzureDreamsReimagined
                     nearest = i;
                     closest = delta.sqrMagnitude;
                 }
-                if (nearest >= 0) { _hutSlot = nearest; _homePanel = 2; return true; }
+                if (nearest >= 0) { _hutSlot = nearest; _hutFusionTarget = -1; _homePanel = 2; return true; }
             }
             return false;
         }
@@ -280,8 +273,8 @@ namespace AzureDreamsReimagined
         {
             if (!_interior || (HouseIndex < 0 && !InHomeHut)) { _homePanel = 0; return false; }
             var keys = Keyboard.current;
-            if (_homePanel != 0 && keys != null && keys.escapeKey.wasPressedThisFrame)
-            { _homePanel = 0; return true; }
+            if (_homePanel != 0 && keys != null && keys.qKey.wasPressedThisFrame)
+            { _homePanel = _homePanel == 3 ? 2 : 0; return true; }
             if (InHomeHut && keys != null && keys.mKey.wasPressedThisFrame && !_activeTownNpc && !_interiorMenu)
             { _homePanel = _homePanel == 1 ? 0 : 1; return true; }
             return _homePanel != 0;
@@ -344,7 +337,9 @@ namespace AzureDreamsReimagined
         private void DrawKohHomePanel()
         {
             if (_homePanel == 1) { DrawHomeFloorPlan(); return; }
-            if (_homePanel != 2 || !InHomeHut) return;
+            if (!InHomeHut) return;
+            if (_homePanel == 3) { DrawHutFusion(); return; }
+            if (_homePanel != 2) return;
             var roster = ReadHutRoster();
             string slot = roster[_hutSlot];
             var storedFamiliar = HutDefinition(slot);
@@ -408,9 +403,64 @@ namespace AzureDreamsReimagined
                 }
                 GUILayout.EndScrollView();
             }
-            if (GUILayout.Button(T("Close [Esc]", "Fechar [Esc]"))) _homePanel = 0;
+            if (GUILayout.Button(T("Close [Q]", "Fechar [Q]"))) _homePanel = 0;
             GUILayout.EndArea();
             if (changed) SaveHutRoster(roster);
+        }
+
+        private void DrawHutFusion()
+        {
+            var roster = ReadHutRoster();
+            var first = HutFusionFamiliar(roster[_hutSlot]);
+            GUILayout.BeginArea(new Rect(128, 72, 384, 336), GUI.skin.box);
+            GUILayout.Label(T("Choose a stored familiar", "Escolha um familiar guardado"));
+            _hutFusionScroll = GUILayout.BeginScrollView(_hutFusionScroll);
+            for (int i = 0; i < roster.Count; i++)
+            {
+                if (i == _hutSlot) continue;
+                var candidate = HutFusionFamiliar(roster[i]);
+                if (candidate != null && GUILayout.Button($"{i + 1}. {candidate.Name}"))
+                    _hutFusionTarget = i;
+            }
+            GUILayout.EndScrollView();
+
+            if (first != null && _hutFusionTarget >= 0 && _hutFusionTarget < roster.Count)
+            {
+                var second = HutFusionFamiliar(roster[_hutFusionTarget]);
+                var preview = second == null ? null : BuildFusionPreview(first, second, first.Name);
+                if (preview == null)
+                    GUILayout.Label(T("These familiars cannot fuse.", "Esses familiares não podem se fundir."));
+                else
+                {
+                    var survivor = preview.BlueSurvives ? second : first;
+                    GUILayout.Label($"{preview.Name} ({survivor.Definition.DisplayName})  Lv. {preview.Result.Level}");
+                    GUILayout.Label($"HP {preview.Result.MaxHp}   MP {preview.Result.MaxMp}   {DescribeTalents(preview.Result)}");
+                    if (GUILayout.Button(T("Confirm fusion", "Confirmar fusão")))
+                    {
+                        roster[_hutSlot] = EncodeFamiliar(survivor.Definition, survivor.Species, preview.Result, survivor.Nickname);
+                        roster[_hutFusionTarget] = EmptyHutSlot;
+                        _hutStatusActor = null;
+                        _homePanel = 2;
+                        SaveHutRoster(roster);
+                    }
+                }
+            }
+
+            if (GUILayout.Button(T("Back [Q]", "Voltar [Q]"))) _homePanel = 2;
+            GUILayout.EndArea();
+        }
+
+        private BagFamiliar HutFusionFamiliar(string slot)
+        {
+            var definition = HutDefinition(slot);
+            if (!definition) return null;
+            return new BagFamiliar
+            {
+                Definition = definition,
+                Species = ReadHatchedSlot(slot),
+                Actor = ReadStoredFamiliarActor(slot, definition),
+                Nickname = HutFamiliarNickname(slot)
+            };
         }
 
         private void DrawHutFamiliarStatus(List<string> roster, string slot, ActorDefinition definition)
@@ -419,7 +469,7 @@ namespace AzureDreamsReimagined
             if (_hutStatusActor == null || _hutStatusEntry != slot)
             {
                 var actor = ReadStoredFamiliarActor(slot, definition);
-                actor.Hp = actor.MaxHp;
+                RestoreTownFamiliarVitals(actor);
                 _hutStatusActor = actor;
                 _hutStatusEntry = slot;
             }
@@ -433,6 +483,12 @@ namespace AzureDreamsReimagined
             DrawHudText(new Rect(panel.x + 10f, panel.y + 208f, panel.width - 20f, 46f),
                 T("Talents: ", "Talentos: ") + DescribeTalents(stored), _messageStyle);
 
+            if (GUI.Button(new Rect(panel.x + 115f, panel.yMax - 32f, 80f, 24f), T("Fuse", "Fundir")))
+            {
+                _hutFusionTarget = -1;
+                _homePanel = 3;
+            }
+
             if (GUI.Button(new Rect(panel.x + 10f, panel.yMax - 32f, 100f, 24f), T("Take", "Retirar")))
             {
                 var familiar = new BagFamiliar { Definition = definition, Species = hatchedSpecies,
@@ -445,7 +501,7 @@ namespace AzureDreamsReimagined
                 RefreshInventoryCommands();
                 SaveHutRoster(roster);
             }
-            if (GUI.Button(new Rect(panel.xMax - 110f, panel.yMax - 32f, 100f, 24f), T("Close [Esc]", "Fechar [Esc]")))
+            if (GUI.Button(new Rect(panel.xMax - 110f, panel.yMax - 32f, 100f, 24f), T("Close [Q]", "Fechar [Q]")))
                 _homePanel = 0;
         }
 

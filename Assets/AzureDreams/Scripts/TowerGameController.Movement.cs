@@ -43,6 +43,30 @@ namespace AzureDreamsReimagined
         private const float TownAirAccelerationRate = 3f;
         private const float TownActorRadius = 0.30f;
         private const float TownActorFootOffset = 0.55f;
+        private bool _kohCollapsePlaying;
+
+        private System.Collections.IEnumerator PlayKohCollapse()
+        {
+            _kohCollapsePlaying = true;
+            try
+            {
+                _message = T("Koh collapses!", "Koh desmaiou!");
+                if (_kohSprite) _kohSprite.PresentSleep(true);
+                yield return new WaitForSecondsRealtime(1f);
+
+                const float duration = 4f;
+                for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+                {
+                    _fadeToBlack = Mathf.Clamp01(elapsed / duration);
+                    yield return null;
+                }
+
+                _fadeToBlack = 1f;
+                ReturnToTown(false);
+            }
+            finally { _kohCollapsePlaying = false; }
+        }
+
         private const float TownGroundTolerance = 0.001f;
         private float _townJumpHeight, _townJumpVelocity;
         private float _townAirSpeedLimit;
@@ -141,7 +165,7 @@ namespace AzureDreamsReimagined
             _townWasMoving = moving;
             if (moving)
             {
-                if (HasVisibleMessage) _messageActivityAt = Time.unscaledTime;
+                if (HasVisibleMessage) _messageStackActivity = Time.unscaledTime;
                 CheckTownEntranceCrossing(before, position);
             }
         }
@@ -169,7 +193,7 @@ namespace AzureDreamsReimagined
             Transform ignored = null, float radius = TownActorRadius)
         {
             if (InMonsterShop && !Rect.MinMaxRect(9f, 9f, 22f, 18f).Contains(new Vector2(position.x, position.z))) return false;
-            if (_interior && (!WithinKohHome(position) || !BedroomPassageOpen(position))) return false;
+            if (_interior && !WithinKohHome(position)) return false;
             if (UsingRetailTown)
             {
                 if (!RetailTownGroundOpen(position, radius)) return false;
@@ -210,7 +234,7 @@ namespace AzureDreamsReimagined
         private void QueueMonsterSpriteAction(GameObject actor, Vector2Int direction, bool casting = false, int? targetHeight = null)
         {
             if (!actor) return;
-            if (!casting) PlayRetailSound(RetailSfx.MonsterAttack);
+            PlayRetailSound(casting ? RetailSfx.Spell : RetailSfx.MonsterAttack);
             if ((casting || targetHeight.HasValue) && actor.TryGetComponent<KewneSpriteView>(out var kewne))
             {
                 _kewneActions.Add((kewne, direction, targetHeight));
@@ -279,7 +303,7 @@ namespace AzureDreamsReimagined
                 }
             }
             _inspectItemOnArrival = !wait && _interact?.IsPressed() == true;
-            if (HasVisibleMessage) _messageActivityAt = Time.unscaledTime;
+            if (HasVisibleMessage) _messageStackActivity = Time.unscaledTime;
             PrepareTurnGrid();
             _turnIntents.Clear();
             _kohMixingThisTurn = false;
@@ -349,15 +373,17 @@ namespace AzureDreamsReimagined
                     AddIntent(cs.Actor, Vector2Int.zero, CoreTurns.PriorityMonster);
                     continue;
                 }
+                // Enemies lose track of Koh/familiars if too far away
+                bool tooFarFromTarget = Distance(cs.Cell, targetCell) > 8;
                 bool canAttack = !skipsAction && !IsFrog(cs.Actor) && !IsSubmerged(cs.Actor) &&
-                    !fleeing && !IsSacredTile(targetCell);
+                    !fleeing && !IsSacredTile(targetCell) && !tooFarFromTarget;
                 bool attack = canAttack && Distance(cs.Cell, targetCell) == 1;
                 var (spellPower, spellStatus, spellId) = canAttack && !confused && !blind && !attack
                     ? PrepareMonsterSpell(cs.Actor, cs.Cell, targetCell) : default;
                 if (attack && !confused && !blind && TryMandaraSpin(cs.Actor))
                     spellStatus = StatusId.CONFUSION;
                 bool cast = spellPower > 0 || spellStatus != 0;
-                var monsterStep = skipsAction || attack || cast ? Vector2Int.zero : fleeing ? HolyBellStep(cs.Cell) : confused || blind
+                var monsterStep = skipsAction || attack || cast ? Vector2Int.zero : fleeing ? HolyBellStep(cs.Cell) : confused || blind || tooFarFromTarget
                     ? RandomTowerStep(cs.Cell, avoidSacredTiles: true)
                     : ChaseStep(cs.Cell, targetCell, avoidSacredTiles: true);
                 if (cs.Cell + monsterStep == summonCell) monsterStep = Vector2Int.zero;
@@ -776,10 +802,17 @@ namespace AzureDreamsReimagined
                 else AdjustItemHealth(_playerActor, _pendingUseItem.Value);
             }
             _pendingUseItem = null;
-            if (!_testInvulnerable) _health -= _pendingPlayerDamage;
+            if (!_testInvulnerable && _pendingPlayerDamage > 0)
+            {
+                _health -= _pendingPlayerDamage;
+                CloseMinimap();
+            }
             if (_familiar && _pendingFamiliarDamage > 0)
             {
-                _familiarHealth -= _pendingFamiliarDamage;
+                if (_area == Area.Tower)
+                    _familiarHealth -= _pendingFamiliarDamage;
+                else
+                    _familiarHealth = FamiliarMaxHealth;
             }
             _pendingFamiliarDamage = 0;
             if (_blueCollarAlly != null)
@@ -886,9 +919,12 @@ namespace AzureDreamsReimagined
             }
             if (_health <= 0 || _returnWithCrystal)
             {
-                bool survived = _health > 0;
-                if (survived) _returnWithCrystal = false;
-                ReturnToTown(survived);
+                if (_health <= 0) StartCoroutine(PlayKohCollapse());
+                else
+                {
+                    _returnWithCrystal = false;
+                    ReturnToTown(true);
+                }
                 PublishTowerTurnReport(damage, defeats, messageBeforeResolution);
                 return;
             }
@@ -907,7 +943,7 @@ namespace AzureDreamsReimagined
             }
             if (_trapGoUp)
             {
-                CompleteElevatorAscent();
+                StartCoroutine(PlayGoUpTransition());
                 CoreTurns.BeginTurn();
                 return;
             }

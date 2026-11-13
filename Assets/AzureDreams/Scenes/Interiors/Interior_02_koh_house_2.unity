@@ -80,6 +80,53 @@ MonoBehaviour:
   - {fileID: 2100000, guid: be4ad0c1d0414f20941e77ed3983921a, type: 2}
   - {fileID: 2100000, guid: 90fe0b7c319d4a7c81b23543e58cc405, type: 2}
   - {fileID: 2100000, guid: d51a7ea08596476ab87f464290873bdb, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: ba0b645c6b1a1ba4688b404880946247, type: 3}
+  - {fileID: 2800000, guid: 36c0aa25f0ffdb54580562e893fdc42c, type: 3}
+  - {fileID: 2800000, guid: 0b3f250ba686eb245bdcd2997cbdabfd, type: 3}
+  - {fileID: 2800000, guid: 0fa1259fc776cee4fba015a2ec99e893, type: 3}
+  - {fileID: 2800000, guid: 3e86c4aea232b2a4c89665e04d4f724a, type: 3}
+  - {fileID: 2800000, guid: 7bad6c130d43e904cbca4cfbaf75d549, type: 3}
+  - {fileID: 2800000, guid: d69aaa83e550bfe4c8a906dc76933daf, type: 3}
+  - {fileID: 2800000, guid: 9983628a0a1d4674fb336760e583762f, type: 3}
+  - {fileID: 2800000, guid: 312935f39fe1af84aa19c882e7642851, type: 3}
+  - {fileID: 2800000, guid: f96fd59e59da15c4bab80e0e0fc137ec, type: 3}
+  - {fileID: 2800000, guid: ed4179727d8fb0e4da5d6176a969267c, type: 3}
+  - {fileID: 2800000, guid: c1efad08cf3e40c44a3278cb63ed24b6, type: 3}
+  - {fileID: 2800000, guid: 7fe55a8f84c02ca49a2c4512e03bf7d1, type: 3}
+  - {fileID: 2800000, guid: 0b0cc40a3735afe41a8bcd39d3063a50, type: 3}
+  - {fileID: 2800000, guid: 56d1937f7aa300e4ebe347e08c2b992b, type: 3}
+  - {fileID: 2800000, guid: 366c1e82ce5900546931281811b12638, type: 3}
+  - {fileID: 2800000, guid: 539d20e6c60b3d14ca2b095fb3526994, type: 3}
+  - {fileID: 2800000, guid: b7490f39d4f1b854ab7d1e1711507d52, type: 3}
+  - {fileID: 2800000, guid: c50c7a0c25f5e254b9d9d8734f140179, type: 3}
+  - {fileID: 2800000, guid: 84f6ee34e146b4246b6571a9ce54a7ec, type: 3}
+  - {fileID: 2800000, guid: ba4a082f6d4dcb044b9f2daf1a50bdf6, type: 3}
+  - {fileID: 2800000, guid: 9f0370af59333d1498849a68d90bba82, type: 3}
+  - {fileID: 2800000, guid: 9db7f65178060d640a636733d9635706, type: 3}
+  - {fileID: 2800000, guid: 39406ad741f2fd64787454a87964fed5, type: 3}
+  - {fileID: 2800000, guid: c47d07b6eb58f6f4fa7d4d18d1ccadf8, type: 3}
+  - {fileID: 2800000, guid: efdc31e38cfc6c74bb85e9563c9087fc, type: 3}
+  - {fileID: 2800000, guid: e710e9fdc9a5c924287fdf1d8715fe95, type: 3}
+  - {fileID: 2800000, guid: 6c5d9bf5e4f7ac04abd6d1429334c2a0, type: 3}
+  - {fileID: 2800000, guid: 63f4a71963bef5b4eb4d433deefbca0e, type: 3}
+  - {fileID: 2800000, guid: 34a2c739edbb29f4f9f2d56c1ddbb99d, type: 3}
+  - {fileID: 2800000, guid: 528e5a50987355d4dae450ead9815d37, type: 3}
+  - {fileID: 2800000, guid: ea80e879a04a05f4bb44db0f350c4e2e, type: 3}
+  - {fileID: 2800000, guid: e262229a8cdb6f645a97c54db625b590, type: 3}
+  - {fileID: 2800000, guid: d7e37c1afa0e03e4ab9d5a36f043ee7f, type: 3}
+  - {fileID: 2800000, guid: 5126b56eafbc6014fb10f63da32d9d53, type: 3}
+  - {fileID: 2800000, guid: 3192c3ee62713a34a88322b2139a95e1, type: 3}
+  - {fileID: 2800000, guid: fc47af815271f164ea80ba1c858c2781, type: 3}
+  - {fileID: 2800000, guid: 82eb6be8cc0bbd948bd50bc8d5751677, type: 3}
+  - {fileID: 2800000, guid: c1142e0311d8e9c499bfe3b395276ebc, type: 3}
+  - {fileID: 2800000, guid: 2f51e4c3797dce943821604902aa519c, type: 3}
+  - {fileID: 2800000, guid: b6fab8d6b258cd14f951ced0b3090630, type: 3}
+  - {fileID: 2800000, guid: 1e059154c4124564585c98e35ba2824a, type: 3}
+  - {fileID: 2800000, guid: 0bd5172809fbff848ab01477821bc781, type: 3}
+  - {fileID: 2800000, guid: cd16944abd610864e8ce1ccfecb67d4d, type: 3}
+  - {fileID: 2800000, guid: 16bb82f1be1eb204bb40a9c88747608d, type: 3}
   entryPosition: {x: 29.5, y: 0, z: 19.5}
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: ad76990d490a4c5bb4a1ab45b59a549a, type: 3}
@@ -102,22 +149,22 @@ MonoBehaviour:
     x: 21.9844
     y: 9
     width: 0.03125
-    height: 5.75
+    height: 5.5
   - serializedVersion: 2
     x: 21.9844
-    y: 16.25
+    y: 16.5
     width: 0.03125
-    height: 2.75
+    height: 2.5
   - serializedVersion: 2
     x: 22.9844
     y: 9
     width: 0.03125
-    height: 5.75
+    height: 5.5
   - serializedVersion: 2
     x: 22.9844
-    y: 16.25
+    y: 16.5
     width: 0.03125
-    height: 2.75
+    height: 2.5
   - serializedVersion: 2
     x: 35.9844
     y: 9

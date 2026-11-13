@@ -269,8 +269,8 @@ namespace AzureDreamsReimagined
 
             if (_bowlingPhase == BowlingPhase.Menu && Keyboard.current is { } keys)
             {
-                if (keys.downArrowKey.wasPressedThisFrame) _bowlingMenuChoice = (_bowlingMenuChoice + 1) % 3;
-                if (keys.upArrowKey.wasPressedThisFrame) _bowlingMenuChoice = (_bowlingMenuChoice + 2) % 3;
+                if (MenuDirectionPressed(2)) _bowlingMenuChoice = (_bowlingMenuChoice + 1) % 3;
+                if (MenuDirectionPressed(1)) _bowlingMenuChoice = (_bowlingMenuChoice + 2) % 3;
             }
             if (_bowlingPhase == BowlingPhase.Position)
             {

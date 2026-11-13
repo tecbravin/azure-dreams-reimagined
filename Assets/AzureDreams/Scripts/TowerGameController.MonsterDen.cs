@@ -18,7 +18,7 @@ namespace AzureDreamsReimagined
 
         private void PlanMonsterDen()
         {
-            if (InTowerTutorial || !TowerFloorRules.AllowsRandomMonsters(_floor)) return;
+if (InTowerTutorial || _beldoVision || !TowerFloorRules.AllowsRandomMonsters(_floor)) return;
 
             // Give the rare room feature its own stream so it doesn't shift ordinary loot or encounters.
             var random = new System.Random(_towerFloorLayout.Seed ^ 0xD3A13);

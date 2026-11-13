@@ -17,7 +17,7 @@ namespace AzureDreamsReimagined
         [Serializable] private sealed class FacadeDoorCatalog { public FacadeDoorPlacement[] doors; }
         [Serializable] private struct FacadeDoorPlacement
         {
-            public float x, z;
+            public float x, z, width, height;
             public string style, interior;
         }
 
@@ -139,7 +139,11 @@ namespace AzureDreamsReimagined
         {
             var catalog = Resources.Load<TextAsset>(FacadeDoorResources + "placements");
             var material = Resources.Load<Material>(FacadeDoorResources + "FacadeDoor");
-            if (!catalog || !material) return;
+            if (!catalog || !material)
+            {
+                Debug.LogWarning("Town facade doors could not load their placement catalog or material.");
+                return;
+            }
             var doors = JsonUtility.FromJson<FacadeDoorCatalog>(catalog.text)?.doors;
             if (doors == null) return;
 
@@ -154,9 +158,10 @@ namespace AzureDreamsReimagined
                 }
                 if (!texture) continue;
                 var position = new Vector3(placement.x, 0f, placement.z + 0.035f);
-                var leaf = CreateTownAsset("House_Door", placement.style + " door", position, Quaternion.identity);
-                if (!leaf || !leaf.TryGetComponent<TownHouseDoor>(out var door)) continue;
-                door.FitFacade(material, texture);
+                var door = TownHouseDoor.CreateFacadeLeaf(transform, position, placement.style + " door",
+                    placement.width > 0f ? placement.width : 1f,
+                    placement.height > 0f ? placement.height : 1.75f, material, texture);
+                _generated.Add(door.gameObject);
                 _townFacadeDoors.Add(door);
                 if (!string.IsNullOrEmpty(placement.interior))
                     _facadeInteriors.Add(door, placement.interior);
@@ -226,9 +231,16 @@ namespace AzureDreamsReimagined
             if (_interior || _townBridgeSurfaces == null) return float.NegativeInfinity;
             var point = new Vector2(position.x, position.z);
             if (IsBuiltLot(point)) return float.NegativeInfinity;
+            float top = float.NegativeInfinity;
             foreach (var surface in _townBridgeSurfaces)
-                if (surface.Touches(point, 0f)) return surface.HeightAt(point);
-            return float.NegativeInfinity;
+            {
+                if (!surface.Touches(point, 0f)) continue;
+                // Bridge meshes contain overlapping triangles for the deck and
+                // their side faces. Use the upper walkable face independent of
+                // triangle ordering so seams never send Koh under the bridge.
+                top = Mathf.Max(top, surface.HeightAt(point));
+            }
+            return top;
         }
 
         private float TownSteppingStoneTop(Vector3 position)

@@ -11,13 +11,16 @@ namespace AzureDreamsReimagined
         [Serializable] internal sealed class Entry
         {
             public int kind, id, gear;
-            public string en, ptBr, descriptionEn, descriptionPtBr;
+            public string en, ptBr, descriptionEn, descriptionPtBr, icon;
         }
         private static Dictionary<int, Entry> _entries;
         internal static IEnumerable<Entry> Entries => GetEntries().Values;
 
         internal static Entry Find(DungeonItemEntry item) =>
             GetEntries().TryGetValue(item.Kind * 256 + item.Subtype, out var text) ? text : null;
+
+        internal static string IconName(int kind, int subtype) =>
+            GetEntries().TryGetValue(kind * 256 + subtype, out var text) ? text.icon : null;
 
         private static Dictionary<int, Entry> GetEntries()
         {

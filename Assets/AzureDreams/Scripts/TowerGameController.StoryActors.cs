@@ -66,10 +66,31 @@ namespace AzureDreamsReimagined
         private bool StoryResidentCellOpen(Vector2Int cell) => cell != _playerCell &&
             !_npcCells.Contains(cell) && TownPositionOpen(CellPosition(cell));
 
+        private NPCController _outdoorSelfi;
+
+        private void UpdateOutdoorSelfiMusic()
+        {
+            if (_area != Area.Town || _interior || !_outdoorSelfi || !_player || _prologue != Prologue.Off) return;
+            float distance = Vector3.Distance(_player.transform.position, _outdoorSelfi.transform.position);
+            if (distance <= 4f && _playingMusicCue == "Town") PlayAreaMusic(SelfiMusicCue);
+            else if (distance > 5f && _playingMusicCue == SelfiMusicCue) PlayAreaMusic("Town");
+        }
+
         private void SpawnOutdoorStoryResidents()
         {
             if (!UsingRetailTown) return;
             SpawnConstructionResidents();
+            _outdoorSelfi = null;
+            foreach (var cell in new[] { new Vector2Int(86, 53), new Vector2Int(87, 54),
+                new Vector2Int(86, 55), new Vector2Int(85, 55) })
+            {
+                if (!StoryResidentCellOpen(cell) ||
+                    !TownPositionOpen(CellPosition(cell), radius: 0.55f)) continue;
+                int count = _townPeople.Count;
+                SpawnStoryResident("selfi", "selfi", "Selfi", cell);
+                if (_townPeople.Count > count) _outdoorSelfi = _townPeople[count];
+                break;
+            }
             if (StoryStage("nico") is 1 or 2)
                 SpawnStoryResident("nico", "nico", "Nico", new Vector2Int(58, 72));
             if (StoryStage("nico") == 3)
@@ -85,6 +106,7 @@ namespace AzureDreamsReimagined
 
         private bool ShouldSpawnStoryResident(NPCController npc, string room)
         {
+            if (npc.npcId == "selfi" && room == RhodesHouse) return false;
             if (npc.npcId != "vivian") return true;
             int stage = StoryStage("vivian");
             return room switch

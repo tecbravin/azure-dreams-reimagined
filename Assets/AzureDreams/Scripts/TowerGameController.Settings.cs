@@ -19,6 +19,20 @@ namespace AzureDreamsReimagined
         private InputAction[] _settingsOwnedActions;
         private (InputAction action, int index, string en, string pt)[] _mappingRows;
 
+        private bool MenuDirectionPressed(int binding)
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard == null || _move == null) return false;
+            for (int index = binding; index <= binding + 5; index += 5)
+            {
+                string path = _move.bindings[index].effectivePath;
+                if (!string.IsNullOrEmpty(path) &&
+                    InputSystem.FindControl(path) is UnityEngine.InputSystem.Controls.ButtonControl button &&
+                    button.wasPressedThisFrame) return true;
+            }
+            return false;
+        }
+
         private void InitializeSettings()
         {
             _bgmVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(BgmVolumePref, 1f));
@@ -51,6 +65,7 @@ namespace AzureDreamsReimagined
                 (_mapAction, 0, "Map", "Mapa"),
                 (_faceAction, 0, "Face direction", "Virar sem andar"),
                 (_returnAction, 0, "Return to town", "Voltar à cidade"),
+                (_skipAction, 0, "Skip turn [T]", "Pular turno [T]"),
                 (_rotateLeftAction, 0, "Rotate camera left", "Girar câmera à esquerda"),
                 (_rotateRightAction, 0, "Rotate camera right", "Girar câmera à direita"),
             };
@@ -136,13 +151,15 @@ namespace AzureDreamsReimagined
             if (keys == null) return _settingsOpen;
             if (!_settingsOpen)
             {
-                if (!keys.f5Key.wasPressedThisFrame) return false;
+                if (!keys.mKey.wasPressedThisFrame) return false;
                 OpenSettings();
+                PlayRetailSound(RetailSfx.Confirm);
                 return true;
             }
-            if (keys.f5Key.wasPressedThisFrame) { CloseSettings(); return true; }
-            if (keys.escapeKey.wasPressedThisFrame)
+            if (keys.mKey.wasPressedThisFrame) { PlayRetailSound(RetailSfx.Cancel); CloseSettings(); return true; }
+            if (keys.qKey.wasPressedThisFrame)
             {
+                PlayRetailSound(RetailSfx.Cancel);
                 if (_rebindingRow >= 0) _rebindingRow = -1;
                 else if (_mappingOpen || _graphicsSettingsOpen) _mappingOpen = _graphicsSettingsOpen = false;
                 else CloseSettings();
@@ -164,27 +181,45 @@ namespace AzureDreamsReimagined
 
             if (_graphicsSettingsOpen) return true;
 
-            int vertical = keys.upArrowKey.wasPressedThisFrame ? -1 : keys.downArrowKey.wasPressedThisFrame ? 1 : 0;
+            int vertical = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
             bool confirm = keys.enterKey.wasPressedThisFrame || keys.numpadEnterKey.wasPressedThisFrame;
             if (_mappingOpen)
             {
                 if (vertical != 0)
                 {
+                    int previous = _mappingRow;
                     _mappingRow = Mathf.Clamp(_mappingRow + vertical, 0, _mappingRows.Length - 1);
                     _mappingScroll.y = _mappingRow * MappingRowHeight;
+                    if (_mappingRow != previous) PlayRetailSound(RetailSfx.Cursor);
                 }
-                if (confirm) BeginRebinding(_mappingRow);
+                if (confirm)
+                {
+                    PlayRetailSound(RetailSfx.Confirm);
+                    BeginRebinding(_mappingRow);
+                }
             }
             else
             {
+                int previous = _settingsRow;
                 _settingsRow = Mathf.Clamp(_settingsRow + vertical, 0, 4);
-                int horizontal = keys.leftArrowKey.wasPressedThisFrame ? -1 : keys.rightArrowKey.wasPressedThisFrame ? 1 : 0;
+                if (_settingsRow != previous) PlayRetailSound(RetailSfx.Cursor);
+                int horizontal = MenuDirectionPressed(3) ? -1 : MenuDirectionPressed(4) ? 1 : 0;
                 if (_settingsRow == 0 && horizontal != 0)
+                {
                     SetAudioSettings(Mathf.Clamp01(_bgmVolume + horizontal * 0.05f), _sfxVolume);
+                    PlayRetailSound(RetailSfx.Cursor);
+                }
                 if (_settingsRow == 1 && horizontal != 0)
+                {
                     SetAudioSettings(_bgmVolume, Mathf.Clamp01(_sfxVolume + horizontal * 0.05f));
+                    PlayRetailSound(RetailSfx.Cursor);
+                }
                 if (_settingsRow == 2 && (horizontal != 0 || confirm))
+                {
+                    PlayRetailSound(RetailSfx.Confirm);
                     GameLanguage.Select(GameLanguage.Portuguese ? "en" : "pt-BR");
+                }
+                if (confirm && _settingsRow >= 3) PlayRetailSound(RetailSfx.Confirm);
                 if (_settingsRow == 3 && confirm) OpenGraphicsSettings();
                 if (_settingsRow == 4 && confirm) OpenInputMapping();
             }
@@ -220,7 +255,7 @@ namespace AzureDreamsReimagined
             bool navigationKey = code is Key.UpArrow or Key.DownArrow or Key.LeftArrow or Key.RightArrow;
             if ((navigationKey && row.action != _move) ||
                 code is Key.Enter or Key.NumpadEnter or Key.LeftAlt or Key.RightAlt or Key.LeftMeta or Key.RightMeta
-                or Key.F1 or Key.F2 or Key.F5 or Key.Numpad7 or Key.Numpad8 or Key.Numpad9)
+                or Key.F1 or Key.F2 or Key.M or Key.Q or Key.Numpad7 or Key.Numpad8 or Key.Numpad0)
             {
                 _mappingNotice = T("This key is reserved. Try another key.", "Essa tecla é reservada. Tente outra.");
                 return;
@@ -243,6 +278,7 @@ namespace AzureDreamsReimagined
             PlayerPrefs.Save();
             _rebindingRow = -1;
             _mappingNotice = null;
+            PlayRetailSound(RetailSfx.Confirm);
         }
 
         private void RestoreDefaultBindings()
@@ -273,7 +309,11 @@ namespace AzureDreamsReimagined
             else if (_graphicsSettingsOpen)
             {
                 DrawGraphicsSettings();
-                if (GUILayout.Button(T("Back [Esc]", "Voltar [Esc]"))) _graphicsSettingsOpen = false;
+                if (GUILayout.Button(T("Back [Q]", "Voltar [Q]")))
+                {
+                    PlayRetailSound(RetailSfx.Cancel);
+                    _graphicsSettingsOpen = false;
+                }
             }
             else
             {
@@ -286,10 +326,20 @@ namespace AzureDreamsReimagined
                 DrawSettingsLanguage("pt-BR", "Português (Brasil)", GameLanguage.Portuguese);
                 GUILayout.EndHorizontal();
                 if (GUILayout.Button((_settingsRow == 3 ? "› " : "") + T("Graphics Effects", "Efeitos gráficos")))
+                {
+                    PlayRetailSound(RetailSfx.Confirm);
                     OpenGraphicsSettings();
+                }
                 if (GUILayout.Button((_settingsRow == 4 ? "› " : "") + T("Input Mapping", "Mapeamento de controles")))
+                {
+                    PlayRetailSound(RetailSfx.Confirm);
                     OpenInputMapping();
-                if (GUILayout.Button(T("Close [Esc]", "Fechar [Esc]"))) CloseSettings();
+                }
+                if (GUILayout.Button(T("Close [Q]", "Fechar [Q]")))
+                {
+                    PlayRetailSound(RetailSfx.Cancel);
+                    CloseSettings();
+                }
             }
             GUILayout.EndArea();
         }
@@ -297,6 +347,7 @@ namespace AzureDreamsReimagined
         private void DrawSettingsLanguage(string code, string label, bool selected)
         {
             if (!GUILayout.Button((selected ? "› " : "") + label)) return;
+            PlayRetailSound(RetailSfx.Confirm);
             _settingsRow = 2;
             GameLanguage.Select(code);
         }
@@ -315,7 +366,7 @@ namespace AzureDreamsReimagined
         private void DrawInputMappingRows()
         {
             GUILayout.Label(_mappingNotice ?? (_rebindingRow >= 0
-                ? T("Press a new key, or Esc to cancel.", "Pressione uma nova tecla ou Esc para cancelar.")
+                ? T("Press a new key, or Q to cancel.", "Pressione uma nova tecla ou Q para cancelar.")
                 : T("Choose a control to change its key.", "Escolha um controle para trocar sua tecla.")));
             _mappingScroll = GUILayout.BeginScrollView(_mappingScroll);
             for (int i = 0; i < _mappingRows.Length; i++)
@@ -324,15 +375,24 @@ namespace AzureDreamsReimagined
                 GUILayout.BeginHorizontal(GUILayout.Height(MappingRowHeight - 4f));
                 GUILayout.Label((i == _mappingRow ? "› " : "") + T(row.en, row.pt));
                 string binding = i == _rebindingRow ? "…" : row.action.GetBindingDisplayString(row.index);
-                if (GUILayout.Button(binding, GUILayout.Width(125f))) BeginRebinding(i);
+                if (GUILayout.Button(binding, GUILayout.Width(125f)))
+                {
+                    PlayRetailSound(RetailSfx.Confirm);
+                    BeginRebinding(i);
+                }
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndScrollView();
-            GUILayout.Label(T("Fixed controls: Esc (back), mouse wheel (zoom)", "Controles fixos: Esc (voltar), roda do mouse (zoom)"));
+            GUILayout.Label(T("Fixed controls: Q (back), mouse wheel (zoom)", "Controles fixos: Q (voltar), roda do mouse (zoom)"));
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button(T("Restore default keys", "Restaurar teclas padrão"))) RestoreDefaultBindings();
-            if (GUILayout.Button(T("Back [Esc]", "Voltar [Esc]")))
+            if (GUILayout.Button(T("Restore default keys", "Restaurar teclas padrão")))
             {
+                PlayRetailSound(RetailSfx.Confirm);
+                RestoreDefaultBindings();
+            }
+            if (GUILayout.Button(T("Back [Q]", "Voltar [Q]")))
+            {
+                PlayRetailSound(RetailSfx.Cancel);
                 _rebindingRow = -1;
                 _mappingOpen = false;
             }
@@ -355,10 +415,10 @@ namespace AzureDreamsReimagined
             string leave = _returnAction.GetBindingDisplayString();
             string rotate = _rotateLeftAction.GetBindingDisplayString() + "/" + _rotateRightAction.GetBindingDisplayString();
             return _area == Area.Town
-                ? T($"{move}: move   {interact}: interact   {wait}: jump\n{run}: run   {lift}: lift   {inventory}: inventory\nWheel: zoom   {rotate}: rotate camera\nF5: settings",
-                    $"{move}: mover   {interact}: interagir   {wait}: pular\n{run}: correr   {lift}: levantar   {inventory}: inventário\nRoda do mouse: zoom   {rotate}: girar câmera\nF5: configurações")
-                : T($"{move}: move   {interact} or {turn} + direction: face\n{attack}: attack   {wait}: wait   {interact}: interact   {leave}: return\n{map}: map   {lift}: lift   {inventory}: inventory   {familiar}: familiar\nHold toward an enemy to push; hold {interact} too to stay in place\nHold {run}+{lift} to pass turns   F5: settings",
-                    $"{move}: mover   {interact} ou {turn} + direção: virar\n{attack}: atacar   {wait}: esperar   {interact}: interagir   {leave}: voltar\n{map}: mapa   {lift}: levantar   {inventory}: inventário   {familiar}: familiar\nSegure na direção do inimigo para empurrar. Segure {interact} junto para ficar no lugar\nSegure {run}+{lift} para passar turnos   F5: opções");
+                ? T($"{move}: move   {interact}: interact   {wait}: jump\n{run}: run   {lift}: lift   {inventory}: inventory\nWheel: zoom   {rotate}: rotate camera\nM: settings",
+                    $"{move}: mover   {interact}: interagir   {wait}: pular\n{run}: correr   {lift}: levantar   {inventory}: inventário\nRoda do mouse: zoom   {rotate}: girar câmera\nM: configurações")
+                : T($"{move}: move   {interact} or {turn} + direction: face\n{attack}: attack   {wait}: wait   {interact}: interact   {leave}: return\n{map}: map   {lift}: lift   {inventory}: inventory   {familiar}: familiar\nHold toward an enemy to push; hold {interact} too to stay in place\nHold {run}+{lift} to pass turns   M: settings",
+                    $"{move}: mover   {interact} ou {turn} + direção: virar\n{attack}: atacar   {wait}: esperar   {interact}: interagir   {leave}: voltar\n{map}: mapa   {lift}: levantar   {inventory}: inventário   {familiar}: familiar\nSegure na direção do inimigo para empurrar. Segure {interact} junto para ficar no lugar\nSegure {run}+{lift} para passar turnos   M: opções");
         }
     }
 }

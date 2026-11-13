@@ -83,6 +83,7 @@ namespace AzureDreamsReimagined
 
         private void BackFromBarryShop()
         {
+            PlayRetailSound(RetailSfx.Cancel);
             if (_barryConfirm)
             {
                 _barryConfirm = false;
@@ -102,14 +103,17 @@ namespace AzureDreamsReimagined
             }
             else if (!_barryConfirm && BarryOptionCount > 0 && Keyboard.current is { } keyboard)
             {
-                int step = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+                int previous = _barrySelection;
                 _barrySelection = Mathf.Clamp(_barrySelection + step, 0, BarryOptionCount - 1);
+                if (_barrySelection != previous) PlayRetailSound(RetailSfx.Cursor);
             }
             return true;
         }
 
         private void ChooseBarryOption(int index)
         {
+            PlayRetailSound(RetailSfx.Confirm);
             if (_barryPage == BarryShopPage.Services)
                 SetBarryShopPage(index == 0 ? BarryShopPage.Buy : index == 1 ? BarryShopPage.Sell : BarryShopPage.Closed);
             else
@@ -134,6 +138,7 @@ namespace AzureDreamsReimagined
         private void TradeWithBarry()
         {
             if (!_barryConfirm || _barrySelection >= BarryOptionCount) return;
+            PlayRetailSound(RetailSfx.Confirm);
             bool buying = _barryPage == BarryShopPage.Buy;
             if (buying)
             {
@@ -142,6 +147,8 @@ namespace AzureDreamsReimagined
                 if (!_townInventory.HasSpace()) { _barryFeedback = T("Your inventory is full.", "Seu inventário está cheio."); return; }
                 _townInventory.AddDungeonItem(BarryStockItem(_barrySelection));
                 _gold -= price;
+                if (_hospitalHerbShop)
+                    TownSaveVariables.SetBool("town.hush_bought_herb", true);
             }
             else
             {

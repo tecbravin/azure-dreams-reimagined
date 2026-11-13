@@ -90,13 +90,18 @@ namespace AzureDreamsReimagined.Editor
                     hinge.SetParent(root.transform, false);
                     hinge.localPosition = new Vector3(-0.53f, 0.08f, 0f);
                 }
-                if (!hinge.GetComponentInChildren<Renderer>(true))
+                var gateMaterial = AssetDatabase.LoadAssetAtPath<Material>(
+                    "Assets/AzureDreams/Resources/Tower/Entrance/TowerEntranceDoor.mat");
+                if (!gateMaterial) gateMaterial = FindMaterial("Town_Wood");
+                var leafRenderer = hinge.GetComponentInChildren<Renderer>(true);
+                if (!leafRenderer)
                 {
-                    var wood = FindMaterial("Town_Wood");
-                    if (!wood) throw new InvalidOperationException("Town_Wood material is required for the gate leaf.");
-                    Block(hinge, "Wooden Gate Leaf", new Vector3(0.53f, 0.58f, 0f),
-                        new Vector3(1.04f, 1.08f, 0.12f), wood, true);
+                    if (!gateMaterial) throw new InvalidOperationException("Tower gate door material is missing.");
+                    var leaf = Block(hinge, "Tower Gate Leaf", new Vector3(0.53f, 0.58f, 0f),
+                        new Vector3(1.04f, 1.08f, 0.12f), gateMaterial, true);
+                    leafRenderer = leaf.GetComponent<Renderer>();
                 }
+                if (gateMaterial && leafRenderer) leafRenderer.sharedMaterial = gateMaterial;
                 var door = root.GetComponent<TownGateDoor>();
                 if (!door) door = root.AddComponent<TownGateDoor>();
                 door.Configure(hinge);
@@ -408,8 +413,11 @@ namespace AzureDreamsReimagined.Editor
             var hinge = new GameObject("Gate Leaf Pivot");
             hinge.transform.SetParent(root.transform, false);
             hinge.transform.localPosition = new Vector3(-0.53f, 0.08f, 0f);
-            Block(hinge.transform, "Wooden Gate Leaf", new Vector3(0.53f, 0.58f, 0f),
-                new Vector3(1.04f, 1.08f, 0.12f), FindMaterial("Town_Wood"), true);
+            var gateMaterial = AssetDatabase.LoadAssetAtPath<Material>(
+                "Assets/AzureDreams/Resources/Tower/Entrance/TowerEntranceDoor.mat");
+            if (!gateMaterial) gateMaterial = FindMaterial("Town_Wood");
+            Block(hinge.transform, "Tower Gate Leaf", new Vector3(0.53f, 0.58f, 0f),
+                new Vector3(1.04f, 1.08f, 0.12f), gateMaterial, true);
             root.AddComponent<TownGateDoor>().Configure(hinge.transform);
             SavePrefab(root, "Tower_Gate");
         }

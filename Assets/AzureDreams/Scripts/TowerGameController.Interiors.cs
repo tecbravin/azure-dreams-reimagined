@@ -17,13 +17,13 @@ namespace AzureDreamsReimagined
         private Vector2 _interiorScroll;
         private Vector3 _outsidePosition;
         private Vector2 _outsideFacing;
+        private bool _spawnAboveInteriorExitMarker;
         [Serializable] private sealed class InteriorEntry { public string id, label, labelPtBr; }
         [Serializable] private sealed class InteriorCatalog { public InteriorEntry[] entries; }
         private InteriorCatalog _interiorCatalog;
         private bool HandleInteriorInput()
         {
             if (_changingInterior) return true;
-            if (_area != Area.Town) return false;
             if (Keyboard.current != null && Keyboard.current.f2Key.wasPressedThisFrame && !_activeTownNpc && !_heldTownPot)
                 _interiorMenu = !_interiorMenu;
             return _interiorMenu;
@@ -44,29 +44,46 @@ namespace AzureDreamsReimagined
             GetInteriorCatalog();
             GUILayout.BeginArea(new Rect(100, 60, 440, 350), GUI.skin.box);
             GUILayout.Label(T("Interior preview travel (F2) - exterior door locations pending", "Visitar interiores (F2)"));
-            if (_interior && GUILayout.Button(T("Return to Monsbaiya", "Voltar a Monsbaiya"))) { _interiorMenu = false; StartCoroutine(LeaveInterior()); }
             _interiorScroll = GUILayout.BeginScrollView(_interiorScroll);
-            if (_interiorCatalog?.entries != null)
-                foreach (var entry in _interiorCatalog.entries)
-                    if (GUILayout.Button(T(entry.label, entry.labelPtBr)))
-                    { _interiorMenu = false; StartCoroutine(LoadInterior(entry.id)); break; }
-            GUILayout.EndScrollView(); GUILayout.EndArea();
+            string selectedPath = null;
+            for (int index = 0; index < SceneManager.sceneCountInBuildSettings; index++)
+            {
+                string path = SceneUtility.GetScenePathByBuildIndex(index);
+                string id = System.IO.Path.GetFileNameWithoutExtension(path);
+                var entries = _interiorCatalog?.entries;
+                var entry = entries == null ? null : Array.Find(entries, candidate => candidate.id == id);
+                string label = entry == null ? id : T(entry.label, entry.labelPtBr);
+                if (GUILayout.Button(label)) { selectedPath = path; break; }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
+            if (selectedPath == null) return;
+            _interiorMenu = false;
+            if (_area == Area.Town && selectedPath.StartsWith("Assets/AzureDreams/Scenes/Interiors/", StringComparison.Ordinal))
+                StartCoroutine(LoadInterior(System.IO.Path.GetFileNameWithoutExtension(selectedPath)));
+            else
+                SceneManager.LoadSceneAsync(selectedPath, LoadSceneMode.Single);
         }
         private IEnumerator LoadInterior(string id, Vector3? facadeExit = null,
-            bool? returnedFromTower = null, string returnMessage = null)
+            bool? returnedFromTower = null, string returnMessage = null,
+            bool spawnAboveExitMarker = false)
         {
             if (_changingInterior || _heldTownPot || _carriedItem != null || (_interior && _interior.interiorId == id)) yield break;
             if (id == PoolClosedRoom && PoolRestored) id = PoolOpenRoom;
             string path = "Assets/AzureDreams/Scenes/Interiors/" + id + ".unity";
             if (!Application.CanStreamedLevelBeLoaded(path))
-            { _message = T("Interior scene is not in the build: " + id, $"O interior {id} não está disponível nesta versão."); yield break; }
+            { _message = T("Interior scene is not in the build: " + id, $"O interior {id} nao esta disponivel nesta versao."); yield break; }
             _changingInterior = true;
+            _spawnAboveInteriorExitMarker = spawnAboveExitMarker;
+            _fadeToBlack = 0f;
             if (!_interior)
             {
                 _outsidePosition = facadeExit ?? _player.transform.position;
                 _outsideFacing = facadeExit.HasValue ? Vector2.up : _townFacing;
             }
             var previous = _interior ? _interior.gameObject.scene : default;
+            // Start loading immediately. The old fixed two-second fade delayed
+            // every doorway transition before Unity even began loading the room.
             yield return SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
             var loaded = SceneManager.GetSceneByPath(path);
             TownInteriorScene room = null;
@@ -79,8 +96,37 @@ namespace AzureDreamsReimagined
                 yield return PlayWakeUp(returnedFromTower.Value, returnMessage);
             _changingInterior = false;
         }
+        private static byte[] ReadInteriorHeights(TownInteriorScene room)
+        {
+            if (room)
+            {
+                try
+                {
+                    var asset = room.heights;
+                    if (asset) return asset.bytes;
+                }
+                catch (MissingReferenceException)
+                {
+                    // Fall through to the Resources copy below when the scene's
+                    // serialized TextAsset reference has been unloaded/staled.
+                }
+
+                var resource = Resources.Load<TextAsset>("Town/Interiors/" + room.interiorId + "/heights");
+                if (resource) return resource.bytes;
+
+                Debug.LogError("Missing interior height map for " + room.interiorId + ". Using a flat fallback to keep the interior playable.");
+            }
+
+            // Interior layouts use the town's 128x128 little-endian height grid.
+            return new byte[RetailTownSize * RetailTownSize * 2];
+        }
         private void AdoptInterior(TownInteriorScene room)
         {
+            // Copy the binary height map before ClearGenerated destroys transient
+            // scene objects. Some imported interiors keep this TextAsset reference
+            // on the additive scene component, and accessing it after cleanup can
+            // leave Unity holding a stale native object reference.
+            byte[] interiorHeights = ReadInteriorHeights(room);
             bool returningFromHut = InHomeHut;
             ClearGenerated();
             _interior = room;
@@ -105,11 +151,12 @@ namespace AzureDreamsReimagined
                     _ when HouseIndex >= 0 || InHomeHut => "KohHouseTheme.mp3",
                     _ => "Town"
                 });
-            _townHeights = room.heights.bytes;
+            _townHeights = interiorHeights;
             if (room.furnitureFootprints != null) _townBuildings.AddRange(room.furnitureFootprints);
             Vector3 entry = InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(room);
             int house = HouseIndex;
             Vector3 arrival = returningFromHut && house >= 0 ? HutLinks[house] :
+                _spawnAboveInteriorExitMarker ? entry + Vector3.back * 2f :
                 room.useArrivalPosition ? room.arrivalPosition : entry;
             _playerCell = new Vector2Int(Mathf.RoundToInt(arrival.x), Mathf.RoundToInt(arrival.z));
             _player = SpawnKoh(_playerCell, "Koh");
@@ -125,7 +172,9 @@ namespace AzureDreamsReimagined
             var label = GetInteriorCatalog()?.entries;
             var entryLabel = label == null ? null : Array.Find(label, entry => entry.id == room.interiorId);
             string roomName = entryLabel == null ? room.displayName : T(entryLabel.label, entryLabel.labelPtBr);
-            _message = roomName + T(". E at the entrance: return. F2: interiors.", ". E na entrada: voltar. F2: interiores.");
+            _message = room.interiorId == RhodesHouse || room.interiorId == BarRoom || room.interiorId == RestaurantRoom
+                ? ""
+                : roomName + T(". E at the entrance: return. F2: interiors.", ". E na entrada: voltar. F2: interiores.");
             CacheHomeFloorPlan();
             SetupKohHomeInterior();
             SetupMonsterShop();
@@ -146,7 +195,7 @@ namespace AzureDreamsReimagined
         }
         private void SpawnInteriorResidents(TownInteriorScene room)
         {
-            if (room.residentPrefabs == null) return;
+            if (room.residentPrefabs != null)
             for (int i = 0; i < room.residentPrefabs.Length; i++)
             {
                 var prefab = room.residentPrefabs[i];
@@ -164,6 +213,13 @@ namespace AzureDreamsReimagined
                 var instance = Spawn(prefab, cell, prefab.name);
                 instance.transform.position = position;
                 var npc = instance.GetComponent<NPCController>();
+                if (npc.npcId == "hush" && _player)
+                {
+                    var koh = _player.GetComponentInChildren<SpriteRenderer>();
+                    var hush = npc.GetComponentInChildren<Renderer>();
+                    if (koh && hush && koh.bounds.size.y > 0f && hush.bounds.size.y > 0f)
+                        npc.transform.localScale *= koh.bounds.size.y / hush.bounds.size.y;
+                }
                 npc.ConfigureConversation(_townFlow.State);
                 if (!instance.TryGetComponent<TownDialogueProgress>(out var progress))
                     progress = instance.AddComponent<TownDialogueProgress>();
@@ -171,6 +227,53 @@ namespace AzureDreamsReimagined
                 _townPeople.Add(npc);
                 _npcCells.Add(cell);
             }
+
+            // Wreath and Weedy are permanent residents of Koh's home. Keep them
+            // present even if an interior scene's resident list is incomplete or
+            // one of its authored cells becomes blocked by a house upgrade.
+            if (HouseIndex >= 0)
+            {
+                EnsureKohHomeResident(room, "wreath");
+                EnsureKohHomeResident(room, "weedy");
+            }
+        }
+
+        private void EnsureKohHomeResident(TownInteriorScene room, string npcId)
+        {
+            if (_townPeople.Exists(person => person && person.npcId == npcId)) return;
+
+            GameObject prefab = null;
+            if (room.residentPrefabs != null)
+                foreach (var candidate in room.residentPrefabs)
+                    if (candidate && candidate.TryGetComponent<NPCController>(out var resident) && resident.npcId == npcId)
+                    {
+                        prefab = candidate;
+                        break;
+                    }
+            if (!prefab) prefab = FindStoryResidentPrefab(npcId);
+            if (!prefab) return;
+
+            Vector2Int cell = new(-1, -1);
+            if (room.residentPrefabs != null && room.residentCells != null)
+                for (int i = 0; i < room.residentPrefabs.Length && i < room.residentCells.Length; i++)
+                    if (room.residentPrefabs[i] == prefab && room.residentCells[i].x >= 0 &&
+                        room.residentCells[i] != _playerCell && TownPositionOpen(CellPosition(room.residentCells[i])))
+                    {
+                        cell = room.residentCells[i];
+                        break;
+                    }
+            if (cell.x < 0) cell = FindInteriorResidentCell();
+            if (cell.x < 0) return;
+
+            var instance = Spawn(prefab, cell, prefab.name);
+            instance.transform.position = RetailTownActorPosition(CellPosition(cell), 0f);
+            var npc = instance.GetComponent<NPCController>();
+            npc.ConfigureConversation(_townFlow.State);
+            if (!instance.TryGetComponent<TownDialogueProgress>(out var progress))
+                progress = instance.AddComponent<TownDialogueProgress>();
+            if (npcId != "wreath") progress.Prepare(npc);
+            _townPeople.Add(npc);
+            _npcCells.Add(cell);
         }
 
         private Vector2Int FindInteriorResidentCell()

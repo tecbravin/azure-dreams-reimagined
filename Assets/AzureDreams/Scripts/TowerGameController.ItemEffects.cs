@@ -128,6 +128,7 @@ namespace AzureDreamsReimagined
         private void TemperEquipment(DungeonItemEntry equipment)
         {
             equipment.Param++;
+            PlayRetailSound(RetailSfx.Equip);
             if (IsSword(equipment, HolySword) && HasHolySwordProtection(_playerActor))
                 Status(_playerActor, StatusId.CONFUSION, 0);
             string name = InventoryItemName(equipment);
@@ -145,15 +146,29 @@ namespace AzureDreamsReimagined
                 if (item.Kind == ItemKind.Herb) ApplyHerb(item, target);
                 else ApplyFruit(item, target);
             }
-            else if (item.Kind == ItemKind.Seed) ApplySeed(item.Subtype, target);
-            else if (item.Kind == ItemKind.Scroll) ApplyScroll(item, target);
-            else if (item.Kind == ItemKind.Bell) ApplyBell(item.Subtype);
+            else if (item.Kind == ItemKind.Seed)
+            {
+                if (!thrown) PlayRetailSound(target == _playerActor ? RetailSfx.Eat : RetailSfx.FeedFamiliar);
+                ApplySeed(item.Subtype, target);
+            }
+            else if (item.Kind == ItemKind.Scroll)
+            {
+                PlayRetailSound(RetailSfx.Spell);
+                ApplyScroll(item, target);
+            }
+            else if (item.Kind == ItemKind.Bell)
+            {
+                PlayRetailSound(RetailSfx.Spell);
+                ApplyBell(item.Subtype);
+            }
             else if (item.Kind == ItemKind.Glasses && item.Subtype == 2)
             {
+                PlayRetailSound(RetailSfx.Spell);
                 RevealStarGlassesTargets();
             }
             else if (item.Kind == ItemKind.Loupe)
             {
+                PlayRetailSound(RetailSfx.Spell);
                 switch (item.Subtype)
                 {
                     case 1: _seeElevator = true; break;
@@ -184,12 +199,12 @@ namespace AzureDreamsReimagined
                     target.EffectiveDefense = StatByte(target.EffectiveDefense + 1);
                     break;
                 case 3: ChangeActorLevel(target, 1); break;
-                case 4: Status(target, StatusId.SPEED, 20); break;
+                case 4: Status(target, StatusId.SPEED, 8); break;
                 case 5: case 6: case 7:
                     if (target != _playerActor) ChangeSeedGenus(target, 1 << (subtype - 5));
                     break;
                 case 8: ChangeActorLevel(target, -1); break;
-                case 9: Status(target, StatusId.SPEED, -20); break;
+                case 9: Status(target, StatusId.SPEED, -10); break;
                 case TovarSeed: target.Luck = StatByte(target.Luck + 1); break;
             }
         }
@@ -251,6 +266,7 @@ namespace AzureDreamsReimagined
             if (!prefab) prefab = MonsterPrefab(visualSpecies);
             summon.View = SpawnActor(prefab, summon.Cell, "Salamander - Fire Crystal",
                 species: (int)visualSpecies, palette: MonsterPaletteVariant.Fire);
+            summon.View.AddComponent<SalamanderSpriteView>().Initialize();
             ConfigureLocomotion(summon.View);
         }
 
@@ -416,6 +432,7 @@ namespace AzureDreamsReimagined
             {
                 case 1: case 2:
                     if (actor == _playerActor) break;
+                    bool isFamiliar = actor == _familiarActor || (_blueCollarAlly != null && actor == _blueCollarAlly.Actor);
                     if (actor.MpRaw == actor.MaxMp * 256)
                     {
                         actor.BaseMp = StatByte(actor.BaseMp + 1);
@@ -426,18 +443,25 @@ namespace AzureDreamsReimagined
                     {
                         var diet = UnitProfile(actor.Species);
                         int recovery = item.Subtype == 1 ? diet?.likesPitas ?? 50 : diet?.likesBigPitas ?? 100;
-                        actor.CurrentMp = Mathf.Min(actor.MaxMp, actor.CurrentMp + recovery);
+                        if (isFamiliar && _area != Area.Tower)
+                            actor.CurrentMp = actor.MaxMp;
+                        else
+                            actor.CurrentMp = Mathf.Min(actor.MaxMp, actor.CurrentMp + recovery);
                     }
                     break;
-                case 3: Status(actor, StatusId.FROG, 20); break;
+                case 3: Status(actor, StatusId.FROG, 32); break;
                 case 4:
                     if (actor == _familiarActor || actor == _blueCollarAlly?.Actor)
                         actor.Flags14 |= LevaFusionProtection;
                     break;
-                case 5: _mpProtection[actor] = 30; break;
-                case 6: _doubleMpCost[actor] = 30; break;
+                case 5: _mpProtection[actor] = 16; break;
+                case 6:
+                    _doubleMpCost[actor] = 32 + (_towerRun?.Rng != null
+                        ? RollSpawnRange(32)
+                        : UnityEngine.Random.Range(0, 32));
+                    break;
                 case 7: RevertToEgg(actor); break;
-                case 8: Status(actor, StatusId.ANGER, 15); break;
+                case 8: Status(actor, StatusId.ANGER, 96); break;
                 case 9:
                     var target = actor == _playerActor ? (_familiar ? _familiarActor : _blueCollarAlly?.Actor) : actor;
                     if (target != null && RemoveFruitTarget(target, out bool familiar) && familiar)
@@ -715,8 +739,10 @@ namespace AzureDreamsReimagined
                 if (Combat.HasStatus(target, StatusId.PARALYSIS)) target.Flags1C |= ActorFlag.PARALYZED;
                 if (Combat.HasStatus(target, StatusId.BLIND)) target.Flags1C |= ActorFlag.BLIND;
                 if (HasTalent(actor, AtrociousTalent)) actor.Flags1C |= ActorFlag.ANGRY;
-                if (Combat.HasStatus(actor, StatusId.BLIND))
-                    actor.HitBaseline = StatByte(oldHitBaseline - 32);
+                byte weaponAccuracy = PhysicalWeaponAccuracy(actor, weapon, attackerCell, targetCell);
+                actor.HitBaseline = Combat.HasStatus(actor, StatusId.BLIND)
+                    ? StatByte(weaponAccuracy - 32)
+                    : weaponAccuracy;
                 actor.Luck = AttackLuck(actor);
                 target.Shield = trollSword ? null : shield;
 
@@ -727,7 +753,7 @@ namespace AzureDreamsReimagined
                 if (rng != null)
                 {
                     var prepared = Combat.PrepareDirectionalAttack(actor, target, rng);
-                    if (prepared == null || (IsSword(weapon, DarkSword) && DarkSwordMisses(actor, target))) return 0;
+                    if (prepared == null) return 0;
                     power += prepared.AttackPower - 2 * (actor.CurrentAttack + actor.AttackBonus());
 
                     int baseCritOutcomes = 1 + ((actor.Flags1C & ActorFlag.ANGRY) != 0 ? actor.Luck >> 1 : actor.Luck >> 6);
@@ -765,28 +791,63 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private static byte AttackLuck(ActorRecord actor) => Combat.HasStatus(actor, StatusId.CURSE)
-            ? (byte)(actor.Luck * 3 / 4) : actor.Luck;
-
-        private bool DarkSwordMisses(ActorRecord attacker, ActorRecord target)
+        private byte AttackLuck(ActorRecord actor)
         {
-            if (Combat.IsIncapacitatedForPhysicalAttack(target))
-                return RollSpawnRange(100) < 30;
+            int luck = actor == _playerActor && _area == Area.Tower
+                ? KohLuckAtTowerTurn(_completedTowerTurns)
+                : actor.Luck;
+            if (Combat.HasStatus(actor, StatusId.CURSE)) luck = luck * 3 / 4;
+            return (byte)Mathf.Clamp(luck, 0, byte.MaxValue);
+        }
 
-            int outcomes = Mathf.Max(1, (int)attacker.Luck);
-            bool evadeShield = target.Species == 0 && target.Shield?.Subtype == 2;
-            int threshold = evadeShield ? 170 : 128;
-            int firstHit = Mathf.Max(0, (threshold - attacker.HitBaseline + 3) / 4);
-            int hits = Mathf.Max(0, outcomes - firstHit);
-            var (dodges, dodgeOutcomes) = Combat.PhysicalDodgeRoll(target);
-            if (dodges == 0) return !AdjustRolledChance(true, hits, outcomes, -30 * outcomes);
+        private static int KohLuckAtTowerTurn(int turn)
+        {
+            // 4096-turn cycle: 64 at entry, 96 at turn 1024, 32 at turn 3072.
+            // A sinusoid matches the reference's near-linear arcs and slowdown
+            // around the extrema without introducing a discontinuity.
+            float phase = Mathf.PI * 2f * (turn % 4096) / 4096f;
+            return Mathf.Clamp(Mathf.RoundToInt(64f + 32f * Mathf.Sin(phase)), 32, 96);
+        }
 
-            // The penalty is 30 percentage points off the joint hit probability.
-            hits *= dodgeOutcomes - dodges;
-            outcomes *= dodgeOutcomes;
-            if (hits == 0) return true;
-            int extraMiss = Mathf.Min(10000, (3000 * outcomes + hits / 2) / hits);
-            return RollSpawnRange(10000) < extraMiss;
+        private static byte PhysicalWeaponAccuracy(ActorRecord actor, DungeonItemEntry weapon,
+            Vector2Int attackerCell, Vector2Int targetCell)
+        {
+            if (actor.Species == 0)
+            {
+                if (weapon?.Kind == ItemKind.Wand) return 124;
+                if (weapon?.Kind != ItemKind.Sword) return 126;
+                return weapon.Subtype switch
+                {
+                    1 => 124, // Gold Sword
+                    2 => 118, // Copper Sword
+                    3 or 4 => 116, // Iron / Steel Sword
+                    5 or 6 or 7 or VitalSword => 120, // elemental / Vital swords
+                    DarkSword => 96,
+                    HolySword => 120,
+                    SeraphimSword or SeraphimKeepsake => 124,
+                    _ => 124
+                };
+            }
+
+            if ((MonsterSpecies)actor.Species == MonsterSpecies.TROLL)
+            {
+                if (weapon?.Kind != ItemKind.Sword) return 124;
+                int accuracy = weapon.Subtype switch
+                {
+                    14 => 116, // Troll Hammer
+                    15 => 112, // Bow Gun
+                    13 => 120, // Troll Sword
+                    _ => 124
+                };
+                if (weapon.Subtype == 15)
+                {
+                    int distance = Mathf.Abs(targetCell.x - attackerCell.x) + Mathf.Abs(targetCell.y - attackerCell.y);
+                    accuracy = Mathf.Max(0, accuracy - Mathf.Max(0, distance - 1) * 4);
+                }
+                return (byte)accuracy;
+            }
+
+            return (MonsterSpecies)actor.Species == (MonsterSpecies)56 ? (byte)128 : (byte)124;
         }
 
         // Change an existing binary roll while preserving its outcome for an unmodified chance.
@@ -1245,6 +1306,7 @@ namespace AzureDreamsReimagined
                 ApplyFreshStats(actor, stats);
                 _thrownEggs.Add(new ThrownEggAlly { View = view, Cell = landing, Actor = actor });
                 SpawnFx(_fxMagic, CellPosition(landing));
+                PlayRetailSound(RetailSfx.Summon);
                 _message = $"{data.name} " + T("hatched at level ", "nasceu no nÃ­vel ") + _floor + ".";
             }
             else if (target != null && item.Kind == ItemKind.Crystal && item.Subtype == 3 &&
@@ -1300,6 +1362,8 @@ namespace AzureDreamsReimagined
                     cell = ally.Cell + direction;
                     if (confused) target = HasTowerPassage(ally.Cell, direction) ? CreatureAt(cell) : -1;
                     QueueMonsterSpriteAction(ally.View, direction);
+                    if (ally.Salamander && ally.View.TryGetComponent<SalamanderSpriteView>(out var salamander))
+                        salamander.PresentAttack(direction);
                     SpendMonsterMp(ally.Actor, 256);
                     if (target >= 0)
                         QueueCreatureDamage(ally.Actor, target, WithItemCombatEffects(ally.Actor, ally.Actor.CurrentAttack,

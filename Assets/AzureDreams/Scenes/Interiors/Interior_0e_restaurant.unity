@@ -85,6 +85,58 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 47744935d03d44f983e0ea5b2583f8f6, type: 2}
   - {fileID: 2100000, guid: 0546026b786f41fc93cf309fe824103e, type: 2}
   - {fileID: 2100000, guid: 8b2ef5d57efd4a06b91e7f1ea20e10e5, type: 2}
+  surfaceShader: {fileID: 4800000, guid: aeae4c31bf4248c58780c7cd63d2603c, type: 3}
+  surfaceTextures:
+  - {fileID: 2800000, guid: 276a8d10b35041640913d9baa07fea1c, type: 3}
+  - {fileID: 2800000, guid: d8cd6a61115b90b4983848cea269eb8e, type: 3}
+  - {fileID: 2800000, guid: b3dde0858d5024441bdc2428d1b7a772, type: 3}
+  - {fileID: 2800000, guid: e2ef836073b933e44b69ec2513b225bb, type: 3}
+  - {fileID: 2800000, guid: 59f3d68b35521b74b8939a7c9277ef0c, type: 3}
+  - {fileID: 2800000, guid: 835db6eb48a947f4c8701962a9d74cc6, type: 3}
+  - {fileID: 2800000, guid: 4353e862ec2d4e24eb6c3f909fb15465, type: 3}
+  - {fileID: 2800000, guid: e914622909367e2469df420b09562e26, type: 3}
+  - {fileID: 2800000, guid: e1effae2eaaff6a4f9c38c2245917aae, type: 3}
+  - {fileID: 2800000, guid: c1bc44684e445184da4667afd550dde9, type: 3}
+  - {fileID: 2800000, guid: 977450b9f33970841b477519fb3853b7, type: 3}
+  - {fileID: 2800000, guid: 71cb6906a0bccf541949f9bda6143e1a, type: 3}
+  - {fileID: 2800000, guid: c92ea151d28e3264a810277d3cbf64f4, type: 3}
+  - {fileID: 2800000, guid: da041f880027aea408f43c7f3459f752, type: 3}
+  - {fileID: 2800000, guid: df14e9430b56ca24a9512b582982cb49, type: 3}
+  - {fileID: 2800000, guid: 5187848874be70e468f695586bc15cb9, type: 3}
+  - {fileID: 2800000, guid: 461fbe6a927dc4542ba0f581ee5e5168, type: 3}
+  - {fileID: 2800000, guid: f09e81e481d41a044bddef7f4d6f3e71, type: 3}
+  - {fileID: 2800000, guid: d8947bb9605369e45b99638eb16d2c6e, type: 3}
+  - {fileID: 2800000, guid: 6e388ae3f85351349a519d3776cf1812, type: 3}
+  - {fileID: 2800000, guid: 8be5d42fdb2d74146a01b68ca0231b53, type: 3}
+  - {fileID: 2800000, guid: 8cefe20d985311a43a65fc99aba925a6, type: 3}
+  - {fileID: 2800000, guid: d675abcb77739ab469ebc997c09ed278, type: 3}
+  - {fileID: 2800000, guid: 851c42d078759e446a83c2036f79c27c, type: 3}
+  - {fileID: 2800000, guid: b75e23b440aaff4499f55c9daccbed6c, type: 3}
+  - {fileID: 2800000, guid: 9e8160e8d942a0d4eb12144ce0bed913, type: 3}
+  - {fileID: 2800000, guid: d5b6c98d058456142b9a8672ec6159a0, type: 3}
+  - {fileID: 2800000, guid: 9429b2a97b6e5a146817c18ce683d5bc, type: 3}
+  - {fileID: 2800000, guid: 5a63984f43d869146b2fe375d6ecda12, type: 3}
+  - {fileID: 2800000, guid: 5702ab9989ee0a14aa1d52eaa13b667d, type: 3}
+  - {fileID: 2800000, guid: 660eeb22cfcc5d646b464b49444cf979, type: 3}
+  - {fileID: 2800000, guid: f93f9dad471afc14e884ad05a623d5ab, type: 3}
+  - {fileID: 2800000, guid: d70d58d0aa72c6e4694d87b4e17566b1, type: 3}
+  - {fileID: 2800000, guid: 90cbaf4439c183544a4ac125e2416dda, type: 3}
+  - {fileID: 2800000, guid: b85aad2a441e19649aeae9cce792ef95, type: 3}
+  - {fileID: 2800000, guid: 014a612517e2a54438410e0943520f20, type: 3}
+  - {fileID: 2800000, guid: cd41264ded5ef7b49a21443ecd9251bd, type: 3}
+  - {fileID: 2800000, guid: df82356df0e63a840b5dda9a4007a5de, type: 3}
+  - {fileID: 2800000, guid: 6ac2c49cb3cc8cf4eac826fade4d2d90, type: 3}
+  - {fileID: 2800000, guid: 66fc1e8f909193745b1d78aebaf0eefa, type: 3}
+  - {fileID: 2800000, guid: bc14679b9a816bb4981c6c485276f351, type: 3}
+  - {fileID: 2800000, guid: 3852f179b1110fe4fb1d794b06a1b6d8, type: 3}
+  - {fileID: 2800000, guid: 1a841b020e6e319418623bf5697559f3, type: 3}
+  - {fileID: 2800000, guid: e41d180cdf84cec4589355941ae5e322, type: 3}
+  - {fileID: 2800000, guid: 954e567b672852842b541a74b6479669, type: 3}
+  - {fileID: 2800000, guid: d68b7c79155e3c943985ae75ec1f9be6, type: 3}
+  - {fileID: 2800000, guid: dba2e2a1dd6db27438b13e7e14173d13, type: 3}
+  - {fileID: 2800000, guid: 8aec0ebe4d5289441989d4142fb44b8f, type: 3}
+  - {fileID: 2800000, guid: 6a0cb84952909e841a65216ad789c84b, type: 3}
+  - {fileID: 2800000, guid: 40c1f75a81010b3468d233c1a3f97a8b, type: 3}
   entryPosition: {x: 17.5, y: 0, z: 18.5}
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 8d7f2fbf7ef04bbba45d6607f25312a5, type: 3}

@@ -23,6 +23,7 @@ namespace AzureDreamsReimagined
         [SerializeField] private int _indexedSpecies;
         [SerializeField, Min(0f)] private float _attackLunge;
         private Texture2D _frameAtlas;
+        private bool _usingCommunityAtlas;
         private SpriteRenderer _renderer;
         private Sprite[] _frames;
         private int _columns;
@@ -42,6 +43,17 @@ namespace AzureDreamsReimagined
 
         private void Awake()
         {
+            int communitySpecies = _indexedSpecies != 0 ? _indexedSpecies : SpeciesFromName(transform.root.name);
+            if (communitySpecies > 0)
+            {
+                var communityAtlas = Resources.Load<Texture2D>($"Monsters/Community/monster_{communitySpecies:x2}");
+                if (communityAtlas)
+                {
+                    _atlas = communityAtlas;
+                    _indexedSpecies = communitySpecies;
+                    _usingCommunityAtlas = true;
+                }
+            }
             if (!_atlas || _atlas.height != Rows * FrameSize || _atlas.width % FrameSize != 0) return;
             _columns = _atlas.width / FrameSize;
             if (!UsesRetailLayout && _columns != CastStart && _columns != SleepStart && _columns != SleepStart + 2) return;
@@ -49,6 +61,28 @@ namespace AzureDreamsReimagined
             var position = transform.localPosition;
             position.y = -0.55f;
             transform.localPosition = position;
+        }
+
+        private static int SpeciesFromName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return 0;
+            int clone = name.IndexOf('(');
+            if (clone >= 0) name = name.Substring(0, clone).Trim();
+            return name switch
+            {
+                "Hikewne" => 1, "Kewne" => 2, "Dragon" => 3, "Kid" => 4,
+                "Ifrit" => 5, "Flame" => 6, "Grineut" => 7, "Griffon" => 8,
+                "Saber" => 9, "Snowman" => 10, "Ashra" => 11, "Arachne" => 12,
+                "Battnel" => 13, "Nyuel" => 14, "Death" => 15, "Clown" => 16,
+                "Univern" => 17, "Unicorn" => 18, "Metal" => 19, "Block" => 20,
+                "Pulunpa" => 21, "Troll" => 22, "Noise" => 23, "U_Boat" => 24,
+                "Baloon" => 25, "Dreamin" => 26, "Blume" => 27, "Volcano" => 28,
+                "Cyclone" => 29, "Manoeva" => 30, "Barong" => 31, "Picket" => 32,
+                "Kraken" => 33, "Weadog" => 34, "Stealth" => 35, "Viper" => 36,
+                "Naplass" => 37, "Zu" => 38, "Mandara" => 39, "Killer" => 40,
+                "Garuda" => 41, "Glacier" => 42, "Tyrant" => 43, "Golem" => 44,
+                "Maximum" => 45, _ => 0
+            };
         }
 
         private void Start()
@@ -60,7 +94,20 @@ namespace AzureDreamsReimagined
 
         internal void SetActionAtlas(Texture2D atlas)
         {
-            if (_atlas && atlas.width == _atlas.width && atlas.height == _atlas.height) _atlas = atlas;
+            if (!_usingCommunityAtlas && _atlas && atlas.width == _atlas.width && atlas.height == _atlas.height) _atlas = atlas;
+        }
+
+        internal void UseCommunityAtlas(int species, Texture2D atlas)
+        {
+            _atlas = atlas;
+            _indexedSpecies = species;
+            _usingCommunityAtlas = true;
+            _renderer = GetComponent<SpriteRenderer>();
+            _columns = atlas.width / IndexedCellSize;
+            var position = transform.localPosition;
+            position.y = -0.55f;
+            transform.localPosition = position;
+            BuildFrames(MonsterPalettes.Recolor(atlas, species, MonsterPaletteVariant.Enemy, indexed: true));
         }
 
         internal void SetPalette(int species, MonsterPaletteVariant variant) =>

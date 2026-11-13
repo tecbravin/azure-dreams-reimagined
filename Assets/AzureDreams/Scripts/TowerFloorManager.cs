@@ -53,7 +53,11 @@ namespace AzureDreamsReimagined
             if (floorNumber == 2)
             {
                 // NTSC-U DUNGEON.BIN sector 3995, fixed encounter layout.
-                LoadFixedTerrain(Resources.Load<TextAsset>("Town/Retail/floor_02").bytes,
+                var asset = Resources.Load<TextAsset>("Town/Retail/floor_02");
+                var terrain = asset ? asset.bytes : null;
+                if (terrain == null || terrain.Length != CoreDungeon.GridSize * CoreDungeon.GridSize * 6)
+                    terrain = ReadEmbeddedSecondFloor();
+                LoadFixedTerrain(terrain,
                     floorNumber, seed, new Vector2Int(31, 56), new Vector2Int(55, 9));
                 return;
             }
@@ -71,6 +75,34 @@ namespace AzureDreamsReimagined
             LocateStairs();
             RebuildOpenCells();
             GenerateHeightPatches(seed);
+        }
+
+        // Backup of floor_02.bytes (retail sector 3995), for players with an incomplete asset import.
+        private static byte[] ReadEmbeddedSecondFloor()
+        {
+            const string encoded =
+                "H4sIAAAAAAAC/+2ca47TMBDHg3YPsEfgK7A8LtAqqrQSb5b38ihCInW2SCwf9gI9GkfhCNxgobaAqf6Z6dhJHKd1PoysNI7HP0/G" +
+                "Y2fSg6I4LFYHWQ4qi3xEPzL/lPiX9lyWcWQI/2otV+dWLqzMJEPJaPnTOy+tnNrf6r0fCyQz8SCznX8Fd3bksVzv2ShUYI0cH56M" +
+                "xJ8jj0/Zvo0CRx7JbBsFib9hyLt2H8I9qSZmp/kbhjxHhjI0Cv70bjfsNTdJ3ae2/LX4eVUcPiPnb9vyHfB+uyeX0F9K5tqaTEHJ" +
+                "UIabT0Ezfzq+t6w8hrqPYNzv2jP3xDlil8q0vzIZynDTPzTz57wK9WOu7O4/s2VZ3mfkLDHZRs+aeBsuYqHj4uv/ubJr/bT48Uc+" +
+                "B/nJypf2mlfFr6u/8rU985mpFV+G6fnWypn62THq+ZebQajfmxD+c6vJiS2jfMDIk8Skr55zwp/jM22wfG38j6OAfn4GmlQwZy3E" +
+                "aE0j0RIurBbfrKRlLlrWtyLruSBedw72j3yayPutf2tRQ9TEPWUuRnLSMJEYvUaWNCpwnC/XxdVlcUTk+swFGYWwVmQ9DcOfG7Vl" +
+                "i/UvF/1ORPunOnOrlToo6pts8HfMSyKP/vGftmiFW1HK/Hk/3+X+m/G0f6NYoXM+kytr+Gvuo2/XKPj7r0C7tP8zkb8+ltbE3hr/" +
+                "4xvDa+IW5H+WgP0/tvKdlU/gqdfsUIWVufm3j7awR9jroezfafKe0STMw6RfF3s9rP1zmuCT/r24vtUj0Wva7GxgXXdnua67Rm5X" +
+                "trr49v+BaCLvxGKZ7lD5Eo5TF3uEvR42/jltEf/gDpWeZJy63Pz7MZn4Z94i/km/bEYe/6fvYeS66cf/Mv/0PYxc1+T176B1x27/" +
+                "3a5/49fdbftPvzx2+6dPun4F1IeH0a/+8A37eO0/fQ8j191t/59+dLrb/n+869/07b+/XKz275R934sNZf+VuJ+vef/bhySW4PRZ" +
+                "xWxXtn99Zrhv/jP6TNSkjpgH2Oadcpt2OftHPnJOsm/+M/pM1KRv6d4zcrlq7tc4mqD9c3MKNwpd5b/FzGR7IeaqvYmeNRea/9bM" +
+                "X/6yoCLnF2L+Z992yOWq9f3ccb9WxGK5t074FMj5z3QNKGe5o9+7/D8z9rIzwHHobxfC9Qj9vEwG1+BG5E/r4hqQy/+nfq9qEU/q" +
+                "aXD+X0+1jZ64O82RoQwxF1Hv/+Us9/bfv+BKjVufyv7f/aq5T1d6ymR8/b+c/yzn9lRbMh79VnZcLDEV/b9+nRvGvxa/fTsXv5tb" +
+                "qvnLo7DtywK/HnF2JbeFs38lfjky6cj+NV+paMhr+Mv5z7os33D7l6M4A/zp+bBoMGwUcP7Sk/Hd/6k7Zc7dWbMC5fj73ifsfwO6" +
+                "ItPEX3OUntdoelR4te5o08gHv+7x6ct6Bm86r+UfJsf7/xuONp15u/juuIjci7HzR/8zrl5k/pl/G/68/8/8x+j/M//sf8bOXxND" +
+                "Zv7hEvZ7Syfx30Uy//7I23318guRxw2jkPl373PsHktp99VLOv/aPfbS7u2UJvPvQcJ+bEn9vyNf9bA3lfnLo9BEPvv/GKPA72fu" +
+                "J/8UjtJzn3bII///czr8sxxK/ga6+5CdAGAAAA==";
+            using var input = new System.IO.MemoryStream(System.Convert.FromBase64String(encoded));
+            using var stream = new System.IO.Compression.GZipStream(input, System.IO.Compression.CompressionMode.Decompress);
+            using var output = new System.IO.MemoryStream();
+            stream.CopyTo(output);
+            return output.ToArray();
         }
 
         private void GenerateBeldoArena(int seed)

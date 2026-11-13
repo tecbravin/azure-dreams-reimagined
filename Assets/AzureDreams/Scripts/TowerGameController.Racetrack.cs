@@ -139,11 +139,11 @@ namespace AzureDreamsReimagined
             var keys = Keyboard.current;
             if (keys != null)
             {
-                int row = (keys.downArrowKey.wasPressedThisFrame ? 1 : 0) - (keys.upArrowKey.wasPressedThisFrame ? 1 : 0);
+                int row = (MenuDirectionPressed(2) ? 1 : 0) - (MenuDirectionPressed(1) ? 1 : 0);
                 if (_raceScreen == RaceScreen.Tickets && BoughtRaceTickets == 0)
                 {
                     _racePair = (_racePair + row + RacePairs.Length) % RacePairs.Length;
-                    int quantity = (keys.rightArrowKey.wasPressedThisFrame ? 1 : 0) - (keys.leftArrowKey.wasPressedThisFrame ? 1 : 0);
+                    int quantity = (MenuDirectionPressed(4) ? 1 : 0) - (MenuDirectionPressed(3) ? 1 : 0);
                     _raceTickets = Mathf.Clamp(_raceTickets + quantity, 1, RaceTicketLimit);
                 }
                 if (_raceScreen == RaceScreen.Silver) _raceChoice = (_raceChoice + row + 4) % 4;

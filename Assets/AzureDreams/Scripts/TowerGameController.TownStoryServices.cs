@@ -149,11 +149,12 @@ namespace AzureDreamsReimagined
         {
             const string route = "selfi";
             int stage = StoryStage(route);
-            if (StoryRoom != RhodesHouse) return false;
+            if (_interior || npc != _outdoorSelfi) return false;
             if (stage == 0)
-                return StoryTalk(npc, "Ghosh says the Tower is too dangerous for me. You'll see me up there anyway.",
-                    "Ghosh diz que a Torre é perigosa demais para mim. Mesmo assim, você vai me ver lá em cima.",
-                    () => AdvanceTownStory(route, 1));
+            {
+                AdvanceTownStory(route, 1);
+                return false;
+            }
             if (stage == 3)
                 return StoryAsk(npc, "Here. Take this egg for helping me with the Pulunpa.",
                     "Aqui. Aceite este ovo por ter me ajudado com o Pulunpa.",

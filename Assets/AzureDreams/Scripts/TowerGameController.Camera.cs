@@ -20,7 +20,9 @@ namespace AzureDreamsReimagined
         private const float InteriorCameraDistance = 7f;
         private const float CameraFollowRate = 16f;
         private const float CameraOrbitRate = 13f;
-        private float GameplayCameraPitch => _interior ? 55f : _area == Area.Tower ? 46.25f : 35f;
+        // Retail camera_default_rotation_xy is 0xFD80: a signed PSX angle of
+        // -640/4096 turns, equivalent to the tower's 56.25 degree downward pitch.
+        private float GameplayCameraPitch => _interior ? 55f : _area == Area.Tower ? 56.25f : 35f;
 
         private void ReadCameraControls()
         {
@@ -90,6 +92,7 @@ namespace AzureDreamsReimagined
 
         private void LateUpdate()
         {
+            UpdateTowerBackdropRotation();
             AnimateTowerElevator();
             // Update the camera first so the lift uses this frame's screen axes.
             UpdateCameraFollow();
@@ -111,7 +114,7 @@ namespace AzureDreamsReimagined
                 bool paralyzed = _area == Area.Tower && KohIsParalyzed;
                 _kohSprite.PresentStatusTint(paralyzed, greenFlash);
                 _kohSprite.PresentParalysis(paralyzed);
-                _kohSprite.PresentSleep(_wakingInBed || (_area == Area.Tower && KohIsAsleep));
+                _kohSprite.PresentSleep(_wakingInBed || _kohCollapsePlaying || (_area == Area.Tower && KohIsAsleep));
                 var visibleEquipment = _area == Area.Tower && !IsFrog(_playerActor) ? _runInventory : null;
                 var weapon = visibleEquipment?.EquippedItem(PlayerEquipped, false);
                 var shield = visibleEquipment?.EquippedItem(PlayerEquipped, true);
@@ -250,7 +253,10 @@ namespace AzureDreamsReimagined
             var focus = _cameraFocus + Vector3.up * 0.35f +
                 Quaternion.Euler(0, _cameraFollowYaw, 0) * Vector3.forward * 0.45f;
             _gameCamera.orthographic = false;
-            _gameCamera.fieldOfView = 40f;
+            // The original uses a perspective projection rather than an orthographic
+            // view. 45 degrees is the closest practical Unity projection match for
+            // the retail framing at the existing 8-unit camera distance.
+            _gameCamera.fieldOfView = tower ? 45f : 40f;
             _gameCamera.transform.SetPositionAndRotation(focus - rotation * Vector3.forward * _cameraFollowDistance + TowerQuakeShake(), rotation);
             if (tower && UsesManagedTowerLayout) UpdateTowerWallCutaway();
         }

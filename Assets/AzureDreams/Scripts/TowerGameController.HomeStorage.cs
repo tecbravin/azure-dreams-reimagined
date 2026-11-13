@@ -72,10 +72,16 @@ namespace AzureDreamsReimagined
             if (_cancel?.WasPressedThisFrame() == true) { CloseHomeStorage(); return true; }
             if (Keyboard.current is { } keyboard)
             {
-                if (keyboard.leftArrowKey.wasPressedThisFrame) SelectStorageSide(false);
-                else if (keyboard.rightArrowKey.wasPressedThisFrame) SelectStorageSide(true);
-                int step = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
-                _storageRow = Mathf.Clamp(_storageRow + step, 0, Mathf.Max(0, StorageCount(_storageSelectDepot) - 1));
+                bool moveLeft = MenuDirectionPressed(3);
+                bool moveRight = MenuDirectionPressed(4);
+                bool moveUp = MenuDirectionPressed(1);
+                bool moveDown = MenuDirectionPressed(2);
+
+                if (moveLeft) SelectStorageSide(false);
+                else if (moveRight) SelectStorageSide(true);
+
+                if (moveUp) _storageRow = Mathf.Clamp(_storageRow - 1, 0, Mathf.Max(0, StorageCount(_storageSelectDepot) - 1));
+                else if (moveDown) _storageRow = Mathf.Clamp(_storageRow + 1, 0, Mathf.Max(0, StorageCount(_storageSelectDepot) - 1));
             }
             if (_interact?.WasPressedThisFrame() == true) TransferHomeStorageItem();
             return true;
@@ -132,6 +138,41 @@ namespace AzureDreamsReimagined
             PersistTownProgress();
         }
 
+        private void GiveHomeStorageItem()
+        {
+            bool withdrawing = _storageSelectDepot;
+            if (_storageRow < 0 || _storageRow >= StorageCount(withdrawing)) return;
+            var source = StorageSide(withdrawing);
+            var rows = StorageRows(withdrawing);
+            var item = _storageRow < rows.Count ? rows[_storageRow] : null;
+            if (item == null || !_familiarDefinition || !IsGiveableToFamiliar(item) ||
+                item.Kind == ItemKind.Ball) return;
+            string name = StorageItemName(item);
+            if (IsTrollWeapon(item))
+            {
+                if (!IsTroll(_familiarActor)) return;
+                if (withdrawing)
+                {
+                    _storageFeedback = T("Take the weapon into your bag before equipping it.",
+                        "Retire a arma para a bolsa antes de equipá-la.");
+                    return;
+                }
+                if (!source.SetEquipped(_storageRow, FamiliarEquipped, lockCursed: false)) return;
+                PlayRetailSound(RetailSfx.Equip);
+            }
+            else
+            {
+                if (!CanUseInventoryEffect(item, true) ||
+                    (item.Kind == ItemKind.Fruit && item.Subtype == 7 && !CanRevertToEgg(_familiarActor))) return;
+                if (!source.ConsumeDungeonItem(_storageRow, item.Kind)) return;
+                ApplyInventoryEffect(item, _familiarActor);
+            }
+            _storageFeedback = T($"You gave {name} to your familiar.", $"Deu {name} ao familiar.");
+            RefreshHomeStorageRows();
+            _storageRow = Mathf.Clamp(_storageRow, 0, Mathf.Max(0, StorageCount(withdrawing) - 1));
+            PersistTownProgress();
+        }
+
         private void DrawHomeStorage(float width, float height)
         {
             var panel = new Rect(width * 0.5f - 280f, height * 0.5f - 161f, 560f, 322f);
@@ -179,7 +220,12 @@ namespace AzureDreamsReimagined
                 string name = StorageItemName(item);
                 if (item?.Kind == ItemSystem.Kind.Ball) name += $" ({Mathf.Max(0, (int)item.Param)})";
                 DrawHudText(row, name, item == null ? _messageStyle : InventoryNameStyle(item));
-            }
+                if (item != null && IsGiveableToFamiliar(item) && active && _storageRow == i)
+                {
+                    if (GUI.Button(new Rect(row.xMax - 52f, row.y + 2f, 50f, 17f), T("Give", "Dar")))
+                        GiveHomeStorageItem();
+                }
+                }
             if (first > 0 && GUI.Button(new Rect(x, y + 183f, 126f, 22f), T("Previous", "Anterior")))
                 _storageRow = first - StorageRowsPerPage;
             if (first + StorageRowsPerPage < count &&

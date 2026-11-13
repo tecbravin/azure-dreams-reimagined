@@ -17,19 +17,28 @@ namespace AzureDreamsReimagined
         private FusionPreview _fusionPreview;
         private bool _fusionPlaying;
 
-        private bool FusionBlockedByFrog => IsFrog(_familiarActor) || IsFrog(_blueCollarAlly?.Actor);
+        private bool FusionBlockedByFrog =>
+            (_fusionFirst != null && IsFrog(_fusionFirst.Actor)) ||
+            (_fusionSecond != null && IsFrog(_fusionSecond.Actor));
 
         private static string FrogFusionMessage() => T(
             "A familiar is a frog. Wait for the effect to wear off before fusing.",
             "Um familiar está em forma de sapo. Espere o efeito passar para fundir.");
 
-        private FusionPreview BuildFusionPreview()
+        private FusionPreview BuildFusionPreview(BagFamiliar redFamiliar, BagFamiliar blueFamiliar)
         {
-            if (_area != Area.Tower || !HasBlueCollar || !_familiar || !_blueCollarAlly?.View ||
-                _familiarHealth <= 0 || _blueCollarAlly.Actor.Hp == 0 ||
-                FusionBlockedByFrog) return null;
-            var red = _familiarActor;
-            var blue = _blueCollarAlly.Actor;
+            if (_area != Area.Tower || !HasBlueCollar || redFamiliar == null || blueFamiliar == null ||
+                redFamiliar.Actor.Hp <= 0 || blueFamiliar.Actor.Hp <= 0 ||
+                (IsFrog(redFamiliar.Actor) && IsFrog(blueFamiliar.Actor))) return null;
+            return BuildFusionPreview(redFamiliar, blueFamiliar, FamiliarDisplayName);
+        }
+
+        private FusionPreview BuildFusionPreview(BagFamiliar redFamiliar, BagFamiliar blueFamiliar, string redName)
+        {
+            if (redFamiliar.Actor.Hp <= 0 || blueFamiliar.Actor.Hp <= 0 ||
+                IsFrog(redFamiliar.Actor) || IsFrog(blueFamiliar.Actor)) return null;
+            var red = redFamiliar.Actor;
+            var blue = blueFamiliar.Actor;
             int Priority(ActorRecord actor) => actor.Species switch
             {
                 (byte)MonsterSpecies.KEWNE => 2,
@@ -44,7 +53,7 @@ namespace AzureDreamsReimagined
             var survivor = blueSurvives ? blue : red;
             var donor = blueSurvives ? red : blue;
             return new FusionPreview { Red = red, Blue = blue, Result = ComputeFusionResult(survivor, donor),
-                BlueSurvives = blueSurvives, Name = blueSurvives ? _blueCollarFamiliar.Name : FamiliarDisplayName };
+                BlueSurvives = blueSurvives, Name = blueSurvives ? blueFamiliar.Name : redName };
         }
 
         private ActorRecord ComputeFusionResult(ActorRecord survivor, ActorRecord donor)
@@ -152,36 +161,51 @@ namespace AzureDreamsReimagined
         private void ConfirmFamiliarFusion()
         {
             var preview = _fusionPreview;
-            if (preview == null || _fusionPlaying || _turnBusy || !_familiar || !_blueCollarAlly?.View ||
-                _familiarActor != preview.Red || _blueCollarAlly.Actor != preview.Blue ||
+            if (preview == null || _fusionPlaying || _turnBusy || _fusionFirst == null || _fusionSecond == null ||
                 KohSkipsAction || ItemImmobilized(_playerActor) || SlowBlocksAction(_playerActor)) return;
             if (FusionBlockedByFrog)
             {
                 _fusionPreview = null;
+                _fusionFirst = null;
+                _fusionSecond = null;
+                _fusionPendingSecond = false;
                 return;
             }
             if (ScheduleInventoryAction(() => _finishFamiliarAction = () =>
             {
-                if (!_familiar || !_blueCollarAlly?.View || _familiarActor != preview.Red ||
-                    _blueCollarAlly.Actor != preview.Blue || _familiarHealth <= 0 || preview.Blue.Hp <= 0 ||
-                    _health <= 0) return;
-                if (FusionBlockedByFrog)
-                {
-                    _message = FrogFusionMessage();
-                    return;
-                }
-                StartCoroutine(PresentFamiliarFusion(preview));
+                if (_fusionFirst == null || _fusionSecond == null || _fusionPreview == null) return;
+                if (_familiarHealth <= 0 || _fusionPreview.Result.Hp <= 0 || _health <= 0) return;
+                StartCoroutine(PresentFamiliarFusion(_fusionPreview));
             }))
             {
                 _familiarOrderPicker = FamiliarOrderPicker.None;
                 _fusionPreview = null;
+                _fusionFirst = null;
+                _fusionSecond = null;
+                _fusionPendingSecond = false;
             }
         }
 
         private IEnumerator PresentFamiliarFusion(FusionPreview preview)
         {
             var redView = _familiar;
-            var blueView = _blueCollarAlly.View;
+            var blueView = _fusionSecond != null ? _fusionSecond.View : 
+                           (HasBlueCollar ? _blueCollarFamiliar?.View : null);
+            if (blueView == null && HasBlueCollar)
+            {
+                blueView = _blueCollarAlly?.View;
+            }
+            if (_fusionFirst != null && _fusionSecond != null)
+            {
+                // Use the selected familiars' views if available
+                var fView = _familiarActor == _fusionFirst.Actor ? _familiar : (_fusionSecond?.View);
+                var bView = _fusionSecond != null ? _fusionSecond.View : (_fusionFirst?.View);
+                if (fView != null && bView != null)
+                {
+                    redView = fView;
+                    blueView = bView;
+                }
+            }
             Vector3 redStart = redView.transform.position, blueStart = blueView.transform.position;
             Vector3 center = (redStart + blueStart) * 0.5f;
             var redSprites = redView.GetComponentsInChildren<SpriteRenderer>();
@@ -245,6 +269,14 @@ namespace AzureDreamsReimagined
             var winner = preview.BlueSurvives ? preview.Blue : preview.Red;
             var donor = preview.BlueSurvives ? preview.Red : preview.Blue;
             var blue = _blueCollarFamiliar;
+            var blueAlly = _blueCollarFamiliar;  // default to blue collar familiar
+            BagFamiliar allyFamiliar = blue;
+            if (_blueCollarAlly != null && _blueCollarAlly.View is GameObject blueViewObj && blueViewObj != blueView)
+            {
+                // Blue collar ally is a ThrownEggAlly; use its cell for the familiar cell
+                // (The blue collar familiar is the one being fused, so use its view.)
+                allyFamiliar = blue;
+            }
             if (preview.BlueSurvives)
             {
                 if (_parkedFamiliarDefinition) ExposeParkedFamiliar();
@@ -267,8 +299,10 @@ namespace AzureDreamsReimagined
                             item.Flags = (byte)((item.Flags & ~BlueFamiliarEquipped) | FamiliarEquipped);
             }
             RemoveGenerated(preview.BlueSurvives ? redView : blueView);
-            _thrownEggs.Remove(_blueCollarAlly);
-            _bagFamiliars.Remove(blue);
+            if (_blueCollarAlly != null)
+                _thrownEggs.Remove(_blueCollarAlly);
+            if (_blueCollarFamiliar != null)
+                _bagFamiliars.Remove(_blueCollarFamiliar);
             _runInventory?.ClearEquipped(BlueFamiliarEquipped);
             _blueCollarAlly = null;
             _blueCollarFamiliar = null;

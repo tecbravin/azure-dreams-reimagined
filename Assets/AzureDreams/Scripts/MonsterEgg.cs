@@ -24,6 +24,10 @@ namespace AzureDreamsReimagined
         public static DungeonItemEntry Create(byte species, bool identified)
             => Encode(species, Random.Range(0, Colors.Length), identified, Random.Range(15, 99));
 
+        /// <summary>Retail tower-spawned egg: caller supplies seeded color and 1–40% warmth rolls.</summary>
+        public static DungeonItemEntry CreateTowerSpawn(byte species, bool identified, int color, int heat)
+            => Encode(species, color, identified, heat);
+
         internal static DungeonItemEntry Encode(byte species, int color, bool identified, int heat)
             => new(species, Kind, (sbyte)Mathf.Clamp(heat, 0, 100),
                 (byte)(Format | (identified ? Identified : 0) | (color & 7)));

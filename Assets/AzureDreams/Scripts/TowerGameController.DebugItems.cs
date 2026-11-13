@@ -16,7 +16,7 @@ namespace AzureDreamsReimagined
 
         private bool TryOpenDebugItemPicker()
         {
-            if (Keyboard.current?.numpad9Key.wasPressedThisFrame != true || !_player) return false;
+            if (Keyboard.current?.numpad0Key.wasPressedThisFrame != true || !_player) return false;
             if (_area == Area.Town && (_townDoorOpening || _townJumpHeight > 0f || _townJumpVelocity != 0f ||
                 _activeTownNpc || _townObjectDialogueOpen ||
                 (_townFlow && _townFlow.State.Current != TownGameState.State.TownIdle))) return false;
@@ -28,6 +28,12 @@ namespace AzureDreamsReimagined
             if (species != null)
                 foreach (var entry in species)
                     _debugItems.Add((MonsterEgg.Kind, (byte)entry.id, T($"{entry.name} Egg", $"Ovo de {entry.name}")));
+
+            if (_debugItems.Count == 0)
+            {
+                Debug.LogError("Debug item catalogs could not be loaded from Resources/Town/Retail.");
+                return false;
+            }
 
             var compare = CultureInfo.GetCultureInfo(GameLanguage.Portuguese ? "pt-BR" : "en").CompareInfo;
             _debugItems.Sort((a, b) =>
@@ -45,13 +51,13 @@ namespace AzureDreamsReimagined
         private void HandleDebugItemPickerInput()
         {
             var keyboard = Keyboard.current;
-            if (keyboard?.numpad9Key.wasPressedThisFrame == true || _cancel?.WasPressedThisFrame() == true)
+            if (keyboard?.numpad0Key.wasPressedThisFrame == true || _cancel?.WasPressedThisFrame() == true)
             {
                 _debugItemPickerOpen = false;
                 return;
             }
             if (keyboard == null || _debugItems.Count == 0) return;
-            int step = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+            int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
             if (step != 0)
             {
                 _debugItemSelection = Mathf.Clamp(_debugItemSelection + step, 0, _debugItems.Count - 1);
@@ -79,7 +85,7 @@ namespace AzureDreamsReimagined
             var panel = new Rect((width - panelWidth) * 0.5f, (height - panelHeight) * 0.5f, panelWidth, panelHeight);
             DrawHudPanel(panel);
             GUI.Label(new Rect(panel.x + 12f, panel.y + 6f, panel.width - 106f, 24f),
-                T("Spawn item [Numpad 9]", "Gerar item [Num 9]"));
+                T("Spawn item [Numpad 0]", "Gerar item [Num 0]"));
             if (GUI.Button(new Rect(panel.xMax - 90f, panel.y + 6f, 78f, 24f), T("Close", "Fechar")))
                 _debugItemPickerOpen = false;
             var viewport = new Rect(panel.x + 12f, panel.y + 34f, panel.width - 24f, listHeight);
@@ -111,8 +117,8 @@ namespace AzureDreamsReimagined
             var item = kind == MonsterEgg.Kind
                 ? MonsterEgg.Create(id, identified: true)
                 : ItemSystem.CreateFloorItem(id, kind, kind == ItemSystem.Kind.Ball ? (sbyte)5 : (sbyte)0);
-            if (_area == Area.Tower && kind is ItemSystem.Kind.Sword or ItemSystem.Kind.Shield)
-                item = TowerItemTrapManager.CreateTowerEquipment(kind, id, Random.Range(0, 100));
+            if (_area == Area.Tower && kind is ItemSystem.Kind.Sword or ItemSystem.Kind.Shield or ItemSystem.Kind.Wand)
+                item = TowerItemTrapManager.CreateTowerEquipment(kind, id, Random.Range(0, 1024));
             else if (kind == ItemSystem.Kind.Sword && id == DarkSword)
                 item.Flags |= Inventory.CursedEquipmentFlag;
 

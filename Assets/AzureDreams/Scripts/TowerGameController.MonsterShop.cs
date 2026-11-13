@@ -127,6 +127,7 @@ namespace AzureDreamsReimagined
         private void BuySelectedEgg()
         {
             if (_monsterShopSelection < 0 || _monsterShopSelection >= _eggsForSale.Count) return;
+            PlayRetailSound(RetailSfx.Confirm);
             var egg = _eggsForSale[_monsterShopSelection];
             int cost = PurchasePrice(egg);
             if (_gold < cost) { _shopPurchaseMessage = T("You don't have enough gold.", "Você não tem ouro suficiente."); return; }
@@ -142,6 +143,7 @@ namespace AzureDreamsReimagined
         private void SellSelectedEgg()
         {
             if (_monsterShopSelection < 0 || _monsterShopSelection >= _eggOffers.Count) return;
+            PlayRetailSound(RetailSfx.Confirm);
             var offer = _eggOffers[_monsterShopSelection];
             var items = _townInventory.DungeonItems;
             if (offer.Index >= items.Count || items[offer.Index].Kind != RetailEggKind ||
@@ -169,8 +171,9 @@ namespace AzureDreamsReimagined
             if (_monsterShopPage == MonsterShopPage.Closed) return false;
             var keys = Keyboard.current;
             if (keys == null) return true;
-            if (keys.escapeKey.wasPressedThisFrame)
+            if (keys.qKey.wasPressedThisFrame)
             {
+                PlayRetailSound(RetailSfx.Cancel);
                 if (_monsterShopPage == MonsterShopPage.Confirm) SetMonsterShopPage(MonsterShopPage.Sell);
                 else if (_monsterShopPage == MonsterShopPage.ConfirmBuy) { _monsterShopPage = MonsterShopPage.Buy; _shopPurchaseMessage = null; }
                 else if (_monsterShopPage is MonsterShopPage.Buy or MonsterShopPage.Sell) SetMonsterShopPage(MonsterShopPage.Services);
@@ -184,14 +187,17 @@ namespace AzureDreamsReimagined
             }
             else if (ShopOptionCount > 0)
             {
-                int step = keys.upArrowKey.wasPressedThisFrame ? -1 : keys.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+                int previous = _monsterShopSelection;
                 _monsterShopSelection = Mathf.Clamp(_monsterShopSelection + step, 0, ShopOptionCount - 1);
+                if (_monsterShopSelection != previous) PlayRetailSound(RetailSfx.Cursor);
             }
             return true;
         }
 
         private void SelectMonsterShopOption(int index)
         {
+            PlayRetailSound(RetailSfx.Confirm);
             switch (_monsterShopPage)
             {
                 case MonsterShopPage.Greeting:

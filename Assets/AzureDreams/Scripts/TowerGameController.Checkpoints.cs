@@ -22,22 +22,27 @@ namespace AzureDreamsReimagined
             if (_checkpointMenu == CheckpointMenu.Closed) return false;
             var keyboard = Keyboard.current;
             if (keyboard == null) return true;
-            if (keyboard.escapeKey.wasPressedThisFrame) CancelCheckpointMenu();
+            if (keyboard.qKey.wasPressedThisFrame) CancelCheckpointMenu();
             else if (_checkpointMenu == CheckpointMenu.SaveBeforeAscend && keyboard.nKey.wasPressedThisFrame) AscendFromElevator();
             else if (_checkpointMenu == CheckpointMenu.Wreath)
             {
-                int delta = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+                int previous = _checkpointSelection;
                 _checkpointSelection = Mathf.Clamp(_checkpointSelection + delta, 0, WreathOptionCount - 1);
+                if (_checkpointSelection != previous) PlayRetailSound(RetailSfx.Cursor);
                 if (_interact?.WasPressedThisFrame() == true) SelectWreathOption(_checkpointSelection);
             }
             else if (_checkpointMenu is CheckpointMenu.SaveSlots or CheckpointMenu.LoadSlots)
             {
-                int delta = keyboard.upArrowKey.wasPressedThisFrame ? -1 : keyboard.downArrowKey.wasPressedThisFrame ? 1 : 0;
+                int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+                int previous = _checkpointSelection;
                 _checkpointSelection = Mathf.Clamp(_checkpointSelection + delta, 0, SaveSystem.SlotCount - 1);
+                if (_checkpointSelection != previous) PlayRetailSound(RetailSfx.Cursor);
                 if (_interact != null && _interact.WasPressedThisFrame()) SelectCheckpoint(_checkpointSelection);
             }
             else if (_interact != null && _interact.WasPressedThisFrame())
             {
+                PlayRetailSound(RetailSfx.Confirm);
                 switch (_checkpointMenu)
                 {
                     case CheckpointMenu.Ascend: _checkpointMenu = CheckpointMenu.SaveBeforeAscend; break;
@@ -50,6 +55,7 @@ namespace AzureDreamsReimagined
 
         private void SelectWreathOption(int option)
         {
+            PlayRetailSound(RetailSfx.Confirm);
             switch (option)
             {
                 case 0: OpenSaveSlots(false); break;
@@ -72,6 +78,7 @@ namespace AzureDreamsReimagined
 
         private void CancelCheckpointMenu()
         {
+            PlayRetailSound(RetailSfx.Cancel);
             switch (_checkpointMenu)
             {
                 case CheckpointMenu.Overwrite: _checkpointMenu = CheckpointMenu.SaveSlots; break;
@@ -88,6 +95,7 @@ namespace AzureDreamsReimagined
 
         private void SelectCheckpoint(int slot)
         {
+            PlayRetailSound(RetailSfx.Confirm);
             _checkpointSelection = slot;
             var saved = SaveSystem.ReadSlot(slot);
             if (_checkpointMenu == CheckpointMenu.LoadSlots)

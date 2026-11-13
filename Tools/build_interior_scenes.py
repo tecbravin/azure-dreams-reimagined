@@ -4,17 +4,24 @@ import json, re, uuid, struct, math
 # Rebuild captured interiors without inventing exterior door coordinates.
 P = Path(__file__).resolve().parents[1]
 A = P / 'Assets/AzureDreams'
-def meta(path, kind='DefaultImporter'):
+def meta(path, kind=None):
+    if kind is None:
+        kind = {'.json': 'TextScriptImporter', '.bytes': 'TextScriptImporter',
+                '.mat': 'NativeFormatImporter'}.get(path.suffix, 'DefaultImporter')
     m = Path(str(path)+'.meta')
     if not m.exists():
         m.write_text(f'fileFormatVersion: 2\nguid: {uuid.uuid4().hex}\n{kind}:\n  externalObjects: {{}}\n')
+    if kind == 'NativeFormatImporter':
+        content = m.read_text()
+        if 'mainObjectFileID:' not in content:
+            m.write_text(content + '  mainObjectFileID: 2100000\n')
     return re.search(r'guid: (\w+)',m.read_text()).group(1)
 def ref(path, fid):
     asset_type = 2 if path.suffix == '.mat' else 3
     return '{fileID: '+str(fid)+', guid: '+meta(path)+', type: '+str(asset_type)+'}'
 for script in ['TownInteriorScene','TownHomeDialogueSelector','TownDialogueProgress','TowerGameController.Interiors']:
     meta(A/'Scripts'/f'{script}.cs','MonoImporter')
-shader = meta(A/'Shaders/TownCaptured.shader')
+shader = meta(A/'Shaders/TownCaptured.shader', 'ShaderImporter')
 scenes = A/'Scenes/Interiors'; scenes.mkdir(parents=True,exist_ok=True)
 data = A/'Resources/Town/Interiors'; data.mkdir(parents=True,exist_ok=True)
 entries=[]; report=[]

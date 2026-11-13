@@ -21,12 +21,25 @@ namespace AzureDreamsReimagined.Editor
         {
             var manifest = JsonUtility.FromJson<Manifest>("{\"entries\":" +
                 File.ReadAllText("Assets/AzureDreams/Data/Community/integration_manifest.json") + "}");
+            string communityRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "community"));
             var pattern = new Regex(@"^community/monster_animations/monster_([0-9a-f]+)_animation_(\d+)_frame_(\d+)\.png$");
             var sequences = manifest.entries.Select(entry => (entry, match: pattern.Match(entry.source.Replace('\\', '/'))))
                 .Where(pair => pair.match.Success)
                 .GroupBy(pair => (monster: pair.match.Groups[1].Value, animation: pair.match.Groups[2].Value))
                 .ToArray();
             if (sequences.Length == 0) throw new InvalidDataException("No community monster frames found.");
+
+            // Refresh the imported frames from the community extraction before rebuilding clips.
+            foreach (var pair in sequences.SelectMany(group => group))
+            {
+                string source = Path.Combine(communityRoot, "monster_animations", Path.GetFileName(pair.entry.source));
+                if (!File.Exists(source)) throw new FileNotFoundException("Missing community monster frame", source);
+                Directory.CreateDirectory(Path.GetDirectoryName(pair.entry.asset));
+                if (!File.Exists(pair.entry.asset) ||
+                    !File.ReadAllBytes(source).SequenceEqual(File.ReadAllBytes(pair.entry.asset)))
+                    File.Copy(source, pair.entry.asset, true);
+            }
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
 
             var sprites = new Dictionary<string, Sprite>();
             foreach (var pair in sequences.SelectMany(group => group))

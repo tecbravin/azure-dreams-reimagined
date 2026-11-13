@@ -28,6 +28,19 @@ namespace AzureDreamsReimagined
         private Material EntranceMaterial(ref Material cached, string resource, Material fallback)
         {
             if (cached) return cached;
+            if (resource == "Door")
+            {
+                // Keep the tower's iron gate tied directly to its original
+                // texture/material pair. The generic facade material can be
+                // replaced or loaded without a texture in some town setups.
+                var doorMaterial = Resources.Load<Material>(EntranceResources + "TowerEntranceDoor");
+                if (doorMaterial)
+                {
+                    cached = new Material(doorMaterial);
+                    return cached;
+                }
+            }
+
             var texture = Resources.Load<Texture2D>(EntranceResources + resource);
             var template = Resources.Load<Material>(FacadeDoorResources + "FacadeDoor");
             if (!texture || !template) return fallback;
