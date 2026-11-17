@@ -124,7 +124,10 @@ namespace AzureDreamsReimagined
         {
             if (_kewneSkipTransition) return true;
             if (_kewneMeeting == KewneMeeting.None) return false;
-            if (KewneMeetingSpeaking && _mapAction?.IsPressed() == true)
+            // Skipping a conversation follows the universal cancel binding.  The
+            // map control must remain available for the tower HUD instead of
+            // doubling as a hidden dialogue command.
+            if (KewneMeetingSpeaking && _cancel?.IsPressed() == true)
             {
                 _kewneSkipHeld += Time.unscaledDeltaTime;
                 if (_kewneSkipHeld >= KewneSkipHoldSeconds)
@@ -178,7 +181,7 @@ namespace AzureDreamsReimagined
             progress = Mathf.Clamp01(progress);
             if (!_kewneSkipIcon) _kewneSkipIcon = Resources.Load<Texture2D>(EntranceResources + "KewneDialogueSkip");
 
-            string binding = _mapAction?.GetBindingDisplayString() ?? "Right Shift";
+            string binding = _cancel?.GetBindingDisplayString() ?? "Q";
             string label = T($"Skip [{binding}]", $"Pular [{binding}]");
             _dialogueSkipStyle ??= new GUIStyle(_messageStyle) { fontSize = 14, wordWrap = false };
             float labelWidth = _dialogueSkipStyle.CalcSize(new GUIContent(label)).x;
@@ -242,17 +245,12 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private void DrawKewneMeetingChoices(Rect box)
+        private void DrawKewneMeetingChoices(Rect choices)
         {
-            if (!KewneMeetingSpeaking) return;
-            int count = _kewneMeeting == KewneMeeting.Question ? 2 : 1;
-            for (int i = 0; i < count; i++)
-            {
-                var button = new Rect(box.xMax - 116f * (count - i), box.y - 30f, 108f, 26f);
-                string label = count == 1 ? T("Continue", "Continuar") : i == 0 ? T("Yes", "Sim") : T("No", "Não");
-                if (count == 2 && i == _kewneMeetingSelection) label = "▸ " + label;
-                if (GUI.Button(button, label)) { AdvanceKewneMeeting(i); break; }
-            }
+            int reply = _kewneMeeting == KewneMeeting.Question
+                ? DrawDialogueChoices(choices, _kewneMeetingSelection, T("Yes", "Sim"), T("No", "Não"))
+                : DrawDialogueChoices(choices, -1, T("Continue", "Continuar"));
+            if (reply >= 0) AdvanceKewneMeeting(reply);
         }
 
         private void PlaceTutorialContents()

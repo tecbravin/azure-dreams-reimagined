@@ -8,7 +8,6 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        [SerializeField] private Texture2D _retailFont;
         [SerializeField] private Sprite[] _groundItemSprites;
         private const float WorldItemScale = 1.8f;
         private const float WorldItemHeight = 0.18f * WorldItemScale;
@@ -126,94 +125,14 @@ namespace AzureDreamsReimagined
         private GameObject CreateItemMarker(Vector2Int cell, string name, PrimitiveType shape) =>
             CreateMarker(cell, name, _accentMaterial, shape, 0.28f * WorldItemScale, WorldItemHeight);
 
-        private static bool CanDrawRetailText(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return false;
-            foreach (char character in text)
-                if (character != '\n' && RetailCharacter(character) is < ' ' or > '~') return false;
-            return true;
-        }
-
-        private static char RetailCharacter(char character)
-        {
-            return character switch
-            {
-                '‘' or '’' => '\'',
-                '“' or '”' => '"',
-                '–' or '—' => '-',
-                '▸' => '>',
-                'À' or 'Á' or 'Â' or 'Ã' or 'Ä' => 'A',
-                'à' or 'á' or 'â' or 'ã' or 'ä' => 'a',
-                'È' or 'É' or 'Ê' or 'Ë' => 'E',
-                'è' or 'é' or 'ê' or 'ë' => 'e',
-                'Ì' or 'Í' or 'Î' or 'Ï' => 'I',
-                'ì' or 'í' or 'î' or 'ï' => 'i',
-                'Ò' or 'Ó' or 'Ô' or 'Õ' or 'Ö' => 'O',
-                'ò' or 'ó' or 'ô' or 'õ' or 'ö' => 'o',
-                'Ù' or 'Ú' or 'Û' or 'Ü' => 'U',
-                'ù' or 'ú' or 'û' or 'ü' => 'u',
-                'Ç' => 'C',
-                'ç' => 'c',
-                'Ñ' => 'N',
-                'ñ' => 'n',
-                _ => character
-            };
-        }
-
-        private void DrawRetailText(Rect rect, string text, GUIStyle style)
-        {
-            float glyphHeight = Mathf.Max(16f, Mathf.Round((style.fontSize + 3f) / 16f) * 16f);
-            float advance = glyphHeight * 0.5f;
-            float y = rect.y + (style.wordWrap ? 0f : (rect.height - glyphHeight) * 0.5f);
-            float x = rect.x;
-            var previous = GUI.color;
-            // Use the sheet's authored palettes instead of tinting white pixels.
-            GUI.color = Color.white;
-            Color requested = style.normal.textColor;
-            int palette = requested.g > requested.r * 1.25f ? 4 :
-                requested.r > requested.b * 1.25f ? 3 : 0;
-            int wordLength = 0;
-            for (int i = 0; i < text.Length; i++)
-            {
-                char character = RetailCharacter(text[i]);
-                if (style.wordWrap && (i == 0 || text[i - 1] == ' '))
-                {
-                    wordLength = 0;
-                    while (i + wordLength < text.Length && text[i + wordLength] != ' ' && text[i + wordLength] != '\n')
-                        wordLength++;
-                    if (x > rect.x && x + wordLength * advance > rect.xMax)
-                    {
-                        x = rect.x;
-                        y += glyphHeight;
-                    }
-                }
-                if (character == '\n' || (style.wordWrap && x + advance > rect.xMax))
-                {
-                    x = rect.x;
-                    y += glyphHeight;
-                    if (character == '\n' || character == ' ') continue;
-                }
-                if (y + glyphHeight > rect.yMax + 1f) break;
-                if (character != ' ')
-                {
-                    int code = character >= ' ' && character <= '~' ? character : '?';
-                    int u = palette * 128 + (code & 15) * 8;
-                    int v = 40 + (code / 16 - 2) * 16;
-                    var uv = new Rect(u / (float)_retailFont.width, 1f - (v + 16f) / _retailFont.height,
-                        8f / _retailFont.width, 16f / _retailFont.height);
-                    GUI.DrawTextureWithTexCoords(new Rect(x, y, advance, glyphHeight), _retailFont, uv);
-                }
-                x += advance;
-            }
-            GUI.color = previous;
-        }
-
         private static bool HasRetailHudFrames
         {
             get
             {
                 if (!_retailHudFrames) _retailHudFrames = Resources.Load<Texture2D>("Tower/RetailHudFrames");
-                return _retailHudFrames && _retailHudFrames.width == 128 && _retailHudFrames.height == 768;
+                // The six original 128-square bands share the same UVs in the restored atlas.
+                return _retailHudFrames && _retailHudFrames.width >= 128 &&
+                    _retailHudFrames.height == _retailHudFrames.width * 6;
             }
         }
 
@@ -221,9 +140,13 @@ namespace AzureDreamsReimagined
             float height, bool flipX = false)
         {
             const float atlasWidth = 128f, atlasHeight = 768f;
-            var uv = new Rect((x + (flipX ? width : 0f)) / atlasWidth,
-                1f - (band * 128f + y + height) / atlasHeight,
-                (flipX ? -width : width) / atlasWidth, height / atlasHeight);
+            // Stay inside the slice when using bilinear filtering on neighboring pieces.
+            float insetX = Mathf.Min(width * 0.25f, atlasWidth / (2f * _retailHudFrames.width));
+            float insetY = Mathf.Min(height * 0.25f, atlasHeight / (2f * _retailHudFrames.height));
+            var uv = new Rect((flipX ? x + width - insetX : x + insetX) / atlasWidth,
+                1f - (band * 128f + y + height - insetY) / atlasHeight,
+                (flipX ? -1f : 1f) * (width - insetX * 2f) / atlasWidth,
+                (height - insetY * 2f) / atlasHeight);
             GUI.DrawTextureWithTexCoords(destination, _retailHudFrames, uv);
         }
 
@@ -278,7 +201,6 @@ namespace AzureDreamsReimagined
                 float fill = (gauge.width - 4f) * Mathf.Clamp01(_health / (float)Mathf.Max(1, maxHp));
                 DrawHudFill(new Rect(gauge.x + 2f, gauge.y + 2f, fill, gauge.height - 4f), new Color(0.35f, 0.76f, 0.93f));
             }
-            _bodyStyle.normal.textColor = new Color(0.51f, 1f, 0.83f);
             DrawHudText(new Rect(floor.x + 12f, floor.y, 55f, floor.height), T($"{_floor}F", $"{_floor}º"), _bodyStyle);
             float levelInset = level < 10 ? 30f : 26f;
             DrawHudText(new Rect(levelDial.x + levelInset, levelDial.y + 17f, 40f, 26f), $"{level}", _bodyStyle);
@@ -305,6 +227,7 @@ namespace AzureDreamsReimagined
 
         private static void DrawDialogueFrame(Rect rect, bool dialoguePole = false)
         {
+            if (Event.current.type != EventType.Repaint || rect.width <= 0f || rect.height <= 0f) return;
             if (HasRetailHudFrames)
             {
                 DrawHudFill(rect, new Color(0.025f, 0.027f, 0.12f, 0.74f));
@@ -330,7 +253,7 @@ namespace AzureDreamsReimagined
                 }
                 return;
             }
-            DrawHudPanel(rect);
+            DrawFlatHudPanel(rect);
             var bronze = new Color(0.49f, 0.28f, 0.10f);
             var gold = new Color(0.93f, 0.78f, 0.42f);
             var light = new Color(1f, 0.94f, 0.70f);

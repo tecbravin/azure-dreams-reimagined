@@ -96,9 +96,10 @@ namespace AzureDreamsReimagined
         }
 
         private bool HasVisibleMessage =>
-            _messageStack.Count > 0 &&
-            (_activeTownNpc || _storySpeaker || KewneMeetingSpeaking || IsShowingVisitorDialogue || _townObjectDialogueOpen || _rowanOfferPending ||
-             Time.unscaledTime - _messageStackActivity < MessageIdleSeconds);
+            (IsShowingVisitorDialogue && !string.IsNullOrEmpty(_dialogueLine)) ||
+            (_messageStack.Count > 0 &&
+             (_activeTownNpc || _storySpeaker || KewneMeetingSpeaking || _townObjectDialogueOpen || _rowanOfferPending ||
+              Time.unscaledTime - _messageStackActivity < MessageIdleSeconds));
         private bool _showControls;
         private bool _testInvulnerable;
         public bool IsTestInvulnerable => _testInvulnerable;
@@ -115,27 +116,57 @@ namespace AzureDreamsReimagined
             _visibleDialogue = string.Empty;
             _dialogueStarted = Time.unscaledTime;
             _dialoguePortrait = portraitOverride;
+            _dialogueTextScroll = Vector2.zero;
             if (!portraitOverride) FindDialoguePortrait(speaker);
         }
 
         private Texture2D FindDialoguePortrait(string speaker)
         {
+            if (speaker == "Selfi") return StreamPortrait(SelfiPortrait(0));
+            if (speaker == "Patty") return StreamPortrait(PattyPortrait(0));
+            if (speaker is "Mia" or "Miya") return StreamPortrait(MiaPortrait(0));
+            if (speaker == "Vivian") return StreamPortrait(VivianPortrait(0));
+            if (speaker == "Fur") return StreamPortrait(FurPortrait(0));
+            if (speaker == "Cherrl") return StreamPortrait(CherrlPortrait(0));
+            if (speaker == "Nico") return StreamPortrait(NicoPortrait(NicoNeutral));
+            if (speaker == "Wreath") return StreamPortrait(WreathPortrait);
+            if (speaker == "Weedy") return StreamPortrait(WeedyPortrait);
+            if (speaker == "Guy") return GuyDialoguePortrait(GuyPortrait);
             string name = speaker switch
             {
-                "Mia" or "Miya" => "Miya",
-                "Aunt" or "Cherrl" or "Fur" or "Ghosh" or "Grandpa" or "Guy" or "Jorda" or "Kewne" or "Nico" or "Patty" or "Selfi" or "Vivian" or "Weedy" or "Wreath" => speaker,
+                // Silver uses the original elderly/Grandpa portrait rather
+                // than falling back to the empty generic-resident portrait.
+                "Silver" => "Grandpa",
+                "Aunt" or "Ghosh" or "Grandpa" or "Jorda" or "Kewne" => speaker,
                 _ => null
             };
             return name == null ? null : StreamPortrait($"Dialogue/{name}_variant0_frame0");
         }
 
-        private static void DrawDialoguePortrait(Texture2D portrait, Rect box, bool rightAligned = false, float scale = 1f)
+        private static void DrawDialoguePortrait(Texture2D portrait, Rect box, bool rightAligned = false, float scale = 1f,
+            float offset = 0f)
         {
             if (!portrait || Event.current.type != EventType.Repaint) return;
+            var rect = DialoguePortraitRect(portrait, box, rightAligned, scale);
+            rect.x += offset * rect.width;
+            GUI.DrawTexture(rect, portrait, ScaleMode.ScaleToFit);
+        }
+
+        private static Rect DialoguePortraitRect(Texture2D portrait, Rect box, bool rightAligned = false, float scale = 1f)
+        {
             float height = Mathf.Max(0f, Mathf.Min(134f * 3f, box.y - 8f)) * scale;
             float width = height * portrait.width / portrait.height;
             float x = rightAligned ? box.xMax - width - 8f : box.x + 8f;
-            GUI.DrawTexture(new Rect(x, box.y - height, width, height), portrait, ScaleMode.ScaleToFit);
+            return new Rect(x, box.y - height, width, height);
+        }
+
+        private static void DrawDialoguePortraitPatch(Texture2D portrait, Texture2D patch, Rect box, Rect normalized)
+        {
+            Rect target = DialoguePortraitRect(portrait, box);
+            var area = new Rect(target.x + normalized.x * target.width, target.y + normalized.y * target.height,
+                normalized.width * target.width, normalized.height * target.height);
+            var uv = new Rect(normalized.x, 1f - normalized.yMax, normalized.width, normalized.height);
+            GUI.DrawTextureWithTexCoords(area, patch, uv, alphaBlend: true);
         }
         private GUIStyle _bodyStyle;
         private GUIStyle _messageStyle;
@@ -175,7 +206,9 @@ namespace AzureDreamsReimagined
         }
 
         private bool _familiarWaiting;
-        private bool _familiarLost;
+        // Retail familiar control is lost once the familiar is more than six tiles away.
+        // Keep this shared threshold in one place because both collars use the same rule.
+        private const int FamiliarLostDistance = 6;
         private InputAction _familiarCommand;
         private GameObject SpawnFamiliar(bool pullFromBag = false, bool showSummoningEffect = true)
         {
@@ -198,20 +231,13 @@ namespace AzureDreamsReimagined
                 palette: FamiliarPalette(_familiarActor.Species, _familiarActor));
             if (showSummoningEffect && (_summoningSheet || pullFromBag))
                 StartCoroutine(PresentFamiliarSummoning(familiar, pullFromBag));
-            _familiarLost = false;
             return familiar;
-        }
-
-        private bool IsFamiliarLost()
-        {
-            if (!_familiar) return false;
-            return Distance(_playerCell, _familiarCell) > 6;
         }
 
         private bool IsFamiliarDistant()
         {
             if (!_familiar) return false;
-            return Distance(_playerCell, _familiarCell) > 6;
+            return Distance(_playerCell, _familiarCell) > FamiliarLostDistance;
         }
         private Vector2Int _familiarCell;
         private ItemDefinition _potionItem;
@@ -469,6 +495,7 @@ namespace AzureDreamsReimagined
             if (_townDoorOpening || _towerArrivalPlaying || _pullingFamiliarFromBag || _pickupView || _fusionPlaying) return;
             if (TickLevelUpCelebration(Time.unscaledDeltaTime)) return;
             if (_debugItemPickerOpen) { HandleDebugItemPickerInput(); return; }
+            if (_debugQuestPickerOpen) { HandleDebugQuestPickerInput(); return; }
             if (HandleTheaterAct() || HandleBowlingInput() || HandleRacetrackInput() || HandleCasinoInput() || HandleSettingsInput()) return;
             if (Keyboard.current != null && Keyboard.current.numpad7Key.wasPressedThisFrame)
             {
@@ -484,7 +511,7 @@ namespace AzureDreamsReimagined
             }
             if (HandleItemTargetPicker()) return;
             if (HandleHomeStorageInput() || HandleCheckpointInput() || HandleGroundItemPrompt() || HandleTrapRearmInput() || HandleTutorialInput() || HandleVisitorEvent()) return;
-            if (HandleTownStory() || HandleCarpenterInput() || HandleGeneralStoreInput() || HandleBarryShopInput() || HandleMonsterShopInput() || HandleWeedyBookInput() || HandleKohHomeInput() || HandleInteriorInput()) return;
+            if (HandleOctopusDumplingStallInput() || HandleTownStory() || HandleCarpenterInput() || HandleGeneralStoreInput() || HandleBarryShopInput() || HandleMonsterShopInput() || HandleWeedyBookInput() || HandleKohHomeInput() || HandleInteriorInput()) return;
             if (HandleKewneMeeting() || TryStartKewneMeeting()) return;
             bool runHeld = _runAction != null && _runAction.IsPressed();
             bool passTurns = _area == Area.Tower && runHeld && _liftAction != null && _liftAction.IsPressed();
@@ -518,7 +545,7 @@ namespace AzureDreamsReimagined
                 TryTowerAction(Vector2Int.zero);
                 return;
             }
-            if (TryOpenDebugItemPicker()) return;
+            if (TryOpenDebugQuestPicker() || TryOpenDebugItemPicker()) return;
             ReadCameraControls();
             Vector2 direction = ReadMovementDirection();
             if (_area == Area.Tower && HandleTowerInteractInput(direction, runHeld)) return;
@@ -528,7 +555,8 @@ namespace AzureDreamsReimagined
             { ReleaseTownInventoryItem(true); return; }
             if (_area == Area.Town && _heldTownPot && _attackAction?.WasPressedThisFrame() == true)
             { ThrowTownPot(); return; }
-            if (_area == Area.Tower && !KohIsAsleep && _familiar && _familiarCommand != null && _familiarCommand.WasPressedThisFrame())
+            if (_area == Area.Tower && !KohIsAsleep && _familiar && !IsFamiliarLost(_familiarActor) &&
+                _familiarCommand != null && _familiarCommand.WasPressedThisFrame())
             {
                 if (OrdersFor(_familiarActor).Ai == FamiliarAi.Wait) SetFamiliarAi(_familiarActor, FamiliarAi.Follow);
                 else _familiarWaiting = !_familiarWaiting;
@@ -1192,6 +1220,7 @@ namespace AzureDreamsReimagined
         private void ClearGenerated()
         {
             EndHomeBath();
+            ResetPoolPresentation();
             ResetLevelUpCelebration();
             ResetBowling();
             EndTheaterAct();
@@ -1214,6 +1243,7 @@ namespace AzureDreamsReimagined
             _elevatorDeclined = false;
             ResetInventoryCommands();
             _debugItemPickerOpen = false;
+            _debugQuestPickerOpen = false;
             _heldTownPot = null;
             _townPots.Clear();
             _townJumpHeight = _townJumpVelocity = _townAirSpeedLimit = 0f;
@@ -1261,6 +1291,7 @@ namespace AzureDreamsReimagined
             _trapReversalUntil = 0;
             _trapGoUp = false;
             _trapRearmCell = null;
+            _trapDisarmCell = null;
             _groundItemPrompt = null;
             _pickupView = null;
         }
@@ -1274,11 +1305,31 @@ namespace AzureDreamsReimagined
 
         private void OnGUI()
         {
+            var previousSkin = GUI.skin;
+            var previousMatrix = GUI.matrix;
+            if (!_windowSkin) InitialiseWindowSkin(previousSkin);
+            GUI.skin = _windowSkin;
+            try
+            {
+                DrawGameGui(previousMatrix);
+            }
+            finally
+            {
+                GUI.matrix = previousMatrix;
+                GUI.skin = previousSkin;
+            }
+        }
+
+        private void DrawGameGui(Matrix4x4 previousMatrix)
+        {
             // Screen fade-to-black when transitioning to a new interior
             if (_fadeToBlack > 0f)
             {
                 GUI.color = new Color(0f, 0f, 0f, _fadeToBlack);
-                GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0f, Color.white, 0f, 0f);
+                // This overload uses its explicit tint instead of GUI.color.  Keep the
+                // transition genuinely black (including Koh's collapse) rather than
+                // drawing a translucent white screen.
+                GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0f, Color.black, 0f, 0f);
                 GUI.color = Color.white;
                 if (_fadeToBlack <= 0f) _fadeToBlack = 0f;
             }
@@ -1286,14 +1337,16 @@ namespace AzureDreamsReimagined
             {
                 _bodyStyle = new GUIStyle(GUI.skin.label)
                 {
+                    fontSize = 17,
                     fontStyle = FontStyle.Bold,
                     alignment = TextAnchor.MiddleLeft,
-                    normal = { textColor = new Color(1f, 0.95f, 0.78f) }
+                    normal = { textColor = Color.white }
                 };
-                _messageStyle = new GUIStyle(_bodyStyle) { wordWrap = true, fontStyle = FontStyle.Normal };
+                _messageStyle = new GUIStyle(_bodyStyle) { fontSize = 15, wordWrap = true, fontStyle = FontStyle.Normal };
+                _dialogueTextStyle = new GUIStyle(_messageStyle) { alignment = TextAnchor.UpperLeft, clipping = TextClipping.Clip };
+                _logLineStyle = new GUIStyle(_messageStyle) { wordWrap = false, clipping = TextClipping.Clip };
             }
 
-            Matrix4x4 previousMatrix = GUI.matrix;
             float scale = Mathf.Max(0.5f, Mathf.Min(Screen.width / 640f, Screen.height / 480f));
             GUI.matrix = previousMatrix * Matrix4x4.Scale(new Vector3(scale, scale, 1f));
             float width = Screen.width / scale;
@@ -1348,21 +1401,24 @@ namespace AzureDreamsReimagined
                 GUI.matrix = previousMatrix;
                 return;
             }
+            if (_debugQuestPickerOpen)
+            {
+                DrawDebugQuestPicker(width, height);
+                GUI.matrix = previousMatrix;
+                return;
+            }
             if (_settingsOpen)
             {
                 DrawSettingsPanel(width, height);
                 GUI.matrix = previousMatrix;
                 return;
             }
-            _bodyStyle.fontSize = 17;
-            _messageStyle.fontSize = 15;
             if (_area == Area.Tower)
                 DrawRetailTowerHud(width);
             else if (!_activeTownNpc)
             {
                 var money = new Rect(width - 175f, 24f, 159f, 34f);
                 DrawRetailHudPlaque(money);
-                _bodyStyle.normal.textColor = new Color(0.94f, 0.96f, 0.82f);
                 DrawHudText(new Rect(money.x + 8f, money.y, money.width - 16f, money.height), T("MONEY", "OURO") + $"     {_gold}G", _bodyStyle);
             }
 
@@ -1372,85 +1428,7 @@ namespace AzureDreamsReimagined
                 GUI.matrix = previousMatrix;
                 return;
             }
-            if (HasVisibleMessage)
-            {
-                const float logLineHeight = 21f;
-                const float textInset = 13f;
-                const float sliderWidth = 14f;
-                float logTextWidth = width * 0.87f - textInset * 2f;
-                var logLines = WrapTowerLogLines(_messageStack, logTextWidth, _messageStyle);
-                if (logLines.Count > MaxVisibleMessages)
-                {
-                    logTextWidth -= sliderWidth + 8f;
-                    logLines = WrapTowerLogLines(_messageStack, logTextWidth, _messageStyle);
-                }
-                int visibleCount = Mathf.Min(logLines.Count, MaxVisibleMessages);
-                bool showSlider = logLines.Count > MaxVisibleMessages;
-                float dialogueBlock = 22f;
-                float sliderGap = showSlider ? 7f : 0f;
-                float boxHeight = Mathf.Clamp(visibleCount * logLineHeight + dialogueBlock + sliderGap + 14f,
-                    height * 0.23f, height * 0.65f);
-                var box = new Rect(width * 0.065f, height * 0.96f - boxHeight, width * 0.87f, boxHeight);
-                DrawDialogueFrame(box, dialoguePole: true);
-
-                // Arrange the dialogue box (portrait + typed line) above the stacked messages.
-                string line = _message;
-                bool hasDialogue = ((_area == Area.Town && (_activeTownNpc || _storySpeaker || KewneMeetingSpeaking)) ||
-                    IsShowingVisitorDialogue) && _dialogueLine != null;
-                if (hasDialogue)
-                {
-                    int count = Mathf.Clamp(Mathf.FloorToInt((Time.unscaledTime - _dialogueStarted) * 42f),
-                        0, _dialogueLine.Length);
-                    if (_visibleDialogue.Length != count) _visibleDialogue = _dialogueLine.Substring(0, count);
-                    var nameplate = new Rect(box.x, box.y - 28f, 153f, 27f);
-                    DrawDialoguePortrait(_dialoguePortrait ? _dialoguePortrait : FindDialoguePortrait(_dialogueSpeaker), box);
-                    DrawDialogueFrame(nameplate);
-                    DrawHudText(new Rect(nameplate.x + 8f, nameplate.y, 137f, nameplate.height),
-                        _dialogueSpeaker, _messageStyle, dialogue: true);
-                    line = count == _dialogueLine.Length ? _visibleDialogue + "  ▸" : _visibleDialogue;
-                }
-
-                int maxLineScroll = Mathf.Max(0, logLines.Count - MaxVisibleMessages);
-                if (_messageLineScroll == int.MaxValue)
-                    _messageLineScroll = maxLineScroll;
-                _messageLineScroll = Mathf.Clamp(_messageLineScroll, 0, maxLineScroll);
-                int startIndex = showSlider ? _messageLineScroll : 0;
-                int endIndex = Mathf.Min(startIndex + MaxVisibleMessages, logLines.Count);
-                float logWidth = logTextWidth;
-                var logLineStyle = new GUIStyle(_messageStyle)
-                {
-                    wordWrap = false,
-                    clipping = TextClipping.Clip,
-                    alignment = TextAnchor.MiddleLeft
-                };
-
-                float textY = box.y + 6f;
-                if (hasDialogue)
-                {
-                    DrawHudText(new Rect(box.x + textInset, textY, logWidth, dialogueBlock), line,
-                        _messageStyle, dialogue: true);
-                    textY += dialogueBlock;
-                }
-                for (int i = startIndex; i < endIndex; i++)
-                {
-                    DrawHudText(new Rect(box.x + textInset, textY, logWidth, logLineHeight),
-                        logLines[i], logLineStyle, dialogue: true);
-                    textY += logLineHeight;
-                }
-
-                if (showSlider)
-                {
-                    float listTop = box.y + 6f + (hasDialogue ? dialogueBlock : 0f);
-                    float listHeight = visibleCount * logLineHeight;
-                    var sliderRect = new Rect(box.xMax - sliderWidth - 8f, listTop, sliderWidth, listHeight);
-                    _messageLineScroll = Mathf.RoundToInt(GUI.VerticalSlider(
-                        sliderRect, _messageLineScroll, 0f, maxLineScroll));
-                }
-
-                DrawVisitorChoices(box);
-                DrawStoryChoices(box);
-                DrawKewneMeetingChoices(box);
-            }
+            if (HasVisibleMessage) DrawMessageWindow(width, height);
             if (_showControls)
             {
                 var box = new Rect(14f, 42f, Mathf.Min(450f, width - 28f), 134f);
@@ -1472,6 +1450,7 @@ namespace AzureDreamsReimagined
             DrawMonsterShop();
             DrawBarryShop();
             DrawGeneralStore();
+            DrawOctopusDumplingStall();
             DrawCarpenter();
             DrawTutorial(width, height);
             DrawCheckpointMenu(width, height);
@@ -1485,9 +1464,127 @@ namespace AzureDreamsReimagined
             if (!_inventoryOpen) DrawMinimap();
         }
 
+        private const float DialogueChoiceRowHeight = 28f;
+        private Vector2 _dialogueTextScroll;
+
+        private void DrawMessageWindow(float width, float height)
+        {
+            const float logLineHeight = 21f;
+            const float inset = 13f;
+            const float padding = 9f;
+            const float sliderWidth = 14f;
+            const float choiceGap = 6f;
+            float boxWidth = width * 0.87f;
+            float textWidth = boxWidth - inset * 2f;
+            bool speaking = ((_area == Area.Town && (_activeTownNpc || _storySpeaker || KewneMeetingSpeaking)) ||
+                IsShowingVisitorDialogue) && _dialogueLine != null;
+            bool storyChoices = _storySpeaker && _storyChoices is { Length: > 0 };
+            bool visitorChoices = _visitorStage is VisitorStage.Choice or VisitorStage.Challenge;
+            int choiceRows = visitorChoices ? 2 : KewneMeetingSpeaking ? (_kewneMeeting == KewneMeeting.Question ? 2 : 1) : 0;
+            float maxHeight = height * 0.65f;
+            float choicesHeight = storyChoices
+                ? Mathf.Min(MeasureStoryChoices(textWidth), Mathf.Min(VisibleStoryChoices * DialogueChoiceRowHeight, maxHeight * 0.72f))
+                : choiceRows * DialogueChoiceRowHeight;
+            float reservedHeight = padding * 2f + (choicesHeight > 0f ? choiceGap + choicesHeight : 0f);
+
+            if (speaking)
+            {
+                string fullLine = choicesHeight > 0f ? _dialogueLine : _dialogueLine + "  ›";
+                float fullHeight = Mathf.Max(logLineHeight, _dialogueTextStyle.CalcHeight(new GUIContent(fullLine), textWidth) + 2f);
+                float textHeight = Mathf.Min(fullHeight, Mathf.Max(1f, maxHeight - reservedHeight));
+                float panelHeight = Mathf.Max(height * 0.23f, textHeight + reservedHeight);
+                var panel = new Rect(width * 0.065f, height * 0.96f - panelHeight, boxWidth, panelHeight);
+                DrawDialogueFrame(panel, dialoguePole: true);
+                DrawMessagePortrait(panel);
+
+                int count = Mathf.Clamp(Mathf.FloorToInt((Time.unscaledTime - _dialogueStarted) * 42f), 0, _dialogueLine.Length);
+                if (_visibleDialogue.Length != count) _visibleDialogue = _dialogueLine.Substring(0, count);
+                string line = count == _dialogueLine.Length ? fullLine : _visibleDialogue;
+                var textRect = new Rect(panel.x + inset, panel.y + padding, textWidth, textHeight);
+                DrawDialogueText(textRect, line, fullLine);
+
+                var choices = new Rect(textRect.x, panel.yMax - padding - choicesHeight, textWidth, choicesHeight);
+                if (storyChoices) DrawStoryChoices(choices);
+                else if (visitorChoices) DrawVisitorChoices(choices);
+                else if (KewneMeetingSpeaking) DrawKewneMeetingChoices(choices);
+                return;
+            }
+
+            var lines = WrapTowerLogLines(_messageStack, textWidth, _logLineStyle);
+            if (lines.Count > MaxVisibleMessages)
+            {
+                textWidth -= sliderWidth + choiceGap;
+                lines = WrapTowerLogLines(_messageStack, textWidth, _logLineStyle);
+            }
+            int visibleCount = Mathf.Min(lines.Count, MaxVisibleMessages);
+            float boxHeight = Mathf.Max(height * 0.23f, visibleCount * logLineHeight + padding * 2f);
+            var box = new Rect(width * 0.065f, height * 0.96f - boxHeight, boxWidth, boxHeight);
+            DrawDialogueFrame(box, dialoguePole: true);
+            int maxScroll = Mathf.Max(0, lines.Count - visibleCount);
+            _messageLineScroll = Mathf.Clamp(_messageLineScroll, 0, maxScroll);
+            if (maxScroll > 0)
+            {
+                var slider = new Rect(box.xMax - sliderWidth - 8f, box.y + padding, sliderWidth, visibleCount * logLineHeight);
+                _messageLineScroll = Mathf.RoundToInt(GUI.VerticalSlider(slider, _messageLineScroll, 0f, maxScroll));
+            }
+            for (int i = 0; i < visibleCount; i++)
+                DrawHudText(new Rect(box.x + inset, box.y + padding + i * logLineHeight, textWidth, logLineHeight),
+                    lines[_messageLineScroll + i], _logLineStyle, dialogue: true);
+        }
+
+        private void DrawMessagePortrait(Rect box)
+        {
+            var portrait = VisitorDialoguePortrait();
+            var storyPortrait = StoryDialoguePortrait();
+            var scopedPortrait = portrait ? portrait : storyPortrait;
+            var displayedPortrait = scopedPortrait ? scopedPortrait : _dialoguePortrait ? _dialoguePortrait :
+                FindDialoguePortrait(_dialogueSpeaker);
+            DrawDialoguePortrait(displayedPortrait, box, offset: GhoshDialoguePortraitOffset(scopedPortrait));
+            if (!portrait) DrawWeedyBookBlink(storyPortrait, box);
+            if (!portrait && _storyPortraitPath == JordaPortrait)
+                DrawJordaBlink(storyPortrait, box, _storyPortraitStarted);
+            if (string.IsNullOrEmpty(_dialogueSpeaker)) return;
+            var name = new Rect(box.x, box.y - 28f, 153f, 27f);
+            DrawDialogueFrame(name);
+            DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height),
+                _dialogueSpeaker, _messageStyle, dialogue: true);
+        }
+
+        private void DrawDialogueText(Rect viewport, string line, string fullLine)
+        {
+            if (_dialogueTextStyle.CalcHeight(new GUIContent(fullLine), viewport.width) <= viewport.height)
+            {
+                DrawHudText(viewport, line, _dialogueTextStyle, dialogue: true);
+                return;
+            }
+
+            float textWidth = viewport.width - 18f;
+            float contentHeight = _dialogueTextStyle.CalcHeight(new GUIContent(fullLine), textWidth) + 2f;
+            var content = new Rect(0f, 0f, textWidth, contentHeight);
+            _dialogueTextScroll = GUI.BeginScrollView(viewport, _dialogueTextScroll, content);
+            DrawHudText(content, line, _dialogueTextStyle, dialogue: true);
+            GUI.EndScrollView();
+        }
+
+        private int DrawDialogueChoices(Rect area, int selected, string first, string second = null)
+        {
+            var row = new Rect(area.x, area.y, area.width, DialogueChoiceRowHeight - 2f);
+            if (DrawInventoryButton(row, first, selected == 0)) return 0;
+            row.y += DialogueChoiceRowHeight;
+            return second != null && DrawInventoryButton(row, second, selected == 1) ? 1 : -1;
+        }
+
         private static string T(string en, string ptBr) => GameLanguage.Text(en, ptBr);
 
-        private static void DrawHudPanel(Rect rect)
+        private static void DrawHudPanel(Rect rect) => DrawDialogueFrame(rect);
+
+        private static void BeginHudMenu(Rect rect)
+        {
+            DrawDialogueFrame(rect);
+            GUILayout.BeginArea(new Rect(rect.x + 12f, rect.y + 10f, rect.width - 24f, rect.height - 20f));
+        }
+
+        private static void DrawFlatHudPanel(Rect rect)
         {
             if (Event.current.type != EventType.Repaint) return;
             var gold = new Color(0.91f, 0.77f, 0.43f);
@@ -1505,16 +1602,29 @@ namespace AzureDreamsReimagined
             GUI.DrawTexture(rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, true, 0f, color, 0f, 0f);
         }
 
-        [SerializeField] private Font _retailDialogueFont;
-        private GUIStyle _retailDialogueStyle;
+        [SerializeField] private Font _windowFont;
+        private GUISkin _windowSkin;
+        private GUIStyle _dialogueTextStyle;
+        private GUIStyle _logLineStyle;
+
+        private void InitialiseWindowSkin(GUISkin original)
+        {
+            _windowSkin = Instantiate(original);
+            _windowSkin.hideFlags = HideFlags.HideAndDontSave;
+            if (_windowFont) _windowSkin.font = _windowFont;
+            foreach (var style in new[] { _windowSkin.label, _windowSkin.button, _windowSkin.box,
+                _windowSkin.toggle, _windowSkin.textField, _windowSkin.textArea, _windowSkin.window })
+            {
+                if (_windowFont) style.font = _windowFont;
+                style.normal.textColor = style.hover.textColor = style.active.textColor = style.focused.textColor = Color.white;
+                style.onNormal.textColor = style.onHover.textColor = style.onActive.textColor = style.onFocused.textColor = Color.white;
+            }
+        }
 
         private List<string> WrapTowerLogLines(List<string> messages, float maxWidth, GUIStyle style)
         {
             var lines = new List<string>();
             if (messages == null || messages.Count == 0) return lines;
-
-            var retailMeasureStyle = new GUIStyle(style) { font = _retailDialogueFont, wordWrap = false };
-            var regularMeasureStyle = new GUIStyle(style) { wordWrap = false };
 
             foreach (string message in messages)
             {
@@ -1526,8 +1636,7 @@ namespace AzureDreamsReimagined
                     foreach (string word in words)
                     {
                         string candidate = current.Length == 0 ? word : current + " " + word;
-                        GUIStyle measureStyle = SupportsRetailDialogueFont(candidate) ? retailMeasureStyle : regularMeasureStyle;
-                        bool fits = measureStyle.CalcSize(new GUIContent(candidate)).x <= maxWidth;
+                        bool fits = style.CalcSize(new GUIContent(candidate)).x <= maxWidth;
                         if (fits)
                         {
                             current = candidate;
@@ -1547,8 +1656,7 @@ namespace AzureDreamsReimagined
                             while (take > 1)
                             {
                                 string chunk = remainder.Substring(0, take);
-                                GUIStyle chunkStyle = SupportsRetailDialogueFont(chunk) ? retailMeasureStyle : regularMeasureStyle;
-                                bool chunkFits = chunkStyle.CalcSize(new GUIContent(chunk)).x <= maxWidth;
+                                bool chunkFits = style.CalcSize(new GUIContent(chunk)).x <= maxWidth;
                                 if (chunkFits) break;
                                 take--;
                             }
@@ -1570,31 +1678,11 @@ namespace AzureDreamsReimagined
 
         private void DrawHudText(Rect rect, string value, GUIStyle style, bool dialogue = false)
         {
-            if (dialogue && SupportsRetailDialogueFont(value))
-            {
-                _retailDialogueStyle ??= new GUIStyle(style) { font = _retailDialogueFont };
-                _retailDialogueStyle.wordWrap = style.wordWrap;
-                _retailDialogueStyle.clipping = style.clipping;
-                _retailDialogueStyle.alignment = style.alignment;
-                _retailDialogueStyle.fontSize = style.fontSize;
-                _retailDialogueStyle.normal.textColor = style.normal.textColor;
-                style = _retailDialogueStyle;
-            }
             Color previousColor = GUI.contentColor;
             GUI.contentColor = Color.black;
-            GUI.Label(new Rect(rect.x + 1f, rect.y + 2f, rect.width, rect.height), value, style);
+            GUI.Label(new Rect(rect.x + 1f, rect.y + (dialogue ? 1f : 2f), rect.width, rect.height), value, style);
             GUI.contentColor = previousColor;
             GUI.Label(rect, value, style);
-        }
-
-        private bool SupportsRetailDialogueFont(string value)
-        {
-            if (!_retailDialogueFont || string.IsNullOrEmpty(value)) return false;
-            // The original font contains only printable ASCII. Keep accented Portuguese
-            // characters intact by using Unity's regular font for those lines.
-            foreach (char character in value)
-                if (character != '\n' && (character < ' ' || character > '~')) return false;
-            return true;
         }
 
         private IEnumerator FadeToBlackCoroutine()

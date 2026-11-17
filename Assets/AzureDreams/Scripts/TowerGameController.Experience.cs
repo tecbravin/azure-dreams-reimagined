@@ -88,6 +88,10 @@ namespace AzureDreamsReimagined
         };
 
         private const int QuickTalent = 1;
+        // The retail level range is 1 through 99.  Keep this limit here rather
+        // than relying on the size of a progression table, so item effects and
+        // experience rewards obey the same invariant.
+        private const int MaximumActorLevel = 99;
         private static readonly UnitGrowth SalamanderBase = new()
         {
             unitId = (int)MonsterSpecies.SALAMAN, baseHp = 255, baseMp = 255, baseAtk = 48,
@@ -97,7 +101,7 @@ namespace AzureDreamsReimagined
 
         private bool TryGetLevelStats(int species, int level, out LevelStats stats)
         {
-            level = Mathf.Clamp(level, 1, Leveling.MaxLevel);
+            level = ClampActorLevel(level);
             var catalog = GetProgression();
             if (species == 0 && catalog?.koh != null && catalog.koh.Length >= level && catalog.koh[level - 1].level == level)
             {
@@ -153,11 +157,33 @@ namespace AzureDreamsReimagined
             return names.Count == 0 ? T("None", "Nenhum") : string.Join(", ", names);
         }
 
+        private static int ClampActorLevel(int level) =>
+            Mathf.Clamp(level, 1, Mathf.Min(Leveling.MaxLevel, MaximumActorLevel));
+
+        private static int HighestActorLevel => ClampActorLevel(int.MaxValue);
+
         private static byte StatByte(int value) => (byte)Mathf.Clamp(value, 0, byte.MaxValue);
+        private static byte AttributeByte(int value) => (byte)Mathf.Clamp(value, 1, byte.MaxValue);
+
+        private static void ClampPermanentAttributes(ActorRecord actor)
+        {
+            actor.BaseHp = AttributeByte(actor.BaseHp);
+            actor.MaxHp = AttributeByte(actor.MaxHp);
+            actor.BaseMp = AttributeByte(actor.BaseMp);
+            actor.MaxMp = AttributeByte(actor.MaxMp);
+            actor.BaseAttack = AttributeByte(actor.BaseAttack);
+            actor.CurrentAttack = AttributeByte(actor.CurrentAttack);
+            actor.EffectiveAttack = AttributeByte(actor.EffectiveAttack);
+            actor.BaseDefense = AttributeByte(actor.BaseDefense);
+            actor.CurrentDefense = AttributeByte(actor.CurrentDefense);
+            actor.EffectiveDefense = AttributeByte(actor.EffectiveDefense);
+            actor.Agility = AttributeByte(actor.Agility);
+            actor.Luck = AttributeByte(actor.Luck);
+        }
 
         private static void ApplyFreshStats(ActorRecord actor, LevelStats stats)
         {
-            actor.Level = StatByte(stats.level);
+            actor.Level = StatByte(ClampActorLevel(stats.level));
             actor.StatusFlags = stats.talents;
             actor.HitBaseline = StatByte(stats.hit == 0 ? 0x7C : stats.hit);
             actor.MaxHp = actor.Hp = StatByte(stats.hp);
@@ -196,9 +222,12 @@ namespace AzureDreamsReimagined
             else actor.MaxHp = actor.Hp = StatByte(_creatureDefinition ? _creatureDefinition.MaxHealth : 10);
             if (allowSpawnSleep && !InTowerTutorial && species != BeldoBossSpecies && !levelOverride.HasValue && _towerRun?.Rng is { } rng)
                 RollMonsterSpawnSleep(actor, rng);
-            if (species == MonsterSpecies.TROLL && _towerRun?.Rng is { } weaponRng)
+            if (species == MonsterSpecies.TROLL)
             {
-                byte subtype = TowerEncounterTable.RollTrollWeapon(_floor, weaponRng);
+                // Early tower Trolls must carry a hammer even when this enemy
+                // was created outside the normal random-spawn path.
+                byte subtype = _floor <= 4 ? TowerEncounterTable.TrollHammer :
+                    _towerRun?.Rng is { } weaponRng ? TowerEncounterTable.RollTrollWeapon(_floor, weaponRng) : (byte)0;
                 if (subtype != 0) actor.Weapon = new DungeonItemEntry(subtype, ItemSystem.Kind.Sword, 0, 0);
             }
             return actor;
@@ -234,23 +263,24 @@ namespace AzureDreamsReimagined
 
         private static int LevelForExperience(int level, int experience)
         {
-            while (Leveling.CanGainLevel(ExperienceThresholds, level, experience)) level++;
+            level = ClampActorLevel(level);
+            while (level < HighestActorLevel && Leveling.CanGainLevel(ExperienceThresholds, level, experience)) level++;
             return level;
         }
 
         private void AddExperience(ActorRecord actor, int award, ref int health)
         {
             actor.Experience = (int)Math.Min(int.MaxValue, (long)actor.Experience + award);
-            SetActorLevel(actor, LevelForExperience(Mathf.Max(1, actor.Level), actor.Experience), ref health);
+            SetActorLevel(actor, LevelForExperience(ClampActorLevel(actor.Level), actor.Experience), ref health);
         }
 
         private void ChangeActorLevel(ActorRecord actor, int delta)
         {
-            int oldLevel = Mathf.Max(1, actor.Level);
-            int level = Mathf.Clamp(oldLevel + delta, 1, Leveling.MaxLevel);
-            if (oldLevel == level) return;
+            int oldLevel = ClampActorLevel(actor.Level);
+            int level = ClampActorLevel(oldLevel + delta);
+            if (actor.Level == level) return;
             int minimumXp = ExperienceThresholds[level - 1];
-            int maximumXp = level == Leveling.MaxLevel ? int.MaxValue : ExperienceThresholds[level] - 1;
+            int maximumXp = level == HighestActorLevel ? int.MaxValue : ExperienceThresholds[level] - 1;
             actor.Experience = Mathf.Clamp(actor.Experience, minimumXp, maximumXp);
             int creatureIndex = _creatures.FindIndex(creature => creature.Actor == actor);
             int health = actor == _playerActor ? _health : actor == _familiarActor ? _familiarHealth :
@@ -272,7 +302,8 @@ namespace AzureDreamsReimagined
 
         private void SetActorLevel(ActorRecord actor, int level, ref int health)
         {
-            int oldLevel = Mathf.Max(1, actor.Level);
+            level = ClampActorLevel(level);
+            int oldLevel = ClampActorLevel(actor.Level);
             var origin = level >= FamiliarEvolutionLevel && level > oldLevel &&
                 (actor.Flags14 & LevaFusionProtection) == 0 ? UnitProfile(actor.Species) : null;
             if (origin != null && byte.TryParse(origin.evolvesInto, System.Globalization.NumberStyles.HexNumber,
@@ -338,10 +369,16 @@ namespace AzureDreamsReimagined
 
         private void ApplyActorLevelGrowth(ActorRecord actor, int level, ref int health)
         {
-            int oldLevel = Mathf.Max(1, actor.Level);
+            level = ClampActorLevel(level);
+            int oldLevel = ClampActorLevel(actor.Level);
+            bool levelReduced = level < oldLevel;
             actor.Level = StatByte(level);
             if (level == oldLevel || !TryGetLevelStats(actor.Species, oldLevel, out var oldStats) ||
-                !TryGetLevelStats(actor.Species, level, out var newStats)) return;
+                !TryGetLevelStats(actor.Species, level, out var newStats))
+            {
+                if (levelReduced) ClampPermanentAttributes(actor);
+                return;
+            }
 
             if (level > oldLevel)
                 for (int offset = 8; offset < 17; offset += 3)
@@ -380,6 +417,10 @@ namespace AzureDreamsReimagined
             if (health > 0) health = Mathf.Clamp(health + actor.MaxHp - oldMax, 0, actor.MaxHp);
             actor.Hp = StatByte(health);
             actor.CurrentMp = Mathf.Clamp(actor.CurrentMp + actor.MaxMp - oldMp, 0, actor.MaxMp);
+            // Lar Seed may take a level away, but never reduces permanent
+            // attributes below one.  Current HP/MP remain resources and may
+            // legitimately be zero.
+            if (levelReduced) ClampPermanentAttributes(actor);
         }
 
         private const int GrowthPromotedTalent = 32;
@@ -429,10 +470,6 @@ namespace AzureDreamsReimagined
             }
             _experienceNotice = $"+{kohXp} EXP" + (_playerActor.Level > before ? T($"  Level {_playerActor.Level}!", $"  Nível {_playerActor.Level}!") : "");
             _experienceNoticeUntil = Time.unscaledTime + 2f;
-            if (_playerActor.Level > before)
-            {
-                SpawnFx(_fxMagic, CellPosition(_playerCell));
-            }
             return message;
         }
     }

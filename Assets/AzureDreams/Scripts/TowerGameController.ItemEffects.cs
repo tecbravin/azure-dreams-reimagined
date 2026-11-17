@@ -16,6 +16,11 @@ namespace AzureDreamsReimagined
         private int _holyBellTurns;
         private static readonly Vector2Int[] BellSteps =
             { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
+        private const byte MazarrSeed = 3;
+        private const byte LightSeed = 5;
+        private const byte SeaSeed = 6;
+        private const byte WindSeed = 7;
+        private const byte LarSeed = 8;
         private const byte TovarSeed = 10;
         private const byte RedSand = 1;
         private const byte BlueSand = 2;
@@ -47,6 +52,7 @@ namespace AzureDreamsReimagined
 
         private bool CanUseInventoryEffect(DungeonItemEntry item, bool giving)
         {
+            if (IsOctopusDumplings(item)) return _area == Area.Tower && !giving;
             return item.Kind switch
             {
                 ItemKind.Herb => item.Subtype is >= 1 and <= 15 and not 8,
@@ -59,8 +65,13 @@ namespace AzureDreamsReimagined
                     9 => _familiar || _blueCollarAlly != null,
                     _ => false
                 })),
-                ItemKind.Seed => _area == Area.Tower && item.Subtype is >= 1 and <= TovarSeed &&
-                    (item.Subtype is not (5 or 6 or 7) || giving),
+                // Seeds can be fed to the active familiar from town storage as
+                // well as used in the tower.  The individual effects decide
+                // whether their target is valid.
+                ItemKind.Seed => (_area == Area.Tower || giving) && item.Subtype is >= 1 and <= TovarSeed &&
+                    // Elemental seeds are food for a familiar, never a usable
+                    // Koh item.  This prevents consuming one with no effect.
+                    (item.Subtype is not (LightSeed or SeaSeed or WindSeed) || giving),
                 ItemKind.Scroll => item.Subtype is >= 1 and <= 7 &&
                     (item.Subtype == 5 || _area == Area.Tower) &&
                     (item.Subtype != 4 || !giving),
@@ -140,7 +151,14 @@ namespace AzureDreamsReimagined
         private void ApplyInventoryEffect(DungeonItemEntry item, ActorRecord target, bool thrown = false)
         {
             byte originalSpecies = target.Species;
-            if (item.Kind is ItemKind.Herb or ItemKind.Fruit)
+            int changedGenus = 0;
+            if (IsOctopusDumplings(item))
+            {
+                if (!thrown) PlayRetailSound(RetailSfx.Eat);
+                AdjustItemHealth(target, target.MaxHp);
+                target.CurrentMp = target.MaxMp;
+            }
+            else if (item.Kind is ItemKind.Herb or ItemKind.Fruit)
             {
                 if (!thrown) PlayRetailSound(target == _playerActor ? RetailSfx.Eat : RetailSfx.FeedFamiliar);
                 if (item.Kind == ItemKind.Herb) ApplyHerb(item, target);
@@ -149,7 +167,7 @@ namespace AzureDreamsReimagined
             else if (item.Kind == ItemKind.Seed)
             {
                 if (!thrown) PlayRetailSound(target == _playerActor ? RetailSfx.Eat : RetailSfx.FeedFamiliar);
-                ApplySeed(item.Subtype, target);
+                changedGenus = ApplySeed(item.Subtype, target);
             }
             else if (item.Kind == ItemKind.Scroll)
             {
@@ -181,10 +199,23 @@ namespace AzureDreamsReimagined
             else if (item.Kind == ItemKind.Ball) CastCrystalBall(item, target);
             else if (item.Kind == ItemKind.Crystal) ApplyCrystal(item.Subtype);
             string used = T("Used ", "Usou ") + InventoryItemName(item) + ".";
-            _message = originalSpecies == target.Species ? used : JoinTowerMessages(used, _message);
+            if (changedGenus != 0)
+            {
+                string genus = changedGenus switch
+                {
+                    Element.Fire => T("Fire", "Fogo"),
+                    Element.Water => T("Water", "Água"),
+                    _ => T("Wind", "Vento")
+                };
+                _message = T($"{used} {TowerCombatName(target)} is now {genus} genus.",
+                    $"{used} {TowerCombatName(target)} agora é do gênero {genus}.");
+            }
+            else _message = originalSpecies == target.Species ? used : JoinTowerMessages(used, _message);
         }
 
-        private void ApplySeed(int subtype, ActorRecord target)
+        // Returns the genus selected by an elemental seed, or zero for every
+        // other seed.  Callers can use this to give clear result feedback.
+        private int ApplySeed(int subtype, ActorRecord target)
         {
             switch (subtype)
             {
@@ -192,21 +223,28 @@ namespace AzureDreamsReimagined
                     target.BaseAttack = StatByte(target.BaseAttack + 1);
                     target.CurrentAttack = StatByte(target.CurrentAttack + 1);
                     target.EffectiveAttack = StatByte(target.EffectiveAttack + 1);
-                    break;
+                    return 0;
                 case 2:
                     target.BaseDefense = StatByte(target.BaseDefense + 1);
                     target.CurrentDefense = StatByte(target.CurrentDefense + 1);
                     target.EffectiveDefense = StatByte(target.EffectiveDefense + 1);
-                    break;
-                case 3: ChangeActorLevel(target, 1); break;
-                case 4: Status(target, StatusId.SPEED, 8); break;
-                case 5: case 6: case 7:
-                    if (target != _playerActor) ChangeSeedGenus(target, 1 << (subtype - 5));
-                    break;
-                case 8: ChangeActorLevel(target, -1); break;
-                case 9: Status(target, StatusId.SPEED, -10); break;
-                case TovarSeed: target.Luck = StatByte(target.Luck + 1); break;
+                    return 0;
+                case MazarrSeed: ChangeActorLevel(target, 1); break;
+                case 4: Status(target, StatusId.SPEED, 8); return 0;
+                case LightSeed:
+                    if (target != _playerActor) ChangeSeedGenus(target, Element.Fire);
+                    return target == _playerActor ? 0 : Element.Fire;
+                case SeaSeed:
+                    if (target != _playerActor) ChangeSeedGenus(target, Element.Water);
+                    return target == _playerActor ? 0 : Element.Water;
+                case WindSeed:
+                    if (target != _playerActor) ChangeSeedGenus(target, Element.Wind);
+                    return target == _playerActor ? 0 : Element.Wind;
+                case LarSeed: ChangeActorLevel(target, -1); break;
+                case 9: Status(target, StatusId.SPEED, -10); return 0;
+                case TovarSeed: target.Luck = StatByte(target.Luck + 1); return 0;
             }
+            return 0;
         }
 
         private void ChangeSeedGenus(ActorRecord actor, int element)
@@ -1373,7 +1411,8 @@ namespace AzureDreamsReimagined
                 {
                     bool Available(Vector2Int tile) => tile != reservedCell && tile != _playerCell && tile != kohDestination &&
                         (!_familiar || tile != _familiarCell) && CreatureAt(tile) < 0 &&
-                        !_thrownEggs.Exists(other => other != ally && other.View && other.Cell == tile);
+                        !_thrownEggs.Exists(other => other != ally && other.View && other.Cell == tile) &&
+                        !IsRevealedActiveTrap(tile);
                     var step = confused || blind ? RandomTowerStep(ally.Cell) : ChaseStep(ally.Cell, cell);
                     var next = ally.Cell + step;
                     if (!Available(next)) continue;

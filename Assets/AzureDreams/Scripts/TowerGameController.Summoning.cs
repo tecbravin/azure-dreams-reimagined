@@ -11,22 +11,42 @@ namespace AzureDreamsReimagined
         private Sprite[] _closeBagFrames;
         private bool _pullingFamiliarFromBag;
 
+        private Sprite[] FamiliarLightFrames()
+        {
+            if (!_summoningSheet || _summoningSheet.width != 512 || _summoningSheet.height != 512)
+                return null;
+            if (_summoningFrames?.Length == 4) return _summoningFrames;
+
+            var frames = new Sprite[4];
+            for (int i = 0; i < frames.Length; i++)
+                frames[i] = Sprite.Create(_summoningSheet,
+                    new Rect(256 + i * 64, _summoningSheet.height - 338, 64, 178),
+                    new Vector2(27f / 64f, 6f / 178f), 96f, 0, SpriteMeshType.FullRect);
+            _summoningFrames = frames;
+            return _summoningFrames;
+        }
+
+        private void AddStoredFamiliarLight(GameObject familiar)
+        {
+            var frames = FamiliarLightFrames();
+            if (!familiar || frames is not { Length: > 0 } || !frames[^1]) return;
+
+            var beam = new GameObject("Stored familiar light");
+            beam.transform.SetParent(familiar.transform, false);
+            var sprite = beam.AddComponent<SpriteRenderer>();
+            sprite.sprite = frames[^1];
+            sprite.sortingOrder = -2;
+            beam.AddComponent<AzureDreamsReimagined.Rendering.CameraFacingSprite>();
+        }
+
         private IEnumerator PresentFamiliarSummoning(GameObject familiar, bool pullFromBag)
         {
             if (!familiar) yield break;
-            if (!_summoningSheet || _summoningSheet.width != 512 || _summoningSheet.height != 512)
+            var summoningFrames = FamiliarLightFrames();
+            if (summoningFrames == null)
             {
                 if (pullFromBag) PlayRetailSound(RetailSfx.Summon);
                 yield break;
-            }
-            if (_summoningFrames?.Length != 4)
-            {
-                var frames = new Sprite[4];
-                for (int i = 0; i < frames.Length; i++)
-                    frames[i] = Sprite.Create(_summoningSheet,
-                        new Rect(256 + i * 64, _summoningSheet.height - 338, 64, 178),
-                        new Vector2(27f / 64f, 6f / 178f), 96f, 0, SpriteMeshType.FullRect);
-                _summoningFrames = frames;
             }
             var effect = new GameObject("Familiar summoning light");
             effect.transform.SetParent(familiar.transform, false);
@@ -65,7 +85,7 @@ namespace AzureDreamsReimagined
                 PlayRetailSound(RetailSfx.Summon);
                 for (float elapsed = 0f; elapsed < 0.48f && familiar && sprite; elapsed += TowerAnimationDelta)
                 {
-                    sprite.sprite = _summoningFrames[Mathf.Min((int)(elapsed / 0.12f), 3)];
+                    sprite.sprite = summoningFrames[Mathf.Min((int)(elapsed / 0.12f), 3)];
                     yield return null;
                 }
                 if (sprite) sprite.enabled = false;

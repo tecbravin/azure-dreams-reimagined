@@ -9,13 +9,11 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        private enum CheckpointMenu { Closed, Wreath, Ascend, SaveBeforeAscend, SaveSlots, LoadSlots, Overwrite }
+        private enum CheckpointMenu { Closed, Ascend, SaveBeforeAscend, SaveSlots, Overwrite }
         private CheckpointMenu _checkpointMenu;
         private bool _elevatorDeclined;
         private bool _saveAtElevator;
         private int _checkpointSelection;
-        private const int WreathStorageOption = 2;
-        private const int WreathOptionCount = 3;
 
         private bool HandleCheckpointInput()
         {
@@ -24,15 +22,7 @@ namespace AzureDreamsReimagined
             if (keyboard == null) return true;
             if (keyboard.qKey.wasPressedThisFrame) CancelCheckpointMenu();
             else if (_checkpointMenu == CheckpointMenu.SaveBeforeAscend && keyboard.nKey.wasPressedThisFrame) AscendFromElevator();
-            else if (_checkpointMenu == CheckpointMenu.Wreath)
-            {
-                int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
-                int previous = _checkpointSelection;
-                _checkpointSelection = Mathf.Clamp(_checkpointSelection + delta, 0, WreathOptionCount - 1);
-                if (_checkpointSelection != previous) PlayRetailSound(RetailSfx.Cursor);
-                if (_interact?.WasPressedThisFrame() == true) SelectWreathOption(_checkpointSelection);
-            }
-            else if (_checkpointMenu is CheckpointMenu.SaveSlots or CheckpointMenu.LoadSlots)
+            else if (_checkpointMenu == CheckpointMenu.SaveSlots)
             {
                 int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
                 int previous = _checkpointSelection;
@@ -53,21 +43,6 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        private void SelectWreathOption(int option)
-        {
-            PlayRetailSound(RetailSfx.Confirm);
-            switch (option)
-            {
-                case 0: OpenSaveSlots(false); break;
-                case 1:
-                    _checkpointSelection = 0;
-                    RefreshCheckpointSlots();
-                    _checkpointMenu = CheckpointMenu.LoadSlots;
-                    break;
-                case WreathStorageOption: OpenHomeStorage(fromWreath: true); break;
-            }
-        }
-
         private void OpenSaveSlots(bool elevator)
         {
             _saveAtElevator = elevator;
@@ -82,8 +57,11 @@ namespace AzureDreamsReimagined
             switch (_checkpointMenu)
             {
                 case CheckpointMenu.Overwrite: _checkpointMenu = CheckpointMenu.SaveSlots; break;
-                case CheckpointMenu.LoadSlots: _checkpointSelection = 1; _checkpointMenu = CheckpointMenu.Wreath; break;
-                case CheckpointMenu.SaveSlots: _checkpointSelection = 0; _checkpointMenu = _saveAtElevator ? CheckpointMenu.SaveBeforeAscend : CheckpointMenu.Wreath; break;
+                case CheckpointMenu.SaveSlots:
+                    _checkpointSelection = 0;
+                    _checkpointMenu = _saveAtElevator ? CheckpointMenu.SaveBeforeAscend : CheckpointMenu.Closed;
+                    if (!_saveAtElevator) ReturnToWreathServices();
+                    break;
                 case CheckpointMenu.SaveBeforeAscend: _checkpointMenu = CheckpointMenu.Ascend; break;
                 case CheckpointMenu.Ascend:
                     _elevatorDeclined = true;
@@ -98,11 +76,6 @@ namespace AzureDreamsReimagined
             PlayRetailSound(RetailSfx.Confirm);
             _checkpointSelection = slot;
             var saved = SaveSystem.ReadSlot(slot);
-            if (_checkpointMenu == CheckpointMenu.LoadSlots)
-            {
-                if (saved != null) StartCoroutine(LoadCheckpoint(saved));
-                return;
-            }
             if (saved == null) WriteCheckpoint(slot);
             else _checkpointMenu = CheckpointMenu.Overwrite;
         }
@@ -166,6 +139,7 @@ namespace AzureDreamsReimagined
             if (_saveAtElevator) AscendFromElevator();
             else _checkpointMenu = CheckpointMenu.Closed;
             _message = T($"Saved in slot {slot + 1}.", $"Jogo salvo no espaço {slot + 1}.");
+            if (!_saveAtElevator) ReturnToWreathServices();
         }
 
         private ActorDefinition RestoreCheckpointFamiliar(string name, int species, byte[] data)
@@ -274,11 +248,10 @@ namespace AzureDreamsReimagined
         private void DrawCheckpointMenu(float width, float height)
         {
             if (_checkpointMenu == CheckpointMenu.Closed) return;
-            if (_checkpointMenu is CheckpointMenu.LoadSlots or CheckpointMenu.SaveSlots)
+            if (_checkpointMenu == CheckpointMenu.SaveSlots)
             {
-                bool loading = _checkpointMenu == CheckpointMenu.LoadSlots;
-                DrawSaveSlotList(width, height, loading ? T("Load game", "Carregar jogo") : T("Save game", "Salvar jogo"),
-                    _checkpointSlots, _checkpointSelection, loading, SelectCheckpoint, CancelCheckpointMenu);
+                DrawSaveSlotList(width, height, T("Save game", "Salvar jogo"),
+                    _checkpointSlots, _checkpointSelection, false, SelectCheckpoint, CancelCheckpointMenu);
                 return;
             }
             var rect = new Rect(width * 0.5f - 180, height * 0.5f - 100, 360, 200);
@@ -286,20 +259,6 @@ namespace AzureDreamsReimagined
             GUILayout.BeginArea(new Rect(rect.x + 12, rect.y + 10, rect.width - 24, rect.height - 20));
             switch (_checkpointMenu)
             {
-                case CheckpointMenu.Wreath:
-                    GUILayout.Label(T("Wreath: What is it?", "Wreath: O que foi?"));
-                    for (int i = 0; i < WreathOptionCount; i++)
-                    {
-                        string label = i switch
-                        {
-                            0 => T("Save game", "Salvar jogo"),
-                            1 => T("Load game", "Carregar jogo"),
-                            _ => T("Open item storage", "Abrir depósito de itens")
-                        };
-                        if (GUILayout.Button((_checkpointSelection == i ? "▸ " : "") + label))
-                        { SelectWreathOption(i); break; }
-                    }
-                    break;
                 case CheckpointMenu.Ascend:
                     GUILayout.Label(T("Do you want to go up?", "Quer subir?"));
                     if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) _checkpointMenu = CheckpointMenu.SaveBeforeAscend;

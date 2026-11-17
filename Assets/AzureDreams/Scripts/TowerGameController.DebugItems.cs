@@ -106,7 +106,7 @@ namespace AzureDreamsReimagined
 
             GUI.Label(new Rect(panel.x + 12f, viewport.yMax + 4f, panel.width - 24f, 26f),
                 _debugItemPlacementFailed
-                    ? T("Cannot place an item here. Close and move to a free tile.", "Não é possível colocar o item aqui. Feche e vá para um piso livre.")
+                    ? T("No reachable free tile is available for this item.", "Não há um piso livre acessível para este item.")
                     : T("Click an item or use the arrow keys and Enter.", "Clique em um item ou use as setas e Enter."));
             if (clicked >= 0) SpawnDebugItem(clicked);
         }
@@ -122,14 +122,16 @@ namespace AzureDreamsReimagined
             else if (kind == ItemSystem.Kind.Sword && id == DarkSword)
                 item.Flags |= Inventory.CursedEquipmentFlag;
 
-            if (!PlaceInventoryItem(_playerCell, item))
+            // Reuse normal discard placement: a debug item must still be
+            // creatable when Koh is standing on another dropped item.
+            if (!TryFindDiscardCell(_playerCell, out var destination) || !PlaceInventoryItem(destination, item))
             {
                 _debugItemPlacementFailed = true;
                 return;
             }
 
-            if (_area == Area.Tower) _discardedUnderKoh = _playerCell;
-            else _townDroppedItems[_playerCell].view.transform.position =
+            if (_area == Area.Tower && destination == _playerCell) _discardedUnderKoh = destination;
+            else if (_area == Area.Town && destination == _playerCell) _townDroppedItems[destination].view.transform.position =
                 _player.transform.position - Vector3.up * (TownActorFootOffset - WorldItemHeight);
             _debugItemPickerOpen = false;
         }

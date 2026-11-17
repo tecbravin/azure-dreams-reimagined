@@ -11,7 +11,7 @@ namespace AzureDreamsReimagined
         private enum Prologue { Off, Angel, Name, Confirm, Farewell, BirthFilm, Birth, Childhood, StormFilm, Rain, TowerFilm, ReturnInRain, TimeSkipFilm, Wake, Blessing, Transition }
 
         private static readonly string[] PrologueFilms = { "JO001_WS.mp4", "JO002_WS.mp4", "JO003_WS.mp4", "LOP2_WS.mp4" };
-        private Texture2D _prologueAngel;
+        [SerializeField] private Texture2D _prologueAngel;
         private float _prologueAngelStarted;
         private Texture2D _prologueClouds;
         private const string AngelMusicCue = "AngelSong";
@@ -20,8 +20,7 @@ namespace AzureDreamsReimagined
         private const string HeroNameKey = "opening.hero_name";
         private const string DefaultHeroName = "Koh";
         private const int AngelNameLine = 2;
-        private const int BrokenAmuletLine = 5;
-        private const string BrokenAmuletPortrait = "Dialogue/WreathBrokenAmulet";
+        private const int BrokenAmuletLine = 6;
         private const string HeroNameControl = "PrologueHeroName";
         private static string HeroName => TownSaveVariables.GetString(HeroNameKey, DefaultHeroName);
         private static string ResolveHeroName(string line) =>
@@ -38,12 +37,21 @@ namespace AzureDreamsReimagined
         private float _prologueBlack;
         private float _prologueStarted;
         private VideoPlayer _prologuePlayer;
+        // Keep prologue movies in an explicit render target.  Letting the platform
+        // choose its presentation surface can leave a stale native overlay behind
+        // while IMGUI is also drawing VideoPlayer.texture.
+        private RenderTexture _prologueFilmTexture;
         private Coroutine _prologueRoutine;
         private GameObject _prologueCast;
+        private SpriteRenderer _prologueAunt;
+        private SpriteRenderer _prologueGrandpa;
         private bool _prologueWorldReady;
         private bool _prologueHomeLoaded;
         private int _prologueChoice;
         private Vector3 _prologueStanding;
+        private bool _jordaImpactPlaying;
+        private float _jordaImpactStarted;
+        private Texture2D _jordaImpactStar;
 
         private static readonly (string Speaker, string En, string Pt)[] AngelLines =
         {
@@ -66,103 +74,79 @@ namespace AzureDreamsReimagined
         private static readonly (string Speaker, string En, string Pt)[] BirthLines =
         {
             ("", "Whaaaa, whaaaa.", "Uááá, uááá."),
-            ("Guy", "Wreath! You did well! He's a boy!", "Wreath! Você foi muito bem! É um menino!"),
-            ("Guy", "Ha ha, he looks just like me.", "Ha, ha! Ele é a minha cara."),
+            ("Guy", "Wreath! You did well! He’s a boy!\nHa ha, he looks just like me.",
+                "Wreath! Você foi muito bem! É um menino!\nHa, ha! Ele é a minha cara."),
             ("Wreath", "Have you thought of a name?", "Você já pensou em um nome?"),
-            ("Guy", "Let's see… How does Koh sound?", "Deixe-me pensar… Que tal Koh?"),
-            ("Wreath", "Koh… no. I feel there is a name that better fits him.", "Koh… não. Sinto que outro nome combina melhor com ele."),
-            ("Guy", "I've got it! {name}! How's that!?", "Já sei! {name}! O que acha?"),
-            ("Wreath", "That's good! His name is {name}.", "Que bom! O nome dele é {name}."),
-            ("Wreath", "It's as if God had already picked that name for him a long time ago!", "É como se Deus já tivesse escolhido esse nome para ele há muito tempo!")
+            ("Guy", "Let’s see...\nHow does Koh sound?", "Deixe-me pensar...\nQue tal Koh?"),
+            ("Wreath", "Koh... no.\nI feel there is a name that better fits him.", "Koh... não.\nSinto que outro nome combina melhor com ele."),
+            ("Guy", "I’ve got it!\n{name}! How’s that!?", "Já sei!\n{name}! O que acha?!"),
+            ("Wreath", "That’s good! His name is {name}.\nIt’s as if God had already picked that name for him a long time ago!",
+                "Que bom! O nome dele é {name}.\nÉ como se Deus já tivesse escolhido esse nome para ele há muito tempo!")
         };
 
         private static readonly (string Speaker, string En, string Pt)[] ChildhoodLines =
         {
             ("Nico", "{name}'s Dad!", "Pai do {name}!"),
-            ("Guy", "Yeah, what's the matter Nico?", "Sim, o que foi, Nico?"),
-            ("Nico", "Sob! {name} is teasing me.", "Snif! O {name} está me provocando."),
-            ("Guy", "Listen, {name}. A man must take good care of women.", "Escute, {name}. Um homem deve tratar bem as mulheres.")
+            ("Guy", "Yeah, what’s the matter Nico?", "Sim, o que foi, Nico?"),
+            ("Nico", "Sob!\n{name} is teasing me.", "Snif!\nO {name} está me provocando."),
+            ("Guy", "Listen, {name}.\nA man must take good care of women.",
+                "Escute, {name}.\nUm homem deve tratar bem as mulheres.")
         };
 
+        // TOWN.BIN 0x427B17–0x427CA2.
+        private const int AuntNoticesNecklace = 5;
         private static readonly (string Speaker, string En, string Pt)[] RainLines =
         {
             ("Aunt", "I wonder if Guy made it to the top level?", "Será que Guy chegou ao último andar?"),
-            ("Wreath", "What? Oh… yes.", "O quê? Ah… sim."),
-            ("Aunt", "Guy's the only one that could possibly make it to the top.", "Guy é o único que conseguiria chegar ao topo."),
-            ("Wreath", "Guy… Huh!?", "Guy… Hã!?"),
-            ("Aunt", "What's the matter?", "O que houve?"),
-            ("Wreath", "My necklace… it broke…", "Meu colar… ele quebrou…")
+            ("Wreath", "What?\nOh... yes.", "O quê?\nAh... sim."),
+            ("Aunt", "Guy’s the only one that could possibly make it to the top.", "Guy é o único que conseguiria chegar ao topo."),
+            ("Wreath", "Guy...", "Guy..."),
+            ("Wreath", "Huh!?", "Hã!?"),
+            ("Aunt", "What’s the matter?", "O que houve?"),
+            ("Wreath", "My necklace...\nit broke...", "Meu colar...\nele quebrou...")
         };
 
+        // TOWN.BIN 0x427CDC–0x4283EF.
+        private const int AuntAnswersGrandpa = 4;
+        private const int RainDoorReaction = 6;
+        private const int RainFamiliarArrival = 7;
+        private const int AuntAfterGuysReturn = 12;
         private static readonly (string Speaker, string En, string Pt)[] ReturnInRainLines =
         {
-            ("Grandpa", "It's been decades since it rained like this in this desert city of Monsbaiya.", "Faz décadas que não chove assim em Monsbaiya, nossa cidade no deserto."),
+            ("Grandpa", "It’s been decades since it rained like this\nin this desert city of Monsbaiya", "Faz décadas que não chove assim\nem Monsbaiya, esta cidade no deserto"),
+            ("Grandpa", "......", "......"),
             ("Grandpa", "Wreath is one tough woman.", "Wreath é uma mulher muito forte."),
-            ("Grandpa", "She must be worried sick about those strange occurrences the day before yesterday, at that ancient tower Guy went to.", "Ela deve estar morrendo de preocupação com as coisas estranhas que aconteceram anteontem naquela torre antiga para onde Guy foi."),
-            ("Aunt", "Don't be silly, Grandpa. Wreath is a woman, after all!", "Não diga bobagem, vovô. Wreath é uma mulher, afinal!"),
-            ("Aunt", "Can't you see that she is worried out of her mind about her husband, that it's just enough to keep those tears back!?", "Não vê que ela está tão preocupada com o marido que mal consegue conter as lágrimas!?"),
-            ("Wreath", "A… Guy?", "A… Guy?"),
-            ("Aunt", "…you're…", "…você é…"),
-            ("Grandpa", "It's Guy's Familiar! He's got Guy's Monster Tamer's Collar on him!", "É o familiar do Guy! Ele está com o colar de domador do Guy!"),
-            ("Grandpa", "Why is a familiar with Guy's collar here with no sign of Guy!", "Por que o familiar está aqui com o colar, e nada do Guy?"),
-            ("Wreath", "Aaaa, … Guy!", "Aaah… Guy!"),
+            ("Grandpa", "She must be worried sick about those strange occurrences the day before yesterday,\nat that ancient tower Guy went to.", "Ela deve estar morrendo de preocupação com as coisas estranhas que aconteceram anteontem,\nnaquela torre antiga para onde Guy foi."),
+            ("Aunt", "Don’t be silly, Grandpa.\nWreath is a woman, after all!", "Não diga bobagem, vovô.\nWreath é uma mulher, afinal!"),
+            ("Aunt", "Can’t you see that she is worried out of her mind about her husband, that it’s just enough to keep those tears back!?", "Não vê que ela está tão preocupada com o marido que mal consegue conter as lágrimas!?"),
+            ("Wreath", "A...\nGuy?", "A...\nGuy?"),
+            ("Wreath", "......!", "......!"),
+            ("Aunt", "... you’re...", "... você é..."),
+            ("Grandpa", "It’s Guy’s Familiar!\nHe’s got Guy’s [Monster Tamer’s Collar] on him!", "É o familiar de Guy!\nEle está com o [Colar de Domador de Monstros] de Guy!"),
+            ("Grandpa", "Why is a familiar with Guy’s collar here with no sign of Guy!", "Por que um familiar está aqui com o colar de Guy, sem nenhum sinal dele!"),
+            ("Wreath", "Aaaa, ......\nGuy!", "Aaah, ......\nGuy!"),
             ("Aunt", "Guy never did return, did he?", "Guy nunca mais voltou, não é?"),
-            ("Aunt", "Coming to this city, you had accumulated numerous familiars, and the future was looking so bright.", "Quando vieram para esta cidade, vocês já tinham reunido muitos familiares e o futuro parecia tão promissor."),
-            ("Aunt", "Now you're pregnant with your second child.", "Agora você está grávida do seu segundo filho."),
-            ("Wreath", "…I was prepared that this might happen someday.", "…Eu estava preparada para a possibilidade de isso acontecer algum dia.")
+            ("Wreath", "......", "......"),
+            ("Aunt", "Coming to this city, you had accumulated numerous familiars,\nand the future was looking so bright.", "Quando veio para esta cidade, você já tinha reunido muitos familiares,\ne o futuro parecia tão promissor."),
+            ("Aunt", "Now you’re pregnant with your second child.", "Agora você está grávida do seu segundo filho."),
+            ("Wreath", "... I was prepared...", "... Eu estava preparada..."),
+            ("Wreath", "... I was prepared that this might happen someday.", "... Eu estava preparada para a possibilidade de isso acontecer algum dia.")
         };
 
+        // TOWN.BIN 0x412CE9–0x412F1C.
+        private const int WakeGreeting = 4;
+        private const int WakeTomboyReply = 5;
         private static readonly (string Speaker, string En, string Pt)[] WakeLines =
         {
             ("Nico", "Get up!", "Levante!"),
             ("", "Pow!", "Paf!"),
-            ("Nico", "Today is your fifteenth birthday. It's the day you've become an adult!", "Hoje é seu aniversário de quinze anos. É o dia em que você se torna adulto!"),
-            ("Nico", "I can't help my tomboy attitude, so there!", "Não consigo evitar esse meu jeito, e pronto!"),
-            ("Nico", "The priest is already here! Get up and greet him, hurry!", "O padre já chegou! Levante e vá cumprimentá-lo, depressa!")
-        };
-
-        private const int BlessingOffer = 13;
-        private const int BlessingLesson = 14;
-        private const int BlessingCheck = 23;
-        private const int BlessingFarewell = 24;
-        private const int BlessingTowerChoice = 30;
-
-        private static readonly (string Speaker, string En, string Pt)[] BlessingLines =
-        {
-            ("Wreath", "Thanks again for waking him up every morning…", "Obrigada mais uma vez por acordá-lo todas as manhãs…"),
-            ("Nico", "Don't mention it. He will never get up until I get a good kick into him.", "De nada. Ele nunca levanta até eu dar um bom chute nele."),
-            ("Jorda", "Ho, ho, ho, ho. You've grown up considerably since I last saw you.", "Ho, ho, ho! Você cresceu bastante desde a última vez que o vi."),
-            ("Jorda", "Cause you never come to the temple at all, do you?", "É que você nunca aparece no templo, não é?"),
-            ("Jorda", "I hear from Wreath that you want to go to the monster tower.", "Wreath me disse que você quer ir à Torre dos Monstros."),
-            ("Jorda", "You're fifteen today. You're old enough now to go to the tower.", "Você faz quinze anos hoje. Já tem idade para entrar na torre."),
-            ("Jorda", "Here, just a moment. I've got a prayer for you.", "Espere só um momento. Tenho uma oração para você."),
-            ("Jorda", "Mumble, mumble… Mumble, mumble…", "Resmungo, resmungo… Resmungo, resmungo…"),
-            ("Jorda", "There.", "Pronto."),
-            ("", "Bonk!", "Toc!"),
-            ("Jorda", "There you go. We're done.", "Pronto. Terminamos."),
-            ("Jorda", "What's that you say… You look as if you want to go to the tower right this moment.", "Como é que é… Parece que você quer ir à torre agora mesmo."),
-            ("Jorda", "But… the tower is dangerous.", "Mas… a torre é perigosa."),
-            ("Jorda", "Do you want me to give you information on the specifics of the tower?", "Quer que eu explique como funciona a torre?"),
-            ("Jorda", "I'm going to teach it to you thoroughly, so listen up.", "Vou explicar tudo direitinho, então preste atenção."),
-            ("Jorda", "When entering the dungeon of the tower, you'd be able to obtain rare items and monster eggs.", "Nas masmorras da torre, você pode encontrar itens raros e ovos de monstros."),
-            ("Jorda", "If you bring that back with you, you'd be able to exchange these for money.", "Se trouxer tudo isso de volta, poderá vender por dinheiro."),
-            ("Jorda", "But the tower is a monster nest. Danger will always follow you.", "Mas a torre é um ninho de monstros. O perigo vai acompanhar você a cada passo."),
-            ("Jorda", "Whether or not you can survive the dungeon all depends on your ability to control the monsters.", "Sobreviver na masmorra depende da sua habilidade de controlar os monstros."),
-            ("Jorda", "You should be able to have monster eggs hatch, and train the young monsters to fight for you.", "Você pode chocar ovos de monstros e treinar os filhotes para lutar ao seu lado."),
-            ("Jorda", "There are three secrets to the tower. There is a spell cast on the inner structure so that the interior will change.", "A torre guarda três segredos. Um feitiço lançado sobre a estrutura faz o interior mudar."),
-            ("Jorda", "There is a spell cast at the entrance to reduce the power of human beings. That's why everyone starts at the first level each and every time.", "Um feitiço na entrada reduz a força dos humanos. Por isso todo mundo sempre começa no primeiro andar."),
-            ("Jorda", "If you try to enter with too many items, the entrance of the tower will close, not allowing you to enter.", "Se tentar entrar com itens demais, a entrada da torre vai se fechar e barrar a passagem."),
-            ("Jorda", "Okay, do you understand to this point?", "Tudo bem. Entendeu até aqui?"),
-            ("Jorda", "Hmm… Even your stubbornness is just like Guy.", "Hmm… Até na teimosia você é igual ao Guy."),
-            ("Jorda", "Listen, {name}. Everything I told you, I heard from Guy.", "Escute, {name}. Tudo o que contei a você eu ouvi do Guy."),
-            ("Jorda", "This is a magic collar, that used to belong to your father.", "Este é um colar mágico que pertenceu ao seu pai."),
-            ("Jorda", "Any tamed monster with this around its neck will come to help you wherever you are in the tower.", "Qualquer monstro domado que usar este colar vai vir ajudar você onde quer que esteja na torre."),
-            ("Jorda", "When you find an egg, and it hatches, put this on the monster.", "Quando encontrar um ovo e ele chocar, coloque o colar no monstro."),
-            ("Weedy", "That's great news. That means that now you're able to enter that tower you always wanted to go to.", "Que notícia boa! Agora você pode entrar naquela torre que sempre quis visitar."),
-            ("Wreath", "Are you heading out for the tower already?", "Já vai sair para a torre?"),
-            ("Wreath", "Then take this with you.", "Então leve isto com você."),
-            ("Wreath", "Go do your best!", "Dê o seu melhor!"),
-            ("Nico", "Don't stumble!", "Cuidado para não tropeçar!")
+            ("Nico", "Today is your fifteenth birthday.", "Hoje é seu aniversário de quinze anos."),
+            ("Nico", "It’s the day you’ve become an adult!", "É o dia em que você vira adulto!"),
+            ("Weedy", "Yup!", "Isso!"),
+            ("Nico", "I can’t help my tomboy attitude, so there!", "É meu jeito de moleca, e pronto!"),
+            ("Nico", "The priest is already here!", "O padre já chegou!"),
+            ("Nico", "Get up and greet him, hurry!", "Levante e vá cumprimentá-lo, depressa!"),
+            ("Weedy", "Yup!", "Isso!")
         };
 
         private (string Speaker, string En, string Pt)[] PrologueLines => _prologue switch
@@ -174,7 +158,6 @@ namespace AzureDreamsReimagined
             Prologue.Rain => RainLines,
             Prologue.ReturnInRain => ReturnInRainLines,
             Prologue.Wake => WakeLines,
-            Prologue.Blessing => BlessingLines,
             _ => null
         };
 
@@ -183,12 +166,23 @@ namespace AzureDreamsReimagined
 
         private void SetPrologue(Prologue phase)
         {
+            _dialogueTextScroll = Vector2.zero;
             if (IsAngelPhase(_prologue) && !IsAngelPhase(phase)) ReleaseAngelPresentation();
             _prologue = phase;
             _focusPrologueName = phase == Prologue.Name;
             _prologueLine = 0;
             _prologueChoice = 0;
             _prologueStarted = Time.unscaledTime;
+            if (phase is Prologue.Rain or Prologue.ReturnInRain)
+            {
+                PresentRainCast();
+                UpdateCameraFollow(snap: true);
+            }
+            if (phase == Prologue.Blessing)
+            {
+                _blessingRepeatingBasics = _blessingRepeatingSecrets = false;
+                _blessingPitaReceiptShown = false;
+            }
         }
 
         private void StartPrologue()
@@ -217,6 +211,9 @@ namespace AzureDreamsReimagined
             yield return null;
             if (index >= 0 && index < PrologueFilms.Length)
             {
+                // A film phase owns exactly one player. Dispose any stale player
+                // before preparing the next clip so two video layers cannot remain.
+                ReleasePrologueFilm();
                 bool finished = false;
                 _prologuePlayer = gameObject.AddComponent<VideoPlayer>();
                 _prologuePlayer.playOnAwake = false;
@@ -231,6 +228,7 @@ namespace AzureDreamsReimagined
                 while (!finished && !_prologuePlayer.isPrepared && Time.realtimeSinceStartup < deadline) yield return null;
                 if (!finished && _prologuePlayer.isPrepared)
                 {
+                    ConfigurePrologueFilmTexture();
                     PlayCinematic(_prologuePlayer);
                     float duration = (float)_prologuePlayer.length;
                     deadline = Time.realtimeSinceStartup + (float.IsFinite(duration) && duration > 0f ? duration + 8f : 100f);
@@ -250,16 +248,46 @@ namespace AzureDreamsReimagined
 
         private void ReleasePrologueFilm()
         {
-            if (!_prologuePlayer) return;
-            _prologuePlayer.Stop();
-            Destroy(_prologuePlayer);
-            _prologuePlayer = null;
+            if (_prologuePlayer)
+            {
+                // Disabling the component takes down any native video surface in
+                // this frame; Destroy alone is deferred until the end of it.
+                _prologuePlayer.Stop();
+                _prologuePlayer.enabled = false;
+                Destroy(_prologuePlayer);
+                _prologuePlayer = null;
+            }
+            if (_prologueFilmTexture)
+            {
+                _prologueFilmTexture.Release();
+                Destroy(_prologueFilmTexture);
+                _prologueFilmTexture = null;
+            }
+        }
+
+        private void ConfigurePrologueFilmTexture()
+        {
+            if (!_prologuePlayer || _prologueFilmTexture) return;
+
+            int width = Mathf.Max(1, (int)_prologuePlayer.width);
+            int height = Mathf.Max(1, (int)_prologuePlayer.height);
+            _prologueFilmTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
+            {
+                name = "Prologue Film",
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            _prologueFilmTexture.Create();
+            _prologuePlayer.renderMode = VideoRenderMode.RenderTexture;
+            _prologuePlayer.targetTexture = _prologueFilmTexture;
         }
 
         private bool HandlePrologueInput()
         {
             if (_prologue == Prologue.Off) return _prologueBlack > 0f;
-            bool held = Application.isFocused && _mapAction?.IsPressed() == true;
+            // The prologue uses the same hold-to-skip control as dialogue:
+            // Cancel (Q by default), rather than the map button.
+            bool held = Application.isFocused && _cancel?.IsPressed() == true;
             if (!held)
             {
                 _prologueHold = 0f;
@@ -304,23 +332,16 @@ namespace AzureDreamsReimagined
         private (string First, string Second) PrologueChoices()
         {
             if (_prologue == Prologue.Confirm) return (T("Yes", "Sim"), T("No", "Não"));
-            if (_prologue == Prologue.Wake && _prologueLine == 2)
-                return (T("Good morning, Nico.", "Bom dia, Nico."), T("Can't you be a bit more gentle?", "Não dá para ter um pouco mais de cuidado?"));
-            if (_prologue == Prologue.Blessing)
-                return _prologueLine switch
-                {
-                    9 => (T("Hey, that hurts!", "Ei, isso dói!"), T("I've gotta be patient.", "Preciso ter paciência.")),
-                    BlessingOffer => (T("Yes.", "Sim."), T("I don't need you to tell me.", "Não precisa me explicar.")),
-                    BlessingCheck => (T("Yes.", "Sim."), T("Not at all.", "Não entendi nada.")),
-                    BlessingTowerChoice => (T("I’m going.", "Já vou."), T("Of course.", "É claro.")),
-                    _ => default
-                };
+            if (_prologue == Prologue.Wake && _prologueLine == WakeGreeting)
+                return (T("Good Morning. Nico.", "Bom dia, Nico."), T("Can’t you be bit more gentle?", "Não dá para ter um pouco mais de cuidado?"));
+            if (_prologue == Prologue.Blessing) return BlessingChoices();
             return default;
         }
 
         private void AdvancePrologue()
         {
             if (_prologueHold > 0f || _prologueBlack > 0f) return;
+            _dialogueTextScroll = Vector2.zero;
             if (EditingPrologueName)
                 _prologueName = string.IsNullOrWhiteSpace(_prologueName) ? DefaultHeroName : _prologueName.Trim();
             if (_prologue == Prologue.Confirm && _prologueChoice == 1)
@@ -328,26 +349,27 @@ namespace AzureDreamsReimagined
                 SetPrologue(Prologue.Name);
                 return;
             }
-            if (_prologue == Prologue.Wake && _prologueLine == 2 && _prologueChoice == 0)
+            if (_prologue == Prologue.Wake && _prologueLine == WakeGreeting && _prologueChoice == 0)
             {
-                _prologueLine = 4;
+                _prologueLine = WakeTomboyReply + 1;
                 return;
             }
-            if (_prologue == Prologue.Blessing && _prologueChoice == 1)
-            {
-                if (_prologueLine == BlessingOffer) { _prologueLine = BlessingFarewell; return; }
-                if (_prologueLine == BlessingCheck) { _prologueLine = BlessingLesson; return; }
-            }
-            var lines = PrologueLines;
-            if (lines != null && _prologueLine + 1 < lines.Length)
+            if (_jordaImpactPlaying) return;
+            bool blessing = _prologue == Prologue.Blessing;
+            if (blessing && TryBranchBlessing()) return;
+            int lineCount = blessing ? BlessingPages.Length : PrologueLines?.Length ?? 0;
+            if (_prologueLine + 1 < lineCount)
             {
                 _prologueLine++;
+                if (blessing)
+                {
+                    if (CurrentBlessingCue == BlessingCue.Impact) StartCoroutine(PlayJordaImpact());
+                    if (CurrentBlessingCue == BlessingCue.PitaReceipt) _blessingPitaReceiptShown = true;
+                }
                 _focusPrologueName = EditingPrologueName;
                 _prologueChoice = 0;
-                if (_prologue == Prologue.ReturnInRain && _prologueLine == 5)
-                    StageGuysFamiliar();
-                if (_prologue == Prologue.Blessing && _prologueLine == 9 && _player)
-                    SpawnFx(_fxMagic, _player.transform.position);
+                if (_prologue is Prologue.Rain or Prologue.ReturnInRain)
+                    PresentRainCast();
                 if (_prologue == Prologue.Wake && _prologueLine == 1)
                     BeginPrologueTransition(WakeFromPrologueBed(true, continueWakeDialogue: true), fade: false);
                 return;
@@ -370,6 +392,7 @@ namespace AzureDreamsReimagined
 
         private void StartPrologueFilm(Prologue phase, int index, Prologue next)
         {
+            if (_prologueRoutine != null || _prologue == phase) return;
             SetPrologue(phase);
             _prologueRoutine = StartCoroutine(PlayPrologueFilm(index, next));
         }
@@ -401,6 +424,7 @@ namespace AzureDreamsReimagined
 
         private IEnumerator EnterPrologueHome()
         {
+            StreamPortrait(WreathBirthPortrait);
             yield return LoadPrologueBedroom();
             if (_prologueHomeLoaded)
             {
@@ -409,7 +433,7 @@ namespace AzureDreamsReimagined
                 SetPrologueResidentVisible("wreath", false);
                 SetPrologueResidentVisible("weedy", false);
                 ClearPrologueCast();
-                Vector3 bed = CellPosition(WakeUpBeds[HouseIndex]);
+                Vector3 bed = CellPosition(HomeLayoutCell(HouseIndex, WakeUpBeds[HouseIndex]));
                 _player.transform.position = bed;
                 PlacePrologueActor("guy", bed + Vector3.forward * 0.65f + Vector3.right * 0.15f);
                 Vector3 mattress = bed + Vector3.up * MattressHeight;
@@ -444,6 +468,8 @@ namespace AzureDreamsReimagined
             if (_prologueCast) { _prologueCast.SetActive(false); Destroy(_prologueCast); }
             _prologueCast = new GameObject("Prologue cast");
             _prologueCast.transform.SetParent(transform, false);
+            _prologueAunt = null;
+            _prologueGrandpa = null;
         }
 
         private void SetPrologueResidentVisible(string id, bool visible)
@@ -470,7 +496,6 @@ namespace AzureDreamsReimagined
                 if (adult && adult.sprite && child && child.sprite && child.bounds.size.y > 0f)
                     actor.transform.localScale *= adult.bounds.size.y * 0.5f / child.bounds.size.y;
                 else actor.transform.localScale *= 0.5f;
-                if (id == "youngkoh") actor.transform.localScale *= 0.5f;
             }
             return actor;
         }
@@ -483,11 +508,54 @@ namespace AzureDreamsReimagined
             Vector3 home = HomeReturnPosition();
             _player.transform.position = home;
             _player.SetActive(false);
-            PlacePrologueActor("youngkoh", home + Vector3.right * 2f);
-            PlacePrologueActor("youngnico", home + Vector3.left + Vector3.forward * 0.75f);
+            var youngKoh = PlacePrologueActor("youngkoh", home + Vector3.right * 2f);
+            var youngNico = PlacePrologueActor("youngnico", home + Vector3.right * 0.9f + Vector3.forward * 0.75f);
+            // Establish their original facing cels before the childhood dialogue.
+            youngKoh?.GetComponent<ActorLocomotionView>()?.Present(Vector3.left, 0f, false);
+            youngNico?.GetComponent<ActorLocomotionView>()?.Present(Vector3.back, 0f, false);
             PlacePrologueActor("guy", home);
+            StreamPortrait(GuyKneelingPortrait);
             UpdateCameraFollow(snap: true);
             SetPrologue(Prologue.Childhood);
+            StartCoroutine(PlayPrologueChildrenEntrance(youngKoh, youngNico));
+        }
+
+        private IEnumerator PlayPrologueChildrenEntrance(GameObject youngKoh, GameObject youngNico)
+        {
+            const float duration = 0.42f;
+            if (!youngKoh || !youngNico) yield break;
+
+            Vector3 kohEnd = youngKoh.transform.position;
+            Vector3 nicoEnd = youngNico.transform.position;
+            Vector3 kohStart = kohEnd + Vector3.right * 0.42f;
+            Vector3 nicoStart = nicoEnd + Vector3.forward * 0.46f;
+            youngKoh.transform.position = kohStart;
+            youngNico.transform.position = nicoStart;
+            var kohMotion = youngKoh.GetComponent<ActorLocomotionView>();
+            var nicoMotion = youngNico.GetComponent<ActorLocomotionView>();
+            Vector3 kohDirection = kohEnd - kohStart;
+            Vector3 nicoDirection = nicoEnd - nicoStart;
+
+            for (float elapsed = 0f; elapsed < duration && _prologue == Prologue.Childhood; elapsed += Time.unscaledDeltaTime)
+            {
+                float progress = Mathf.Clamp01(elapsed / duration);
+                if (youngKoh) youngKoh.transform.position = Vector3.Lerp(kohStart, kohEnd, progress);
+                if (youngNico) youngNico.transform.position = Vector3.Lerp(nicoStart, nicoEnd, progress);
+                kohMotion?.Present(kohDirection, elapsed * 7f, true);
+                nicoMotion?.Present(nicoDirection, elapsed * 7f, true);
+                yield return null;
+            }
+
+            if (youngKoh)
+            {
+                youngKoh.transform.position = kohEnd;
+                kohMotion?.Present(kohDirection, 0f, false);
+            }
+            if (youngNico)
+            {
+                youngNico.transform.position = nicoEnd;
+                nicoMotion?.Present(nicoDirection, 0f, false);
+            }
         }
 
         private IEnumerator LoadPrologueBedroom()
@@ -512,19 +580,76 @@ namespace AzureDreamsReimagined
             {
                 _player.SetActive(false);
                 SetPrologueResidentVisible("weedy", false);
-                PlacePrologueActor("youngkoh", _prologueStanding + Vector3.forward * 2f);
-                PlaceBirthSprite("AuntRain", RetailTownActorPosition(_prologueStanding + new Vector3(1.1f, 0f, -1.3f), 0f));
-                PlaceBirthSprite("GrandpaRain", RetailTownActorPosition(_prologueStanding + new Vector3(-1.0f, 0f, -1.6f), 0f));
-                UpdateCameraFollow(snap: true);
             }
-            StreamPortrait(BrokenAmuletPortrait);
+            FindDialoguePortrait("Aunt");
+            FindDialoguePortrait("Grandpa");
+            StreamPortrait(WreathPregnantPortrait);
+            StreamPortrait(WreathAmuletPortrait);
             SetPrologue(Prologue.Rain);
+        }
+
+        private Vector3 RainCastPosition(float x, float z)
+        {
+            Vector3 point = HouseIndex == 0 ? HomeLayoutPoint(0, new Vector3(x, 0f, z)) :
+                _prologueStanding + new Vector3(18.7f - x, 0f, z - 12f);
+            return RetailTownActorPosition(point, 0f);
+        }
+
+        private Vector3 FrameRainPrologue(Vector3 target) =>
+            _prologueHomeLoaded && (_prologue is Prologue.Rain or Prologue.ReturnInRain)
+                ? RainCastPosition(18.8f, 12f)
+                : target;
+
+        private void PresentRainCast()
+        {
+            if (!_prologueHomeLoaded || !_prologueCast) return;
+            int page = _prologueLine;
+            if (_prologue == Prologue.Rain)
+            {
+                SetRainPose(ref _prologueAunt, "Aunt", page < AuntNoticesNecklace ? "Back" : "Side",
+                    RainCastPosition(18.1f, 9.9f), 1.42f);
+                SetRainPose(ref _prologueGrandpa, "Grandpa", "Back", RainCastPosition(17.25f, 10.55f), 1.25f);
+                return;
+            }
+
+            if (page == 0)
+            {
+                var youngKoh = PlacePrologueActor("youngkoh", RainCastPosition(18.55f, 10.65f));
+                youngKoh?.GetComponent<ActorLocomotionView>()?.Present(Vector3.back, 0f, false);
+            }
+            bool auntFacesWreath = page >= AuntAnswersGrandpa && (page < RainDoorReaction || page >= AuntAfterGuysReturn);
+            SetRainPose(ref _prologueAunt, "Aunt", auntFacesWreath ? "Side" : "Front",
+                RainCastPosition(17.9f, 11.5f), 1.42f);
+            string grandpaPose = page == 0 ? "Side" : page < AuntAnswersGrandpa ? "Back" :
+                page < RainDoorReaction ? "Side" : "Front";
+            SetRainPose(ref _prologueGrandpa, "Grandpa", grandpaPose, RainCastPosition(20.75f, 12.8f),
+                1.25f, flipX: page == 0);
+            if (page == RainFamiliarArrival) StageGuysFamiliar();
+        }
+
+        // Directional cels isolated from the PS1 prologue capture at 05:55–07:50.
+        private void SetRainPose(ref SpriteRenderer actor, string name, string direction, Vector3 position,
+            float height, bool flipX = false)
+        {
+            var sprite = Resources.Load<Sprite>($"Title/RainCast/{name}{direction}");
+            if (!sprite) return;
+            if (!actor)
+            {
+                var view = new GameObject(name);
+                view.transform.SetParent(_prologueCast.transform, false);
+                view.AddComponent<Rendering.CameraFacingSprite>();
+                actor = view.AddComponent<SpriteRenderer>();
+            }
+            actor.sprite = sprite;
+            actor.flipX = flipX;
+            actor.transform.position = position;
+            actor.transform.localScale = Vector3.one * (height / sprite.bounds.size.y);
         }
 
         private void StageGuysFamiliar()
         {
             if (!_prologueHomeLoaded || !_kewnePrefab) return;
-            var familiar = Instantiate(_kewnePrefab, _prologueStanding, Quaternion.identity, _prologueCast.transform);
+            var familiar = Instantiate(_kewnePrefab, RainCastPosition(18.35f, 14.2f), Quaternion.identity, _prologueCast.transform);
             foreach (var collider in familiar.GetComponentsInChildren<Collider>()) collider.enabled = false;
         }
 
@@ -533,7 +658,7 @@ namespace AzureDreamsReimagined
             ClearPrologueCast();
             if (_prologueHomeLoaded)
             {
-                var bed = WakeUpBeds[HouseIndex];
+                var bed = HomeLayoutCell(HouseIndex, WakeUpBeds[HouseIndex]);
                 _playerCell = bed;
                 _player.transform.position = CellPosition(bed) + Vector3.up * (MattressHeight + TownActorFootOffset);
                 _player.SetActive(true);
@@ -564,7 +689,7 @@ namespace AzureDreamsReimagined
                 }
                 if (!_wakingInBed) StagePrologueWake();
                 SetPrologue(Prologue.Transition);
-                var bed = WakeUpBeds[HouseIndex];
+                var bed = HomeLayoutCell(HouseIndex, WakeUpBeds[HouseIndex]);
                 var exit = FindWakeUpCell(bed, MattressHeight);
                 var start = _player.transform.position;
                 var end = exit.x >= 0 ? RetailTownActorPosition(CellPosition(exit), TownActorFootOffset) : _prologueStanding;
@@ -634,15 +759,46 @@ namespace AzureDreamsReimagined
             SetPrologue(Prologue.Blessing);
         }
 
+        private IEnumerator PlayJordaImpact()
+        {
+            _jordaImpactPlaying = true;
+            _jordaImpactStarted = Time.unscaledTime;
+            PlayRetailSound(RetailSfx.Hit);
+            if (_kohSprite) _kohSprite.PresentSleep(true);
+            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(2f);
+            if (_kohSprite) _kohSprite.PresentSleep(false);
+            _jordaImpactPlaying = false;
+        }
+
         private IEnumerator FinishPrologue()
         {
+            bool showedPitaReceipt = _prologue == Prologue.Blessing && _blessingPitaReceiptShown;
             if (_prologueCast) { _prologueCast.SetActive(false); Destroy(_prologueCast); }
             if (_prologueHomeLoaded) yield return LeaveInterior();
             _townInventory.AddDungeonItem(ItemSystem.CreateFloorItem(ItemSystem.Id.PitaFruit, ItemSystem.Kind.Fruit, 40));
             TownSaveVariables.SetBool(WreathFruitAvailable, false);
             PersistTownProgress();
-            _message = T("Pita Fruit obtained.", "Fruta Pita obtida.");
+            _message = showedPitaReceipt ? string.Empty : T("Pita Fruit obtained.", "Fruta Pita obtida.");
             SetPrologue(Prologue.Off);
+        }
+
+        private void DrawJordaImpactStars(float height)
+        {
+            if (!_jordaImpactPlaying || !_player || Event.current.type != EventType.Repaint) return;
+            if (!_jordaImpactStar) _jordaImpactStar = Resources.Load<Texture2D>("Title/JordaImpactStar");
+            var camera = Camera.main;
+            if (!_jordaImpactStar || !camera) return;
+            Vector3 point = camera.WorldToScreenPoint(_player.transform.position + Vector3.up * 1.3f);
+            if (point.z <= 0f) return;
+            float angle = (Time.unscaledTime - _jordaImpactStarted) * 5f;
+            for (int i = 0; i < 3; i++)
+            {
+                float orbit = angle + i * Mathf.PI * 2f / 3f;
+                float x = point.x + Mathf.Cos(orbit) * 25f;
+                float y = height - point.y + Mathf.Sin(orbit) * 9f;
+                GUI.DrawTexture(new Rect(x - 9f, y - 9f, 18f, 18f), _jordaImpactStar);
+            }
         }
 
         private void DrawPrologue(float width, float height)
@@ -659,8 +815,10 @@ namespace AzureDreamsReimagined
             }
             else if (_prologue is Prologue.BirthFilm or Prologue.StormFilm or Prologue.TowerFilm or Prologue.TimeSkipFilm)
                 DrawHudFill(screen, Color.black);
-            if (_prologuePlayer && _prologuePlayer.texture)
-                GUI.DrawTexture(screen, _prologuePlayer.texture, ScaleMode.ScaleToFit);
+            if ((_prologue is Prologue.BirthFilm or Prologue.StormFilm or Prologue.TowerFilm or Prologue.TimeSkipFilm) &&
+                _prologueFilmTexture && Event.current.type == EventType.Repaint)
+                DrawPrologueFilm(screen, _prologueFilmTexture);
+            DrawJordaImpactStars(height);
             if ((_prologue is Prologue.Rain or Prologue.ReturnInRain) && Event.current.type == EventType.Repaint)
             {
                 DrawHudFill(screen, new Color(0.04f, 0.06f, 0.13f, 0.47f));
@@ -674,32 +832,51 @@ namespace AzureDreamsReimagined
 
             }
 
-            var box = new Rect(width * 0.065f, height * 0.72f, width * 0.87f, height * 0.23f);
-            var lines = PrologueLines;
+            var line = _prologue == Prologue.Blessing ? CurrentBlessingDialogue() : PrologueLines?[_prologueLine];
             bool editingName = EditingPrologueName;
-            if (lines != null)
+            var choices = PrologueChoices();
+            string name = _prologue <= Prologue.Farewell ? _prologueName : HeroName;
+            string body = line.HasValue ? T(line.Value.En, line.Value.Pt).Replace("{name}", name) :
+                editingName ? T("Have you decided on a name?", "Já escolheu um nome?") :
+                T($"So you will be {_prologueName}. Is that okay?", $"Então seu nome será {_prologueName}. Tudo bem?");
+            float controlsHeight = editingName ? 36f : choices.First != null ?
+                2f * DialogueChoiceRowHeight + 5f : DialogueChoiceRowHeight + 4f;
+            float boxWidth = width * 0.87f;
+            float textHeight = _dialogueTextStyle.CalcHeight(new GUIContent(body), boxWidth - 26f);
+            float boxHeight = Mathf.Clamp(textHeight + controlsHeight + 18f, height * 0.23f, height * 0.65f);
+            var box = new Rect(width * 0.065f, height * 0.95f - boxHeight, boxWidth, boxHeight);
+            if (line.HasValue)
             {
-                var (speaker, en, pt) = lines[_prologueLine];
-                string name = _prologue <= Prologue.Farewell ? _prologueName : HeroName;
+                string speaker = line.Value.Speaker;
                 var portrait = speaker switch
                 {
-                    "Nico" when _prologue == Prologue.Childhood => StreamPortrait("Dialogue/YoungNico"),
-                    "Wreath" when _prologue == Prologue.Birth => StreamPortrait("Dialogue/Wreath_variant3_frame0"),
-                    "Wreath" when _prologue == Prologue.Rain && _prologueLine == BrokenAmuletLine =>
-                        StreamPortrait(BrokenAmuletPortrait) ?? FindDialoguePortrait(speaker),
+                    "Nico" when _prologue == Prologue.Childhood => PrologueNicoPortrait(NicoChild),
+                    "Nico" when _prologue == Prologue.Wake && _prologueLine == WakeTomboyReply =>
+                        PrologueNicoPortrait(NicoPlayful),
+                    "Nico" => PrologueNicoPortrait(NicoNeutral),
+                    "Guy" when _prologue == Prologue.Childhood && _prologueLine == ChildhoodLines.Length - 1 =>
+                        GuyDialoguePortrait(GuyKneelingPortrait),
+                    "Jorda" => JordaDialoguePortrait(_prologueStarted),
+                    "Wreath" when _prologue == Prologue.Birth => StreamPortrait(WreathBirthPortrait),
+                    // TOWN.BIN 0x427B06, 0x427C71, 0x427CD0: the retail
+                    // portrait-variant changes for Wreath are 1, 2, then 1.
+                    "Wreath" when _prologue == Prologue.Rain && _prologueLine >= BrokenAmuletLine =>
+                        StreamPortrait(WreathAmuletPortrait) ?? StreamPortrait(WreathAmuletOriginalPortrait),
+                    "Wreath" when _prologue is Prologue.Rain or Prologue.ReturnInRain =>
+                        StreamPortrait(WreathPregnantPortrait),
                     _ => FindDialoguePortrait(speaker)
                 };
-                DrawPrologueLine(box, speaker, T(en, pt).Replace("{name}", name), portrait);
+                float portraitScale = speaker == "Wreath" && _prologue == Prologue.Birth ? 72f / 128f : 1f;
+                DrawPrologueLine(box, speaker, body, portrait, controlsHeight, portraitScale);
                 if (_prologue == Prologue.Childhood && _prologueLine == ChildhoodLines.Length - 1)
                     DrawDialoguePortrait(StreamPortrait("Dialogue/YoungKoh"), box, rightAligned: true, scale: 0.25f);
-                if (!editingName && PrologueChoices().First == null &&
-                    GUI.Button(new Rect(box.xMax - 40f, box.yMax - 29f, 32f, 22f), "▸"))
+                if (!editingName && choices.First == null &&
+                    GUI.Button(new Rect(box.xMax - 40f, box.yMax - 29f, 32f, 22f), "›"))
                     AdvancePrologue();
             }
             else if (_prologue == Prologue.Name || _prologue == Prologue.Confirm)
             {
-                DrawPrologueLine(box, "Angel", editingName ? T("Have you decided on a name?", "Já escolheu um nome?") :
-                    T($"So you will be {_prologueName}. Is that okay?", $"Então seu nome será {_prologueName}. Tudo bem?"), null);
+                DrawPrologueLine(box, "Angel", body, null, controlsHeight);
             }
             if (editingName)
             {
@@ -714,18 +891,33 @@ namespace AzureDreamsReimagined
                 if (GUI.Button(new Rect(box.xMax - 104f, y, 90f, 27f), T("Confirm", "Confirmar")))
                     AdvancePrologue();
             }
-            var choices = PrologueChoices();
-            if (choices.First != null)
+            if (!editingName && choices.First != null)
             {
-                float column = (box.width - 28f) * 0.5f;
-                float y = box.yMax - 32f;
-                if (GUI.Button(new Rect(box.x + 12f, y, column, 23f), (_prologueChoice == 0 ? "▸ " : "") + choices.First))
-                { _prologueChoice = 0; AdvancePrologue(); }
-                if (GUI.Button(new Rect(box.x + 16f + column, y, column, 23f), (_prologueChoice == 1 ? "▸ " : "") + choices.Second))
-                { _prologueChoice = 1; AdvancePrologue(); }
+                var rows = new Rect(box.x + 13f, box.yMax - controlsHeight - 4f, box.width - 26f, controlsHeight);
+                int picked = DrawDialogueChoices(rows, _prologueChoice, choices.First, choices.Second);
+                if (picked >= 0)
+                {
+                    _prologueChoice = picked;
+                    AdvancePrologue();
+                }
             }
             if (_prologue is not (Prologue.Off or Prologue.Transition)) DrawDialogueSkipPrompt(width, _prologueHold / KewneSkipHoldSeconds);
             if (_prologueBlack > 0f) DrawHudFill(screen, new Color(0f, 0f, 0f, _prologueBlack));
+        }
+
+        private static void DrawPrologueFilm(Rect screen, Texture texture)
+        {
+            if (!texture || texture.width <= 0 || texture.height <= 0) return;
+
+            // Fit the actual decoded frame once inside the canvas.  This avoids
+            // ScaleMode's platform-specific video texture path, which caused a
+            // split/duplicated frame with JO001 on Windows Media Foundation.
+            float scale = Mathf.Min(screen.width / texture.width, screen.height / texture.height);
+            float width = texture.width * scale;
+            float height = texture.height * scale;
+            var destination = new Rect(screen.center.x - width * 0.5f,
+                screen.center.y - height * 0.5f, width, height);
+            GUI.DrawTextureWithTexCoords(destination, texture, new Rect(0f, 0f, 1f, 1f), alphaBlend: false);
         }
 
         private void DrawPrologueClouds(Rect screen)
@@ -784,7 +976,9 @@ namespace AzureDreamsReimagined
 
         private void DrawPrologueAngel(Rect screen)
         {
-            if (!_prologueAngel || Event.current.type != EventType.Repaint) return;
+            if (Event.current.type != EventType.Repaint) return;
+            if (!_prologueAngel) _prologueAngel = Resources.Load<Texture2D>("Title/AngelOpeningFrames");
+            if (!_prologueAngel) return;
 
             const int frameCount = 10;
             const float flapFramesPerSecond = 12f;
@@ -798,12 +992,17 @@ namespace AzureDreamsReimagined
             float hover = Mathf.Sin(age * (2f * Mathf.PI / hoverPeriod)) * screen.height * 0.042f;
             var bounds = new Rect(screen.center.x - width * 0.5f,
                 screen.height * 0.37f - height * 0.5f + hover, width, height);
-            GUI.DrawTextureWithTexCoords(bounds, _prologueAngel, new Rect(frame * frameUvWidth, 0f, frameUvWidth, 1f));
+            Color previousColor = GUI.color;
+            GUI.color = Color.white;
+            GUI.DrawTextureWithTexCoords(bounds, _prologueAngel,
+                new Rect(frame * frameUvWidth, 0f, frameUvWidth, 1f), alphaBlend: true);
+            GUI.color = previousColor;
         }
 
-        private void DrawPrologueLine(Rect box, string speaker, string line, Texture2D portrait)
+        private void DrawPrologueLine(Rect box, string speaker, string line, Texture2D portrait, float controlsHeight, float portraitScale = 1f)
         {
-            DrawDialoguePortrait(portrait, box);
+            DrawDialoguePortrait(portrait, box, scale: portraitScale);
+            if (speaker == "Jorda") DrawJordaBlink(portrait, box, _prologueStarted);
             DrawDialogueFrame(box, dialoguePole: true);
             var name = new Rect(box.x, box.y - 28f, 150f, 27f);
             if (!string.IsNullOrEmpty(speaker))
@@ -811,7 +1010,7 @@ namespace AzureDreamsReimagined
                 DrawDialogueFrame(name);
                 DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height), T(speaker, speaker switch { "Angel" => "Anjo", "Aunt" => "Tia", "Grandpa" => "Vovô", _ => speaker }), _messageStyle, dialogue: true);
             }
-            DrawHudText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f), line, _messageStyle, dialogue: true);
+            DrawDialogueText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f - controlsHeight), line, line);
         }
     }
 }

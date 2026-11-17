@@ -16,6 +16,12 @@ namespace AzureDreamsReimagined
         private static Dictionary<int, Entry> _entries;
         internal static IEnumerable<Entry> Entries => GetEntries().Values;
 
+        // Domain reload can be disabled in the editor.  Always begin a play
+        // session with a fresh catalog, rather than retaining a cache made
+        // before Resources finished importing the JSON asset.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetCache() => _entries = null;
+
         internal static Entry Find(DungeonItemEntry item) =>
             GetEntries().TryGetValue(item.Kind * 256 + item.Subtype, out var text) ? text : null;
 
@@ -24,13 +30,17 @@ namespace AzureDreamsReimagined
 
         private static Dictionary<int, Entry> GetEntries()
         {
-            if (_entries == null)
+            // A failed early Resources lookup used to cache an empty list for
+            // the entire session, leaving the debug item picker blank. Retry
+            // an empty catalog so an import/initialization race can recover.
+            if (_entries == null || _entries.Count == 0)
             {
-                _entries = new Dictionary<int, Entry>();
+                var entries = new Dictionary<int, Entry>();
                 var asset = Resources.Load<TextAsset>("Town/Retail/inventory_text");
                 var catalog = asset ? JsonUtility.FromJson<Catalog>(asset.text) : null;
                 if (catalog?.entries != null)
-                    foreach (var entry in catalog.entries) _entries[entry.kind * 256 + entry.id] = entry;
+                    foreach (var entry in catalog.entries) entries[entry.kind * 256 + entry.id] = entry;
+                _entries = entries;
             }
             return _entries;
         }

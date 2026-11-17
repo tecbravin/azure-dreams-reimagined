@@ -280,8 +280,8 @@ MonoBehaviour:
   _townMoveSpeed: 4
   _turnDuration: 0.16
   _prologuePriest: {fileID: 5151358256163527516, guid: 1cb287197f0e437ab46fa4c3e19fcb87, type: 3}
-  _retailFont: {fileID: 2800000, guid: f852b5d0e02ff714e83c5b0fe78a02d9, type: 3}
-  _retailDialogueFont: {fileID: 12800000, guid: 4ae50a87fbe2ec54da200ae71c8ba70b, type: 3}
+  _windowFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  _prologueAngel: {fileID: 2800000, guid: 9874b9629b3d4ae5990b2085a5dc6074, type: 3}
   _groundItemSprites:
   - {fileID: 21300000, guid: 065b294701f889f4cb0a708f5b65b1c8, type: 3}
   - {fileID: 21300000, guid: 5152caccbef55ed408f3baacc01d2c84, type: 3}
@@ -462,7 +462,6 @@ MonoBehaviour:
   - KONAMI.mp4
   - LOP1_WS.mp4
   _titleBackground: {fileID: 2800000, guid: 7d849e51df207f641909d099a2da0bfb, type: 3}
-  _titleMenuFont: {fileID: 12800000, guid: 4ae50a87fbe2ec54da200ae71c8ba70b, type: 3}
   _titleMenuCrystal: {fileID: 2800000, guid: 985a3cebfce22274c853a7b590a80105, type: 3}
   _storyResidents:
   - {fileID: 5151358256163527516, guid: 0ce4b08aa70141fab4b7b5bd140ed015, type: 3}
@@ -477,6 +476,10 @@ MonoBehaviour:
   - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
   - {fileID: 5151358256163527516, guid: 0cf8e9f56c224d72ae5275672dfeecbb, type: 3}
   - {fileID: 5151358256163527516, guid: 8d7f2fbf7ef04bbba45d6607f25312a5, type: 3}
+  - {fileID: 5151358256163527516, guid: 310d5bbc23b647d6b0c34e6930f8795d, type: 3}
+  - {fileID: 5151358256163527516, guid: 1fe76d42b336435f91775f6a5fe21bfa, type: 3}
+  - {fileID: 5151358256163527516, guid: 38536ae87ddc4a90a31c7c4c3459e7ea, type: 3}
+  - {fileID: 5151358256163527516, guid: 999975edf39d405cad77d9b3f633ace3, type: 3}
   _towerTrapTexture: {fileID: 2800000, guid: 98a5ce9a65d8e984aaff4a12da65ad8b, type: 3}
   _playerPrefab: {fileID: 637105039296161816, guid: 2f53ead6c9a3aa04887e156ac65eca17, type: 3}
   _creaturePrefab: {fileID: 1079190681340550386, guid: 688c2b1c4ddf5c840bd4c0a6f9707170, type: 3}

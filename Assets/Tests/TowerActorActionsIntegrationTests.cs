@@ -122,6 +122,53 @@ public class TowerActorActionsIntegrationTests
         Assert.That(_controller.TryTowerAction(Vector2Int.zero), Is.True);
     }
 
+    [Test]
+    public void MazarrSeedRaisesOneLevelAndStopsAtNinetyNine()
+    {
+        var actor = Get<CoreActor>("_playerActor");
+        actor.Level = 98;
+        actor.Experience = AzureDreams.Core.Leveling.BuildExperienceTable()[97];
+
+        Call("ApplySeed", 3, actor);
+        Assert.That(actor.Level, Is.EqualTo(99));
+
+        Call("ApplySeed", 3, actor);
+        Assert.That(actor.Level, Is.EqualTo(99));
+    }
+
+    [Test]
+    public void LarSeedCannotLowerLevelOrPermanentAttributesBelowOne()
+    {
+        var actor = Get<CoreActor>("_playerActor");
+        actor.Level = 2;
+        actor.BaseHp = actor.MaxHp = actor.Hp = 1;
+        actor.BaseMp = 1;
+        actor.MaxMp = 1;
+        actor.CurrentMp = 1;
+        actor.BaseAttack = actor.CurrentAttack = actor.EffectiveAttack = 1;
+        actor.BaseDefense = actor.CurrentDefense = actor.EffectiveDefense = 1;
+        actor.Agility = actor.Luck = 1;
+
+        Call("ApplySeed", 8, actor);
+
+        Assert.That(actor.Level, Is.EqualTo(1));
+        Assert.That(actor.BaseHp, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.MaxHp, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.BaseMp, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.MaxMp, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.BaseAttack, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.CurrentAttack, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.EffectiveAttack, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.BaseDefense, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.CurrentDefense, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.EffectiveDefense, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.Agility, Is.GreaterThanOrEqualTo(1));
+        Assert.That(actor.Luck, Is.GreaterThanOrEqualTo(1));
+
+        Call("ApplySeed", 8, actor);
+        Assert.That(actor.Level, Is.EqualTo(1));
+    }
+
     [UnityTearDown]
     public IEnumerator TearDown()
     {

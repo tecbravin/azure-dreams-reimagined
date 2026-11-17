@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -42,7 +43,7 @@ namespace AzureDreamsReimagined
         {
             if (!_interiorMenu) return;
             GetInteriorCatalog();
-            GUILayout.BeginArea(new Rect(100, 60, 440, 350), GUI.skin.box);
+            BeginHudMenu(new Rect(100, 60, 440, 350));
             GUILayout.Label(T("Interior preview travel (F2) - exterior door locations pending", "Visitar interiores (F2)"));
             _interiorScroll = GUILayout.BeginScrollView(_interiorScroll);
             string selectedPath = null;
@@ -74,7 +75,12 @@ namespace AzureDreamsReimagined
             if (!Application.CanStreamedLevelBeLoaded(path))
             { _message = T("Interior scene is not in the build: " + id, $"O interior {id} nao esta disponivel nesta versao."); yield break; }
             _changingInterior = true;
-            _spawnAboveInteriorExitMarker = spawnAboveExitMarker;
+            // Every entrance from the town places Koh inside the doorway, beyond
+            // the blue return marker. Interior-to-interior travel and the wake-up
+            // sequence keep their authored arrival positions.
+            bool enteringFromTownDoor = _area == Area.Town && !_interior &&
+                _prologue == Prologue.Off && !returnedFromTower.HasValue;
+            _spawnAboveInteriorExitMarker = spawnAboveExitMarker || enteringFromTownDoor;
             _fadeToBlack = 0f;
             if (!_interior)
             {
@@ -152,10 +158,15 @@ namespace AzureDreamsReimagined
                     _ => "Town"
                 });
             _townHeights = interiorHeights;
-            if (room.furnitureFootprints != null) _townBuildings.AddRange(room.furnitureFootprints);
+            _townBuildings.AddRange(room.CollisionFootprints());
             Vector3 entry = InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(room);
             int house = HouseIndex;
-            Vector3 arrival = returningFromHut && house >= 0 ? HutLinks[house] :
+            // The hut's exit marker is the door square itself. Arriving on that
+            // square makes the first movement retrigger the exit, so every
+            // direction of travel through this link uses its interior-side cell.
+            bool enteringHomeHut = InHomeHut && !returningFromHut;
+            Vector3 arrival = returningFromHut && house >= 0 ? HomeHutArrival(house) :
+                enteringHomeHut ? entry + Vector3.forward * 2f :
                 _spawnAboveInteriorExitMarker ? entry + Vector3.back * 2f :
                 room.useArrivalPosition ? room.arrivalPosition : entry;
             _playerCell = new Vector2Int(Mathf.RoundToInt(arrival.x), Mathf.RoundToInt(arrival.z));
@@ -166,6 +177,8 @@ namespace AzureDreamsReimagined
             _townFlow.State.ForceSet(TownGameState.State.TownIdle);
             SpawnInteriorResidents(room);
             SpawnInteriorStoryResidents(room.interiorId);
+            SpawnAmbientInteriorResidents(room.interiorId);
+            SetupRestoredPoolInterior();
             CreatePrimitive(PrimitiveType.Cylinder, "Interior return marker (provisional)",
                 new Vector3(entry.x, RetailTownHeight(entry) + 0.03f, entry.z),
                 new Vector3(0.8f, 0.03f, 0.8f), _accentMaterial, false);
@@ -195,31 +208,51 @@ namespace AzureDreamsReimagined
         }
         private void SpawnInteriorResidents(TownInteriorScene room)
         {
+            var occurrences = new Dictionary<string, int>(StringComparer.Ordinal);
             if (room.residentPrefabs != null)
             for (int i = 0; i < room.residentPrefabs.Length; i++)
             {
                 var prefab = room.residentPrefabs[i];
                 if (!prefab || !prefab.TryGetComponent<NPCController>(out var resident) ||
                     !ShouldSpawnStoryResident(resident, room.interiorId)) continue;
+                string npcId = resident.npcId ?? string.Empty;
+                occurrences.TryGetValue(npcId, out int occurrence);
+                occurrences[npcId] = occurrence + 1;
+                string placedId = room.interiorId == BarRoom ? npcId switch
+                {
+                    "monster_shop_hunter" => occurrence == 0 ? "bar_hunter_1" : "bar_hunter_2",
+                    "restaurant_hunter" => "bar_hunter_3",
+                    _ => npcId
+                } : npcId;
                 var cell = room.residentCells != null && i < room.residentCells.Length
                     ? room.residentCells[i] : new Vector2Int(-1, -1);
-                bool useAuthoredCell = cell.x >= 0 && cell != _playerCell && TownPositionOpen(CellPosition(cell));
-                if (!useAuthoredCell) cell = FindInteriorResidentCell();
-                if (cell.x < 0) continue;
-
+                // The catalog makes captured scene positions resilient to a
+                // missing serialized cell (notably Nico's house) and keeps
+                // repeated NPC prefabs in their distinct authored locations.
+                if (TownResidentPlacementCatalog.TryGetInteriorCell(room.interiorId, placedId, placedId == npcId ? occurrence : 0, out var catalogCell))
+                    cell = catalogCell;
+                if (cell.x >= 0) cell = room.MapLayoutCell(cell);
+                bool seated = IsSeatedInteriorResident(room.interiorId, placedId);
                 var position = RetailTownActorPosition(CellPosition(cell), 0f);
-                if (useAuthoredCell && room.residentOffsets != null && i < room.residentOffsets.Length)
+                if (room.residentOffsets != null && i < room.residentOffsets.Length)
                     position += room.residentOffsets[i];
+                bool useAuthoredCell = cell.x >= 0 && cell != _playerCell &&
+                    (seated || TownPositionOpen(position, feetHeight: position.y));
+                if (!useAuthoredCell)
+                {
+                    cell = FindInteriorResidentCell();
+                    if (cell.x < 0) continue;
+                    position = RetailTownActorPosition(CellPosition(cell), 0f);
+                }
                 var instance = Spawn(prefab, cell, prefab.name);
                 instance.transform.position = position;
                 var npc = instance.GetComponent<NPCController>();
-                if (npc.npcId == "hush" && _player)
-                {
-                    var koh = _player.GetComponentInChildren<SpriteRenderer>();
-                    var hush = npc.GetComponentInChildren<Renderer>();
-                    if (koh && hush && koh.bounds.size.y > 0f && hush.bounds.size.y > 0f)
-                        npc.transform.localScale *= koh.bounds.size.y / hush.bounds.size.y;
-                }
+                npc.npcId = placedId;
+                if (seated && npc.TryGetComponent<TownHumanoidView>(out var humanoid))
+                    humanoid.SetSeated(0.5f);
+                if (placedId is "bar_hunter_1" or "bar_hunter_2" or "bar_hunter_3")
+                    npc.GetComponent<CharacterStats>().displayName = T("Hunter", "Caçador");
+                if (npc.npcId == "hush") MatchHushVisualToKoh(npc);
                 npc.ConfigureConversation(_townFlow.State);
                 if (!instance.TryGetComponent<TownDialogueProgress>(out var progress))
                     progress = instance.AddComponent<TownDialogueProgress>();
@@ -236,6 +269,31 @@ namespace AzureDreamsReimagined
                 EnsureKohHomeResident(room, "wreath");
                 EnsureKohHomeResident(room, "weedy");
             }
+        }
+
+        private void MatchHushVisualToKoh(NPCController hushNpc)
+        {
+            if (!hushNpc || !_player) return;
+
+            // Do not select an arbitrary descendant renderer here.  Koh's hand
+            // equipment is also made of SpriteRenderers, so that selection can
+            // make Hush inherit a weapon's tiny bounds and effectively vanish.
+            var kohRoot = _player.transform.Find("Koh Sprite");
+            var hushRoot = hushNpc.transform.Find("Character Sprite");
+            var koh = kohRoot ? kohRoot.GetComponent<SpriteRenderer>() : null;
+            var hush = hushRoot ? hushRoot.GetComponentInChildren<SpriteRenderer>() : null;
+            if (koh && hush && koh.bounds.size.y > 0f && hush.bounds.size.y > 0f)
+            {
+                float scale = koh.bounds.size.y / hush.bounds.size.y;
+                if (scale is > 0.1f and < 8f)
+                    hushNpc.transform.localScale *= scale;
+            }
+
+            // His body is generated by TownCharacterSpriteView at instantiation.
+            // Make the generated renderers explicit after fitting so scene state
+            // cannot leave the story NPC present but visually disabled.
+            foreach (var renderer in hushNpc.GetComponentsInChildren<SpriteRenderer>(true))
+                renderer.enabled = true;
         }
 
         private void EnsureKohHomeResident(TownInteriorScene room, string npcId)
@@ -257,9 +315,10 @@ namespace AzureDreamsReimagined
             if (room.residentPrefabs != null && room.residentCells != null)
                 for (int i = 0; i < room.residentPrefabs.Length && i < room.residentCells.Length; i++)
                     if (room.residentPrefabs[i] == prefab && room.residentCells[i].x >= 0 &&
-                        room.residentCells[i] != _playerCell && TownPositionOpen(CellPosition(room.residentCells[i])))
+                        room.MapLayoutCell(room.residentCells[i]) != _playerCell &&
+                        TownPositionOpen(CellPosition(room.MapLayoutCell(room.residentCells[i]))))
                     {
-                        cell = room.residentCells[i];
+                        cell = room.MapLayoutCell(room.residentCells[i]);
                         break;
                     }
             if (cell.x < 0) cell = FindInteriorResidentCell();
@@ -293,8 +352,27 @@ namespace AzureDreamsReimagined
         private bool TryExitInterior()
         {
             if (!_interior || !_player || _heldTownPot) return false;
+
+            // Home-hut passages activate by touch. Check this before the house
+            // exit because Level 1 keeps both markers close to the same wall.
+            int house = HouseIndex;
+            if (house >= 0 && NearHomePoint(HomeHutMarker(house), 0.58f))
+            {
+                StartCoroutine(LoadInterior(HutScenes[CurrentHutRank]));
+                return true;
+            }
+
             Vector3 delta = _player.transform.position - (InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(_interior)); delta.y = 0f;
             if (delta.sqrMagnitude > 1.44f) return false;
+
+            // The Monster Hut is an extension of Koh's home, not a town building.
+            // Walking through its return marker must therefore load the currently
+            // built house level instead of using the generic town-exit path.
+            if (InHomeHut)
+            {
+                StartCoroutine(LoadInterior(CurrentHomeScene()));
+                return true;
+            }
             StartCoroutine(LeaveInterior()); return true;
         }
         private IEnumerator LeaveInterior()
@@ -304,7 +382,6 @@ namespace AzureDreamsReimagined
             var scene = _interior.gameObject.scene;
             _interior = null;
             _homePanel = 0;
-            _homeBeforeHut = null;
             EnterTown();
             if (_outsidePosition != Vector3.zero)
             {

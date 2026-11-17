@@ -22,10 +22,19 @@ namespace AzureDreamsReimagined
             "Interior_01_koh_house_1", "Interior_02_koh_house_2", "Interior_03_koh_house_3"
         };
         // Walkable cells next to features visible in the supplied capture views.
-        private static readonly Vector2Int InitialHouseDoor = new(20, 14);
+        // Captured door tile in the original coordinate frame.  It is mapped
+        // with the rest of House 1 to the black doorway rather than the floor
+        // tile in front of it.
+        private static readonly Vector2Int InitialHouseDoor = new(12, 13);
         private static readonly Vector2Int[] BathPoints = { new(20, 11), new(34, 13), new(54, 14) };
-        private static readonly Vector2Int[] BathDoors = { new(12, 10), new(17, 10), new(20, 10) };
-        private static readonly Vector3[] HutLinks = { new(21f, 0f, 13f), new(32.5f, 0f, 8.75f), new(68f, 0f, 10f) };
+        // House 1 is laid out left-to-right: Koh's bedroom, the living room
+        // (where Wreath and Weedy stand), then the bath.  The old coordinate
+        // pointed to the bedroom wall, which made the bath passage disagree
+        // with the original room geometry.
+        private static readonly Vector2Int[] BathDoors = { new(20, 10), new(17, 10), new(20, 10) };
+        // Level 1's Monster Hut passage is the brown mat on the left; the
+        // exterior return uses the black doorway tile captured at (12, 13).
+        private static readonly Vector3[] HutLinks = { new(12f, 0f, 13f), new(32.5f, 0f, 8.75f), new(68f, 0f, 10f) };
         private static int CurrentHutRank => Mathf.Clamp(TownSaveVariables.GetInt(HutRankKey), 0, HutScenes.Length - 1);
         private static Vector2Int[] HutPads => HutPadLayouts[CurrentHutRank];
         private static readonly Vector2Int[] BedroomDoors = { new(16, 12), new(22, 15), new(22, 16) };
@@ -41,7 +50,6 @@ namespace AzureDreamsReimagined
         };
         private static readonly Rect HutFootprint = Rect.MinMaxRect(20f, 8f, 29f, 17f);
         private readonly List<GameObject> _hutViews = new();
-        private string _homeBeforeHut;
         private int _homePanel;
         private int _hutFusionTarget = -1;
         private Vector2 _hutFusionScroll;
@@ -70,6 +78,29 @@ namespace AzureDreamsReimagined
         }
 
         private static readonly Vector2Int HomeDoorCell = new(5, 3);
+
+        private static Vector2Int HomeLayoutCell(int rank, Vector2Int sourceCell) =>
+            rank == 0 ? new Vector2Int(32 - sourceCell.x, sourceCell.y) : sourceCell;
+
+        private static Vector3 HomeLayoutPoint(int rank, Vector3 sourcePoint) =>
+            rank == 0 ? new Vector3(32f - sourcePoint.x, sourcePoint.y, sourcePoint.z) : sourcePoint;
+
+        // Keep the marker and the arrival cell together.  House 1's captured
+        // geometry is mirrored, so using the raw HutLinks coordinate here
+        // would leave the visual marker and the touch trigger on opposite
+        // sides of the room.
+        private static Vector3 HomeHutMarker(int rank) => HomeLayoutPoint(rank, HutLinks[rank]);
+
+        // A return from the hut must not place Koh directly on its touch
+        // marker, otherwise the next movement immediately sends him back.
+        // +Z is the interior-side (below-the-door) cell for every house rank.
+        private static Vector3 HomeHutArrival(int rank) => HomeHutMarker(rank) + Vector3.forward * 2f;
+
+        private static bool IsInHomeBedroom(int rank, Vector2Int cell)
+        {
+            int doorway = HomeLayoutCell(rank, BedroomDoors[rank]).x;
+            return rank == 0 ? cell.x > doorway : cell.x < doorway;
+        }
 
         private void PlaceKohHomeEntrance()
         {
@@ -140,6 +171,8 @@ namespace AzureDreamsReimagined
             foreach (var (door, interior) in _facadeInteriors)
             {
                 if (!door || !door.IsPassable) continue;
+                if (interior == CherrlHouse && StoryStage("cherrl") == CherrlFirstMeeting &&
+                    !TownSaveVariables.GetBool(CherrlInvitedInsideKey)) continue;
                 var threshold = door.Threshold;
                 float entranceZ = threshold.z + 0.10f;
                 if (before.z <= entranceZ || after.z > entranceZ) continue;
@@ -162,7 +195,7 @@ namespace AzureDreamsReimagined
         private Vector3 HomeEntry(TownInteriorScene room)
         {
             int index = Array.IndexOf(HomeScenes, room.interiorId);
-            if (index == 0) return CellPosition(InitialHouseDoor);
+            if (index == 0) return CellPosition(HomeLayoutCell(index, InitialHouseDoor));
             int hut = Array.IndexOf(HutScenes, room.interiorId);
             return hut > 0 ? CellPosition(HutDoor) : room.entryPosition;
         }
@@ -174,14 +207,16 @@ namespace AzureDreamsReimagined
             int index = HouseIndex;
             if (index >= 0)
             {
-                PlaceHomeMarker("Bath passage", CellPosition(BathDoors[index]), _accentMaterial);
-                PlaceHomeMarker("Monster hut passage", HutLinks[index], _accentMaterial);
+                PlaceHomeMarker("Bath passage", CellPosition(HomeLayoutCell(index, BathDoors[index])), _accentMaterial);
+                PlaceHomeMarker("Monster hut passage", HomeHutMarker(index), _accentMaterial);
+                ApplyPurchasedHomeItems();
+                SetupHomeBathScene(index);
                 _message = string.Empty;
             }
             else if (InHomeHut)
             {
                 RefreshHutMonsters();
-                _message = T("Monster hut. E at a storage pad: manage familiars. E at the entrance: return.", "Alojamento. E junto a uma vaga: gerenciar familiares. E na entrada: voltar.");
+                _message = string.Empty;
             }
         }
 
@@ -219,26 +254,25 @@ namespace AzureDreamsReimagined
 
             if (TryHomeStorageShelf()) return true;
             int house = HouseIndex;
-            if (house >= 0 && NearHomeCell(BathDoors[house], 0.9f))
+            if (house >= 0 && NearHomeCell(HomeLayoutCell(house, BathDoors[house]), 0.9f))
             {
                 BeginHomeBath(house);
                 return true;
             }
-            if (house >= 0 && NearHomeCell(BathPoints[house], 0.75f))
+            if (house >= 0 && NearHomeCell(HomeLayoutCell(house, BathPoints[house]), 0.75f))
             {
-                MoveThroughBathPassage(BathDoors[house]);
+                MoveThroughBathPassage(HomeLayoutCell(house, BathDoors[house]));
                 return true;
             }
-            if (house >= 0 && NearHomeCell(Beds[house], 1.4f))
+            if (house >= 0 && NearHomeCell(HomeLayoutCell(house, Beds[house]), 1.4f))
             {
                 _health = _playerDefinition ? _playerDefinition.MaxHealth : 20;
                 if (_player.TryGetComponent<CharacterStats>(out var stats)) stats.currentHealth = _health;
                 _message = T("Koh rests in his bed.", "Koh descansa na cama.");
                 return true;
             }
-            if (house >= 0 && NearHomePoint(HutLinks[house], 0.95f))
+            if (house >= 0 && NearHomePoint(HomeHutMarker(house), 0.95f))
             {
-                _homeBeforeHut = _interior.interiorId;
                 StartCoroutine(LoadInterior(HutScenes[CurrentHutRank]));
                 return true;
             }
@@ -248,9 +282,10 @@ namespace AzureDreamsReimagined
                 exit.y = 0f;
                 if (exit.sqrMagnitude <= 0.85f * 0.85f)
                 {
-                    string destination = string.IsNullOrEmpty(_homeBeforeHut) ?
-                        CurrentHomeScene() : _homeBeforeHut;
-                    StartCoroutine(LoadInterior(destination));
+                    // Always resolve the house from the current saved upgrade
+                    // level. This also keeps the return correct after a home
+                    // upgrade while Koh is visiting the Monster Hut.
+                    StartCoroutine(LoadInterior(CurrentHomeScene()));
                     return true;
                 }
                 int nearest = -1;
@@ -330,6 +365,7 @@ namespace AzureDreamsReimagined
                 var familiar = SpawnActor(prefab, cell, "Stored familiar - " + definition.DisplayName,
                     species: paletteSpecies, palette: FamiliarPalette(paletteSpecies, record), groundedIdle: true);
                 familiar.transform.position = RetailTownActorPosition(familiar.transform.position, TownActorFootOffset);
+                AddStoredFamiliarLight(familiar);
                 _hutViews.Add(familiar);
             }
         }
@@ -348,7 +384,7 @@ namespace AzureDreamsReimagined
                 DrawHutFamiliarStatus(roster, slot, storedFamiliar);
                 return;
             }
-            GUILayout.BeginArea(new Rect(128, 72, 384, 336), GUI.skin.box);
+            BeginHudMenu(new Rect(128, 72, 384, 336));
             GUILayout.Label(T("Monster hut", "Alojamento de monstros") + T(" - slot ", " - vaga ") + $"{_hutSlot + 1}/{HutPads.Length}");
             GUILayout.Label(_familiarDefinition ? T("Traveling with Koh: ", "Viajando com Koh: ") + _familiarDefinition.DisplayName : T("No traveling familiar", "Sem acompanhante"));
             bool changed = false;
@@ -412,9 +448,9 @@ namespace AzureDreamsReimagined
         {
             var roster = ReadHutRoster();
             var first = HutFusionFamiliar(roster[_hutSlot]);
-            GUILayout.BeginArea(new Rect(128, 72, 384, 336), GUI.skin.box);
+            BeginHudMenu(new Rect(128, 72, 384, 336));
             GUILayout.Label(T("Choose a stored familiar", "Escolha um familiar guardado"));
-            _hutFusionScroll = GUILayout.BeginScrollView(_hutFusionScroll);
+            _hutFusionScroll = GUILayout.BeginScrollView(_hutFusionScroll, GUILayout.MaxHeight(102f));
             for (int i = 0; i < roster.Count; i++)
             {
                 if (i == _hutSlot) continue;
@@ -435,6 +471,7 @@ namespace AzureDreamsReimagined
                     var survivor = preview.BlueSurvives ? second : first;
                     GUILayout.Label($"{preview.Name} ({survivor.Definition.DisplayName})  Lv. {preview.Result.Level}");
                     GUILayout.Label($"HP {preview.Result.MaxHp}   MP {preview.Result.MaxMp}   {DescribeTalents(preview.Result)}");
+                    DrawFusionResultStatsChart(GUILayoutUtility.GetRect(342f, 66f, GUILayout.ExpandWidth(true)), preview.Result);
                     if (GUILayout.Button(T("Confirm fusion", "Confirmar fusão")))
                     {
                         roster[_hutSlot] = EncodeFamiliar(survivor.Definition, survivor.Species, preview.Result, survivor.Nickname);
@@ -541,7 +578,14 @@ namespace AzureDreamsReimagined
         {
             int index = HouseIndex;
             var tilePosition = new Vector2(position.x, position.z);
-            if (index >= 0) return HouseFootprints[index].Contains(tilePosition);
+            if (index >= 0)
+            {
+                var footprint = HouseFootprints[index];
+                if (index == 0)
+                    footprint = Rect.MinMaxRect(32f - footprint.xMax, footprint.yMin,
+                        32f - footprint.xMin, footprint.yMax);
+                return footprint.Contains(tilePosition);
+            }
             int hut = HutIndex;
             if (hut <= 0) return hut < 0 || HutFootprint.Contains(tilePosition);
             var last = HutPadLayouts[hut][^1];

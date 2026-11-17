@@ -25,10 +25,51 @@ namespace AzureDreamsReimagined
             "A familiar is a frog. Wait for the effect to wear off before fusing.",
             "Um familiar está em forma de sapo. Espere o efeito passar para fundir.");
 
+        // Fusion previews show the actual record that will be kept, so this
+        // chart must read from the calculated result rather than either input.
+        // Keeping the scale local to the four displayed values makes useful
+        // differences visible for low-level familiars as well as high-level ones.
+        private void DrawFusionResultStatsChart(Rect rect, ActorRecord result)
+        {
+            if (result == null) return;
+
+            DrawDialogueFrame(rect);
+            DrawInventoryText(new Rect(rect.x + 6f, rect.y + 2f, rect.width - 12f, 13f),
+                T("Resulting stats", "Atributos resultantes"), _messageStyle);
+
+            int hp = Mathf.Max(1, result.MaxHp);
+            int mp = Mathf.Max(1, result.MaxMp);
+            int attack = Mathf.Max(1, result.CurrentAttack);
+            int defense = Mathf.Max(1, result.CurrentDefense);
+            int ceiling = Mathf.Max(20, hp, mp, attack, defense);
+            ceiling = Mathf.CeilToInt(ceiling / 10f) * 10;
+
+            float rowHeight = (rect.height - 18f) * 0.25f;
+            float labelWidth = 28f;
+            float valueWidth = 31f;
+            DrawFusionStatChartBar(0, "HP", hp, new Color(0.37f, 0.79f, 0.94f));
+            DrawFusionStatChartBar(1, "MP", mp, new Color(0.47f, 0.54f, 0.95f));
+            DrawFusionStatChartBar(2, T("ATK", "ATQ"), attack, new Color(0.96f, 0.48f, 0.34f));
+            DrawFusionStatChartBar(3, "DEF", defense, new Color(0.50f, 0.85f, 0.52f));
+
+            void DrawFusionStatChartBar(int row, string label, int value, Color color)
+            {
+                float y = rect.y + 17f + row * rowHeight;
+                var labelRect = new Rect(rect.x + 6f, y - 1f, labelWidth, rowHeight);
+                var valueRect = new Rect(rect.xMax - valueWidth - 5f, y - 1f, valueWidth, rowHeight);
+                var track = Rect.MinMaxRect(labelRect.xMax + 2f, y + 2f, valueRect.x - 3f, y + rowHeight - 2f);
+                DrawInventoryText(labelRect, label, _messageStyle);
+                DrawHudFill(track, new Color(0.10f, 0.15f, 0.27f, 0.9f));
+                DrawHudFill(new Rect(track.x, track.y, track.width * Mathf.Clamp01(value / (float)ceiling), track.height), color);
+                DrawInventoryText(valueRect, value.ToString(), _messageStyle);
+            }
+        }
+
         private FusionPreview BuildFusionPreview(BagFamiliar redFamiliar, BagFamiliar blueFamiliar)
         {
             if (_area != Area.Tower || !HasBlueCollar || redFamiliar == null || blueFamiliar == null ||
                 redFamiliar.Actor.Hp <= 0 || blueFamiliar.Actor.Hp <= 0 ||
+                IsFamiliarLost(redFamiliar.Actor) || IsFamiliarLost(blueFamiliar.Actor) ||
                 (IsFrog(redFamiliar.Actor) && IsFrog(blueFamiliar.Actor))) return null;
             return BuildFusionPreview(redFamiliar, blueFamiliar, FamiliarDisplayName);
         }
@@ -162,6 +203,7 @@ namespace AzureDreamsReimagined
         {
             var preview = _fusionPreview;
             if (preview == null || _fusionPlaying || _turnBusy || _fusionFirst == null || _fusionSecond == null ||
+                IsFamiliarLost(_fusionFirst.Actor) || IsFamiliarLost(_fusionSecond.Actor) ||
                 KohSkipsAction || ItemImmobilized(_playerActor) || SlowBlocksAction(_playerActor)) return;
             if (FusionBlockedByFrog)
             {

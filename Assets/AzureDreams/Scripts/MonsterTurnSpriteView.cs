@@ -1,4 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace AzureDreamsReimagined
 {
@@ -18,6 +23,7 @@ namespace AzureDreamsReimagined
         private const int SleepStart = 14;
         private const int IndexedSleepStart = 18;
         private const int IndexedHitColumn = 20;
+        private const int CommunityFramesPerSecond = 8;
         private ActorLocomotionView _locomotion;
         [SerializeField] private Texture2D _atlas;
         [SerializeField] private int _indexedSpecies;
@@ -26,6 +32,8 @@ namespace AzureDreamsReimagined
         private bool _usingCommunityAtlas;
         private SpriteRenderer _renderer;
         private Sprite[] _frames;
+        private readonly Dictionary<string, Sprite[][]> _communityFrames = new(StringComparer.Ordinal);
+        private bool _communityLoadStarted;
         private int _columns;
         private bool UsesRetailLayout => _atlas &&
             (_atlas.width == IndexedHitColumn * IndexedCellSize || _atlas.width == (IndexedHitColumn + 1) * IndexedCellSize);
@@ -37,14 +45,44 @@ namespace AzureDreamsReimagined
         private bool _casting;
         private float _progress = 1f;
         private Vector3 _previousLunge;
-        private bool _sleeping, _exhausted, _tinted;
+        private bool _sleeping, _exhausted, _tinted, _defeated;
         private Color _awakeColor;
         private float _sleepStartedAt;
+        private float _defeatStartedAt;
+
+        [Serializable]
+        private sealed class CommunityManifest
+        {
+            public CommunityMonster[] monsters;
+        }
+
+        [Serializable]
+        private sealed class CommunityMonster
+        {
+            public int species;
+            public int cell_size;
+            public CommunityAction[] actions;
+        }
+
+        [Serializable]
+        private sealed class CommunityAction
+        {
+            public string name;
+            public string file;
+            public int columns;
+            public int[] frame_counts;
+        }
+
+        private static readonly Dictionary<string, Texture2D> CommunitySourceAtlases = new(StringComparer.Ordinal);
 
         private void Awake()
         {
             int communitySpecies = _indexedSpecies != 0 ? _indexedSpecies : SpeciesFromName(transform.root.name);
-            if (communitySpecies > 0)
+            // Cyclone has a captured retail sheet whose layout and artwork are
+            // authoritative. The community dump for it is incomplete, so never
+            // replace that sheet with the generic fallback atlas.
+            bool keepRetailCycloneAtlas = communitySpecies == 29 && _atlas;
+            if (communitySpecies > 0 && !keepRetailCycloneAtlas)
             {
                 var communityAtlas = Resources.Load<Texture2D>($"Monsters/Community/monster_{communitySpecies:x2}");
                 if (communityAtlas)
@@ -87,8 +125,16 @@ namespace AzureDreamsReimagined
 
         private void Start()
         {
+            // SpawnActor can assign the indexed fallback before Start runs. Do
+            // not let that temporary sheet prevent the full source sequences
+            // from being loaded.
+            if (_usingCommunityAtlas && !_communityLoadStarted)
+                StartCommunityActionLoad();
             if (_frames != null) return;
-            if (_indexedSpecies != 0) SetPalette(_indexedSpecies, MonsterPaletteVariant.Enemy);
+            if (_indexedSpecies != 0)
+            {
+                SetPalette(_indexedSpecies, MonsterPaletteVariant.Enemy);
+            }
             else BuildFrames(_atlas);
         }
 
@@ -99,6 +145,14 @@ namespace AzureDreamsReimagined
 
         internal void UseCommunityAtlas(int species, Texture2D atlas)
         {
+            // Do not overwrite Cyclone's extracted retail action atlas. It is
+            // deliberately separate from the partial community frame export.
+            if (species == 29 && _atlas && _atlas.width == 16 * CellSize && _atlas.height == Rows * CellSize)
+            {
+                _indexedSpecies = 0;
+                _usingCommunityAtlas = false;
+                return;
+            }
             _atlas = atlas;
             _indexedSpecies = species;
             _usingCommunityAtlas = true;
@@ -108,11 +162,130 @@ namespace AzureDreamsReimagined
             position.y = -0.55f;
             transform.localPosition = position;
             BuildFrames(MonsterPalettes.Recolor(atlas, species, MonsterPaletteVariant.Enemy, indexed: true));
+            if (isActiveAndEnabled && !_communityLoadStarted) StartCommunityActionLoad();
         }
 
-        internal void SetPalette(int species, MonsterPaletteVariant variant) =>
-            BuildFrames(MonsterPalettes.Recolor(_atlas, _indexedSpecies == 0 ? species : _indexedSpecies, variant,
-                indexed: _indexedSpecies != 0));
+        internal void SetPalette(int species, MonsterPaletteVariant variant)
+        {
+            if (_communityFrames.Count > 0)
+            {
+                BuildCommunityFrames(variant);
+                return;
+            }
+            if (_atlas)
+                BuildFrames(MonsterPalettes.Recolor(_atlas, _indexedSpecies == 0 ? species : _indexedSpecies, variant,
+                    indexed: _indexedSpecies != 0));
+        }
+
+        private void StartCommunityActionLoad()
+        {
+            if (_communityLoadStarted) return;
+            _communityLoadStarted = true;
+            StartCoroutine(LoadCommunityActions());
+        }
+
+        private IEnumerator LoadCommunityActions()
+        {
+            const string relativeRoot = "Monsters/Community/";
+            using var manifestRequest = UnityWebRequest.Get(StreamingUrl(relativeRoot + "manifest.json"));
+            yield return manifestRequest.SendWebRequest();
+            if (manifestRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Could not load community monster animation manifest: {manifestRequest.error}", this);
+                yield break;
+            }
+
+            CommunityManifest manifest;
+            try { manifest = JsonUtility.FromJson<CommunityManifest>(manifestRequest.downloadHandler.text); }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"Community monster animation manifest is invalid: {exception.Message}", this);
+                yield break;
+            }
+            CommunityMonster monster = null;
+            if (manifest?.monsters != null)
+                foreach (var entry in manifest.monsters)
+                    if (entry != null && entry.species == _indexedSpecies) { monster = entry; break; }
+            if (monster?.actions == null || monster.cell_size != IndexedCellSize) yield break;
+
+            var loaded = new List<(CommunityAction action, Texture2D texture)>();
+            foreach (var action in monster.actions)
+            {
+                if (action == null || string.IsNullOrEmpty(action.name) || string.IsNullOrEmpty(action.file)) continue;
+                string key = _indexedSpecies + ":" + action.file;
+                if (!CommunitySourceAtlases.TryGetValue(key, out var texture) || !texture)
+                {
+                    // Palette conversion reads the indexed red channel, so these
+                    // streamed source textures must remain CPU-readable.
+                    using var request = UnityWebRequestTexture.GetTexture(StreamingUrl(relativeRoot + action.file), false);
+                    yield return request.SendWebRequest();
+                    if (request.result != UnityWebRequest.Result.Success)
+                    {
+                        Debug.LogWarning($"Could not load {action.file}: {request.error}", this);
+                        continue;
+                    }
+                    texture = DownloadHandlerTexture.GetContent(request);
+                    texture.filterMode = FilterMode.Point;
+                    texture.wrapMode = TextureWrapMode.Clamp;
+                    CommunitySourceAtlases[key] = texture;
+                }
+                loaded.Add((action, texture));
+            }
+
+            if (loaded.Count == 0) yield break;
+            _communitySourceActions.Clear();
+            foreach (var entry in loaded) _communitySourceActions[entry.action.name] = (entry.action, entry.texture);
+            BuildCommunityFrames(MonsterPaletteVariant.Enemy);
+        }
+
+        private readonly Dictionary<string, (CommunityAction action, Texture2D texture)> _communitySourceActions = new(StringComparer.Ordinal);
+
+        private static string StreamingUrl(string relativePath)
+        {
+            string root = Application.streamingAssetsPath.Replace('\\', '/').TrimEnd('/');
+            if (root.Contains("://", StringComparison.Ordinal)) return root + "/" + relativePath;
+            return new Uri(Path.Combine(root, relativePath)).AbsoluteUri;
+        }
+
+        private void BuildCommunityFrames(MonsterPaletteVariant variant)
+        {
+            ClearCommunityFrames();
+            ClearFrames();
+            foreach (var entry in _communitySourceActions)
+            {
+                CommunityAction action = entry.Value.action;
+                Texture2D colored = MonsterPalettes.Recolor(entry.Value.texture, _indexedSpecies, variant, indexed: true);
+                int availableColumns = Mathf.Min(action.columns, colored.width / IndexedCellSize);
+                if (availableColumns <= 0) continue;
+                var rows = new Sprite[Rows][];
+                for (int row = 0; row < Rows; row++)
+                {
+                    int count = action.frame_counts != null && row < action.frame_counts.Length
+                        ? Mathf.Min(action.frame_counts[row], availableColumns)
+                        : availableColumns;
+                    if (count <= 0) continue;
+                    rows[row] = new Sprite[count];
+                    for (int column = 0; column < count; column++)
+                        rows[row][column] = Sprite.Create(colored,
+                            new Rect(column * IndexedCellSize, (Rows - 1 - row) * IndexedCellSize,
+                                IndexedCellSize, IndexedCellSize),
+                            new Vector2(0.5f, 0f), 64f, 0, SpriteMeshType.FullRect);
+                }
+                _communityFrames[action.name] = rows;
+            }
+            if (_communityFrames.TryGetValue("idle", out var idle))
+            {
+                var first = FirstCommunitySprite(idle);
+                if (first) _renderer.sprite = first;
+            }
+        }
+
+        private static Sprite FirstCommunitySprite(Sprite[][] rows)
+        {
+            foreach (var row in rows)
+                if (row is { Length: > 0 }) return row[0];
+            return null;
+        }
 
         private void BuildFrames(Texture2D atlas)
         {
@@ -120,7 +293,9 @@ namespace AzureDreamsReimagined
             ClearFrames();
             _frameAtlas = atlas;
             int size = FrameSize;
-            int pivotPixels = UsesRetailLayout ? 12 : 4;
+            // The indexed monster frames have opaque feet at the bottom edge.
+            // A 12-pixel pivot buried them below the tower tile after actor scaling.
+            int pivotPixels = UsesRetailLayout ? 0 : 4;
             if (GroundedIdle && _atlas.isReadable) pivotPixels = GroundedIdlePivot(size, pivotPixels);
             float pivotY = (float)pivotPixels / size;
             _frames = new Sprite[Rows * _columns];
@@ -155,6 +330,7 @@ namespace AzureDreamsReimagined
 
         internal void BeginAction(Vector2Int direction, bool casting)
         {
+            if (_defeated) return;
             _direction = direction;
             _casting = casting;
             _progress = 0f;
@@ -162,9 +338,30 @@ namespace AzureDreamsReimagined
 
         internal void PresentAction(float progress) => _progress = progress;
 
+        /// <summary>Plays the extracted defeat sequence before this view is retired.</summary>
+        internal float BeginDefeat()
+        {
+            if (!_communityFrames.TryGetValue("defeated", out var frames)) return 0f;
+            int longest = 0;
+            foreach (var row in frames)
+                if (row != null) longest = Mathf.Max(longest, row.Length);
+            if (longest == 0) return 0f;
+
+            _defeated = true;
+            _walking = false;
+            _casting = false;
+            _progress = 1f;
+            _defeatStartedAt = AnimationTime;
+            // Do not hold up a turn for unusually long source banks, while
+            // still letting even a one-pose defeat read on screen.
+            return Mathf.Clamp(longest / (float)CommunityFramesPerSecond, 0.18f, 0.55f);
+        }
+
         internal bool PresentStatus(bool sleeping, bool exhausted, bool paralyzed)
         {
-            bool canPresent = _frames != null && (!sleeping || _columns > SleepColumn + 1);
+            bool hasCommunitySleep = _communityFrames.TryGetValue("sleep", out _);
+            bool canPresent = (_frames != null && (!sleeping || _columns > SleepColumn + 1)) ||
+                              (_communityFrames.Count > 0 && (!sleeping || hasCommunitySleep));
             _paralyzed = canPresent && paralyzed;
             if (!canPresent) return false;
             if (sleeping && !_sleeping) _sleepStartedAt = AnimationTime;
@@ -177,7 +374,7 @@ namespace AzureDreamsReimagined
 
         private void LateUpdate()
         {
-            if (!_renderer || _frames == null) return;
+            if (!_renderer || (_frames == null && _communityFrames.Count == 0)) return;
             var camera = Camera.main;
             float angle = Mathf.Atan2(_direction.x, _direction.y) * Mathf.Rad2Deg;
             if (camera) angle -= camera.transform.eulerAngles.y;
@@ -202,18 +399,29 @@ namespace AzureDreamsReimagined
             }
             if (!_locomotion) _locomotion = GetComponentInParent<ActorLocomotionView>();
             bool hit = _locomotion && _locomotion.HitProgress < 1f;
-            int column = Mathf.FloorToInt(AnimationTime * 4f) & 1;
-            if (hit && UsesRetailLayout && _columns > IndexedHitColumn)
-                column = IndexedHitColumn;
-            else if (_sleeping)
-                column = SleepColumn + (Mathf.FloorToInt(sleepTime * 2f) & 1);
-            else if (!hit && _progress < 1f)
-                column = _casting && _columns > CastStart
-                    ? CastColumn()
-                    : AttackStart + Mathf.Clamp((int)(_progress * 5f), 0, 4);
-            else if (!hit && _walking)
-                column = WalkStart + Mathf.Clamp((int)(_walkProgress * 5f), 0, 4);
-            _renderer.sprite = _frames[row * _columns + column];
+            if (_communityFrames.Count > 0)
+            {
+                string action = _defeated ? "defeated" : hit ? "hit" : _sleeping ? "sleep" :
+                    _progress < 1f ? (_casting ? "magic" : "attack") : _walking ? "walk" : "idle";
+                Sprite[] frames = CommunityFrames(action, row) ?? CommunityFrames("idle", row);
+                if (frames is { Length: > 0 })
+                    _renderer.sprite = frames[CommunityFrameIndex(action, frames.Length, sleepTime)];
+            }
+            else
+            {
+                int column = Mathf.FloorToInt(AnimationTime * 4f) & 1;
+                if (hit && UsesRetailLayout && _columns > IndexedHitColumn)
+                    column = IndexedHitColumn;
+                else if (_sleeping)
+                    column = SleepColumn + (Mathf.FloorToInt(sleepTime * 2f) & 1);
+                else if (!hit && _progress < 1f)
+                    column = _casting && _columns > CastStart
+                        ? CastColumn()
+                        : AttackStart + Mathf.Clamp((int)(_progress * 5f), 0, 4);
+                else if (!hit && _walking)
+                    column = WalkStart + Mathf.Clamp((int)(_walkProgress * 5f), 0, 4);
+                _renderer.sprite = _frames[row * _columns + column];
+            }
 
             if (_attackLunge > 0f || UsesRetailLayout)
             {
@@ -240,13 +448,51 @@ namespace AzureDreamsReimagined
             return CastStart + Mathf.Clamp((int)(_progress * frames), 0, frames - 1);
         }
 
-        private void OnDestroy() => ClearFrames();
+        private Sprite[] CommunityFrames(string action, int row)
+        {
+            if (!_communityFrames.TryGetValue(action, out var rows)) return null;
+            if (row >= 0 && row < rows.Length && rows[row] is { Length: > 0 }) return rows[row];
+            foreach (var candidate in rows)
+                if (candidate is { Length: > 0 }) return candidate;
+            return null;
+        }
+
+        private int CommunityFrameIndex(string action, int frameCount, float sleepTime)
+        {
+            if (frameCount <= 1) return 0;
+            if (action is "attack" or "magic")
+                return Mathf.Clamp(Mathf.FloorToInt(_progress * frameCount), 0, frameCount - 1);
+            if (action == "walk")
+                return Mathf.Clamp(Mathf.FloorToInt(_walkProgress * frameCount), 0, frameCount - 1);
+            if (action == "defeated")
+                return Mathf.Min(Mathf.FloorToInt((AnimationTime - _defeatStartedAt) * CommunityFramesPerSecond),
+                    frameCount - 1);
+            float time = action == "sleep" ? sleepTime : AnimationTime;
+            return Mathf.FloorToInt(time * CommunityFramesPerSecond) % frameCount;
+        }
+
+        private void OnDestroy()
+        {
+            ClearFrames();
+            ClearCommunityFrames();
+        }
 
         private void ClearFrames()
         {
             if (_frames == null) return;
             foreach (var sprite in _frames) Destroy(sprite);
             _frames = null;
+            _frameAtlas = null;
+        }
+
+        private void ClearCommunityFrames()
+        {
+            foreach (var action in _communityFrames.Values)
+                foreach (var row in action)
+                    if (row != null)
+                        foreach (var sprite in row)
+                            if (sprite) Destroy(sprite);
+            _communityFrames.Clear();
         }
     }
 }

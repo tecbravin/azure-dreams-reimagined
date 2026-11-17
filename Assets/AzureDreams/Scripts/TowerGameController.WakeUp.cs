@@ -7,26 +7,36 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private const string NicoWakeUpSeen = StoryPrefix + "nico.wake_up_seen";
+        private const string NicoConfessionWakeUpSeen = StoryPrefix + "nico.confession_wake_up_seen";
         private static readonly TownRetailSelectionTable WakeUpSelection = TownRetailSelectionTable.CreateForScene3E5000();
-        // Entries 1-7 of the home module, including Cherrl's nurse visit at entry 7.
-        private static readonly (string Id, string English, string Portuguese)[] WakeUpVisitors =
+        private readonly struct WakeUpVisitorDefinition
+        {
+            internal readonly string Id, English, Portuguese, PortraitPath;
+
+            internal WakeUpVisitorDefinition(string id, string english, string portuguese, string portraitPath)
+            {
+                Id = id;
+                English = english;
+                Portuguese = portuguese;
+                PortraitPath = portraitPath;
+            }
+        }
+
+        // Entries 1-7 follow the order decoded from the retail home module.
+        // WakeUpSelection retains its original priority/paired/cycling rules.
+        private static readonly WakeUpVisitorDefinition[] WakeUpVisitors =
         {
             default,
-            ("nico", "Good morning, {name}. Come see the fountain with me when you're ready.",
-                "Bom dia, {name}. Quando estiver pronto, venha ver a fonte comigo."),
-            ("selfi", "You're awake! Next time, tell me before you go climbing the Tower again.",
-                "Você acordou! Da próxima vez, me avise antes de subir a Torre de novo."),
-            ("fur", "Did you sleep well? Stop by the shop later. I'd like to hear about your trip.",
-                "Dormiu bem? Passe na loja mais tarde. Quero saber como foi a sua aventura."),
-            ("patty", "Good morning! Come by the restaurant when you get hungry.",
-                "Bom dia! Passe no restaurante quando bater a fome."),
-            ("vivian", "You're back just in time. Come see me dance when you've rested.",
-                "Você voltou bem a tempo. Venha me ver dançar depois que descansar."),
-            ("mia", "Oh, you're awake. Come find me at the library when you feel up to it.",
-                "Ah, você acordou. Quando estiver se sentindo melhor, me procure na biblioteca."),
-            ("cherrl", "I was worried about you. Chappy and I are glad you're home.",
-                "Eu estava preocupada com você. O Chappy e eu estamos felizes que você voltou.")
+            new WakeUpVisitorDefinition("nico", null, null, null),
+            new WakeUpVisitorDefinition("selfi", null, null, null),
+            new WakeUpVisitorDefinition("fur", null, null, null),
+            new WakeUpVisitorDefinition("patty", null, null, null),
+            new WakeUpVisitorDefinition("vivian", null, null, null),
+            new WakeUpVisitorDefinition("mia", null, null, null),
+            new WakeUpVisitorDefinition("cherrl", null, null, null)
         };
+
+        private static readonly WakeUpVisitorDefinition WreathWakeUpVisitor = new("wreath", null, null, WreathPortrait);
 
         // Mattress centers from the three captured bedroom meshes.
         private static readonly Vector2Int[] WakeUpBeds = { new(10, 12), new(10, 12), new(10, 14) };
@@ -38,6 +48,8 @@ namespace AzureDreamsReimagined
         private Vector3 _wakeUpResidentPosition;
         private Quaternion _wakeUpResidentRotation;
         private string _wakeUpReturnMessage;
+        private Vector3 _wakeUpApproachStart;
+        private bool _wakeUpVisitorLeaving;
 
         private Vector3 HomeReturnPosition()
         {
@@ -55,7 +67,7 @@ namespace AzureDreamsReimagined
 
         private IEnumerator PlayWakeUp(bool survived, string returnMessage)
         {
-            var bed = WakeUpBeds[HouseIndex];
+            var bed = HomeLayoutCell(HouseIndex, WakeUpBeds[HouseIndex]);
             var exit = FindWakeUpCell(bed, MattressHeight);
             if (exit.x < 0)
             {
@@ -72,7 +84,13 @@ namespace AzureDreamsReimagined
             _playerCell = bed;
             _wakingInBed = true;
             _townFacing = new Vector2(exit.x - bed.x, exit.y - bed.y);
-            if (_kohSprite) _kohSprite.SetFacing(_townFacing);
+            if (_kohSprite)
+            {
+                _kohSprite.SetFacing(_townFacing);
+                // The retail sleep sheet ends on the prone pose.  Start the wake-up
+                // scene there instead of replaying the fall while Koh is already in bed.
+                _kohSprite.PresentSleep(true, alreadyLying: true);
+            }
             UpdateCameraFollow(snap: true);
             yield return new WaitForSecondsRealtime(0.85f);
 
@@ -102,7 +120,7 @@ namespace AzureDreamsReimagined
                         if (Mathf.Abs(x) + Mathf.Abs(z) != distance) continue;
                         var candidate = near + new Vector2Int(x, z);
                         var position = CellPosition(candidate);
-                        if (candidate == _playerCell || candidate.x >= BedroomDoors[HouseIndex].x ||
+                        if (candidate == _playerCell || !IsInHomeBedroom(HouseIndex, candidate) ||
                             TownTerrainHeight(position) >= maxGroundHeight || !TownPositionOpen(position)) continue;
                         return candidate;
                     }
@@ -111,20 +129,18 @@ namespace AzureDreamsReimagined
 
         private bool TryStartWakeUpVisit(Vector2Int cell, bool survived, string returnMessage)
         {
+            _wakeUpVisitorLeaving = false;
             var reputation = TownReputation.Read();
-            bool nicoThanks = StoryStage("nico") == 2 && !TownSaveVariables.GetBool(NicoWakeUpSeen) &&
+            bool nicoThanks = StoryStage("nico") == NicoSecondDonation && !TownSaveVariables.GetBool(NicoWakeUpSeen) &&
                 !reputation.IsFlagSet(TownReputation.NicoWakeUpFlag);
+            bool nicoConfession = StoryStage("nico") == NicoConfessionWake && StoryNewDay("nico") &&
+                !TownSaveVariables.GetBool(NicoConfessionWakeUpSeen) && !reputation.IsFlagSet(NicoCheroMorningFlag);
             byte entry = 0;
-            string id = nicoThanks ? "nico" : "wreath";
-            string english = survived ? "Good morning, {name}. I'm glad you're home." :
-                "{name}, you're awake. You gave me quite a scare. Take it easy today.";
-            string portuguese = survived ? "Bom dia, {name}. Que bom que você voltou." :
-                "{name}, você acordou. Que susto você me deu! Vá com calma hoje.";
-            if (nicoThanks)
-            {
-                english = "Good morning, {name}! I came to thank you for donating to the fountain.";
-                portuguese = "Bom dia, {name}! Vim agradecer pela sua doação para a fonte.";
-            }
+            var visitor = WreathWakeUpVisitor;
+            string english = visitor.English;
+            string portuguese = visitor.Portuguese;
+            string portraitPath = visitor.PortraitPath;
+            if (nicoThanks || nicoConfession) visitor = WakeUpVisitors[1];
             else
             {
                 var selection = new TownRetailStorySelectionState
@@ -132,21 +148,26 @@ namespace AzureDreamsReimagined
                     EntryIndex = (byte)TownSaveVariables.GetInt(TownReputation.WakeCursorKey, byte.MaxValue)
                 };
                 entry = TownRetailStoryEventSelector.SelectCompletedEntry(reputation, selection, WakeUpSelection);
-                if (entry != 0)
+                if (entry != 0) TownSaveVariables.SetInt(TownReputation.WakeCursorKey, selection.EntryIndex);
+                if (entry != 0 && (survived || WakeUpVisitors[entry].Id != "vivian") &&
+                    (WakeUpVisitors[entry].Id != "cherrl" || reputation.IsFlagSet(CherrlNurseFlag)))
                 {
-                    (id, english, portuguese) = WakeUpVisitors[entry];
-                    TownSaveVariables.SetInt(TownReputation.WakeCursorKey, selection.EntryIndex);
+                    visitor = WakeUpVisitors[entry];
+                    english = visitor.English;
+                    portuguese = visitor.Portuguese;
+                    portraitPath = visitor.PortraitPath;
                 }
+                else entry = 0;
             }
 
-            var npc = _townPeople.Find(candidate => candidate && candidate.npcId == id);
+            var npc = _townPeople.Find(candidate => candidate && candidate.npcId == visitor.Id);
             _wakeUpVisitorIsResident = npc;
             if (!npc)
             {
-                var prefab = FindStoryResidentPrefab(id);
+                var prefab = FindStoryResidentPrefab(visitor.Id);
                 if (!prefab && _interior.residentPrefabs != null)
                     prefab = Array.Find(_interior.residentPrefabs, candidate =>
-                        candidate && candidate.TryGetComponent<NPCController>(out var resident) && resident.npcId == id);
+                        candidate && candidate.TryGetComponent<NPCController>(out var resident) && resident.npcId == visitor.Id);
                 if (!prefab) return false;
                 npc = Spawn(prefab, cell, "Wake-up visitor").GetComponent<NPCController>();
             }
@@ -154,24 +175,94 @@ namespace AzureDreamsReimagined
             _wakeUpResidentPosition = npc.transform.position;
             _wakeUpResidentRotation = npc.transform.rotation;
             _wakeUpReturnMessage = returnMessage;
-            npc.transform.position = RetailTownActorPosition(CellPosition(cell), 0f);
+            Vector3 destination = RetailTownActorPosition(CellPosition(cell), 0f);
             _townFacing = new Vector2(cell.x - _playerCell.x, cell.y - _playerCell.y);
             if (_kohSprite) _kohSprite.SetFacing(_townFacing);
-            npc.transform.rotation = Quaternion.LookRotation(new Vector3(-_townFacing.x, 0f, -_townFacing.y));
+            Vector3 approach = new(-_townFacing.x, 0f, -_townFacing.y);
+            _wakeUpApproachStart = destination + approach * 0.72f;
+            npc.transform.position = _wakeUpApproachStart;
+            npc.transform.rotation = Quaternion.LookRotation(-approach);
 
             if (nicoThanks)
             {
                 TownSaveVariables.SetBool(NicoWakeUpSeen, true);
                 reputation.ApplyOneTimeFlagOperation(TownReputation.NicoWakeUpFlag);
             }
+            else if (nicoConfession)
+            {
+                TownSaveVariables.SetBool(NicoConfessionWakeUpSeen, true);
+                reputation.ApplyOneTimeFlagOperation(NicoCheroMorningFlag);
+                AdvanceTownStory("nico", NicoHouseGuard);
+            }
             TownSaveVariables.SetInt(TownReputation.WakeEntryKey, entry);
             TownSaveVariables.Save();
-            return StoryTalk(npc, english, portuguese);
+            StartCoroutine(PlayWakeUpVisitorArrival(npc, destination, english, portuguese, portraitPath, survived,
+                nicoThanks, nicoConfession));
+            return true;
+        }
+
+        private IEnumerator PlayWakeUpVisitorArrival(NPCController npc, Vector3 destination, string english,
+            string portuguese, string portraitPath, bool survived, bool nicoThanks, bool nicoConfession)
+        {
+            const float duration = 0.32f;
+            if (!npc) yield break;
+            Vector3 origin = npc.transform.position;
+            Vector3 direction = destination - origin;
+            var locomotion = npc.GetComponent<ActorLocomotionView>();
+            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            {
+                if (!npc) yield break;
+                npc.transform.position = Vector3.Lerp(origin, destination, elapsed / duration);
+                locomotion?.Present(direction, elapsed * 7f, true);
+                yield return null;
+            }
+            if (!npc) yield break;
+            npc.transform.position = destination;
+            locomotion?.Present(direction, 0f, false);
+            if (direction.sqrMagnitude > 0.0001f) npc.transform.rotation = Quaternion.LookRotation(-direction.normalized);
+            if (npc.npcId == "nico")
+                NicoWakeUpStory(npc, survived, nicoThanks, nicoConfession);
+            else if (npc.npcId == "selfi")
+                SelfiWakeUpStory(npc, survived);
+            else if (npc.npcId == "patty")
+                PattyWakeUpStory(npc);
+            else if (npc.npcId == "mia")
+                MiaWakeUpStory(npc, survived);
+            else if (npc.npcId == "vivian")
+                VivianWakeUpStory(npc);
+            else if (npc.npcId == "fur")
+                FurWakeUpStory(npc, survived);
+            else if (npc.npcId == "cherrl")
+                CherrlWakeUpStory(npc);
+            else if (npc.npcId == "wreath")
+                WreathWakeUpStory(npc, survived);
+            else StoryTalk(npc, english, portuguese, portraitPath);
         }
 
         private void FinishWakeUpVisit()
         {
-            if (!_wakeUpVisitor) return;
+            if (!_wakeUpVisitor || _wakeUpVisitorLeaving) return;
+            StartCoroutine(PlayWakeUpVisitorDeparture(_wakeUpVisitor));
+        }
+
+        private IEnumerator PlayWakeUpVisitorDeparture(NPCController npc)
+        {
+            _wakeUpVisitorLeaving = true;
+            const float duration = 0.28f;
+            Vector3 origin = npc ? npc.transform.position : Vector3.zero;
+            Vector3 direction = _wakeUpApproachStart - origin;
+            var locomotion = npc ? npc.GetComponent<ActorLocomotionView>() : null;
+            for (float elapsed = 0f; npc && elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            {
+                npc.transform.position = Vector3.Lerp(origin, _wakeUpApproachStart, elapsed / duration);
+                locomotion?.Present(direction, elapsed * 7f, true);
+                yield return null;
+            }
+            if (!_wakeUpVisitor)
+            {
+                _wakeUpVisitorLeaving = false;
+                yield break;
+            }
             if (_wakeUpVisitorIsResident)
                 _wakeUpVisitor.transform.SetPositionAndRotation(_wakeUpResidentPosition, _wakeUpResidentRotation);
             else
@@ -182,6 +273,7 @@ namespace AzureDreamsReimagined
             _wakeUpVisitor = null;
             _message = _wakeUpReturnMessage ?? string.Empty;
             _wakeUpReturnMessage = null;
+            _wakeUpVisitorLeaving = false;
         }
     }
 }

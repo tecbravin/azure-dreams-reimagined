@@ -194,6 +194,21 @@ namespace AzureDreamsReimagined
         {
             if (value is TownObject.InteractionEvent e && e.Source && e.Source.transform.IsChildOf(transform) && e.Actor == _player)
             {
+                if (e.ObjectId == MiaGlassesObjectId)
+                {
+                    RecordMiaGlassesPickup(e.Source);
+                    return;
+                }
+                if (e.ObjectId == OctopusDumplingStandId)
+                {
+                    OpenOctopusDumplingStall();
+                    return;
+                }
+                if (e.ObjectId == PoolChangingRoomObjectId)
+                {
+                    OpenPoolChangingRoom();
+                    return;
+                }
                 _message = e.Message;
                 _townObjectDialogueOpen = true;
                 _rowanOfferPending = false;
@@ -296,6 +311,7 @@ namespace AzureDreamsReimagined
                     pot.transform.position = RetailTownActorPosition(pot.transform.position, 0f);
                     if (pot.TryGetComponent<TownPotView>(out var potView)) _townPots.Add(potView);
                 }
+                CreateOctopusDumplingStall();
             }
             foreach (var instance in _generated)
             {
@@ -327,8 +343,10 @@ namespace AzureDreamsReimagined
             ResetMonsterShop();
             SetBarryShopPage(BarryShopPage.Closed);
             SetGeneralStorePage(GeneralStorePage.Closed);
+            CloseOctopusDumplingStall();
             _townObjects.Clear();
             _homeStorageOpen = _storageFromWreath = false;
+            _wreathServiceSpeaker = null;
             _storageBagRows = _storageDepotRows = null;
             _townObjectDialogueOpen = false;
             _rowanOfferPending = false;
@@ -414,26 +432,31 @@ namespace AzureDreamsReimagined
                     bool acrossCounter = (npc.npcId == "barry" && AtBlacksmithCounter) ||
                         (npc.npcId == "fur" && InGeneralStore) ||
                         (npc.npcId == "patty" && StoryRoom == RestaurantRoom) ||
+                        (StoryRoom == BarRoom && (npc.npcId is "okami" or "bar_barten")) ||
                         (npc.npcId == "tonka" && _interior && _interior.interiorId == "Interior_13_carpenter");
-                    float reach = acrossCounter ? 3f : 1.4f;
+                    float reach = acrossCounter ? 3f : IsSeatedInteriorResident(StoryRoom, npc.npcId) ? 2f : 1.4f;
                     if (delta.sqrMagnitude > distance || delta.sqrMagnitude > reach * reach) continue;
                     distance = delta.sqrMagnitude;
                     speaker = npc;
                 }
                 if (!speaker) return false;
-                LocalizeHunter(speaker);
                 if (speaker.npcId == "rowan")
                     speaker.dialogueLines = new[] { T("Welcome.", "Boas-vindas."), T("What are you looking for.", "O que está procurando?") };
                 MoveInTown(Vector2.zero, Time.deltaTime);
                 Vector3 facing = _player.transform.position - speaker.transform.position;
                 facing.y = 0f;
-                if (facing.sqrMagnitude > 0.0001f) speaker.transform.rotation = Quaternion.LookRotation(facing);
+                if (facing.sqrMagnitude > 0.0001f)
+                {
+                    speaker.transform.rotation = Quaternion.LookRotation(facing);
+                    speaker.GetComponent<ActorLocomotionView>()?.Present(facing, 0f, false);
+                }
+                if (speaker.npcId == "master" && TalkToMaster(speaker)) return true;
+                if (TryMonsterShopHunterDialogue(speaker)) return true;
                 if (speaker.npcId == "barry" && _interior && _interior.interiorId == BlacksmithInterior)
                 {
-                    if (!TryConstructionStory(speaker)) SetBarryShopPage(BarryShopPage.Services);
-                    return true;
+                    return BarryShopConversation(speaker);
                 }
-                if (TryTownStory(speaker) || TheaterService(speaker)) return true;
+                if (TryTownStory(speaker) || TryAmbientInteriorDialogue(speaker) || TheaterService(speaker)) return true;
                 if (speaker.npcId == "hush" && _interior &&
                     _interior.interiorId is "Interior_0f_hospital" or "Interior_10_hospital_2")
                 {
@@ -453,17 +476,11 @@ namespace AzureDreamsReimagined
             if (_activeTownNpc)
             {
                 var stats = speaker.GetComponent<CharacterStats>();
-                var portrait = speaker.npcId == "weedy" && line == TownDialogueProgress.WeedyBookOffer
-                    ? StreamPortrait(WeedyBookOfferPortrait) ?? stats.portraitTexture
-                    : stats.portraitTexture;
-                ShowTownDialogue(stats.displayName, line, portrait);
+                ShowTownDialogue(stats.displayName, line, stats.portraitTexture);
             }
             _message = speaker.IsTalking ? $"{speaker.GetComponent<CharacterStats>().displayName}: {_dialogueLine}  [{InteractKey}]" : string.Empty;
-            if (!speaker.IsTalking && string.IsNullOrEmpty(line)) CompleteHomeResidentTalk(speaker);
             if (!speaker.IsTalking && string.IsNullOrEmpty(line) && speaker.npcId == "fur" && InGeneralStore)
                 SetGeneralStorePage(GeneralStorePage.Services);
-            if (!speaker.IsTalking && string.IsNullOrEmpty(line) && speaker.npcId == "tonka" && InCarpenterShop)
-                OpenCarpenter();
             if (!speaker.IsTalking && speaker.npcId == "rowan" && string.IsNullOrEmpty(line))
             {
                 _rowanOfferPending = true;

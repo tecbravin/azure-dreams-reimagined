@@ -91,7 +91,10 @@ namespace AzureDreamsReimagined
                 if (_kohSprite) _kohSprite.SetFacing(_townFacing);
             }
             RefreshTownNpcCells();
-            float speed = _townMoveSpeed * (running ? 1.6f : 1f);
+            // Swimming uses the same directional input but deliberately runs at
+            // a slower cadence and never uses the town sprint poses.
+            if (_poolKohSwimming) running = false;
+            float speed = _townMoveSpeed * (running ? 1.6f : 1f) * (_poolKohSwimming ? 0.58f : 1f);
             float stepTime = Mathf.Min(deltaTime, 0.25f);
             Vector3 before = _player.transform.position;
             float startFeet = before.y - TownActorFootOffset;
@@ -102,7 +105,7 @@ namespace AzureDreamsReimagined
             {
                 _townMomentum = Vector2.ClampMagnitude(input, 1f) * speed;
                 _townAirSpeedLimit = speed;
-                if (_wait != null && _wait.WasPressedThisFrame())
+                if (!_poolKohSwimming && _wait != null && _wait.WasPressedThisFrame())
                     _townJumpVelocity = Mathf.Sqrt(2f * TownGravity * 1.8f);
             }
             else if (input.sqrMagnitude > 0.0001f)
@@ -135,6 +138,13 @@ namespace AzureDreamsReimagined
                 next = position + new Vector3(0f, 0f, move.y / count);
                 if (TownPlayerPositionOpen(next, position, clearance)) position = next;
             }
+            if (PoolWaterRequiresSwimsuit(position))
+            {
+                position = before;
+                _townMomentum = Vector2.zero;
+                _message = T("Use the changing room before going into the pool.",
+                    "Use o vestiário antes de entrar na piscina.");
+            }
             float ground = Mathf.Max(TownTerrainHeight(position), TownObstacleTop(position, TownActorRadius));
             bool steppedOffObstacle = !airborne && startGround > startTerrain + TownGroundTolerance &&
                 ground < startGround - TownGroundTolerance;
@@ -148,6 +158,7 @@ namespace AzureDreamsReimagined
             if (_kohSprite) _kohSprite.SetAirborne(_townJumpHeight > TownGroundTolerance);
             position.y = feet + TownActorFootOffset;
             _player.transform.position = position;
+            UpdateKohPoolSwimming(position);
             _playerCell = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
             var planarDelta = new Vector2(position.x - before.x, position.z - before.z);
             bool moving = planarDelta.sqrMagnitude > 0.000001f;
@@ -156,8 +167,8 @@ namespace AzureDreamsReimagined
                 _townJumpHeight <= TownGroundTolerance;
             if (runningOnGround && !_townWasRunningOnGround) SpawnFx(_fxDust, position);
             _townWasRunningOnGround = runningOnGround;
-            if (_playerLocomotion) _playerLocomotion.Present(position - before, _townWalkCycle, moving, running);
-            if (_playerAnimation) _playerAnimation.PlaybackSpeed = moving && running ? 2f : 1f;
+            if (_playerLocomotion) _playerLocomotion.Present(position - before, _townWalkCycle, moving, running && !_poolKohSwimming);
+            if (_playerAnimation) _playerAnimation.PlaybackSpeed = moving && running && !_poolKohSwimming ? 2f : 1f;
             if (moving != _townWasMoving && _playerAnimation)
             {
                 if (moving) _playerAnimation.Play(); else _playerAnimation.Stop();
@@ -651,7 +662,8 @@ namespace AzureDreamsReimagined
                 var cell = from + step;
                 return CanTowerStep(from, step) && cell != _stairCell && CreatureAt(cell) < 0 &&
                     (!_familiar || cell != _familiarCell) &&
-                    !_thrownEggs.Exists(ally => ally.View && ally.Turns > 0 && ally.Cell == cell);
+                    !_thrownEggs.Exists(ally => ally.View && ally.Turns > 0 && ally.Cell == cell) &&
+                    !IsRevealedActiveTrap(cell);
             }
 
             var side = new Vector2Int(-approach.y, approach.x);
@@ -882,7 +894,7 @@ namespace AzureDreamsReimagined
                 bool duelOpponent = _ghoshDuelActive && creature.Actor.Species == (byte)MonsterSpecies.GHOSH;
                 if (creature.Health > 0 && !(duelOpponent && lostGhoshDuel)) continue;
                 if (duelOpponent)
-                    defeats = JoinTowerMessages(defeats, FinishGhoshDuel(creature, !lostGhoshDuel));
+                    FinishGhoshDuel(creature, !lostGhoshDuel);
                 else if (!_revertedActors.Remove(creature.Actor))
                 {
                     PlayRetailSound(RetailSfx.MonsterDefeat);
@@ -1058,6 +1070,14 @@ namespace AzureDreamsReimagined
 
         private void RetireTowerHitView(GameObject view)
         {
+            var monster = view ? view.GetComponentInChildren<MonsterTurnSpriteView>() : null;
+            float defeatDuration = monster ? monster.BeginDefeat() : 0f;
+            if (defeatDuration > 0f)
+            {
+                foreach (var collider in view.GetComponentsInChildren<Collider>()) collider.enabled = false;
+                StartCoroutine(RemoveAfterDefeat(view, defeatDuration));
+                return;
+            }
             if (!view || !view.TryGetComponent<ActorLocomotionView>(out var locomotion) || locomotion.HitProgress >= 1f)
             {
                 RemoveGenerated(view);
@@ -1070,6 +1090,12 @@ namespace AzureDreamsReimagined
         private System.Collections.IEnumerator RemoveAfterFlinch(GameObject view)
         {
             yield return new WaitForSeconds(ActorLocomotionView.HitDuration);
+            if (view) RemoveGenerated(view);
+        }
+
+        private System.Collections.IEnumerator RemoveAfterDefeat(GameObject view, float duration)
+        {
+            yield return new WaitForSeconds(duration);
             if (view) RemoveGenerated(view);
         }
 

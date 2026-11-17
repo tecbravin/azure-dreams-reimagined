@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #else
@@ -11,6 +12,21 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private const string SelfiMusicCue = "SelfiTheme.mp3";
+        // These cues are supplied by Redesigned assets/music.  Keeping this
+        // mapping at the playback boundary lets all existing location and
+        // event rules continue to use their original cue names.
+        // The redesigned M4A files contain Opus-in-MP4.  FMOD cannot decode
+        // that container, so the matching Vorbis files below are generated
+        // from the same source tracks for every runtime, including WebGL.
+        private static readonly HashSet<string> RedesignedOggMusicCues = new()
+        {
+            "AngelSong", "ArmShop", "SelfiTheme", "BeldoDuel", "Casino", "CherrlTheme",
+            "DanceAtPub", "EntranceOfComedians", "ExitComedians", "GhoshTheme", "HeroFinale",
+            "KohHouseTheme", "MiaTheme", "MonsterRaceCourse", "MonsterRacing", "Playroom",
+            "SwimmingPool", "Temple1", "Theatre", "Tower1", "Tower2", "Tower3", "Tower4",
+            "Tower5", "Tower6", "Tower7", "Tower8", "TowerFinale", "VeiledGenuine", "VivianTheme"
+        };
+        private static readonly HashSet<string> RedesignedMp3MusicCues = new() { "NicoTheme", "Town" };
         private AudioSource _backgroundMusic;
         private AudioSource _levelUpMusic;
         private bool _levelUpMusicActive;
@@ -33,27 +49,38 @@ namespace AzureDreamsReimagined
             return $"Tower{Mathf.Clamp(floor / 5, 0, 7) + 1}";
         }
 
+        private static string MusicFileName(string cue)
+        {
+            string baseCue = cue.EndsWith(".mp3", System.StringComparison.Ordinal)
+                ? cue[..^4] : cue;
+            if (RedesignedOggMusicCues.Contains(baseCue)) return baseCue + ".redesigned.ogg";
+            if (RedesignedMp3MusicCues.Contains(baseCue)) return baseCue + ".mp3";
+            return cue.EndsWith(".mp3", System.StringComparison.Ordinal) ? cue : cue + ".ogg";
+        }
+
+        private static AudioType MusicAudioType(string file) =>
+            file.EndsWith(".mp3", System.StringComparison.OrdinalIgnoreCase) ? AudioType.MPEG :
+            AudioType.OGGVORBIS;
+
         private void PlayAreaMusic(string cue, bool loop = true)
         {
             if (_playingMusicCue == cue) return;
             StopLevelUpMusic(resumeBackground: false);
             _playingMusicCue = cue;
-            bool mp3 = cue.EndsWith(".mp3", System.StringComparison.Ordinal);
-            string file = mp3 ? cue : $"{cue}.ogg";
+            string file = MusicFileName(cue);
             string url = StreamedMediaUrl($"Music/{file}");
 #if UNITY_WEBGL && !UNITY_EDITOR
             AzureBgmPlay(url, DefaultMusicVolume * _bgmVolume, loop ? 1 : 0);
 #else
             CancelMusicLoad();
             ReleaseMusicClip();
-            _musicLoad = StartCoroutine(LoadAreaMusic(url, cue, mp3, loop));
+            _musicLoad = StartCoroutine(LoadAreaMusic(url, cue, MusicAudioType(file), loop));
 #endif
         }
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-        private IEnumerator LoadAreaMusic(string url, string cue, bool mp3, bool loop)
+        private IEnumerator LoadAreaMusic(string url, string cue, AudioType audioType, bool loop)
         {
-            var audioType = mp3 ? AudioType.MPEG : AudioType.OGGVORBIS;
             var request = UnityWebRequestMultimedia.GetAudioClip(url, audioType);
             _musicRequest = request;
             request.timeout = 20;

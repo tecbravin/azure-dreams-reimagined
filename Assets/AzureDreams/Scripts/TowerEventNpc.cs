@@ -9,8 +9,15 @@ namespace AzureDreamsReimagined
         private Vector3 _depart;
 
         private MonsterTurnSpriteView _sprite;
+        private ActorLocomotionView _locomotion;
+        private Rendering.CameraFacingSprite _billboard;
 
-        private void Awake() => _sprite = GetComponentInChildren<MonsterTurnSpriteView>();
+        private void Awake()
+        {
+            _sprite = GetComponentInChildren<MonsterTurnSpriteView>();
+            _locomotion = GetComponent<ActorLocomotionView>();
+            _billboard = GetComponentInChildren<Rendering.CameraFacingSprite>();
+        }
 
         public bool HasSpoken { get; private set; }
 
@@ -37,12 +44,18 @@ namespace AzureDreamsReimagined
             if (direction.sqrMagnitude <= 0.001f) return;
             transform.rotation = Quaternion.LookRotation(direction);
             if (_sprite) _sprite.Face(new Vector2Int(Mathf.RoundToInt(direction.normalized.x), Mathf.RoundToInt(direction.normalized.z)));
+            if (_billboard) _billboard.FaceMonster(direction);
         }
 
         private void Move(Vector3 from, Vector3 to, float progress)
         {
             float smooth = Mathf.SmoothStep(0f, 1f, progress);
             transform.position = Vector3.Lerp(from, to, smooth) + Vector3.up * (0.10f * Mathf.Sin(progress * Mathf.PI));
+            var direction = to - from;
+            direction.y = 0f;
+            bool walking = progress < 1f;
+            if (_sprite) _sprite.PresentMovement(direction, progress, walking);
+            if (_locomotion) _locomotion.Present(direction, progress, walking);
         }
     }
 }

@@ -61,13 +61,14 @@ namespace AzureDreamsReimagined
             foreach (var npc in _townPeople)
             {
                 if (!npc) continue;
-                bool silver = npc.npcId == "dar";
+                bool silver = npc.npcId is "dar" or "silver";
                 bool clerk = npc.npcId == "fur";
                 npc.npcId = silver ? "race_silver" : clerk ? "race_clerk" : "race_gambler";
+                if (silver) ConfigureSilverPresentation(npc);
                 if (npc.TryGetComponent<CharacterStats>(out var stats))
                 {
                     stats.displayName = silver ? "Silver" : clerk ? T("Ticket Clerk", "Bilheteira") : T("Gambler", "Apostador");
-                    stats.portraitTexture = null;
+                    stats.portraitTexture = silver ? StreamPortrait(SilverPortrait) : null;
                 }
                 npc.dialogueLines = new[]
                 {
@@ -367,11 +368,12 @@ namespace AzureDreamsReimagined
                 case RaceScreen.Tickets: DrawRaceTickets(); break;
                 case RaceScreen.Silver:
                     GUILayout.Label("Silver", _bodyStyle);
-                    GUILayout.Label(T($"Hi, {HeroName}. Isn't it a beautiful Monster racetrack? Thank you so much. Do you want to ride today?",
-                        $"Olá, {HeroName}. A pista de monstros ficou linda, não acha? Muito obrigado. Quer montar hoje?"), _messageStyle);
-                    DrawRaceOption(0, T("I'm going to race.", "Vou correr."));
+                    // TOWN.BIN 0x4E276A–0x4E28EE.
+                    GUILayout.Label(T($"Hi, {HeroName}.\nLook, isn’t it a beautiful Monster racetrack?\nThank you so much.\nWhat are you going to do today?\nDo you want to get on a horse?",
+                        $"Olá, {HeroName}.\nVeja, que bela pista de corrida de monstros, não acha?\nMuito obrigado.\nO que vai fazer hoje?\nQuer montar um cavalo?"), _messageStyle);
+                    DrawRaceOption(0, T("I’m going to race.", "Vou correr."));
                     DrawRaceOption(1, T("I'll just watch.", "Só vou assistir."));
-                    DrawRaceOption(2, T("Show me how to ride.", "Ensine-me a montar."));
+                    DrawRaceOption(2, T("Show me how to ride a horse.", "Ensine-me a montar um cavalo."));
                     DrawRaceOption(3, T("Not today.", "Hoje não."));
                     break;
                 case RaceScreen.Instructions:
@@ -400,7 +402,7 @@ namespace AzureDreamsReimagined
 
         private void DrawRaceOption(int index, string text)
         {
-            if (!GUILayout.Button((_raceChoice == index ? "▸ " : "") + text)) return;
+            if (!GUILayout.Button((_raceChoice == index ? "› " : "") + text)) return;
             _raceChoice = index;
             ConfirmRaceMenu();
         }
@@ -420,7 +422,7 @@ namespace AzureDreamsReimagined
             for (int i = 0; i < RacePairs.Length; i++)
             {
                 var pair = RacePairs[i];
-                if (GUILayout.Button($"{(_racePair == i ? "▸ " : "")}{pair.A + 1}–{pair.B + 1}    ×{_raceOdds[i]}"))
+                if (GUILayout.Button($"{(_racePair == i ? "› " : "")}{pair.A + 1}–{pair.B + 1}    ×{_raceOdds[i]}"))
                     _racePair = i;
             }
             GUILayout.BeginHorizontal();

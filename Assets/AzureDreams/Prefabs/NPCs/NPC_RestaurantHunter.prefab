@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1085751856712418880}
   - component: {fileID: 7108393835339038485}
   - component: {fileID: 219945623700259782}
-  - component: {fileID: 800000000000000001}
+  - component: {fileID: 800000000000000010}
   m_Layer: 0
-  m_Name: Hunter
+  m_Name: RestaurantHunter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad03c8383aa6f14281da996d7bd90be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.ActorLocomotionView
---- !u!114 &800000000000000001
+--- !u!114 &800000000000000010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,12 +118,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5151358256163527516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90e4b97d40d4898aafabb33daee6634, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sheet: {fileID: 2800000, guid: 46ecfc2a84104046961547fcd91d13b4, type: 3}
-  _material: {fileID: 0}
-  _pixelsPerUnit: 47.0588
-  _parts:
-  - rectangle: {x: 0, y: 0, width: 33, height: 40}
-    offset: {x: 0, y: 0}
+  m_Script: {fileID: 11500000, guid: e2183419589d44dbb6e9e550a47ed489, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.TownHumanoidView
+  _sourceMesh: {fileID: -2432090755550338912, guid: c0446351d2ed4fb3bb05c6ca09b65c46, type: 3}
+  _texture: {fileID: 2800000, guid: 63acf9361f3242878fa8c41de3e5a2ac, type: 3}
+  _standingHeight: 1.65

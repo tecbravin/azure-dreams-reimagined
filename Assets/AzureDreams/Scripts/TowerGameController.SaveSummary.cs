@@ -95,7 +95,7 @@ namespace AzureDreamsReimagined
             DrawHudPanel(card);
             if (selected) DrawHudFill(new Rect(card.x + 2f, card.y + 2f, card.width - 4f, card.height - 4f),
                 new Color(0.22f, 0.36f, 0.65f, 0.36f));
-            string marker = selected ? "\u25b8 " : "";
+            string marker = selected ? "› " : "";
             if (data == null)
             {
                 DrawHudText(new Rect(card.x + 10f, card.y + 8f, card.width - 20f, 21f),

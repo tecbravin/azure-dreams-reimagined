@@ -20,6 +20,10 @@ namespace AzureDreamsReimagined
         private Transform _visual;
         private KohSpriteView _kohSprite;
         private KewneSpriteView _kewneSprite;
+        private NicoSpriteView _nicoSprite;
+        private SilverSpriteView _silverSprite;
+        private TownCharacterSpriteView _townCharacterSprite;
+        private TownHumanoidView _townHumanoid;
         private Vector3 _walkOffset, _hitDirection;
         private float _hitStartedAt = float.NegativeInfinity;
         internal const float HitDuration = 0.22f;
@@ -54,6 +58,11 @@ namespace AzureDreamsReimagined
             _billboard = GetComponentInChildren<SpriteRenderer>() != null;
             _kohSprite = GetComponent<KohSpriteView>();
             _kewneSprite = GetComponent<KewneSpriteView>();
+            _nicoSprite = GetComponent<NicoSpriteView>();
+            _silverSprite = GetComponent<SilverSpriteView>();
+            _townCharacterSprite = GetComponent<TownCharacterSpriteView>();
+            _townHumanoid = GetComponent<TownHumanoidView>();
+            if (_townHumanoid) return;
             _animator = GetComponentInChildren<Animator>();
             if (_animator != null && _animator.runtimeAnimatorController != null)
             {
@@ -116,10 +125,22 @@ namespace AzureDreamsReimagined
         public void Present(Vector3 direction, float cycle, bool moving, bool running)
         {
             Initialize();
+            // Story residents can acquire a dedicated view after their shared
+            // source prefab has been spawned (Silver is one such resident).
+            if (!_silverSprite) _silverSprite = GetComponent<SilverSpriteView>();
+            if (!_townHumanoid) _townHumanoid = GetComponent<TownHumanoidView>();
             IsMoving = moving;
             IsRunningNow = moving && running;
             direction.y = 0f;
+            if (_townHumanoid)
+            {
+                _townHumanoid.Present(direction, cycle, moving);
+                return;
+            }
             if (_monsterSprite) _monsterSprite.PresentMovement(direction, cycle, moving);
+            if (_nicoSprite) _nicoSprite.PresentMovement(direction, moving);
+            if (_silverSprite) _silverSprite.PresentMovement(direction, moving);
+            if (_townCharacterSprite) _townCharacterSprite.PresentMovement(direction, moving);
             if (moving && direction.sqrMagnitude > 0.000001f)
             {
                 if (_billboard) FaceMonster(direction);

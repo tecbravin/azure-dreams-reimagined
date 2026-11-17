@@ -222,6 +222,7 @@ namespace AzureDreamsReimagined
             var target = _player.transform.position;
             target.y -= TownActorFootOffset + (_area == Area.Town ? _townJumpHeight : 0f);
             target = FrameTheaterCamera(FrameBowlingCamera(FrameVisitorEvent(target)));
+            target = FrameRainPrologue(target);
 
             UpdateTowerCameraBackdrop();
             if (_quakeAscending)

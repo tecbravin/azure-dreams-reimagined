@@ -14,18 +14,23 @@ namespace AzureDreamsReimagined
         private static readonly Vector2Int MonsterShopExit = new(16, 17);
         private static readonly Vector2Int MasterCounter = new(16, 12);
         private const string HunterId = "monster_shop_hunter";
-        private enum MonsterShopPage { Closed, Greeting, Services, Buy, ConfirmBuy, Sell, Confirm }
+        private enum MonsterShopPage { Closed, Greeting, CustomerIntro, Services, Buy, ConfirmBuy, Sell, Confirm, Farewell }
         private MonsterShopPage _monsterShopPage;
         private int _monsterShopSelection;
         private MonsterShopData _monsterShopData;
         private bool InMonsterShop => _interior && _interior.interiorId == MonsterShopScene;
 
         [Serializable] private sealed class EggPrice { public int id, sell; public string name; }
-        [Serializable] private sealed class HunterDialogue { public string[] lines, ptBr; }
+        [Serializable] private sealed class HunterDialogue
+        {
+            public int actor, minimumFloor;
+            public bool kewneChoice;
+            public string[] lines, ptBr;
+        }
         [Serializable] private sealed class MonsterShopData
         {
             public string buy, greeting, customer, sellPrompt, thanks;
-            public string greetingPtBr, customerPtBr, sellPromptPtBr, thanksPtBr;
+            public string buyPtBr, greetingPtBr, customerPtBr, sellPromptPtBr, thanksPtBr;
             public HunterDialogue[] hunters;
             public EggPrice[] eggs;
         }
@@ -38,6 +43,75 @@ namespace AzureDreamsReimagined
         private readonly List<EggOffer> _eggOffers = new();
         private readonly List<EggPrice> _eggsForSale = new();
         private string _shopPurchaseMessage;
+
+        private static int MasterReputationTier(TownReputation reputation)
+        {
+            // Tower progress is the principal proof of Koh's reputation.  Completed
+            // town routes are an alternate public marker so that the dialogue still
+            // acknowledges a player who has been helping the people of Monsbaiya.
+            if (reputation.HighestFloor >= 40) return 5;
+            if (reputation.HighestFloor >= 30) return 4;
+            if (reputation.HighestFloor >= 20 || reputation.CompletedRouteCount >= 4) return 3;
+            if (reputation.HighestFloor >= 10 || reputation.CompletedRouteCount >= 2) return 2;
+            if (reputation.HighestFloor >= 5 || reputation.CompletedRouteCount >= 1) return 1;
+            return 0;
+        }
+
+        private static string[] MasterDialogueLines(int tier)
+        {
+            return tier switch
+            {
+                5 => new[] { MasterLateWelcome() },
+                4 => new[]
+                {
+                    GameLanguage.Text("As of late, there’s not one person in this city who does not know of you.",
+                        "Ultimamente, não há uma só pessoa nesta cidade que não conheça você."),
+                    GameLanguage.Text("At this rate, you could surpass even Guy himself as a monster tamer.",
+                        "Nesse ritmo, você pode superar até o próprio Guy como domador de monstros."),
+                    MasterLateWelcome()
+                },
+                3 => new[]
+                {
+                    GameLanguage.Text("Welcome.\nHow may I assist you today.",
+                        "Boas-vindas. Como posso ajudar hoje?")
+                },
+                2 => new[]
+                {
+                    GameLanguage.Text("You know, you’re becoming a pretty good tamer.",
+                        "Sabe, você está se tornando um domador muito bom."),
+                    GameLanguage.Text("Welcome.\nHow may I assist you today.", "Boas-vindas.\nComo posso ajudar hoje?")
+                },
+                1 => new[]
+                {
+                    GameLanguage.Text("Welcome.\nHow can I help you today.",
+                        "Boas-vindas. Como posso ajudar hoje?")
+                },
+                _ => new[]
+                {
+                    GameLanguage.Text("Your father, Guy, was super.", "Seu pai, Guy, era incrível."),
+                    GameLanguage.Text("He would frequently come to sell top quality monsters.", "Ele vinha sempre vender monstros de primeira.")
+                }
+            };
+        }
+
+        private static string MasterLateWelcome() =>
+            GameLanguage.Text("Welcome.  I’ve been waiting for you, {name}.\nHow may I assist you today.",
+                "Boas-vindas. Estive esperando por você, {name}. Como posso ajudar hoje?");
+
+        private string MasterShopGreeting()
+        {
+            return T(_monsterShopData.greeting, _monsterShopData.greetingPtBr).Replace("{name}", HeroName);
+        }
+
+        private string MasterCustomerIntro() => T(
+            _monsterShopData.customer + "\nI doubt you’re here to buy anything... and you’ve run out of the familiars your father left you, right?",
+            _monsterShopData.customerPtBr + "\nDuvido que tenha vindo comprar algo... e você já ficou sem os familiares que seu pai deixou, não é?");
+
+        private string MasterServicesPrompt()
+        {
+            return T("My stock has been low for some time on familiars.\nI’m especially interested in the eggs, I’ll offer a lot more for them.",
+                "Meu estoque de familiares está baixo há algum tempo.\nTenho interesse especial em ovos e vou oferecer muito mais por eles.");
+        }
 
         private void SetupMonsterShop()
         {
@@ -53,36 +127,77 @@ namespace AzureDreamsReimagined
             foreach (var npc in _townPeople)
             {
                 if (!npc || npc.npcId != HunterId) continue;
-                if (hunterNumber >= _monsterShopData.hunters.Length) break;
+                if (hunterNumber >= 3) break;
                 npc.npcId = HunterId + "_" + ++hunterNumber;
-                var sprite = npc.GetComponentInChildren<SpriteRenderer>();
-                if (sprite)
-                {
-                    // Match 110% of Koh's standing height at the interior camera scale.
-                    const float standingScale = 1.77375f;
-                    sprite.transform.localScale *= standingScale * InteriorCameraDistance / _townCameraDistance;
-                }
-                LocalizeHunter(npc);
+                npc.GetComponent<CharacterStats>().displayName = T("Hunter", "Caçador");
             }
             _message = T($"Monster Shop. Press {InteractKey} at the counter to speak with Master.",
                 $"Loja de Monstros. Pressione {InteractKey} no balcão para falar com Master.");
         }
 
-        private void LocalizeHunter(NPCController speaker)
+        private bool TryMonsterShopHunterDialogue(NPCController speaker)
         {
             if (!InMonsterShop || _monsterShopData?.hunters == null ||
-                !speaker.npcId.StartsWith(HunterId + "_", StringComparison.Ordinal)) return;
+                !speaker.npcId.StartsWith(HunterId + "_", StringComparison.Ordinal)) return false;
             if (!int.TryParse(speaker.npcId.Substring(HunterId.Length + 1), out int number) ||
-                number < 1 || number > _monsterShopData.hunters.Length) return;
-            var dialogue = _monsterShopData.hunters[number - 1];
+                number < 1 || number > 3) return false;
+            int actor = 0x33 + number;
+            int highestFloor = TownReputation.Read().HighestFloor;
+            var available = Array.FindAll(_monsterShopData.hunters,
+                dialogue => dialogue.actor == actor && highestFloor >= dialogue.minimumFloor);
+            if (available.Length == 0) return false;
+            var dialogue = available[Mathf.Max(0, StoryDay) % available.Length];
+            if (dialogue.kewneChoice)
+                return StoryAsk(speaker, dialogue.lines[0], dialogue.ptBr[0],
+                    (T("I just heard about it now", "Acabei de ouvir falar"), () =>
+                        StoryTalk(speaker, "What should we do if this monster is a scary creature?",
+                            "O que vamos fazer se esse monstro for assustador?")),
+                    (T("I haven’t heard about it", "Não ouvi falar disso"), () =>
+                        StoryTalk(speaker, "Oh, right.  You’d better be careful yourself.",
+                            "Ah, certo. É melhor você tomar cuidado também.")));
+            speaker.dialogue = null;
             speaker.dialogueLines = GameLanguage.Portuguese && dialogue.ptBr != null ? dialogue.ptBr : dialogue.lines;
-            speaker.GetComponent<CharacterStats>().displayName = T("Hunter", "Caçador");
+            return false;
         }
 
         private bool TryMonsterShopCounter()
         {
             if (!InMonsterShop || _monsterShopData == null || !NearHomeCell(MasterCounter, 1.2f)) return false;
+            var master = _townPeople.Find(npc => npc && npc.npcId == "master");
+            if (master) return TalkToMaster(master);
             SetMonsterShopPage(MonsterShopPage.Greeting);
+            return true;
+        }
+
+        private bool TalkToMaster(NPCController master)
+        {
+            if (!InMonsterShop || _monsterShopData == null) return false;
+            const string introduced = "dialogue.master.introduced";
+            int tier = MasterReputationTier(TownReputation.Read());
+            bool firstVisit = !TownSaveVariables.GetBool(introduced);
+            if (tier == 0 && !firstVisit)
+            {
+                SetMonsterShopPage(MonsterShopPage.Greeting);
+                return true;
+            }
+
+            var lines = MasterDialogueLines(tier);
+            void Continue(int index)
+            {
+                if (index < lines.Length)
+                {
+                    string line = lines[index];
+                    StoryTalk(master, line, line, () => Continue(index + 1));
+                    return;
+                }
+                if (firstVisit)
+                {
+                    TownSaveVariables.SetBool(introduced, true);
+                    PersistTownProgress();
+                }
+                SetMonsterShopPage(tier > 0 ? MonsterShopPage.Services : MonsterShopPage.Greeting);
+            }
+            Continue(0);
             return true;
         }
 
@@ -103,6 +218,7 @@ namespace AzureDreamsReimagined
         private void ReadEggOffers()
         {
             _eggOffers.Clear();
+            _shopPurchaseMessage = null;
             var items = _townInventory.DungeonItems;
             for (int i = 0; i < items.Count; i++)
             {
@@ -152,14 +268,22 @@ namespace AzureDreamsReimagined
             if (!_townInventory.ConsumeDungeonItem(offer.Index, RetailEggKind)) return;
             _gold += offer.Price.sell;
             PersistTownProgress();
-            _message = T(_monsterShopData.thanks, _monsterShopData.thanksPtBr);
             ReadEggOffers();
+            _shopPurchaseMessage = T($"(Receives {offer.Price.sell}G.)", $"(Recebe {offer.Price.sell}G.)");
+            SetMonsterShopPage(MonsterShopPage.Sell);
+        }
+
+        private void DeclineEggSale()
+        {
+            _shopPurchaseMessage = T("Don’t waste my time.", "Não perca meu tempo.");
             SetMonsterShopPage(MonsterShopPage.Sell);
         }
 
         private int ShopOptionCount => _monsterShopPage switch
         {
             MonsterShopPage.Greeting => 2,
+            MonsterShopPage.CustomerIntro => 1,
+            MonsterShopPage.Farewell => 1,
             MonsterShopPage.Services => 3,
             MonsterShopPage.Sell => _eggOffers.Count,
             MonsterShopPage.Buy => _eggsForSale.Count,
@@ -171,10 +295,10 @@ namespace AzureDreamsReimagined
             if (_monsterShopPage == MonsterShopPage.Closed) return false;
             var keys = Keyboard.current;
             if (keys == null) return true;
-            if (keys.qKey.wasPressedThisFrame)
+            if (_cancel?.WasPressedThisFrame() == true)
             {
                 PlayRetailSound(RetailSfx.Cancel);
-                if (_monsterShopPage == MonsterShopPage.Confirm) SetMonsterShopPage(MonsterShopPage.Sell);
+                if (_monsterShopPage == MonsterShopPage.Confirm) DeclineEggSale();
                 else if (_monsterShopPage == MonsterShopPage.ConfirmBuy) { _monsterShopPage = MonsterShopPage.Buy; _shopPurchaseMessage = null; }
                 else if (_monsterShopPage is MonsterShopPage.Buy or MonsterShopPage.Sell) SetMonsterShopPage(MonsterShopPage.Services);
                 else ResetMonsterShop();
@@ -201,12 +325,18 @@ namespace AzureDreamsReimagined
             switch (_monsterShopPage)
             {
                 case MonsterShopPage.Greeting:
-                    SetMonsterShopPage(index == 0 ? MonsterShopPage.Services : MonsterShopPage.Closed);
+                    SetMonsterShopPage(index == 0 ? MonsterShopPage.CustomerIntro : MonsterShopPage.Closed);
+                    break;
+                case MonsterShopPage.CustomerIntro:
+                    SetMonsterShopPage(MonsterShopPage.Services);
                     break;
                 case MonsterShopPage.Services:
                     if (index == 0) { ReadEggOffers(); SetMonsterShopPage(MonsterShopPage.Sell); }
                     else if (index == 1) OpenEggStock();
-                    else SetMonsterShopPage(MonsterShopPage.Closed);
+                    else SetMonsterShopPage(MonsterShopPage.Farewell);
+                    break;
+                case MonsterShopPage.Farewell:
+                    ResetMonsterShop();
                     break;
                 case MonsterShopPage.Buy:
                     _monsterShopSelection = index;
@@ -228,24 +358,34 @@ namespace AzureDreamsReimagined
             GUI.Label(new Rect(429, 101, 110, 24), _gold + "G");
             string dialogue = _monsterShopPage switch
             {
-                MonsterShopPage.Greeting => T(_monsterShopData.greeting, _monsterShopData.greetingPtBr),
-                MonsterShopPage.Services => T(_monsterShopData.customer, _monsterShopData.customerPtBr),
-                MonsterShopPage.Buy => _shopPurchaseMessage ?? T("Select an egg to buy.", "Escolha um ovo para comprar."),
+                MonsterShopPage.Greeting => MasterShopGreeting(),
+                MonsterShopPage.CustomerIntro => MasterCustomerIntro(),
+                MonsterShopPage.Services => MasterServicesPrompt(),
+                MonsterShopPage.Farewell => T(_monsterShopData.thanks, _monsterShopData.thanksPtBr),
+                MonsterShopPage.Buy => _shopPurchaseMessage ?? (_eggsForSale.Count == 0
+                    ? T(_monsterShopData.buy, _monsterShopData.buyPtBr)
+                    : T("Select an egg to buy.", "Escolha um ovo para comprar.")),
                 MonsterShopPage.ConfirmBuy => _shopPurchaseMessage ??
                     $"Buy {_eggsForSale[_monsterShopSelection].name} Egg for {PurchasePrice(_eggsForSale[_monsterShopSelection])}G?",
-                MonsterShopPage.Sell => _eggOffers.Count > 0 ? T(_monsterShopData.sellPrompt, _monsterShopData.sellPromptPtBr) : T("No eggs to sell.", "Nenhum ovo para vender."),
-                MonsterShopPage.Confirm => T("How about for ", "Que tal por ") + _eggOffers[_monsterShopSelection].Price.sell + "G?",
+                MonsterShopPage.Sell => _shopPurchaseMessage ?? (_eggOffers.Count > 0
+                    ? T(_monsterShopData.sellPrompt, _monsterShopData.sellPromptPtBr)
+                    : T("No eggs to sell.", "Nenhum ovo para vender.")),
+                MonsterShopPage.Confirm => T("How about for ", "Que tal por ") + _eggOffers[_monsterShopSelection].Price.sell + "G.",
                 _ => ""
             };
-            _shopDialogueStyle ??= new GUIStyle(GUI.skin.label) { wordWrap = true };
-            GUI.Label(new Rect(103, 135, 432, 102), dialogue, _shopDialogueStyle);
+            _shopDialogueStyle ??= new GUIStyle(_messageStyle) { wordWrap = true, fontSize = 15 };
+            DrawHudText(new Rect(103, 135, 432, 102), dialogue, _shopDialogueStyle, dialogue: true);
             switch (_monsterShopPage)
             {
                 case MonsterShopPage.Greeting:
-                    DrawShopOptions(T("I'm a customer.", "Sou um cliente."), T("Okay, okay, I'll go home.", "Está bem, vou para casa."));
+                    DrawShopOptions(T("I’m a customer.", "Sou um cliente."), T("Okay, okay, I’ll go home.", "Está bem, está bem, vou para casa."));
+                    break;
+                case MonsterShopPage.CustomerIntro:
+                case MonsterShopPage.Farewell:
+                    DrawShopOptions(WithInteractHint("Continue", "Continuar"));
                     break;
                 case MonsterShopPage.Services:
-                    DrawShopOptions(T("I've come to sell.", "Vim vender."), T("I've come to buy.", "Vim comprar."), T("Just looking around.", "Só estou olhando."));
+                    DrawShopOptions(T("I’ve come to sell.", "Vim vender."), T("I’ve come to buy.", "Vim comprar."), T("Just looking around.", "Só estou olhando."));
                     break;
                 case MonsterShopPage.Buy:
                     int first = _monsterShopSelection / ShopPageSize * ShopPageSize;
@@ -277,7 +417,7 @@ namespace AzureDreamsReimagined
                     break;
                 case MonsterShopPage.Confirm:
                     if (GUI.Button(new Rect(103, 249, 215, 30), WithInteractHint("I'll sell.", "Aceito."))) SellSelectedEgg();
-                    if (GUI.Button(new Rect(320, 249, 215, 30), T("My mistake. [Esc]", "Cancelar [Esc]"))) SetMonsterShopPage(MonsterShopPage.Sell);
+                    if (GUI.Button(new Rect(320, 249, 215, 30), T("My mistake. [Esc]", "Cancelar [Esc]"))) DeclineEggSale();
                     break;
             }
         }

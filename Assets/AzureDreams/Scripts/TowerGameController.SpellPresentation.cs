@@ -103,7 +103,7 @@ namespace AzureDreamsReimagined
 
         private void TryManualMixMagic(ActorRecord actor, GameObject view, Vector2Int from, Vector2Int origin, int spell)
         {
-            if (Distance(from, origin) > 2 || KohSkipsAction || IsFrog(_playerActor) || _carriedView ||
+            if (IsFamiliarLost(actor) || Distance(from, origin) > 2 || KohSkipsAction || IsFrog(_playerActor) || _carriedView ||
                 !FamiliarHasSight(from, origin)) return;
             var (type, cost) = MixtureFor(spell);
             if (type == Mixture.None) return;

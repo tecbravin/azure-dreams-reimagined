@@ -54,6 +54,7 @@ namespace AzureDreamsReimagined
             if (_starterJoinedThisRun) TownSaveVariables.SetBool("starter_kewne_received", true);
             _starterJoinedThisRun = false;
             TownSaveVariables.SetInt(StoryPrefix + "day", StoryDay + 1);
+            if (survived) ScheduleWreathHomecoming();
             TownSaveVariables.SetInt(TownReputation.WakeEntryKey, 0);
             TownRetailScriptFlags.CreatePersistent().ClearBit(TownReputation.WreathSpokenFlag);
             PersistTownProgress();

@@ -83,6 +83,7 @@ interiors = {
     (44, 68): "Interior_15_blacksmith",
     (30, 68): "Interior_14_monster_shop",
     (16, 68): "Interior_0f_hospital",
+    (16, 56): "Interior_18_cherrl_house",
     (29, 80): "Interior_17_fortune_house",
     (44, 80): "Interior_16_general_store",
     (56, 56): "KohHome",

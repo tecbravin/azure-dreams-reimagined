@@ -17,7 +17,7 @@ namespace AzureDreamsReimagined
         private float _casinoSpinStarted;
         private readonly int[] _casinoReels = new int[3];
         private const int CasinoPocketCount = 6;
-        private static readonly string[] CasinoSymbols = { "7", "G", "◆", "●", "★", "✦" };
+        private static readonly string[] CasinoSymbols = { "7", "G", "♦", "●", "♠", "◊" };
         private static readonly int[] CasinoMultipliers = { 100, 20, 12, 8, 5, 3 };
         private static readonly Vector2[] SlotMachines = { new(10.5f, 11.5f), new(15.5f, 11.5f), new(21.5f, 11.5f) };
         private static readonly Vector2 RouletteSwitch = new(16.5f, 13.5f);
@@ -277,7 +277,7 @@ namespace AzureDreamsReimagined
                     var center = hub + new Vector2(66f * Mathf.Sin(angle), -34f * Mathf.Cos(angle));
                     var pocket = new Rect(center.x - 20f, center.y - 12f, 40f, 24f);
                     bool selected = _casinoRound == CasinoRound.Bet ? i == _casinoWagerPocket : i == current;
-                    string label = (selected ? "▸ " : "") + (i + 1);
+                    string label = (selected ? "› " : "") + (i + 1);
                     if (selected) DrawHudFill(pocket, new Color(0.63f, 0.45f, 0.13f, 0.8f));
                     if (_casinoRound == CasinoRound.Bet)
                     {

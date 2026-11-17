@@ -3,6 +3,7 @@ Shader "AzureDreams/TownInteriorUnlit"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -18,6 +19,7 @@ Shader "AzureDreams/TownInteriorUnlit"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            fixed4 _Color;
 
             struct AppData
             {
@@ -41,7 +43,7 @@ Shader "AzureDreams/TownInteriorUnlit"
 
             fixed4 frag(Varyings input) : SV_Target
             {
-                return tex2D(_MainTex, input.uv);
+                return tex2D(_MainTex, input.uv) * _Color;
             }
             ENDCG
         }

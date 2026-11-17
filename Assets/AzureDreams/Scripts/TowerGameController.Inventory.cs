@@ -223,7 +223,7 @@ namespace AzureDreamsReimagined
             }
             int horizontal = (MenuDirectionPressed(3) ? -1 :
                 MenuDirectionPressed(4) ? 1 : 0);
-            if (_inventoryActorSlot > FamiliarInventoryCount)
+            if (!IsActiveInventoryActorSlot(_inventoryActorSlot))
             {
                 _inventoryActorSlot = 0;
                 _familiarOrderPicker = FamiliarOrderPicker.None;
@@ -254,6 +254,14 @@ namespace AzureDreamsReimagined
             if (horizontal != 0 && !_familiarStatus)
             {
                 int next = _inventoryPage + horizontal;
+                if (horizontal > 0 && next >= OccupiedInventoryPageCount && TryInspectGroundItem())
+                {
+                    _inventoryOpen = false;
+                    _groundItemActionsOpen = _groundItemPrompt.HasValue;
+                    _groundItemSelection = GroundItemAction.Use;
+                    PlayRetailSound(RetailSfx.Confirm);
+                    return true;
+                }
                 if (next >= 0 && next < OccupiedInventoryPageCount) SelectInventoryPage(next);
                 return true;
             }
@@ -382,8 +390,15 @@ namespace AzureDreamsReimagined
                     stats.yMax - 51f, stats.width - 20f, 21f),
                     _familiarStatus ? T("Items [F]", "Itens [F]") : T("Familiars [F]", "Familiares [F]")))
                 ToggleInventoryFamiliars();
-            if (!viewingFamiliar) DrawInventoryText(new Rect(stats.x + 10f, stats.yMax - 29f, panelWidth - 20f, 27f),
-                T("Left/Right: tabs\nPgUp/PgDn: character", "Esq./Dir.: abas\nPgUp/PgDn: personagem"), _messageStyle);
+            if (!viewingFamiliar)
+            {
+                bool canInspectGroundItem = _area == Area.Tower && _inventoryPage + 1 >= OccupiedInventoryPageCount &&
+                    ItemUnderKoh(_playerCell) != null;
+                DrawInventoryText(new Rect(stats.x + 10f, stats.yMax - 29f, panelWidth - 20f, 27f),
+                    canInspectGroundItem
+                        ? T("Left: tabs · Right: ground item\nPgUp/PgDn: character", "Esq.: abas · Dir.: item no chão\nPgUp/PgDn: personagem")
+                        : T("Left/Right: tabs\nPgUp/PgDn: character", "Esq./Dir.: abas\nPgUp/PgDn: personagem"), _messageStyle);
+            }
             if (_familiarStatus && actor != null && _itemCommandIndex < 0)
             {
                 var talents = new Rect(stats.x, stats.yMax + 88f, stats.width, 67f);
@@ -493,7 +508,7 @@ namespace AzureDreamsReimagined
         private void DrawInventoryText(Rect rect, string value, GUIStyle style) =>
             DrawHudText(rect, value, style, dialogue: true);
 
-        private bool DrawInventoryButton(Rect rect, string value, bool selected = false)
+        private bool DrawInventoryButton(Rect rect, string value, bool selected = false, GUIStyle textStyle = null)
         {
             if (Event.current.type == EventType.Repaint)
             {
@@ -505,7 +520,7 @@ namespace AzureDreamsReimagined
             }
             bool clicked = GUI.Button(rect, GUIContent.none, GUIStyle.none);
             var text = new Rect(rect.x + 5f, rect.y, rect.width - 10f, rect.height);
-            DrawInventoryText(text, value, _bodyStyle);
+            DrawInventoryText(text, value, textStyle ?? _bodyStyle);
             return clicked;
         }
 
@@ -532,12 +547,7 @@ namespace AzureDreamsReimagined
             if (!Inventory.IsUnrevealedEquipment(item)) return _bodyStyle;
             if (_unrevealedGearStyle == null)
             {
-                var cyan = new Color(0.35f, 0.95f, 1f);
-                _unrevealedGearStyle = new GUIStyle(_bodyStyle)
-                {
-                    normal = { textColor = cyan }, hover = { textColor = cyan },
-                    active = { textColor = cyan }, focused = { textColor = cyan }
-                };
+                _unrevealedGearStyle = new GUIStyle(_bodyStyle) { fontStyle = FontStyle.BoldAndItalic };
             }
             return _unrevealedGearStyle;
         }

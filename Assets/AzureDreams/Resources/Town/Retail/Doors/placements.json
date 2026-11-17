@@ -42,7 +42,8 @@
       "z": 56.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_18_cherrl_house"
     },
     {
       "x": 42.0,

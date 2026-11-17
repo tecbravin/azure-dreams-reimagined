@@ -8,6 +8,7 @@ namespace AzureDreamsReimagined
     {
         private const string GeneralStoreInterior = "Interior_16_general_store";
         private const string GeneralStorePurchases = "home.general_store_purchases";
+        private const string HomeWallpaperKey = "home.wallpaper";
         private const int GeneralStoreRows = 5;
         private enum GeneralStorePage { Closed, Services, Buy, Purchased }
 
@@ -153,18 +154,27 @@ namespace AzureDreamsReimagined
             }
             if (_gold < item.Price)
             {
-                _generalStoreFeedback = T("You don't have enough gold.", "Você não tem ouro suficiente.");
+                _generalStoreFeedback = T("You haven't got enough money.", "Você não tem dinheiro suficiente.");
                 return;
             }
             if (item.Id.StartsWith("wallpaper_", System.StringComparison.Ordinal))
-                TownSaveVariables.SetString("home.wallpaper", item.Id);
+                TownSaveVariables.SetString(HomeWallpaperKey, item.Id);
             TownSaveVariables.SetInt(GeneralStorePurchases + "." + item.Id, owned == int.MaxValue ? owned : owned + 1);
             _gold -= item.Price;
             RecordFurPurchase();
             _generalStoreConfirm = false;
-            _generalStoreFeedback = T($"Purchased {item.English}.", $"Compra concluída: {item.Portuguese}.");
+            _generalStoreFeedback = T($"Thank you very much!\n{item.English} will be set up at Koh's house.",
+                $"Muito obrigada!\n{item.Portuguese} será colocado na casa do Koh.");
             PlayRetailSound(RetailSfx.Confirm);
             TownEventBus.Publish(TownEventBus.EventId.ShopPurchased, item.Id);
+            if (item.Id == "music_box" && FindStoryActor("fur") is { } fur && fur)
+            {
+                SetGeneralStorePage(GeneralStorePage.Closed);
+                // TOWN.BIN 0x410744 and 0x4107A9, after buying the music box.
+                FurSequence(fur, 4, () => SetGeneralStorePage(GeneralStorePage.Buy),
+                    ("It's a gem.  You've got a great sense for quality.", "É uma joia. Você sabe reconhecer qualidade."),
+                    ("You've made an excellent purchase if I may say so myself, {name}.", "Foi uma excelente compra, se posso dizer, {name}."));
+            }
         }
 
         private void DrawGeneralStore()
@@ -204,7 +214,7 @@ namespace AzureDreamsReimagined
                     var item = GeneralStock[buying ? _generalStoreStockRows[i] : _generalStorePurchasedRows[i]];
                     label = T(item.English, item.Portuguese) + (buying ? $"   {item.Price} G" : $"   ×{GeneralStoreOwned(item.Id)}");
                 }
-                if (GUI.Button(row, i == _generalStoreSelection ? "▸ " + label : label))
+                if (GUI.Button(row, i == _generalStoreSelection ? "› " + label : label))
                 {
                     _generalStoreSelection = i;
                     ChooseGeneralStoreRow(i);

@@ -266,6 +266,10 @@ MonoBehaviour:
   - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
   - {fileID: 5151358256163527516, guid: 0cf8e9f56c224d72ae5275672dfeecbb, type: 3}
   - {fileID: 5151358256163527516, guid: 8d7f2fbf7ef04bbba45d6607f25312a5, type: 3}
+  - {fileID: 5151358256163527516, guid: 310d5bbc23b647d6b0c34e6930f8795d, type: 3}
+  - {fileID: 5151358256163527516, guid: 1fe76d42b336435f91775f6a5fe21bfa, type: 3}
+  - {fileID: 5151358256163527516, guid: 38536ae87ddc4a90a31c7c4c3459e7ea, type: 3}
+  - {fileID: 5151358256163527516, guid: 999975edf39d405cad77d9b3f633ace3, type: 3}
   _useGeneratedTowerFloors: 1
   _townMoveSpeed: 4
   _turnDuration: 0.16
@@ -449,8 +453,7 @@ MonoBehaviour:
   _hatchedEggInventoryIcon: {fileID: 2800000, guid: 889422c5c7ff44d0bb0f151a232eca0c, type: 3}
   _kewneStatusSheet: {fileID: 2800000, guid: 0f21906084e009e4188bc4c1f9804fb7, type: 3}
   _monsterMechanics: {fileID: 4900000, guid: bc26e5dfef66f894899651e6aa5fe53d, type: 3}
-  _retailFont: {fileID: 2800000, guid: f852b5d0e02ff714e83c5b0fe78a02d9, type: 3}
-  _retailDialogueFont: {fileID: 12800000, guid: 4ae50a87fbe2ec54da200ae71c8ba70b, type: 3}
+  _windowFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
   _groundItemSprites:
   - {fileID: 21300000, guid: 065b294701f889f4cb0a708f5b65b1c8, type: 3}
   - {fileID: 21300000, guid: 5152caccbef55ed408f3baacc01d2c84, type: 3}

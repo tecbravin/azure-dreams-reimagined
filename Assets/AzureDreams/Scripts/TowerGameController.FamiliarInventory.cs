@@ -210,6 +210,12 @@ namespace AzureDreamsReimagined
             var reserve = ReserveForRow(SelectedRawIndex);
             if ((!_familiarDefinition && reserve == null) || _turnBusy ||
                 (_area == Area.Tower && KohIsAsleep)) return;
+            if (_area == Area.Tower && command != ItemCommand.Rename && IsFamiliarLost(reserve?.Actor ?? _familiarActor))
+            {
+                _message = T("Your familiar is too far away.", "Seu familiar está muito distante.");
+                _itemCommandIndex = -1;
+                return;
+            }
             switch (command)
             {
                 case ItemCommand.Select:
@@ -329,6 +335,11 @@ namespace AzureDreamsReimagined
 
         private void ReturnFamiliarToHut(BagFamiliar reserve)
         {
+            if (_area == Area.Tower && IsFamiliarLost(reserve?.Actor ?? _familiarActor))
+            {
+                _message = T("Your familiar is too far away.", "Seu familiar está muito distante.");
+                return;
+            }
             if ((reserve != null && reserve == _blueCollarFamiliar) || reserve?.Temporary == true || (reserve == null && (!_familiarDefinition || _parkedFamiliarActor != null))) return;
             if (reserve == null && !CanRemoveFamiliarEquipment()) return;
             var roster = ReadHutRoster();
@@ -429,7 +440,7 @@ namespace AzureDreamsReimagined
             else if (_familiarPrompt == ItemCommand.Return && _interact?.WasPressedThisFrame() == true)
             {
                 var reserve = ReserveForRow(SelectedRawIndex);
-                if (reserve != null && IsFamiliarLost(reserve.Actor)) return true;
+                if (IsFamiliarLost(reserve?.Actor ?? _familiarActor)) return true;
                 ConfirmFamiliarInventoryPrompt();
             }
             else if (_familiarPrompt == ItemCommand.Rename && Keyboard.current?.enterKey.wasPressedThisFrame == true)

@@ -59,6 +59,7 @@ namespace AzureDreamsReimagined
         [SerializeField] private Texture2D _liftAtlas;
         private Sprite[] _liftFrames;
         private bool _lifting;
+        private bool _swimming;
         private bool _inTown;
         private float PlaybackSpeed => _inTown ? 1f : TowerGameController.TowerAnimationSpeed;
         private float _framingScale = 1f;
@@ -105,6 +106,12 @@ namespace AzureDreamsReimagined
         {
             if (lifting && !_lifting) _liftStartedAt = Time.time;
             _lifting = lifting;
+        }
+
+        /// <summary>Pool presentation state. Gameplay movement remains owned by the town controller.</summary>
+        internal void PresentSwimming(bool swimming)
+        {
+            _swimming = swimming;
         }
 
         private float LiftProgress => Mathf.Clamp01((Time.time - _liftStartedAt) * PlaybackSpeed / LiftDuration);
@@ -242,7 +249,9 @@ namespace AzureDreamsReimagined
             bool walking = !_sleeping && !_paralyzed && _locomotion && _locomotion.IsMoving;
             bool running = _locomotion && _locomotion.IsRunningNow;
             float rate = _retailFrames != null ? (running ? 15f : 10f) : (running ? 16f : 8f);
-            _clock = walking ? (_clock + Time.deltaTime * PlaybackSpeed * rate) % FramesPerCycle : 0f;
+            // Keep the stride phase through the brief stop between tower tiles.
+            // Resetting it here restarted the walk cycle on every step.
+            if (walking) _clock = (_clock + Time.deltaTime * PlaybackSpeed * rate) % FramesPerCycle;
         }
         public void Configure(Texture2D sheet, Material material) { _sheet = sheet; _material = material; }
 
@@ -403,7 +412,7 @@ namespace AzureDreamsReimagined
             float depth = Vector3.Dot(facing, forward);
             float stride = walking ? Mathf.Sin(_clock * (2f * Mathf.PI / FramesPerCycle)) : 0f;
             float swing = _attackProgress < 0f ? 0f : Mathf.Sin(_attackProgress * Mathf.PI);
-            bool handsFree = !_sleeping && !_bagPose && _pushEffort == 0f;
+            bool handsFree = !_sleeping && !_bagPose && _pushEffort == 0f && !_swimming;
             int facingRow = AtlasRowByOctant[octant];
             Sprite weaponFrame = EquipmentFrame(_weaponRow, facingRow);
             Sprite shieldFrame = EquipmentFrame(_shieldRow, facingRow);
@@ -468,8 +477,10 @@ namespace AzureDreamsReimagined
             var facing = new Vector3(_facing.x, 0f, _facing.y);
             float angle = Mathf.Atan2(facing.x, facing.z) * Mathf.Rad2Deg;
             var visual = _renderer.transform;
-            float idleBob = !_sleeping && !_paralyzed && !walking && !_airborne && !_lifting && _pushEffort == 0f && _attackProgress < 0f
-                ? (1f - Mathf.Cos(Time.time * PlaybackSpeed * 4f)) * 0.015f : 0f;
+            float idleBob = _swimming
+                ? Mathf.Sin(Time.time * PlaybackSpeed * (walking ? 7f : 3.5f)) * 0.035f
+                : !_sleeping && !_paralyzed && !walking && !_airborne && !_lifting && _pushEffort == 0f && _attackProgress < 0f
+                    ? (1f - Mathf.Cos(Time.time * PlaybackSpeed * 4f)) * 0.015f : 0f;
             if (camera)
             {
                 angle -= camera.transform.eulerAngles.y;
@@ -492,7 +503,7 @@ namespace AzureDreamsReimagined
                     jump = Mathf.Abs(Mathf.Sin(_levelUpProgress / 0.9f * Mathf.PI * 3f)) * 0.26f;
             }
             PresentBody(octant, walking, running);
-            var poseOffset = facing.normalized * (_pushEffort * 0.14f) + Vector3.up * (idleBob + jump);
+            var poseOffset = facing.normalized * (_pushEffort * 0.14f) + Vector3.up * (idleBob + jump - (_swimming ? 0.12f : 0f));
             var offset = visual.parent.InverseTransformVector(poseOffset);
             if (_renderer.sprite && _soleClearances.TryGetValue(_renderer.sprite, out float clearance))
                 offset.y += clearance * _visualUnitsPerPixel;
@@ -502,6 +513,16 @@ namespace AzureDreamsReimagined
 
         private void PresentBody(int octant, bool walking, bool running)
         {
+            if (_swimming && !_sleeping && !_lifting && _attackProgress < 0f && _retailFrames != null)
+            {
+                // The retail locomotion cells provide the directional body poses;
+                // cycling the middle stride poses becomes Koh's breaststroke while
+                // the pool waterline covers his lower body.
+                int stroke = walking ? 2 + Mathf.FloorToInt(_clock * 1.35f) % 4 : 3;
+                _renderer.flipX = octant is >= 1 and <= 3;
+                _renderer.sprite = _retailFrames[AtlasRowByOctant[octant] * AtlasColumns + stroke];
+                return;
+            }
             if (_sleeping && _sleepFrames != null)
             {
                 int tick = Mathf.FloorToInt((Time.unscaledTime - _sleepStartedAt) * 30f);

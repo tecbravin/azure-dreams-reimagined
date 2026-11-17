@@ -31,6 +31,19 @@ namespace AzureDreamsReimagined
 
         internal int HighestFloor { get; }
 
+        // Each completed town route is a public sign of Koh's standing in Monsbaiya.
+        // Keep the raw bit mask private so dialogue systems only depend on this stable count.
+        internal int CompletedRouteCount
+        {
+            get
+            {
+                int count = 0;
+                for (int i = 0; i < Routes.Length; i++)
+                    if ((_completedRoutes & (1 << i)) != 0) count++;
+                return count;
+            }
+        }
+
         internal static TownReputation Read()
         {
             var flags = TownRetailScriptFlags.CreatePersistent();

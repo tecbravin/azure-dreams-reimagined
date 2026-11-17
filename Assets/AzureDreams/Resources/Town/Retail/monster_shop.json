@@ -1,44 +1,183 @@
 {
-  "source": "TOWN.BIN 0x603D37-0x6051C0; Monster Shop RAM capture egg category 0x80073414 + 0x12*20, records at 0x8002CA68",
+  "source": "TOWN.BIN 0x60383F-0x60550A; Monster Shop RAM capture egg category 0x80073414 + 0x12*20, records at 0x8002CA68",
   "buy": "I must apologize, we haven’t had enough top monster hunters around, so our stock of monsters is extremely low. As soon as we do get a monster, they sell immediately. At this rate, It’ll likely be like this for years to come. Come again if you get some more.",
-  "greeting": "Koh. Have you come again to bother me? Go home, go home!",
+  "greeting": "{name}. Have you come again to bother me?\nGo home, go home!",
   "customer": "Huh? You’re here as a customer?",
   "sellPrompt": "What kind of monster is it? Is it an egg?",
   "thanks": "Thanks. Come again.",
   "hunters": [
     {
+      "actor": 52,
       "lines": [
-        "Any monster can live in the\nmonster tower, as long as it’s\na monster.",
-        "You see, I even saw fish-like\nmonsters swimming through the\nair or quietly hiding along\nthe ground.",
+        "I hear that a Kewne monster was seen in this city, although the Kewne monster were believed to have become extinct ages ago.",
+        "I also hear that the same rumor was spread about 20 years ago.",
+        "I wonder what kind of monster it is."
+      ],
+      "ptBr": [
+        "Ouvi dizer que viram um monstro Kewne nesta cidade, embora se acreditasse que os Kewnes tinham sido extintos há muito tempo.",
+        "Também ouvi dizer que o mesmo boato correu uns vinte anos atrás.",
+        "Que tipo de monstro será?"
+      ]
+    },
+    {
+      "actor": 53,
+      "kewneChoice": true,
+      "lines": [
+        "Have you heard the rumor about the Kewne monster?"
+      ],
+      "ptBr": [
+        "Você ouviu o boato sobre o monstro Kewne?"
+      ]
+    },
+    {
+      "actor": 54,
+      "lines": [
+        "I was told by the old lady at our place that long ago people used to keep Kewne monsters as house pets.",
+        "They’re probably real cute."
+      ],
+      "ptBr": [
+        "A senhora lá de casa me contou que, há muito tempo, as pessoas criavam monstros Kewne como bichos de estimação.",
+        "Devem ser bem bonitinhos."
+      ]
+    },
+    {
+      "actor": 52,
+      "lines": [
+        "Shucks!  Once again someone had reserved the monster before me.",
+        "I can’t purchase any monsters here.  What kind of monster merchant is he, anyway?"
+      ],
+      "ptBr": [
+        "Droga! Mais uma vez alguém reservou o monstro antes de mim.",
+        "Não consigo comprar monstro nenhum aqui. Que tipo de comerciante de monstros é esse?"
+      ]
+    },
+    {
+      "lines": [
+        "Any monster can live in the monster tower, as long as it’s a monster.",
+        "You see, I even saw fish-like monsters swimming through the air or quietly hiding along the ground.",
         "I’m not kidding ya."
       ],
       "ptBr": [
-        "Qualquer monstro pode viver na Torre dos Monstros.",
+        "Qualquer monstro pode viver na Torre dos Monstros, desde que seja um monstro.",
         "Já vi monstros parecidos com peixes nadando no ar ou se escondendo junto ao chão.",
         "Não estou brincando."
-      ]
+      ],
+      "actor": 53
     },
     {
       "lines": [
-        "There’s this clever monster\ncalled a Troll, who can handle\na number of weapons\nsimultaneously.",
-        "There are three specialized\nweapons this monster’s good\nwith."
+        "Even if you are separated from your familiar, as long as it’s still alive it will follow you to the next level.",
+        "Besides, you could always call them by using your Monster Bells."
       ],
       "ptBr": [
-        "O Troll é um monstro esperto que sabe manejar várias armas.",
-        "Há três armas especiais que ele sabe usar."
-      ]
+        "Mesmo separado do seu familiar, enquanto ele estiver vivo, ele seguirá você até o próximo andar.",
+        "Além disso, você sempre pode chamá-lo usando os Sinos de Monstro."
+      ],
+      "actor": 54
     },
     {
       "lines": [
-        "Do you know of the Picket\nmonster?\nThat thief, he stole my lunch.",
-        "Well, I did beat him up and\nmade him throw up the food.",
-        "What’s that?  Did I eat the\nfood he threw up?  Of course!"
+        "There seems to be a monster that can be very helpful just by being there.",
+        "But nobody knows what kind of help this might be."
       ],
       "ptBr": [
-        "Conhece o Picket? Aquele ladrão roubou meu almoço.",
-        "Eu bati nele até ele devolver a comida.",
-        "Se eu comi depois disso? Claro!"
-      ]
+        "Parece haver um monstro que pode ser muito útil apenas por estar presente.",
+        "Mas ninguém sabe que tipo de ajuda ele pode oferecer."
+      ],
+      "actor": 52
+    },
+    {
+      "lines": [
+        "There’s this clever monster called a Troll, who can handle a number of weapons simultaneously.",
+        "There are three specialized weapons this monster’s good with."
+      ],
+      "ptBr": [
+        "Há um monstro esperto chamado Troll, que consegue manejar várias armas ao mesmo tempo.",
+        "Há três armas especiais que esse monstro sabe usar."
+      ],
+      "actor": 53
+    },
+    {
+      "lines": [
+        "The smart way to command your familiars is to give it general instructions using AI,",
+        "and only when absolutely needed, give it specific instructions."
+      ],
+      "ptBr": [
+        "A forma inteligente de comandar seus familiares é dar instruções gerais usando IA,",
+        "e só quando for absolutamente necessário dar instruções específicas."
+      ],
+      "actor": 54
+    },
+    {
+      "lines": [
+        "Of the monsters, there is one that changes its appearance when it grows up.",
+        "I wish my own Takopoo would change its appearance."
+      ],
+      "ptBr": [
+        "Entre os monstros, há um que muda de aparência quando cresce.",
+        "Eu queria que o meu Takopoo também mudasse de aparência."
+      ],
+      "actor": 52
+    },
+    {
+      "lines": [
+        "Do you know of the Picket monster? That thief, he stole my lunch.",
+        "Well, I did beat him up and made him throw up the food.",
+        "What’s that?  Did I eat the food he threw up?  Of course!"
+      ],
+      "ptBr": [
+        "Você conhece o monstro Picket? Aquele ladrão roubou meu almoço.",
+        "Bem, eu bati nele e fiz ele vomitar a comida.",
+        "O quê? Se eu comi a comida que ele vomitou? Claro!"
+      ],
+      "actor": 53
+    },
+    {
+      "lines": [
+        "I finally got one, a monster’s egg!",
+        "I’m gonna be rich!... no, I went through all that trouble to get this, I’m not going to sell it."
+      ],
+      "ptBr": [
+        "Finalmente consegui um, um ovo de monstro!",
+        "Vou ficar rico!... não, passei por tanto trabalho para conseguir isto que não vou vendê-lo."
+      ],
+      "actor": 54
+    },
+    {
+      "lines": [
+        "Wow!  I hear you made it to Level 20.",
+        "I don’t believe there’s a single soul left in this town who’s got the upper hand on you."
+      ],
+      "ptBr": [
+        "Uau! Ouvi dizer que você chegou ao Andar 20.",
+        "Não acredito que tenha restado uma só alma nesta cidade que leve vantagem sobre você."
+      ],
+      "actor": 52,
+      "minimumFloor": 20
+    },
+    {
+      "lines": [
+        "While in the tower, a monster ate the steel sword I had.",
+        "Then he spit out a gold sword, and went off somewhere.",
+        "Well, I took that gold sword and made a bundle selling it.",
+        "Oh I hope I can meet that monster again sometime."
+      ],
+      "ptBr": [
+        "Na torre, um monstro comeu a espada de aço que eu tinha.",
+        "Depois ele cuspiu uma espada de ouro e foi embora para algum lugar.",
+        "Bem, peguei aquela espada de ouro e ganhei uma fortuna vendendo-a.",
+        "Ah, espero encontrar esse monstro outra vez algum dia."
+      ],
+      "actor": 53
+    },
+    {
+      "lines": [
+        "Dragons only eat metals.\nThey’re pretty picky with their food, I’d say."
+      ],
+      "ptBr": [
+        "Dragões só comem metais. Eu diria que são bem exigentes com a comida."
+      ],
+      "actor": 54
     }
   ],
   "eggs": [
@@ -325,7 +464,8 @@
   ],
   "sourceLanguage": "en",
   "translationLanguage": "pt-BR",
-  "greetingPtBr": "Koh. Veio me incomodar de novo? Vá para casa!",
+  "greetingPtBr": "{name}. Veio me incomodar de novo?\nVá para casa, vá para casa!",
+  "buyPtBr": "Peço desculpas, não tivemos caçadores de monstros de primeira o bastante, então nosso estoque de monstros está extremamente baixo. Assim que conseguimos um monstro, ele é vendido imediatamente. Nesse ritmo, isso deve continuar por muitos anos. Volte se conseguir mais alguns.",
   "customerPtBr": "Hã? Você veio como cliente?",
   "sellPromptPtBr": "Que tipo de monstro é? É um ovo?",
   "thanksPtBr": "Obrigado. Volte sempre."

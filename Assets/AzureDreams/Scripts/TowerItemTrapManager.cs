@@ -18,10 +18,11 @@ namespace AzureDreamsReimagined
     {
         public bool IsRevealed { get; private set; }
         public bool IsActive { get; private set; } = true;
-        public bool FirstTime { get; private set; } = true;
+        public bool FirstActivation { get; private set; } = true;
+        // Kept as a read-only compatibility alias for existing saved-run tests.
+        public bool FirstTime => FirstActivation;
         internal TowerTrapEffect Effect { get; set; }
         internal bool IsRevealedOnMinimap => IsRevealed && !_minimapRevealDeferred;
-        private bool _discoveryAwarded;
         private bool _minimapRevealDeferred;
 
         internal void Reveal()
@@ -30,11 +31,15 @@ namespace AzureDreamsReimagined
             _minimapRevealDeferred = false;
         }
 
-        internal bool Discover()
+        internal bool RevealByAttack(out bool awardExperience)
         {
-            if (!FirstTime || _discoveryAwarded) return false;
+            awardExperience = false;
+            if (IsRevealed) return false;
+            // Preserve the retail-style first-activation state before consuming it.
+            // An already-activated trap grants the attack-discovery bonus.
+            awardExperience = !FirstActivation;
             Reveal();
-            _discoveryAwarded = true;
+            FirstActivation = false;
             return true;
         }
 
@@ -48,7 +53,18 @@ namespace AzureDreamsReimagined
                 _minimapRevealDeferred = true;
             }
             IsActive = false;
-            FirstTime = false;
+            FirstActivation = false;
+            return true;
+        }
+
+        internal bool Disarm(out bool awardExperience)
+        {
+            awardExperience = false;
+            if (!IsRevealed || !IsActive) return false;
+            // A trap disabled before it ever springs awards the disarm bonus.
+            awardExperience = FirstActivation;
+            IsActive = false;
+            FirstActivation = false;
             return true;
         }
 
@@ -369,12 +385,31 @@ namespace AzureDreamsReimagined
             return trap;
         }
 
+        public void RemoveTrapAt(Vector2Int cell)
+        {
+            EnsureFloor();
+            if (TrapAt(cell) == null) return;
+            _traps.Remove(cell);
+            _triggeredTraps.Remove(cell);
+            _floor.Dungeon.Grid[cell.y, cell.x] = _trapTerrain.TryGetValue(cell, out var original)
+                ? original : CoreDungeon.TileType.Floor;
+            _floor.Dungeon.Flags[cell.y, cell.x] &= (ushort)~CoreDungeon.TileFlag.HasTrap;
+            _trapTerrain.Remove(cell);
+        }
+
         public bool TryRearmTrap(Vector2Int cell)
         {
             if (TrapAt(cell)?.Rearm() != true) return false;
             _floor.Dungeon.Grid[cell.y, cell.x] = CoreDungeon.TileType.Trap;
             _floor.Dungeon.SetFlag(cell.x, cell.y, CoreDungeon.TileFlag.HasTrap);
             return true;
+        }
+
+        public bool TryDisarmTrap(Vector2Int cell, out bool awardExperience)
+        {
+            var trap = TrapAt(cell);
+            if (trap == null) { awardExperience = false; return false; }
+            return trap.Disarm(out awardExperience);
         }
 
         /// <summary>Whether a trap on this cell has already been triggered.</summary>

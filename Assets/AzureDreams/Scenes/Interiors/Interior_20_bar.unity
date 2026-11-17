@@ -135,12 +135,21 @@ MonoBehaviour:
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 8e74514bcd904d8791054cca394493cb, type: 3}
   - {fileID: 5151358256163527516, guid: b5a2d3e530664be7b9e0f58ef947fdaa, type: 3}
+  - {fileID: 5151358256163527516, guid: 6f7e72650bb34971a25a19ffe2410ba1, type: 3}
+  - {fileID: 5151358256163527516, guid: 047b553bf10c441c8aa7b55e2cc846d6, type: 3}
+  - {fileID: 5151358256163527516, guid: e3c76ec499784bbaa106666a025cd6d7, type: 3}
   residentCells:
   - {x: 18, y: 12}
-  - {x: 17, y: 11}
+  - {x: 14, y: 10}
+  - {x: 20, y: 12}
+  - {x: 13, y: 13}
+  - {x: 23, y: 13}
   residentOffsets:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0.25, z: 0}
+  - {x: 0, y: 0, z: 0.6}
+  - {x: 0, y: 0, z: 0.15}
+  - {x: 0, y: 0, z: 0.6}
+  - {x: 0, y: 0, z: 0.5}
+  - {x: 0, y: 0, z: 0.5}
   furnitureSurfaces:
   - footprint:
       serializedVersion: 2

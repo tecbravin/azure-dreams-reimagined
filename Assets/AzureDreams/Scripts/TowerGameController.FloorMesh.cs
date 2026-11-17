@@ -164,6 +164,7 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_windowSkin) Destroy(_windowSkin);
             ReleaseAreaMusic();
             ReleaseStreamedPortraits();
             ClearGenerated();

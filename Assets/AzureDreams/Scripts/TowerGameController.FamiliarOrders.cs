@@ -85,38 +85,79 @@ namespace AzureDreamsReimagined
             return null;
         }
 
+        // Status-page cycling follows the party on the current floor. Familiars
+        // stored in the bag remain available from the familiar list, but do not
+        // appear when the player switches character pages with PgUp/PgDn or
+        // left/right in the root menu.
+        private bool PrimaryFamiliarActiveForInventory => _familiarDefinition &&
+            (_area != Area.Tower || _familiar || _carriedFamiliar);
+
+        private bool BlueFamiliarActiveForInventory => _area == Area.Tower && _blueCollarAlly?.View;
+
+        private bool IsActiveInventoryActorSlot(int slot) => slot == 0 ||
+            (slot == 1 && PrimaryFamiliarActiveForInventory) ||
+            (slot == 2 && BlueFamiliarActiveForInventory);
+
+        private int ActiveInventoryActorCount => 1 +
+            (PrimaryFamiliarActiveForInventory ? 1 : 0) +
+            (BlueFamiliarActiveForInventory ? 1 : 0);
+
+        private int ActiveInventoryActorIndex(int slot)
+        {
+            if (slot == 0) return 0;
+            int index = 1;
+            if (PrimaryFamiliarActiveForInventory)
+            {
+                if (slot == 1) return index;
+                index++;
+            }
+            return BlueFamiliarActiveForInventory && slot == 2 ? index : 0;
+        }
+
+        private int InventoryActorSlotAtActiveIndex(int index)
+        {
+            if (index <= 0) return 0;
+            if (PrimaryFamiliarActiveForInventory)
+            {
+                if (index == 1) return 1;
+                index--;
+            }
+            return BlueFamiliarActiveForInventory && index == 1 ? 2 : 0;
+        }
+
         private void CycleInventoryActor(int direction)
         {
             _familiarStatus = false;
             _familiarOrderChoice = 0;
             _familiarOrderPicker = FamiliarOrderPicker.None;
-            int count = FamiliarInventoryCount + 1;
-            _inventoryActorSlot = (Mathf.Clamp(_inventoryActorSlot, 0, count - 1) + direction + count) % count;
+
+            int count = ActiveInventoryActorCount;
+            int current = IsActiveInventoryActorSlot(_inventoryActorSlot)
+                ? ActiveInventoryActorIndex(_inventoryActorSlot) : 0;
+            int next = (current + direction % count + count) % count;
+            _inventoryActorSlot = InventoryActorSlotAtActiveIndex(next);
             ClampInventorySelection(_inventoryOffset);
         }
 
-        // Status pages include the entire bag. Put the two collared familiars first.
+        // Slots are fixed to the red and blue collar familiars, while cycling
+        // decides which of those active actors may be selected.
         private int InventoryActorRow(int slot)
         {
-            if (slot <= 0 || slot > FamiliarInventoryCount) return -1;
-            if (_familiarDefinition && slot-- == 1) return FamiliarInventoryRow;
-            int blue = _blueCollarAlly?.View ? _bagFamiliars.IndexOf(_blueCollarFamiliar) : -1;
-            if (blue >= 0)
+            if (slot == 1 && PrimaryFamiliarActiveForInventory) return FamiliarInventoryRow;
+            if (slot == 2 && BlueFamiliarActiveForInventory)
             {
-                if (slot-- == 1) return FamiliarInventoryRow - blue - 1;
-                if (slot - 1 >= blue) slot++;
+                int blue = _bagFamiliars.IndexOf(_blueCollarFamiliar);
+                return blue >= 0 ? FamiliarInventoryRow - blue - 1 : -1;
             }
-            return FamiliarInventoryRow - slot;
+            return -1;
         }
 
-        private int InventoryActorCollar(int slot)
+        private int InventoryActorCollar(int slot) => slot switch
         {
-            int row = InventoryActorRow(slot);
-            if (row == FamiliarInventoryRow && InventoryCollarActor(1) != null) return 1;
-            if (row < FamiliarInventoryRow && InventoryCollarActor(2) != null &&
-                ReserveForRow(row) == _blueCollarFamiliar) return 2;
-            return 0;
-        }
+            1 when PrimaryFamiliarActiveForInventory && InventoryCollarActor(1) != null => 1,
+            2 when BlueFamiliarActiveForInventory && InventoryCollarActor(2) != null => 2,
+            _ => 0
+        };
 
         private static string FamiliarAiLabel(FamiliarAi ai) => ai switch
         {
@@ -132,7 +173,7 @@ namespace AzureDreamsReimagined
             if (_area != Area.Tower || actor == null) return false;
             if (actor == _familiarActor && _familiar) return IsFamiliarDistant();
             return _blueCollarAlly?.View && actor == _blueCollarAlly.Actor &&
-                Distance(_playerCell, _blueCollarAlly.Cell) > 6;
+                Distance(_playerCell, _blueCollarAlly.Cell) > FamiliarLostDistance;
         }
 
         private Vector2Int FormationWorldOffset(Vector2Int screen) => Vector2Int.RoundToInt(CameraRelativeMovement(screen));
@@ -285,6 +326,7 @@ namespace AzureDreamsReimagined
                     var result = preview.Result;
                     DrawFamiliarStatus(stats, preview.Name, result, result.Hp, result.MaxHp,
                         result.CurrentAttack, result.CurrentDefense);
+                    DrawFusionResultStatsChart(new Rect(stats.x + 5f, stats.y + 142f, stats.width - 10f, 58f), result);
                     DrawInventoryText(new Rect(panel.x + 10f, panel.y + 93f, panel.width - 20f, 38f),
                         DescribeTalents(result), _messageStyle);
                     if (DrawInventoryButton(new Rect(panel.x + 10f, panel.yMax - 69f, panel.width - 20f, 26f),
@@ -371,30 +413,28 @@ namespace AzureDreamsReimagined
             }
             if (executeFamiliarCommands && !IsFamiliarLost(actor) && _pendingFamiliarCommands.TryGetValue(actor, out var manual))
                 return PlanManualFamiliarOrder(actor, view, from, manual.Direction, manual.Order, kohDestination, reserved, otherDestination);
-            if (MonsterExhausted(actor) || ItemImmobilized(actor) || SlowBlocksAction(actor) ||
-                (actor == _familiarActor && (_familiarWaiting || _landingFamiliar))) return (Vector2Int.zero, -1);
             var orders = OrdersFor(actor);
+            bool staysStill = orders.Ai == FamiliarAi.Wait || (actor == _familiarActor && _familiarWaiting);
             bool isLost = IsFamiliarLost(actor);
+            if (isLost) _pendingFamiliarCommands.Remove(actor);
+            if (MonsterExhausted(actor) || ItemImmobilized(actor) || SlowBlocksAction(actor) ||
+                (actor == _familiarActor && _landingFamiliar)) return (Vector2Int.zero, -1);
             if (isLost)
             {
-                // Lost familiar: follow / stay still → attack nearby monsters
-                if (orders.Ai is FamiliarAi.Wait or FamiliarAi.Follow)
-                {
-                    int enemy = _creatures.FindIndex(entry =>
-                        entry.Health > 0 && !IsSubmerged(entry.Actor) &&
-                        FamiliarHasSight(from, entry.Cell) && Distance(from, entry.Cell) == 1);
-                    if (enemy >= 0)
-                        return (Vector2Int.zero, enemy);
-                }
-                if (orders.Ai == FamiliarAi.Wait) return (Vector2Int.zero, -1);
-                // Search for Koh before resuming normal orders.
-                {
-                    var wanderStep = FindFamiliarOrderStep(actor, from, kohDestination, kohDestination, reserved, otherDestination, false);
-                    if (wanderStep != Vector2Int.zero) return (wanderStep, -1);
-                    return (Vector2Int.zero, -1);
-                }
+                // A lost familiar cannot be given orders or cast support magic. It still
+                // defends itself when a monster reaches an adjacent, connected tile.
+                int enemy = _creatures.FindIndex(entry => entry.Health > 0 && !IsSubmerged(entry.Actor) &&
+                    Distance(from, entry.Cell) == 1 && FamiliarHasSight(from, entry.Cell));
+                if (enemy >= 0) return (Vector2Int.zero, enemy);
+                if (staysStill) return (Vector2Int.zero, -1);
+
+                // Every non-wait AI searches for Koh. The path routine settles on the
+                // nearest legal cell next to Koh because Koh's own tile is occupied.
+                var seekKoh = FindFamiliarOrderStep(actor, from, kohDestination, kohDestination,
+                    reserved, otherDestination, false);
+                return (seekKoh, -1);
             }
-            if (orders.Ai == FamiliarAi.Wait) return (Vector2Int.zero, -1);
+            if (staysStill) return (Vector2Int.zero, -1);
             if (orders.Ai == FamiliarAi.Support && !IsSubmerged(actor) && TryFamiliarSupportMagic(actor, view, from))
                 return (Vector2Int.zero, -1);
             if (orders.Ai is FamiliarAi.Direct or FamiliarAi.Aggressive && !IsFrog(actor))
@@ -439,7 +479,13 @@ namespace AzureDreamsReimagined
             Vector2Int? reserved, Vector2Int? otherDestination) =>
             cell != kohDestination && cell != reserved && cell != otherDestination && cell != _stairCell &&
             (!_familiar || actor == _familiarActor || cell != _familiarCell) && CreatureAt(cell) < 0 &&
-            !_thrownEggs.Exists(ally => ally.Actor != actor && ally.View && ally.Cell == cell);
+            !_thrownEggs.Exists(ally => ally.Actor != actor && ally.View && ally.Cell == cell) &&
+            !IsRevealedActiveTrap(cell);
+
+        // A revealed active trap is known danger for a familiar. Hidden traps and
+        // disabled traps stay traversable, preserving the normal exploration rules.
+        private bool IsRevealedActiveTrap(Vector2Int cell) =>
+            TrapAt(cell) is { IsRevealed: true, IsActive: true };
 
         private Vector2Int FindFamiliarOrderStep(ActorRecord actor, Vector2Int from, Vector2Int target,
             Vector2Int kohDestination, Vector2Int? reserved, Vector2Int? otherDestination, bool approachingEnemy)

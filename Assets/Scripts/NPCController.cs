@@ -200,7 +200,11 @@ namespace AzureDreamsReimagined
             {
                 Vector3 facing = player.transform.position - transform.position;
                 facing.y = 0f;
-                if (facing.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(facing);
+                if (facing.sqrMagnitude > 0.0001f)
+                {
+                    transform.rotation = Quaternion.LookRotation(facing);
+                    _view?.Present(facing, _walkCycle, false);
+                }
             }
             Talk();
         }

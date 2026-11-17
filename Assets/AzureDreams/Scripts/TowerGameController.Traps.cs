@@ -70,6 +70,7 @@ namespace AzureDreamsReimagined
         }
         private readonly Dictionary<Vector2Int, TowerTrapState> _demoTraps = new();
         private Vector2Int? _trapRearmCell;
+        private Vector2Int? _trapDisarmCell;
 
         private TowerTrapState TrapAt(Vector2Int cell) => _towerItemTraps != null
             ? _towerItemTraps.TrapAt(cell) : _demoTraps.TryGetValue(cell, out var trap) ? trap : null;
@@ -129,12 +130,16 @@ namespace AzureDreamsReimagined
 
         private void DiscoverTrapWithAttack(Vector2Int cell)
         {
-            if (TrapAt(cell)?.Discover() != true) return;
+            var trap = TrapAt(cell);
+            if (trap == null || !trap.RevealByAttack(out bool awardExperience)) return;
             RefreshTrapMarker(cell);
-            int level = _playerActor.Level;
+            if (!awardExperience)
+            {
+                _message = T("Koh reveals a trap.", "Koh revela uma armadilha.");
+                return;
+            }
             AddExperience(_playerActor, 2, ref _health);
             _towerRun?.SetHealth(_health);
-            if (_playerActor.Level > level) SpawnFx(_fxMagic, CellPosition(_playerCell));
             _message = T("Koh reveals a trap and gains 2 XP.", "Koh revela uma armadilha e ganha 2 XP.");
         }
 
@@ -369,6 +374,11 @@ namespace AzureDreamsReimagined
         {
             if (_area != Area.Tower) return false;
             var cell = _playerCell + _towerFacing;
+            if (TrapAt(cell) is { IsRevealed: true, IsActive: true })
+            {
+                _trapDisarmCell = cell;
+                return true;
+            }
             if (TrapAt(cell) is not { IsRevealed: true, IsActive: false }) cell = _playerCell;
             if (TrapAt(cell) is not { IsRevealed: true, IsActive: false }) return false;
             _trapRearmCell = cell;
@@ -377,10 +387,47 @@ namespace AzureDreamsReimagined
 
         private bool HandleTrapRearmInput()
         {
-            if (!_trapRearmCell.HasValue) return false;
-            if (_cancel?.WasPressedThisFrame() == true) _trapRearmCell = null;
+            if (!_trapRearmCell.HasValue && !_trapDisarmCell.HasValue) return false;
+            if (_cancel?.WasPressedThisFrame() == true)
+            {
+                _trapRearmCell = null;
+                _trapDisarmCell = null;
+            }
+            else if (_trapDisarmCell.HasValue && _interact?.WasPressedThisFrame() == true) ConfirmTrapDisarm();
             else if (_interact?.WasPressedThisFrame() == true) ConfirmTrapRearm();
             return true;
+        }
+
+        private void ConfirmTrapDisarm()
+        {
+            if (!_trapDisarmCell.HasValue) return;
+            var cell = _trapDisarmCell.Value;
+            _trapDisarmCell = null;
+            if (TrapAt(cell) is not { IsRevealed: true, IsActive: true }) return;
+            ScheduleInventoryAction(() =>
+            {
+                bool awardExperience;
+                bool disarmed;
+                if (_towerItemTraps != null)
+                    disarmed = _towerItemTraps.TryDisarmTrap(cell, out awardExperience);
+                else if (_demoTraps.TryGetValue(cell, out var trap))
+                    disarmed = trap.Disarm(out awardExperience);
+                else
+                {
+                    disarmed = false;
+                    awardExperience = false;
+                }
+                if (!disarmed) return;
+                RefreshTrapMarker(cell);
+                if (!awardExperience)
+                {
+                    _message = T("Koh disarms the trap.", "Koh desarma a armadilha.");
+                    return;
+                }
+                AddExperience(_playerActor, 2, ref _health);
+                _towerRun?.SetHealth(_health);
+                _message = T("Koh disarms the trap and gains 2 XP.", "Koh desarma a armadilha e ganha 2 XP.");
+            });
         }
 
         private void ConfirmTrapRearm()
@@ -399,6 +446,17 @@ namespace AzureDreamsReimagined
 
         private void DrawTrapRearm(float width, float height)
         {
+            if (_trapDisarmCell.HasValue)
+            {
+                var disarmRect = new Rect(width * 0.5f - 145f, height * 0.5f - 55f, 290f, 110f);
+                DrawDialogueFrame(disarmRect);
+                GUILayout.BeginArea(new Rect(disarmRect.x + 12f, disarmRect.y + 10f, disarmRect.width - 24f, disarmRect.height - 20f));
+                GUILayout.Label(T("Disarm this trap?", "Desarmar esta armadilha?"));
+                if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) ConfirmTrapDisarm();
+                if (GUILayout.Button(T("No [Esc]", "Não [Esc]"))) _trapDisarmCell = null;
+                GUILayout.EndArea();
+                return;
+            }
             if (!_trapRearmCell.HasValue) return;
             var rect = new Rect(width * 0.5f - 145f, height * 0.5f - 55f, 290f, 110f);
             DrawDialogueFrame(rect);

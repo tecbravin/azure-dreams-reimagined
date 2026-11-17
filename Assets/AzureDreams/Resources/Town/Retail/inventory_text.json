@@ -32,6 +32,16 @@
     },
     {
       "kind": 13,
+      "id": 3,
+      "en": "Dumplings",
+      "ptBr": "Bolinhos de polvo",
+      "descriptionEn": "Delicious Octopus Dumplings. Restores HP and MP in the Tower.",
+      "descriptionPtBr": "Deliciosos bolinhos de polvo. Recuperam PV e PM na Torre.",
+      "gear": 0,
+      "icon": "dumplings"
+    },
+    {
+      "kind": 13,
       "id": 6,
       "en": "Blue Cape",
       "ptBr": "Capa Azul",

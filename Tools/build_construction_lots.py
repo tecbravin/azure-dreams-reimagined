@@ -18,6 +18,7 @@ LOTS = {
     "alley": (42, 29, 54, 41),
     "temple": (64, 27, 84, 44),
     "library": (90, 30, 102, 41),
+    "home_1": (48, 44, 63, 58),
     "home": (48, 44, 63, 58),
     "hospital": (8, 62, 23, 72),
     "fountain": (55, 64, 73, 80),
@@ -51,8 +52,29 @@ def main():
                 z = sum(p[2] for p in points) / len(points)
                 for name, (x0, z0, x1, z1) in LOTS.items():
                     if x0 <= x < x1 and z0 <= z < z1:
+                        # No intermediate town capture was supplied. The
+                        # developed capture has a main house and a later side
+                        # wing. Keep its main house for rank 1, and remove
+                        # the raised wing while preserving its ground.
+                        if name == "home_1" and x >= 58 and z >= 50 and max(p[1] for p in points) > 0.8:
+                            continue
                         meshes[name][material].extend((*vertices[i], *uv[j]) for i, j in refs)
-                        break
+                        if name != "home_1":
+                            break
+
+    # The removed side wing exposes ground that was hidden in the developed
+    # capture. Continue the adjacent captured grass tile across that area.
+    grass = meshes["home_1"]["page_13_clut_30145"]
+    u0, v0, span = 0.126953, 0.751953, 0.121094
+    for z in range(50, 57):
+        for x in range(58, 62):
+            corners = (
+                (x, 0.01, z, u0, v0),
+                (x + 1, 0.01, z, u0 + span, v0),
+                (x, 0.01, z + 1, u0, v0 + span),
+                (x + 1, 0.01, z + 1, u0 + span, v0 + span),
+            )
+            grass.extend((corners[0], corners[2], corners[1], corners[1], corners[2], corners[3]))
 
     textures = OUTPUT / "Textures"
     textures.mkdir(parents=True, exist_ok=True)

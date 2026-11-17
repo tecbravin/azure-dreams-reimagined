@@ -255,7 +255,7 @@ namespace AzureDreamsReimagined
             bool navigationKey = code is Key.UpArrow or Key.DownArrow or Key.LeftArrow or Key.RightArrow;
             if ((navigationKey && row.action != _move) ||
                 code is Key.Enter or Key.NumpadEnter or Key.LeftAlt or Key.RightAlt or Key.LeftMeta or Key.RightMeta
-                or Key.F1 or Key.F2 or Key.M or Key.Q or Key.Numpad7 or Key.Numpad8 or Key.Numpad0)
+                or Key.F1 or Key.F2 or Key.M or Key.Q or Key.Numpad6 or Key.Numpad7 or Key.Numpad8 or Key.Numpad0)
             {
                 _mappingNotice = T("This key is reserved. Try another key.", "Essa tecla é reservada. Tente outra.");
                 return;

@@ -489,7 +489,7 @@ namespace AzureDreamsReimagined
 
         private void DrawBowlingChoice(int index, string label)
         {
-            if (!GUILayout.Button((_bowlingMenuChoice == index ? "▸ " : "") + label)) return;
+            if (!GUILayout.Button((_bowlingMenuChoice == index ? "› " : "") + label)) return;
             _bowlingMenuChoice = index;
             AdvanceBowling();
         }

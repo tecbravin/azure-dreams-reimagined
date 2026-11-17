@@ -9,6 +9,12 @@ namespace AzureDreamsReimagined
     [ExecuteAlways]
     public sealed class TownInteriorScene : MonoBehaviour
     {
+        private const string KohHouseLevelOneId = "Interior_01_koh_house_1";
+        // The first captured house uses the PS1 coordinate frame, whose X axis
+        // is opposite to the town/interior frame used by the player controller.
+        // Keep the correction here so mesh, residents and collision footprints
+        // share one authoritative conversion.
+        private const float KohHouseLevelOneMirrorAxisX = 16f;
         [Serializable] public sealed class Surface { public int[] triangles; }
         [Serializable] public sealed class Geometry
         { public Vector3[] vertices; public Vector2[] uv; public Surface[] surfaces; }
@@ -39,6 +45,34 @@ namespace AzureDreamsReimagined
         private Mesh _mesh;
         private Material[] _runtimeMaterials;
 
+        internal bool UsesMirroredCoordinateFrame => interiorId == KohHouseLevelOneId;
+
+        internal Vector3 MapLayoutPosition(Vector3 position)
+        {
+            if (UsesMirroredCoordinateFrame) position.x = 2f * KohHouseLevelOneMirrorAxisX - position.x;
+            return position;
+        }
+
+        internal Vector2Int MapLayoutCell(Vector2Int cell)
+        {
+            if (UsesMirroredCoordinateFrame) cell.x = Mathf.RoundToInt(2f * KohHouseLevelOneMirrorAxisX) - cell.x;
+            return cell;
+        }
+
+        internal Rect MapLayoutFootprint(Rect footprint)
+        {
+            if (!UsesMirroredCoordinateFrame) return footprint;
+            return Rect.MinMaxRect(
+                2f * KohHouseLevelOneMirrorAxisX - footprint.xMax, footprint.yMin,
+                2f * KohHouseLevelOneMirrorAxisX - footprint.xMin, footprint.yMax);
+        }
+
+        internal IEnumerable<Rect> CollisionFootprints()
+        {
+            if (furnitureFootprints == null) yield break;
+            foreach (var footprint in furnitureFootprints) yield return MapLayoutFootprint(footprint);
+        }
+
         private static Shader FindCapturedFallbackShader(Shader preferred)
         {
             // Captured interior surfaces use opaque, per-surface texture crops.
@@ -58,6 +92,7 @@ namespace AzureDreamsReimagined
 
         internal float FurnitureTop(Vector3 position, float radius)
         {
+            position = MapLayoutPosition(position);
             float top = float.NegativeInfinity;
             if (furnitureSurfaces == null) return top;
             foreach (var surface in furnitureSurfaces)
@@ -70,10 +105,37 @@ namespace AzureDreamsReimagined
             return top;
         }
 
+        /// <summary>
+        /// Applies the currently selected General Store wallpaper without replacing
+        /// the captured PS1 texture pages.  The captured room materials are runtime
+        /// instances, so the tint is local to this loaded interior and is rebuilt
+        /// cleanly on the next visit.
+        /// </summary>
+        internal void ApplyHomeWallpaper(string wallpaperId)
+        {
+            if (_runtimeMaterials == null) return;
+            Color tint = wallpaperId switch
+            {
+                "wallpaper_1" => new Color(1f, 0.93f, 0.74f, 1f),
+                "wallpaper_2" => new Color(0.79f, 0.91f, 1f, 1f),
+                "wallpaper_3" => new Color(0.98f, 0.79f, 0.88f, 1f),
+                _ => Color.white
+            };
+            foreach (var material in _runtimeMaterials)
+            {
+                if (!material) continue;
+                if (material.HasProperty("_Color")) material.SetColor("_Color", tint);
+                if (material.HasProperty("_BaseColor")) material.SetColor("_BaseColor", tint);
+            }
+        }
+
         private void OnEnable()
         {
             if (_mesh || !geometry) return;
             var data = JsonUtility.FromJson<Geometry>(geometry.text);
+            if (UsesMirroredCoordinateFrame && data.vertices != null)
+                for (int i = 0; i < data.vertices.Length; i++)
+                    data.vertices[i] = MapLayoutPosition(data.vertices[i]);
             _mesh = new Mesh { name = displayName, indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 };
             _mesh.vertices = data.vertices; _mesh.uv = data.uv;
             _mesh.subMeshCount = data.surfaces.Length;

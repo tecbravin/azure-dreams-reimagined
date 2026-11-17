@@ -25,12 +25,14 @@ namespace AzureDreamsReimagined
             foreach (var offset in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right })
             {
                 var cell = _stairCell + offset;
-if (!_towerFloorLayout.IsWalkable(cell.x, cell.y) || cell == _playerCell || TrapAt(cell) != null) continue;
+                if (!_towerFloorLayout.IsWalkable(cell.x, cell.y) || cell == _playerCell) continue;
                 int distance = Distance(cell, _playerCell);
                 if (distance >= nearest) continue;
                 nearest = distance;
                 _beldoVisionCell = cell;
             }
+            // The story encounter takes precedence over procedural traps.
+            _towerItemTraps.RemoveTrapAt(_beldoVisionCell);
             int count = _creatures.Count;
             _beldoVision = SpawnManagedCreature(_beldoVisionCell, BeldoBossSpecies, allowSpawnSleep: false);
             if (_creatures.Count > count) _creatures.RemoveAt(count);
@@ -133,7 +135,13 @@ TownRetailScriptFlags.CreatePersistent().ApplyOneTimeFlagOperation(0x1389);
             CompleteBeldoVictory();
         }
 
-        private int BeldoDialogueCount => _beldoScene == BeldoScene.Victory ? 1 : 3;
+        private int BeldoDialogueCount => _beldoScene switch
+        {
+            BeldoScene.Introduction => BeldoIntroductionPages.Length,
+            BeldoScene.Rescue => 3,
+            BeldoScene.Victory => 1,
+            _ => 0
+        };
 
         private void CompleteBeldoVictory()
         {
@@ -163,19 +171,28 @@ TownRetailScriptFlags.CreatePersistent().ApplyOneTimeFlagOperation(0x1389);
         private void DrawBeldoDialogue(float width, float height)
         {
             if (_beldoScene == BeldoScene.None) return;
-            var (speaker, line) = (_beldoScene, _beldoDialoguePage) switch
+            string speaker, line;
+            Texture2D portrait = null;
+            if (_beldoScene == BeldoScene.Introduction)
             {
-                (BeldoScene.Introduction, 0) => ("Beldo", T("You finally made it, son of Guy.", "Finalmente chegou, filho de Guy.")),
-                (BeldoScene.Introduction, 1) => ("Beldo", T("Your father sealed the Ultimate Egg. Your blood will break that seal.",
-                    "Seu pai selou o Ovo Supremo. Seu sangue vai romper o selo.")),
-                (BeldoScene.Introduction, _) => ("Beldo", T("The egg will be mine.", "O ovo será meu.")),
-                (BeldoScene.Rescue, 0) => ("Kewne", T($"{HeroName}! I'm still on your side.", $"{HeroName}! Ainda estou do seu lado.")),
-                (BeldoScene.Rescue, 1) => ("Kewne", T("This is Seraphim, your father's sword. Take it!", "Esta é a Seraphim, a espada do seu pai. Pegue!")),
-                (BeldoScene.Rescue, _) => ("Kewne", T("It's over. The Ultimate Egg is yours.", "Acabou. O Ovo Supremo é seu.")),
-                _ => (HeroName, T("Beldo is defeated. The Ultimate Egg and my father's sword are finally safe.",
-                    "Beldo foi derrotado. O Ovo Supremo e a espada do meu pai finalmente estão a salvo."))
-            };
+                var page = BeldoIntroductionPages[_beldoDialoguePage];
+                speaker = page.Speaker;
+                line = ResolveHeroName(T(page.English, page.Portuguese));
+                if (page.Portrait != null) portrait = GuyDialoguePortrait(page.Portrait);
+            }
+            else
+            {
+                (speaker, line) = (_beldoScene, _beldoDialoguePage) switch
+                {
+                    (BeldoScene.Rescue, 0) => ("Kewne", T($"{HeroName}! I'm still on your side.", $"{HeroName}! Ainda estou do seu lado.")),
+                    (BeldoScene.Rescue, 1) => ("Kewne", T("This is Seraphim, your father's sword. Take it!", "Esta é a Seraphim, a espada do seu pai. Pegue!")),
+                    (BeldoScene.Rescue, _) => ("Kewne", T("It's over. The Ultimate Egg is yours.", "Acabou. O Ovo Supremo é seu.")),
+                    _ => (HeroName, T("Beldo is defeated. The Ultimate Egg and my father's sword are finally safe.",
+                        "Beldo foi derrotado. O Ovo Supremo e a espada do meu pai finalmente estão a salvo."))
+                };
+            }
             var panel = new Rect(width * 0.1f, height * 0.75f, width * 0.8f, height * 0.21f);
+            DrawDialoguePortrait(portrait, panel);
             DrawHudPanel(panel);
             DrawHudText(new Rect(panel.x + 12f, panel.y + 7f, panel.width - 24f, 22f), speaker, _bodyStyle, dialogue: true);
             DrawHudText(new Rect(panel.x + 12f, panel.y + 30f, panel.width - 24f, panel.height - 39f), line, _messageStyle, dialogue: true);

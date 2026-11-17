@@ -50,8 +50,7 @@ namespace AzureDreamsReimagined
             _storageBagRows = _storageDepotRows = null;
             if (!_storageFromWreath) return;
             _storageFromWreath = false;
-            _checkpointSelection = WreathStorageOption;
-            _checkpointMenu = CheckpointMenu.Wreath;
+            ReturnToWreathServices();
         }
 
         private void RefreshHomeStorageRows()
@@ -200,7 +199,7 @@ namespace AzureDreamsReimagined
             var items = StorageRows(depot);
             string title = depot ? T("Storage", "Depósito") : T("Bag", "Sacola");
             string tally = depot ? $"{_townStorage.TotalItems}/{HomeStorageCapacity}" : $"{_townInventory.TotalItems + FamiliarInventoryCount}/{Inventory.SlotCapacity}";
-            if (GUI.Button(new Rect(x, y, 262f, 23f), $"{(active ? "▸ " : "")}{title} · {tally}")) SelectStorageSide(depot);
+            if (GUI.Button(new Rect(x, y, 262f, 23f), $"{(active ? "› " : "")}{title} · {tally}")) SelectStorageSide(depot);
             if (count == 0)
                 DrawHudText(new Rect(x + 8f, y + 28f, 245f, 23f), T("Empty", "Vazio"), _messageStyle);
             for (int i = first; i < Mathf.Min(count, first + StorageRowsPerPage); i++)

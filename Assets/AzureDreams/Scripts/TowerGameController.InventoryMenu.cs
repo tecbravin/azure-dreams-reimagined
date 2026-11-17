@@ -65,6 +65,12 @@ namespace AzureDreamsReimagined
                 return true;
             }
             int characterDelta = InventoryCharacterDelta(keyboard);
+            // The root menu has no horizontal selection. Match the original-style
+            // character cycling here without taking left/right away from item tabs
+            // or the familiar direction picker.
+            if (characterDelta == 0 && _inventoryMenu == InventoryMenu.Main)
+                characterDelta = MenuDirectionPressed(3) ? -1 :
+                    MenuDirectionPressed(4) ? 1 : 0;
             if (_inventoryMenu != InventoryMenu.Direction && characterDelta != 0)
             {
                 CycleInventoryActor(characterDelta);
@@ -76,6 +82,13 @@ namespace AzureDreamsReimagined
                 MenuDirectionPressed(2) ? 1 : 0;
             if (_inventoryMenu == InventoryMenu.Direction)
             {
+                var actor = InventoryCollarActor(_commandCollar);
+                if (actor == null || IsFamiliarLost(actor))
+                {
+                    _inventoryMenu = InventoryMenu.Main;
+                    _inventoryMenuRow = 0;
+                    return true;
+                }
                 int horizontal = MenuDirectionPressed(3) ? -1 :
                     MenuDirectionPressed(4) ? 1 : 0;
                 var direction = new Vector2Int(horizontal, -vertical);
@@ -197,6 +210,8 @@ namespace AzureDreamsReimagined
                 case InventoryMenu.Familiar:
                     if (row == 0 || row == 1)
                     {
+                        var selected = InventoryCollarActor(row + 1);
+                        if (selected == null || IsFamiliarLost(selected)) return;
                         PlayRetailSound(RetailSfx.Confirm);
                         _commandCollar = row + 1;
                         _inventoryMenu = InventoryMenu.Commands;
@@ -244,7 +259,7 @@ namespace AzureDreamsReimagined
         private void ConfirmManualOrder()
         {
             var actor = InventoryCollarActor(_commandCollar);
-            if (_turnBusy || actor == null || (_commandCollar == 1 && !_familiar)) return;
+            if (_turnBusy || actor == null || IsFamiliarLost(actor) || (_commandCollar == 1 && !_familiar)) return;
             var from = _commandCollar == 1 ? _familiarCell : _blueCollarAlly.Cell;
             if (ManualOrderNeedsDirection(actor, _selectedManualOrder) && !InsideMap(from + _commandDirection)) return;
             if (_selectedManualOrder == ManualOrder.Species &&
@@ -296,7 +311,9 @@ namespace AzureDreamsReimagined
                 }
                 DrawInventoryActorStatus(status, InventoryActorRow(_inventoryActorSlot));
                 DrawInventoryText(new Rect(status.x + 10f, status.yMax + 3f, status.width - 20f, 22f),
-                    T("PgUp/PgDn: character", "PgUp/PgDn: personagem"), _messageStyle);
+                    _inventoryMenu == InventoryMenu.Main
+                        ? T("Left/Right: character", "Esq./Dir.: personagem")
+                        : T("PgUp/PgDn: character", "PgUp/PgDn: personagem"), _messageStyle);
             }
             if (count == 0)
                 DrawInventoryText(new Rect(panel.x + 8f, panel.y + 8f, panel.width - 16f, 46f),
@@ -325,6 +342,11 @@ namespace AzureDreamsReimagined
                     GUI.enabled = enabled && !IsFamiliarLost(familiarActor) && (row != 2 ||
                         (HasBlueCollar && _familiar && _blueCollarAlly?.View && !IsFamiliarLost(_familiarActor) &&
                         !IsFamiliarLost(_blueCollarAlly.Actor)));
+                else if (_inventoryMenu == InventoryMenu.Familiar && row < 2)
+                {
+                    var collar = InventoryCollarActor(row + 1);
+                    GUI.enabled = enabled && collar != null && !IsFamiliarLost(collar);
+                }
                 else if (_inventoryMenu == InventoryMenu.Main && row == 1)
                     GUI.enabled = enabled && _area == Area.Tower && (_familiar || _blueCollarAlly?.View);
                 bool clicked = DrawInventoryButton(button, label, row == _inventoryMenuRow);
@@ -370,7 +392,7 @@ namespace AzureDreamsReimagined
             Vector2Int direction, ManualOrder order, Vector2Int kohDestination, Vector2Int? reserved, Vector2Int? otherDestination)
         {
             var wait = (Vector2Int.zero, -1);
-            if (MonsterExhausted(actor) || ItemImmobilized(actor) || SlowBlocksAction(actor) ||
+            if (IsFamiliarLost(actor) || MonsterExhausted(actor) || ItemImmobilized(actor) || SlowBlocksAction(actor) ||
                 Combat.HasStatus(actor, StatusId.CONFUSION) || (actor == _familiarActor && _landingFamiliar))
                 return wait;
             if (order == ManualOrder.Wait) return wait;

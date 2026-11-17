@@ -125,9 +125,10 @@ namespace AzureDreamsReimagined
             {
                 _availableItemCommands.Clear();
                 var reserve = ReserveForRow(SelectedRawIndex);
-                if (_area == Area.Tower && !_carriedFamiliar)
+                bool lost = _area == Area.Tower && IsFamiliarLost(reserve?.Actor ?? _familiarActor);
+                if (_area == Area.Tower && !_carriedFamiliar && !lost)
                     _availableItemCommands.Add((reserve == null && _familiar) || (reserve != null && reserve == _blueCollarFamiliar) ? ItemCommand.Deselect : ItemCommand.Select);
-                if (reserve != null ? !reserve.Temporary && reserve != _blueCollarFamiliar : _parkedFamiliarActor == null)
+                if (!lost && (reserve != null ? !reserve.Temporary && reserve != _blueCollarFamiliar : _parkedFamiliarActor == null))
                     _availableItemCommands.Add(ItemCommand.Return);
                 _availableItemCommands.Add(ItemCommand.Rename);
                 _itemCommandIndex = 0;
@@ -139,7 +140,7 @@ namespace AzureDreamsReimagined
             _availableItemCommands.Clear();
             if (Equipment(item)) _availableItemCommands.Add(Equipped(item) ? ItemCommand.Unequip : ItemCommand.Equip);
             else if (item.Kind == MonsterEgg.Kind && _area == Area.Tower) _availableItemCommands.Add(ItemCommand.Warm);
-            else if (!IsPitaFruit(item)) _availableItemCommands.Add(ItemCommand.Use);
+            else if (!IsPitaFruit(item) && (!IsOctopusDumplings(item) || _area == Area.Tower)) _availableItemCommands.Add(ItemCommand.Use);
             _availableItemCommands.Add(ItemCommand.Drop);
             _availableItemCommands.Add(ItemCommand.Hold);
             if (IsGiveableToFamiliar(item) && CanGiveToFamiliar(item))

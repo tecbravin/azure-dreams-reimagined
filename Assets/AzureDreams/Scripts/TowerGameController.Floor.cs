@@ -91,8 +91,10 @@ namespace AzureDreamsReimagined
             else
             {
                 _towerItemTraps.AddEquipmentToGeneratedLoot();
-                _towerItemTraps.ConfigureCherrlHealingHerb(TownSaveVariables.GetBool(CherrlHealingQuestCompleted));
-                if (_floor == GurusOilPotFloor && !TownRetailScriptFlags.CreatePersistent().IsFlagSet(WindmillQuestCompleteFlag))
+                bool cherrlHerbActive = TownSaveVariables.GetInt(StoryPrefix + "cherrl.stage") >= CherrlHerbAvailable;
+                _towerItemTraps.ConfigureCherrlHealingHerb(!cherrlHerbActive ||
+                    TownSaveVariables.GetBool(CherrlHealingQuestCompleted));
+                if (_floor == GurusOilPotFloor && ShouldPlaceGurusOilPot())
                     _towerItemTraps.TryPlaceGeneratedRoomItem(new AzureDreams.Core.DungeonItemEntry(GurusOilPotId, QuestItemKind, 0, 0),
                         seedSalt: 0x15C4);
                 if (_floor == BlueCapeFloor && !TownRetailScriptFlags.CreatePersistent().IsFlagSet(TavernQuestCompleteFlag))
@@ -171,6 +173,20 @@ namespace AzureDreamsReimagined
             if (_floor == 1)
                 CreateInnerTowerDoor(_towerEntranceEdge, _towerEntranceInward, _towerEntranceWidth, addThreshold: true);
             UpdateCameraFollow(snap: true);
+        }
+
+        private bool ShouldPlaceGurusOilPot()
+        {
+            var flags = TownRetailScriptFlags.CreatePersistent();
+            return flags.IsFlagSet(IsaacAcceptedFlag) && !flags.IsFlagSet(WindmillQuestCompleteFlag) &&
+                !HasGurusOilPot(_runInventory) && !HasGurusOilPot(_townStorage);
+        }
+
+        private static bool HasGurusOilPot(Inventory inventory)
+        {
+            foreach (var item in inventory.DungeonItems)
+                if (item.Kind == QuestItemKind && item.Subtype == GurusOilPotId) return true;
+            return false;
         }
 
         private int _turnsUntilReinforcement;

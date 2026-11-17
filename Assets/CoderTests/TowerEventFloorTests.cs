@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -7,6 +8,27 @@ using AzureDreamsReimagined;
 public class TowerEventFloorTests
 {
  const BindingFlags Flags=BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;
+ [Test] public void FloorTwoDialoguePortraitsExistForEveryEventLine()
+ {
+  var type=typeof(TowerGameController);
+  foreach(var fieldName in new[]{"VisitorScripts","SelfiStoryScripts"})
+  {
+   var scripts=(IEnumerable)type.GetField(fieldName,BindingFlags.Static|BindingFlags.NonPublic).GetValue(null);
+   foreach(var script in scripts)
+   {
+    if(script is not IEnumerable lines)continue;
+    foreach(var line in lines)
+    {
+     var lineType=line.GetType();
+     bool selfi=(bool)lineType.GetField("Selfi").GetValue(line);
+     int variant=(int)lineType.GetField("PortraitVariant").GetValue(line);
+     string name=(selfi?"Selfi":"Ghosh")+"_variant"+variant+"_frame0.png";
+     string path=Path.Combine(Application.streamingAssetsPath,"Media","Portraits","Dialogue",name);
+     Assert.That(File.Exists(path),Is.True,fieldName+" references a missing portrait: "+name);
+    }
+   }
+  }
+ }
  [UnityTest] public IEnumerator Floor2HasVisitorNoMonstersAndCanAdvanceToNormalFloor()
  {
   var root=new GameObject("Event floor QA");var camera=new GameObject("Event floor camera").AddComponent<Camera>();
@@ -64,6 +86,11 @@ public class TowerEventFloorTests
   var line=type.GetField("_dialogueLine",Flags);
   var firstLine=(string)line.GetValue(c);
   Assert.That(firstLine,Is.Not.Empty);
+  Assert.That((bool)type.GetProperty("HasVisibleMessage",Flags).GetValue(c),Is.True,
+   "The floor-2 conversation must be visible even though combat log history was cleared.");
+  var speaker=(string)type.GetField("_dialogueSpeaker",Flags).GetValue(c);
+  var portraitPath=(string)type.GetField("_visitorPortraitPath",Flags).GetValue(c);
+  Assert.That(portraitPath,Does.StartWith("Dialogue/"+speaker+"_variant"));
   var tick=type.GetMethod("TickVisitorMotion",Flags);
   tick.Invoke(c,new object[]{.2f});
   Assert.That(player.transform.position.z,Is.GreaterThan(33f).And.LessThan(34f));

@@ -214,6 +214,10 @@ namespace AzureDreamsReimagined
 
         private bool RetailTownGroundOpen(Vector3 position, float radius)
         {
+            // The captured height grid contains water beneath all three bridges.
+            // A bridge deck is a valid walking surface even when that grid cell
+            // is underwater; its own triangle bounds keep Koh on the walkway.
+            if (!_interior && TownBridgeTop(position) > float.NegativeInfinity) return true;
             float height = RetailTownGround(position);
             float maxGroundHeight = _interior && _interior.interiorId == FortuneHouseInterior ? 2f : 0.65f;
             if (height < -0.75f || height > maxGroundHeight) return false;
