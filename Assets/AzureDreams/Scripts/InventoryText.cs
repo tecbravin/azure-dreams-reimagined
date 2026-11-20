@@ -36,7 +36,7 @@ namespace AzureDreamsReimagined
             if (_entries == null || _entries.Count == 0)
             {
                 var entries = new Dictionary<int, Entry>();
-                var asset = Resources.Load<TextAsset>("Town/Retail/inventory_text");
+                var asset = AssetMode.Load<TextAsset>("Town/Retail/inventory_text");
                 var catalog = asset ? JsonUtility.FromJson<Catalog>(asset.text) : null;
                 if (catalog?.entries != null)
                     foreach (var entry in catalog.entries) entries[entry.kind * 256 + entry.id] = entry;

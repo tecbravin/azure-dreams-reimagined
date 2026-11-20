@@ -131,8 +131,6 @@ namespace AzureDreamsReimagined
             }
 
             if (_area == Area.Tower && destination == _playerCell) _discardedUnderKoh = destination;
-            else if (_area == Area.Town && destination == _playerCell) _townDroppedItems[destination].view.transform.position =
-                _player.transform.position - Vector3.up * (TownActorFootOffset - WorldItemHeight);
             _debugItemPickerOpen = false;
         }
     }

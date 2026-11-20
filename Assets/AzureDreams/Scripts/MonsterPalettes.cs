@@ -49,7 +49,7 @@ namespace AzureDreamsReimagined
             if (_entries == null)
             {
                 _entries = new Dictionary<int, Entry>();
-                var asset = Resources.Load<TextAsset>("Town/Retail/monster_palettes");
+                var asset = AssetMode.Load<TextAsset>("Town/Retail/monster_palettes");
                 if (asset && JsonUtility.FromJson<Catalog>(asset.text)?.entries is { } entries)
                     foreach (var entry in entries) _entries[entry.species] = entry;
             }

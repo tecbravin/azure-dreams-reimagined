@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AzureDreamsReimagined
@@ -50,6 +51,7 @@ namespace AzureDreamsReimagined
         private string _wakeUpReturnMessage;
         private Vector3 _wakeUpApproachStart;
         private bool _wakeUpVisitorLeaving;
+        private bool _wakeUpVisitorArriving;
 
         private Vector3 HomeReturnPosition()
         {
@@ -178,10 +180,11 @@ namespace AzureDreamsReimagined
             Vector3 destination = RetailTownActorPosition(CellPosition(cell), 0f);
             _townFacing = new Vector2(cell.x - _playerCell.x, cell.y - _playerCell.y);
             if (_kohSprite) _kohSprite.SetFacing(_townFacing);
-            Vector3 approach = new(-_townFacing.x, 0f, -_townFacing.y);
-            _wakeUpApproachStart = destination + approach * 0.72f;
-            npc.transform.position = _wakeUpApproachStart;
-            npc.transform.rotation = Quaternion.LookRotation(-approach);
+            // Use the bedroom passage rather than materializing next to Koh.
+            var doorway = CellPosition(HomeLayoutCell(HouseIndex, BedroomDoors[HouseIndex]));
+            doorway = RetailTownActorPosition(doorway, 0f);
+            _wakeUpApproachStart = doorway;
+            if (!_wakeUpVisitorIsResident) npc.transform.position = doorway;
 
             if (nicoThanks)
             {
@@ -196,6 +199,7 @@ namespace AzureDreamsReimagined
             }
             TownSaveVariables.SetInt(TownReputation.WakeEntryKey, entry);
             TownSaveVariables.Save();
+            _wakeUpVisitorArriving = true;
             StartCoroutine(PlayWakeUpVisitorArrival(npc, destination, english, portuguese, portraitPath, survived,
                 nicoThanks, nicoConfession));
             return true;
@@ -204,22 +208,16 @@ namespace AzureDreamsReimagined
         private IEnumerator PlayWakeUpVisitorArrival(NPCController npc, Vector3 destination, string english,
             string portuguese, string portraitPath, bool survived, bool nicoThanks, bool nicoConfession)
         {
-            const float duration = 0.32f;
+            if (!npc) { _wakeUpVisitorArriving = false; yield break; }
+            if (_wakeUpVisitorIsResident)
+                yield return WalkWakeUpVisitor(npc, _wakeUpApproachStart);
+            yield return WalkWakeUpVisitor(npc, destination);
+            _wakeUpVisitorArriving = false;
             if (!npc) yield break;
-            Vector3 origin = npc.transform.position;
-            Vector3 direction = destination - origin;
-            var locomotion = npc.GetComponent<ActorLocomotionView>();
-            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
-            {
-                if (!npc) yield break;
-                npc.transform.position = Vector3.Lerp(origin, destination, elapsed / duration);
-                locomotion?.Present(direction, elapsed * 7f, true);
-                yield return null;
-            }
-            if (!npc) yield break;
-            npc.transform.position = destination;
-            locomotion?.Present(direction, 0f, false);
-            if (direction.sqrMagnitude > 0.0001f) npc.transform.rotation = Quaternion.LookRotation(-direction.normalized);
+            Vector3 facing = _player.transform.position - npc.transform.position;
+            facing.y = 0f;
+            npc.GetComponent<ActorLocomotionView>()?.Present(facing, 0f, false);
+            if (facing.sqrMagnitude > 0.0001f) npc.transform.rotation = Quaternion.LookRotation(facing);
             if (npc.npcId == "nico")
                 NicoWakeUpStory(npc, survived, nicoThanks, nicoConfession);
             else if (npc.npcId == "selfi")
@@ -239,6 +237,54 @@ namespace AzureDreamsReimagined
             else StoryTalk(npc, english, portuguese, portraitPath);
         }
 
+        private IEnumerator WalkWakeUpVisitor(NPCController npc, Vector3 target)
+        {
+            if (!npc) yield break;
+            var start = Vector2Int.RoundToInt(new Vector2(npc.transform.position.x, npc.transform.position.z));
+            var goal = Vector2Int.RoundToInt(new Vector2(target.x, target.z));
+            var queue = new Queue<Vector2Int>();
+            var previous = new Dictionary<Vector2Int, Vector2Int>();
+            queue.Enqueue(start);
+            previous[start] = start;
+            var steps = new[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
+            while (queue.Count > 0 && previous.Count < 4096 && !previous.ContainsKey(goal))
+            {
+                var cell = queue.Dequeue();
+                foreach (var step in steps)
+                {
+                    var next = cell + step;
+                    if (previous.ContainsKey(next)) continue;
+                    var point = CellPosition(next);
+                    if (!TownPositionOpen(point, TownTerrainHeight(point), npc.transform)) continue;
+                    previous[next] = cell;
+                    queue.Enqueue(next);
+                }
+            }
+            // Never substitute a straight line through the furniture if a route is blocked.
+            if (!previous.ContainsKey(goal)) yield break;
+            var route = new List<Vector3> { target };
+            for (var cell = goal; cell != start; cell = previous[cell])
+                route.Add(RetailTownActorPosition(CellPosition(cell), 0f));
+            route.Reverse();
+            float cycle = 0f;
+            var locomotion = npc.GetComponent<ActorLocomotionView>();
+            foreach (var point in route)
+            {
+                while (npc && Vector3.Distance(npc.transform.position, point) > 0.01f)
+                {
+                    var direction = point - npc.transform.position;
+                    direction.y = 0f;
+                    if (direction.sqrMagnitude > 0.0001f) npc.transform.rotation = Quaternion.LookRotation(direction);
+                    cycle += Time.unscaledDeltaTime * 7f;
+                    locomotion?.Present(direction, cycle, true);
+                    npc.transform.position = Vector3.MoveTowards(npc.transform.position, point, 2.25f * Time.unscaledDeltaTime);
+                    yield return null;
+                }
+                if (!npc) yield break;
+            }
+            locomotion?.Present(npc.transform.forward, 0f, false);
+        }
+
         private void FinishWakeUpVisit()
         {
             if (!_wakeUpVisitor || _wakeUpVisitorLeaving) return;
@@ -248,23 +294,20 @@ namespace AzureDreamsReimagined
         private IEnumerator PlayWakeUpVisitorDeparture(NPCController npc)
         {
             _wakeUpVisitorLeaving = true;
-            const float duration = 0.28f;
-            Vector3 origin = npc ? npc.transform.position : Vector3.zero;
-            Vector3 direction = _wakeUpApproachStart - origin;
-            var locomotion = npc ? npc.GetComponent<ActorLocomotionView>() : null;
-            for (float elapsed = 0f; npc && elapsed < duration; elapsed += Time.unscaledDeltaTime)
-            {
-                npc.transform.position = Vector3.Lerp(origin, _wakeUpApproachStart, elapsed / duration);
-                locomotion?.Present(direction, elapsed * 7f, true);
-                yield return null;
-            }
+            yield return WalkWakeUpVisitor(npc, _wakeUpApproachStart);
+            if (_wakeUpVisitorIsResident)
+                yield return WalkWakeUpVisitor(npc, _wakeUpResidentPosition);
             if (!_wakeUpVisitor)
             {
                 _wakeUpVisitorLeaving = false;
                 yield break;
             }
             if (_wakeUpVisitorIsResident)
-                _wakeUpVisitor.transform.SetPositionAndRotation(_wakeUpResidentPosition, _wakeUpResidentRotation);
+            {
+                _wakeUpVisitor.transform.rotation = _wakeUpResidentRotation;
+                _wakeUpVisitor.GetComponent<ActorLocomotionView>()?.Present(
+                    _wakeUpResidentRotation * Vector3.forward, 0f, false);
+            }
             else
             {
                 _wakeUpVisitor.gameObject.SetActive(false);

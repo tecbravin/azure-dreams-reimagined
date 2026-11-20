@@ -65,7 +65,7 @@ if (InTowerTutorial || _beldoVision || !TowerFloorRules.AllowsRandomMonsters(_fl
                 int index = RollSpawnRange(candidates.Count);
                 var cell = candidates[index];
                 candidates.RemoveAt(index);
-                var species = TowerEncounterTable.Roll(_floor, _towerRun.Rng);
+                var species = RollTowerSpecies();
                 var view = SpawnManagedCreature(cell, species, allowSpawnSleep: false);
                 var ground = view.transform.position;
                 view.transform.position = ground + Vector3.up * 3.5f;

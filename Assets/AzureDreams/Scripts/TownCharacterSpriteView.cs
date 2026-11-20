@@ -60,7 +60,7 @@ namespace AzureDreamsReimagined
         private bool TryCreateYoungChildSprites(string id, Transform visual, float pixelsPerUnit)
         {
             Rect[] frames = null;
-            if (id == "youngnico" && _sheet.width == 230 && _sheet.height == 244)
+            if (id is "youngnico" or "arcade_girl" && _sheet.width == 230 && _sheet.height == 244)
             {
                 // Original Young Nico sheet: back, front and side walking cels.
                 frames = new[]
@@ -70,7 +70,7 @@ namespace AzureDreamsReimagined
                     new Rect(72, 52, 25, 41), new Rect(105, 52, 25, 41)
                 };
             }
-            else if (id == "youngkoh" && _sheet.width == 399 && _sheet.height == 226)
+            else if (id is "youngkoh" or "arcade_boy" && _sheet.width == 399 && _sheet.height == 226)
             {
                 // Original Young Koh cels.  The lower row contains the alternate
                 // walking poses for the matching upper-row directions.

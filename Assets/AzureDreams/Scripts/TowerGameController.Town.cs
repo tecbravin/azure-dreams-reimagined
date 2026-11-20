@@ -31,6 +31,7 @@ namespace AzureDreamsReimagined
 
         private void PersistTownProgress()
         {
+            MigrateFamiliarEquipment(CarriedInventory);
             RecordPlayTime();
             int potions = _potionItem ? _townInventory.GetCount(_potionItem) : 0;
             TownSaveVariables.Gold = _gold;
@@ -94,7 +95,7 @@ namespace AzureDreamsReimagined
 
         private GameObject CreateTownAsset(string resourceName, string objectName, Vector3 position, Quaternion rotation)
         {
-            var prefab = Resources.Load<GameObject>("Town/" + resourceName);
+            var prefab = AssetMode.Load<GameObject>("Town/" + resourceName);
             if (!prefab) return null;
             var instance = Instantiate(prefab, position, rotation, transform);
             instance.name = objectName;
@@ -431,6 +432,8 @@ namespace AzureDreamsReimagined
                     delta.y = 0f;
                     bool acrossCounter = (npc.npcId == "barry" && AtBlacksmithCounter) ||
                         (npc.npcId == "fur" && InGeneralStore) ||
+                        (InRaceLobby && npc.npcId == "race_clerk") ||
+                        (InArcade && npc.npcId == "arcade_attendant") ||
                         (npc.npcId == "patty" && StoryRoom == RestaurantRoom) ||
                         (StoryRoom == BarRoom && (npc.npcId is "okami" or "bar_barten")) ||
                         (npc.npcId == "tonka" && _interior && _interior.interiorId == "Interior_13_carpenter");

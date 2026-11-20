@@ -129,8 +129,27 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 02a3255bd299e41468e8a80d2e95ad17, type: 3}
   - {fileID: 2800000, guid: be8eff7e096c1af428037dbb1b8e4132, type: 3}
   - {fileID: 2800000, guid: 8286f1534cbab524da8a1ef793c8278a, type: 3}
-  entryPosition: {x: 19, y: 0, z: 17}
-  residentPrefabs: []
+  entryPosition: {x: 8.5, y: 0, z: 20.5}
+  useArrivalPosition: 1
+  arrivalPosition: {x: 10.5, y: 0, z: 20.5}
+  residentPrefabs:
+  - {fileID: 5151358256163527516, guid: 734b388df2a640b7b8248c57e369659a, type: 3}
+  - {fileID: 5151358256163527516, guid: 51804f1376674fca98514cc820c00bfb, type: 3}
+  - {fileID: 5151358256163527516, guid: 1ddb24f12e834b55849faef51602d74c, type: 3}
+  - {fileID: 5151358256163527516, guid: 6357c083d206493babc5ea22b9a7a6c0, type: 3}
+  - {fileID: 5151358256163527516, guid: 9515a85ebecd4ba18ef9307dc7235fa7, type: 3}
+  residentCells:
+  - {x: 13, y: 11}
+  - {x: 27, y: 11}
+  - {x: 11, y: 20}
+  - {x: 12, y: 19}
+  - {x: 14, y: 20}
+  residentOffsets:
+  - {x: 0.5, y: 0, z: 0.1}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

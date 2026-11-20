@@ -20,7 +20,7 @@ namespace AzureDreamsReimagined
             if (_checkpointMenu == CheckpointMenu.Closed) return false;
             var keyboard = Keyboard.current;
             if (keyboard == null) return true;
-            if (keyboard.qKey.wasPressedThisFrame) CancelCheckpointMenu();
+            if ((_cancel?.WasPressedThisFrame() == true)) CancelCheckpointMenu();
             else if (_checkpointMenu == CheckpointMenu.SaveBeforeAscend && keyboard.nKey.wasPressedThisFrame) AscendFromElevator();
             else if (_checkpointMenu == CheckpointMenu.SaveSlots)
             {
@@ -82,15 +82,34 @@ namespace AzureDreamsReimagined
 
         private static byte[] CaptureActor(ActorRecord actor)
         {
-            var data = new byte[ActorRecord.Size];
-            for (int i = 0; i < data.Length; i++) data[i] = actor.U8(i);
+            var data = new byte[ActorRecord.Size + (actor.Weapon != null || actor.Shield != null ? 10 : 0)];
+            for (int i = 0; i < ActorRecord.Size; i++) data[i] = actor.U8(i);
+            if (data.Length > ActorRecord.Size)
+            {
+                int start = ActorRecord.Size;
+                data[start] = 0xAD; data[start + 1] = 1;
+                WriteGear(actor.Weapon, start + 2); WriteGear(actor.Shield, start + 6);
+            }
             return data;
+            void WriteGear(DungeonItemEntry item, int offset)
+            {
+                if (item == null) return;
+                data[offset] = item.Subtype; data[offset + 1] = item.Kind;
+                data[offset + 2] = unchecked((byte)item.Param); data[offset + 3] = item.Flags;
+            }
         }
+
+        private static bool ValidActorSnapshot(byte[] data) => data != null && (data.Length == ActorRecord.Size ||
+            (data.Length == ActorRecord.Size + 10 && data[ActorRecord.Size] == 0xAD && data[ActorRecord.Size + 1] == 1));
 
         private static void RestoreActor(ActorRecord actor, byte[] data)
         {
-            if (data?.Length != ActorRecord.Size) return;
-            for (int i = 0; i < data.Length; i++) actor.SetRaw(i, data[i]);
+            if (!ValidActorSnapshot(data)) return;
+            for (int i = 0; i < ActorRecord.Size; i++) actor.SetRaw(i, data[i]);
+            actor.Weapon = data.Length > ActorRecord.Size ? ReadGear(ActorRecord.Size + 2) : null;
+            actor.Shield = data.Length > ActorRecord.Size ? ReadGear(ActorRecord.Size + 6) : null;
+            DungeonItemEntry ReadGear(int offset) => data[offset] == 0 ? null : new DungeonItemEntry(
+                data[offset], data[offset + 1], unchecked((sbyte)data[offset + 2]), data[offset + 3]);
         }
 
         private void WriteCheckpoint(int slot)
@@ -130,7 +149,7 @@ namespace AzureDreamsReimagined
                 potions = _potionItem ? carried.GetCount(_potionItem) : 0,
                 storedPotions = _potionItem ? _townStorage.GetCount(_potionItem) : 0,
                 town = TownSaveVariables.Capture(),
-                floor = _saveAtElevator ? _floor + 1 : 0,
+                floor = _saveAtElevator ? NextElevatorFloor : 0,
                 rng = _saveAtElevator ? unchecked((int)_towerRun.Rng.Seed) : 0,
                 loot = _saveAtElevator ? _towerRun.RunLoot : 0,
                 turns = _saveAtElevator ? _completedTowerTurns : 0,
@@ -185,7 +204,7 @@ namespace AzureDreamsReimagined
             _parkedFamiliarActor = null;
             _towerHatchedNickname = data.towerHatchedNickname ?? "";
             _familiarInBag = data.familiarInBag;
-            if (data.parkedActor?.Length == ActorRecord.Size)
+            if (ValidActorSnapshot(data.parkedActor))
             {
                 _familiarActor = new ActorRecord();
                 _parkedFamiliarDefinition = RestoreCheckpointFamiliar(data.parkedFamiliar, data.parkedSpecies, data.parkedActor);
@@ -231,18 +250,26 @@ namespace AzureDreamsReimagined
         private void AscendFromElevator()
         {
             _checkpointMenu = CheckpointMenu.Closed;
+            bool secondTower = _ascendToSecondTower && OnSecondTowerElevator && SecondTowerElevatorUnsealed;
             if (_elevatorAscending || !_player || _turnBusy || ItemImmobilized(_playerActor) ||
-                _towerRun?.CurrentState != TowerRunManager.State.InTower || _playerCell != _stairCell || _floor >= 40) return;
+                _towerRun?.CurrentState != TowerRunManager.State.InTower ||
+                (_playerCell != _stairCell && !secondTower) || (!secondTower && !CanAscendFromFloor))
+            {
+                _ascendToSecondTower = false;
+                return;
+            }
+            if (secondTower) _elevatorPlatform = _secondTowerElevator;
+            else _ascendToSecondTower = false;
             BeginElevatorAscent();
         }
 
         private void CompleteElevatorAscent()
         {
-            _towerRun.AdvanceFloor();
+            AdvanceTowerFloorForElevator();
             _floor = _towerRun.Floor;
             BuildTowerFloor();
             _towerRun.CompleteFloorTransition();
-            _message = T($"You reach floor {_floor}.", $"Você chega ao {_floor}º andar.");
+            _message = T($"You reach {TowerFloorLabel(_floor)}.", $"Você chega ao {TowerFloorLabel(_floor)}.");
         }
 
         private void DrawCheckpointMenu(float width, float height)
@@ -275,7 +302,7 @@ namespace AzureDreamsReimagined
             }
             if (_checkpointMenu != CheckpointMenu.Closed)
             {
-                string cancel = _checkpointMenu == CheckpointMenu.Ascend ? T("No [Esc]", "Não [Esc]") : T("Back [Esc]", "Voltar [Esc]");
+                string cancel = _checkpointMenu == CheckpointMenu.Ascend ? WithCancelHint("No", "Não") : WithCancelHint("Back", "Voltar");
                 if (GUILayout.Button(cancel)) CancelCheckpointMenu();
             }
             GUILayout.EndArea();

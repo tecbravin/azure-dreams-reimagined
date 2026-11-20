@@ -34,7 +34,12 @@ namespace AzureDreamsReimagined
         private static readonly Vector2Int[] BathDoors = { new(20, 10), new(17, 10), new(20, 10) };
         // Level 1's Monster Hut passage is the brown mat on the left; the
         // exterior return uses the black doorway tile captured at (12, 13).
-        private static readonly Vector3[] HutLinks = { new(12f, 0f, 13f), new(32.5f, 0f, 8.75f), new(68f, 0f, 10f) };
+        // The old entry duplicated that exact door coordinate, so the hut
+        // passage and the house exit sat on the same point and fought over
+        // every step near the door.  The captured geometry marks a separate
+        // floor tile at (12.5, 8.5), a few steps back from the doorway on
+        // the same wall, which is the mat this passage should use instead.
+        private static readonly Vector3[] HutLinks = { new(12.5f, 0f, 8.5f), new(32.5f, 0f, 8.75f), new(68f, 0f, 10f) };
         private static int CurrentHutRank => Mathf.Clamp(TownSaveVariables.GetInt(HutRankKey), 0, HutScenes.Length - 1);
         private static Vector2Int[] HutPads => HutPadLayouts[CurrentHutRank];
         private static readonly Vector2Int[] BedroomDoors = { new(16, 12), new(22, 15), new(22, 16) };
@@ -197,7 +202,61 @@ namespace AzureDreamsReimagined
             int index = Array.IndexOf(HomeScenes, room.interiorId);
             if (index == 0) return CellPosition(HomeLayoutCell(index, InitialHouseDoor));
             int hut = Array.IndexOf(HutScenes, room.interiorId);
-            return hut > 0 ? CellPosition(HutDoor) : room.entryPosition;
+            return hut > 0 ? CellPosition(HutDoor) : RetailInteriorDoor(room);
+        }
+
+        // Exit squares of the captured interiors.  Every room marks its way
+        // out with the blue arrow mat (texture page 149) set into the doorway
+        // of the front wall; these are the centres of those mats in the
+        // captured geometry.  The pool is the exception: its mat sits on the
+        // top edge of the tiled platform, so Koh walks in downwards.
+        private static readonly Dictionary<string, (Vector3 door, Vector3 inward)> RetailInteriorDoors =
+            new(StringComparer.Ordinal)
+        {
+            ["Interior_07_library"] = (new Vector3(19.5f, 0f, 19.5f), Vector3.back),
+            ["Interior_08_gym"] = (new Vector3(14.5f, 0f, 18.5f), Vector3.back),
+            ["Interior_09_arcade_1"] = (new Vector3(12.5f, 0f, 18.5f), Vector3.back),
+            ["Interior_0a_racetrack_entrance"] = (new Vector3(22.5f, 0f, 16.5f), Vector3.back),
+            ["Interior_0b_theater"] = (new Vector3(13.5f, 0f, 27.5f), Vector3.back),
+            ["Interior_0c_alley"] = (new Vector3(20.5f, 0f, 21.5f), Vector3.back),
+            ["Interior_0d_pool_quest_done"] = (new Vector3(13.75f, 0f, 11.5f), Vector3.forward),
+            ["Interior_0d_pool_quest_not_done"] = (new Vector3(13.75f, 0f, 11.5f), Vector3.forward),
+            ["Interior_0e_restaurant"] = (new Vector3(17.5f, 0f, 18.5f), Vector3.back),
+            ["Interior_0f_hospital"] = (new Vector3(13.5f, 0f, 16.5f), Vector3.back),
+            ["Interior_10_hospital_2"] = (new Vector3(19.5f, 0f, 19.5f), Vector3.back),
+            ["Interior_11_temple"] = (new Vector3(16.75f, 0f, 19.5f), Vector3.back),
+            ["Interior_12_temple_2"] = (new Vector3(22.75f, 0f, 29.5f), Vector3.back),
+            ["Interior_13_carpenter"] = (new Vector3(14.5f, 0f, 16.5f), Vector3.back),
+            ["Interior_15_blacksmith"] = (new Vector3(14.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_16_general_store"] = (new Vector3(13.5f, 0f, 16.5f), Vector3.back),
+            ["Interior_17_fortune_house"] = (new Vector3(16f, 0f, 16.5f), Vector3.back),
+            ["Interior_18_cherrl_house"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_19_generic_building"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_1a_generic_building"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_1b_generic_building"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_1c_generic_building"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_1d_generic_building"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_20_bar"] = (new Vector3(17.5f, 0f, 19.5f), Vector3.back),
+            ["Interior_21_rhodes_house"] = (new Vector3(17.5f, 0f, 19.5f), Vector3.back),
+            ["Interior_22_nico_house"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_23_generic_house"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+            ["Interior_24_dr_hal_house"] = (new Vector3(12.5f, 0f, 15.5f), Vector3.back),
+            ["Interior_2b_casino_1"] = (new Vector3(15.5f, 0f, 18.5f), Vector3.back),
+            // The roulette room has no street door: its mat is the passage to the slot room.
+            ["Interior_06_casino_2"] = (new Vector3(23.5f, 0f, 16f), Vector3.left),
+            ["Interior_2c_silver_house"] = (new Vector3(15.5f, 0f, 17.5f), Vector3.back),
+        };
+
+        private static Vector3 RetailInteriorDoor(TownInteriorScene room) =>
+            room && RetailInteriorDoors.TryGetValue(room.interiorId, out var link) ? link.door : room.entryPosition;
+
+        // Direction from the exit mat into the room.  Arrivals stand two
+        // squares along it so the first step never retriggers the exit.
+        private Vector3 InteriorDoorInward(TownInteriorScene room)
+        {
+            if (room && RetailInteriorDoors.TryGetValue(room.interiorId, out var link)) return link.inward;
+            if (InHomeHut) return Vector3.forward;
+            return Vector3.back;
         }
 
         private void SetupKohHomeInterior()
@@ -308,7 +367,7 @@ namespace AzureDreamsReimagined
         {
             if (!_interior || (HouseIndex < 0 && !InHomeHut)) { _homePanel = 0; return false; }
             var keys = Keyboard.current;
-            if (_homePanel != 0 && keys != null && keys.qKey.wasPressedThisFrame)
+            if (_homePanel != 0 && keys != null && (_cancel?.WasPressedThisFrame() == true))
             { _homePanel = _homePanel == 3 ? 2 : 0; return true; }
             if (InHomeHut && keys != null && keys.mKey.wasPressedThisFrame && !_activeTownNpc && !_interiorMenu)
             { _homePanel = _homePanel == 1 ? 0 : 1; return true; }
@@ -350,7 +409,11 @@ namespace AzureDreamsReimagined
                 if (TryReadHutEgg(roster[i], out var egg))
                 {
                     var view = CreateEggView(cell, egg, RetailTownHeight(CellPosition(cell)) + WorldItemHeight);
-                    if (view) _hutViews.Add(view);
+                    if (view)
+                    {
+                        AddStoredFamiliarLight(view);
+                        _hutViews.Add(view);
+                    }
                     continue;
                 }
                 var definition = HutDefinition(roster[i]);
@@ -366,6 +429,7 @@ namespace AzureDreamsReimagined
                     species: paletteSpecies, palette: FamiliarPalette(paletteSpecies, record), groundedIdle: true);
                 familiar.transform.position = RetailTownActorPosition(familiar.transform.position, TownActorFootOffset);
                 AddStoredFamiliarLight(familiar);
+                PresentTrollEquipment(familiar, record);
                 _hutViews.Add(familiar);
             }
         }
@@ -439,8 +503,8 @@ namespace AzureDreamsReimagined
                 }
                 GUILayout.EndScrollView();
             }
-            if (GUILayout.Button(T("Close [Q]", "Fechar [Q]"))) _homePanel = 0;
             GUILayout.EndArea();
+            DrawHutCloseButton(new Rect(128, 72, 384, 336));
             if (changed) SaveHutRoster(roster);
         }
 
@@ -477,13 +541,19 @@ namespace AzureDreamsReimagined
                         roster[_hutSlot] = EncodeFamiliar(survivor.Definition, survivor.Species, preview.Result, survivor.Nickname);
                         roster[_hutFusionTarget] = EmptyHutSlot;
                         _hutStatusActor = null;
-                        _homePanel = 2;
+                        // The hut has no ritual: only the MERGE.STR cue and the result.
+                        _homePanel = 0;
                         SaveHutRoster(roster);
+                        PlayHutFusionCue();
+                        string result = preview.Name == survivor.Definition.DisplayName
+                            ? preview.Name : $"{preview.Name} ({survivor.Definition.DisplayName})";
+                        _message = T($"{first.Name} was fused with {second.Name}.\nResult: {result}.",
+                            $"{first.Name} foi fundido com {second.Name}.\nResultado: {result}.");
                     }
                 }
             }
 
-            if (GUILayout.Button(T("Back [Q]", "Voltar [Q]"))) _homePanel = 2;
+            if (GUILayout.Button(WithCancelHint("Back", "Voltar"))) _homePanel = 2;
             GUILayout.EndArea();
         }
 
@@ -538,8 +608,17 @@ namespace AzureDreamsReimagined
                 RefreshInventoryCommands();
                 SaveHutRoster(roster);
             }
-            if (GUI.Button(new Rect(panel.xMax - 110f, panel.yMax - 32f, 100f, 24f), T("Close [Q]", "Fechar [Q]")))
+            DrawHutCloseButton(panel);
+        }
+
+        private void DrawHutCloseButton(Rect panel)
+        {
+            if (GUI.Button(new Rect(panel.xMax - 27f, panel.y + 5f, 22f, 22f),
+                new GUIContent("X", WithCancelHint("Close", "Fechar"))))
+            {
+                PlayRetailSound(RetailSfx.Cancel);
                 _homePanel = 0;
+            }
         }
 
         private void SaveHutRoster(List<string> roster)

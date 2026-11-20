@@ -403,7 +403,7 @@ namespace AzureDreamsReimagined
             try
             {
                 var bytes = Convert.FromBase64String(fields[3]);
-                if (bytes.Length != ActorRecord.Size) return false;
+                if (!ValidActorSnapshot(bytes)) return false;
                 RestoreActor(actor, bytes);
                 return true;
             }

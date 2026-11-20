@@ -32,6 +32,7 @@ Shader "AzureDreams/PSX Vertex Lit"
                 float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 lighting : TEXCOORD1;
+                float w : TEXCOORD2;
             };
 
             sampler2D _MainTex;
@@ -40,12 +41,35 @@ Shader "AzureDreams/PSX Vertex Lit"
             float3 _LightDir;
             float _Ambient;
 
+            // Optional PS1 look, toggled from the graphics menu (see PostProcessingController),
+            // applied uniformly to every object using this shader via global shader properties
+            // rather than per-material properties. 0 = disabled (default, unaffected look).
+            float _PSXVertexSnapResolution;
+            float _PSXAffineWarpStrength;
+
             v2f vert (appdata v)
             {
                 v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                
+                float4 clipPos = UnityObjectToClipPos(v.vertex);
+
+                // Vertex snapping: round screen position to a coarse grid, like the PS1's
+                // fixed-point vertex transform. Same technique as PsxVertexSnapAffine.shader.
+                if (_PSXVertexSnapResolution > 0)
+                {
+                    float2 snapRes = float2(_PSXVertexSnapResolution,
+                        _PSXVertexSnapResolution * _ScreenParams.y / _ScreenParams.x);
+                    clipPos.xy = round(clipPos.xy / clipPos.w * snapRes) / snapRes * clipPos.w;
+                }
+                o.pos = clipPos;
+                o.w = clipPos.w;
+
+                float2 uv = TRANSFORM_TEX(v.uv, _MainTex);
+                // Affine texture warp: pre-multiply by w so the hardware's perspective-correct
+                // interpolation (which divides by w, then multiplies back by w_pixel) cancels
+                // down to plain screen-space-linear UVs once frag() divides by the recovered
+                // w_pixel below -- the PS1 had no perspective-correct texturing.
+                o.uv = uv * lerp(1.0, clipPos.w, saturate(_PSXAffineWarpStrength));
+
                 // PS1 vertex lighting (Gouraud shading)
                 float3 worldNormal = UnityObjectToWorldNormal(v.normal);
                 float ndotl = max(0, dot(worldNormal, normalize(_LightDir)));
@@ -56,7 +80,8 @@ Shader "AzureDreams/PSX Vertex Lit"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
+                float2 uv = i.uv / lerp(1.0, i.w, saturate(_PSXAffineWarpStrength));
+                fixed4 col = tex2D(_MainTex, uv);
                 col.rgb *= i.lighting;
                 col *= _Color;
                 return col;

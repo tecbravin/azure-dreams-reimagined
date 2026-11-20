@@ -259,28 +259,38 @@ namespace AzureDreamsReimagined
             Vector2Int? reflectFrom = null)
         {
             int family = spell > 0 ? SpellFamily(spell) : 17;
+            // Familias 0,1,2,3,6,7,8,9,13,14,15,16 sao todas magias elementais (fogo/agua/vento)
+            // tanto na forma nativa (conjurada por um monstro) quanto na mistura manual do Koh
+            // (MixtureFor/MixtureArt usam o elemento do conjurador para elas - sword, blade,
+            // summon e wave sao todas elementais). Antes, varias dessas familias tinham cor e/ou
+            // impacto fixos (ex: familia 8 sempre azul/agua mesmo com conjurador de fogo; familias
+            // 0-3 com elemento agua/vento nao mostravam NENHUM impacto - 'impact' ficava null),
+            // o que deixava a conjuracao nativa inconsistente com a mesma familia quando usada via
+            // mistura manual (que sempre usa MixtureArt). Corrigido para cair no caso 'elemento do
+            // conjurador' (ultimo _ do switch) em vez de forcar uma cor/impacto fixo, exceto para
+            // familias que sao de fato nao-elementais: veneno (4), parede elemental (5 - identidade
+            // vem do spell id, nao do elemento do conjurador, ver WallProtectionStatus), cegueira
+            // (10), paralisia (11), sono (12) e o placeholder de giro sem magia (17, spell==0).
             Color color = family switch
             {
                 4 => new Color(0.38f, 0.95f, 0.2f),
                 5 when spell == FireWallSpell => MixtureArt(Element.Fire).Color,
-                5 or 7 or 9 => new Color(0.36f, 0.8f, 1f),
-                6 => new Color(0.85f, 0.9f, 1f),
-                8 => new Color(0.35f, 1f, 0.72f),
-                10 or 13 or 15 or 17 => new Color(0.76f, 0.38f, 1f),
+                5 when spell == 18 => MixtureArt(Element.Wind).Color,
+                5 => MixtureArt(Element.Water).Color,
+                10 or 17 => new Color(0.76f, 0.38f, 1f),
                 11 => new Color(1f, 0.9f, 0.35f),
                 12 => new Color(0.55f, 0.56f, 1f),
-                16 => new Color(0.64f, 1f, 0.32f),
                 _ => element == Element.Water ? new Color(0.34f, 0.76f, 1f) :
                     element == Element.Wind ? new Color(0.55f, 1f, 0.65f) : new Color(1f, 0.42f, 0.15f)
             };
             string impact = family switch
             {
-                4 or 10 or 12 or 13 or 15 or 17 => "FX_Smoke",
+                4 or 10 or 12 or 17 => "FX_Smoke",
                 5 when spell == FireWallSpell => "FX_Fire",
-                5 or 7 or 8 or 9 or 16 => "FX_Water",
+                5 when spell == 18 => "FX_Lightning",
+                5 => "FX_Water",
                 11 => "FX_Lightning",
-                <= 3 when element == Element.Fire => "FX_Fire",
-                _ => null
+                _ => element == Element.Water ? "FX_Water" : element == Element.Wind ? "FX_Lightning" : "FX_Fire"
             };
             var from = CellPosition(origin) + Vector3.up * 0.3f;
             var to = CellPosition(destination) + Vector3.up * 0.3f;
@@ -354,7 +364,7 @@ namespace AzureDreamsReimagined
                 {
                     cue.HitShown = true;
                     if (cue.FireWall) PresentFireWall(cue.To);
-                    else if (cue.Impact != null) SpawnFx(Resources.Load<GameObject>("FX/" + cue.Impact), cue.To);
+                    else if (cue.Impact != null) SpawnFx(AssetMode.Load<GameObject>("FX/" + cue.Impact), cue.To);
                 }
             }
             if (waiting) return false;
@@ -374,7 +384,7 @@ namespace AzureDreamsReimagined
             }
 
             // Use the project's fire particles until a renderable retail wall sprite is available.
-            var fire = Resources.Load<GameObject>("FX/FX_Fire");
+            var fire = AssetMode.Load<GameObject>("FX/FX_Fire");
             var right = _gameCamera ? _gameCamera.transform.right : Vector3.right;
             for (int column = -1; column <= 1; column++)
                 SpawnFx(fire, center + right * (column * 0.26f));
@@ -416,7 +426,7 @@ namespace AzureDreamsReimagined
             if (strike >= 0.7f && !cue.HitShown)
             {
                 cue.HitShown = true;
-                SpawnFx(Resources.Load<GameObject>("FX/" + cue.Impact), cue.To);
+                SpawnFx(AssetMode.Load<GameObject>("FX/" + cue.Impact), cue.To);
             }
             return true;
         }

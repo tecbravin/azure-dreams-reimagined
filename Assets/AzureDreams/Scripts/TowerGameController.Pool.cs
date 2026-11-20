@@ -311,15 +311,9 @@ namespace AzureDreamsReimagined
                             "Acho que dá para dizer que a piscina também é muito culta."));
                 case "pool_fur":
                     return FurPoolStory(npc);
-                case "pool_visitor":
-                    PoolSequence(npc, null, null,
-                        ("Listen! There's a sea monster in this pool! I'm not kidding!",
-                            "Escute! Tem um monstro marinho nesta piscina! É sério!"),
-                        ("I saw a big shadow glide beneath the water. It disappeared before the lifeguard could see it.",
-                            "Eu vi uma sombra enorme deslizar debaixo d'água. Ela sumiu antes que o salva-vidas pudesse ver."),
-                        ("You believe me, don't you?", "Você acredita em mim, não é?"));
-                    return true;
-                default: return false;
+                // The retail pool residents (TowerGameController.PoolResidents.cs) replace the
+                // former generic "pool_visitor" and its reconstructed lines.
+                default: return PoolResidentDialogue(npc);
             }
         }
     }

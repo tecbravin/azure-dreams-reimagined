@@ -14,7 +14,7 @@ namespace AzureDreamsReimagined
         private static readonly Vector2Int MonsterShopExit = new(16, 17);
         private static readonly Vector2Int MasterCounter = new(16, 12);
         private const string HunterId = "monster_shop_hunter";
-        private enum MonsterShopPage { Closed, Greeting, CustomerIntro, Services, Buy, ConfirmBuy, Sell, Confirm, Farewell }
+        private enum MonsterShopPage { Closed, Greeting, CustomerIntro, Services, Buy, ConfirmBuy, Sell, Confirm, Farewell, InfusionFamiliar, InfusionSpell }
         private MonsterShopPage _monsterShopPage;
         private int _monsterShopSelection;
         private MonsterShopData _monsterShopData;
@@ -119,7 +119,7 @@ namespace AzureDreamsReimagined
             if (!InMonsterShop) return;
             if (_monsterShopData == null)
             {
-                var text = Resources.Load<TextAsset>("Town/Retail/monster_shop");
+                var text = AssetMode.Load<TextAsset>("Town/Retail/monster_shop");
                 if (text) _monsterShopData = JsonUtility.FromJson<MonsterShopData>(text.text);
             }
             if (_monsterShopData?.hunters == null) return;
@@ -284,7 +284,9 @@ namespace AzureDreamsReimagined
             MonsterShopPage.Greeting => 2,
             MonsterShopPage.CustomerIntro => 1,
             MonsterShopPage.Farewell => 1,
-            MonsterShopPage.Services => 3,
+            MonsterShopPage.Services => 4,
+            MonsterShopPage.InfusionFamiliar => _infusionFamiliars.Count,
+            MonsterShopPage.InfusionSpell => InfusionSpells.Count,
             MonsterShopPage.Sell => _eggOffers.Count,
             MonsterShopPage.Buy => _eggsForSale.Count,
             _ => 0
@@ -301,6 +303,7 @@ namespace AzureDreamsReimagined
                 if (_monsterShopPage == MonsterShopPage.Confirm) DeclineEggSale();
                 else if (_monsterShopPage == MonsterShopPage.ConfirmBuy) { _monsterShopPage = MonsterShopPage.Buy; _shopPurchaseMessage = null; }
                 else if (_monsterShopPage is MonsterShopPage.Buy or MonsterShopPage.Sell) SetMonsterShopPage(MonsterShopPage.Services);
+                else if (_monsterShopPage is MonsterShopPage.InfusionFamiliar or MonsterShopPage.InfusionSpell) MagicInfusionBack();
                 else ResetMonsterShop();
             }
             else if (_interact != null && _interact.WasPressedThisFrame())
@@ -333,6 +336,7 @@ namespace AzureDreamsReimagined
                 case MonsterShopPage.Services:
                     if (index == 0) { ReadEggOffers(); SetMonsterShopPage(MonsterShopPage.Sell); }
                     else if (index == 1) OpenEggStock();
+                    else if (index == 2) OpenMagicInfusion();
                     else SetMonsterShopPage(MonsterShopPage.Farewell);
                     break;
                 case MonsterShopPage.Farewell:
@@ -346,6 +350,12 @@ namespace AzureDreamsReimagined
                 case MonsterShopPage.Sell:
                     _monsterShopSelection = index;
                     _monsterShopPage = MonsterShopPage.Confirm;
+                    break;
+                case MonsterShopPage.InfusionFamiliar:
+                    SelectInfusionFamiliar(index);
+                    break;
+                case MonsterShopPage.InfusionSpell:
+                    InfuseSelectedSpell(index);
                     break;
             }
         }
@@ -370,10 +380,11 @@ namespace AzureDreamsReimagined
                 MonsterShopPage.Sell => _shopPurchaseMessage ?? (_eggOffers.Count > 0
                     ? T(_monsterShopData.sellPrompt, _monsterShopData.sellPromptPtBr)
                     : T("No eggs to sell.", "Nenhum ovo para vender.")),
+                MonsterShopPage.InfusionFamiliar or MonsterShopPage.InfusionSpell => MagicInfusionDialogue(),
                 MonsterShopPage.Confirm => T("How about for ", "Que tal por ") + _eggOffers[_monsterShopSelection].Price.sell + "G.",
                 _ => ""
             };
-            _shopDialogueStyle ??= new GUIStyle(_messageStyle) { wordWrap = true, fontSize = 15 };
+            _shopDialogueStyle ??= new GUIStyle(_messageStyle) { wordWrap = true, fontSize = 13 };
             DrawHudText(new Rect(103, 135, 432, 102), dialogue, _shopDialogueStyle, dialogue: true);
             switch (_monsterShopPage)
             {
@@ -385,7 +396,12 @@ namespace AzureDreamsReimagined
                     DrawShopOptions(WithInteractHint("Continue", "Continuar"));
                     break;
                 case MonsterShopPage.Services:
-                    DrawShopOptions(T("I’ve come to sell.", "Vim vender."), T("I’ve come to buy.", "Vim comprar."), T("Just looking around.", "Só estou olhando."));
+                    DrawShopOptions(T("I’ve come to sell.", "Vim vender."), T("I’ve come to buy.", "Vim comprar."),
+                        T("Magic Infusion", "Infusão Mágica"), T("Just looking around.", "Só estou olhando."));
+                    break;
+                case MonsterShopPage.InfusionFamiliar:
+                case MonsterShopPage.InfusionSpell:
+                    DrawMagicInfusionOptions();
                     break;
                 case MonsterShopPage.Buy:
                     int first = _monsterShopSelection / ShopPageSize * ShopPageSize;
@@ -398,11 +414,11 @@ namespace AzureDreamsReimagined
                     if (GUI.Button(new Rect(104, 350, 110, 26), T("Previous", "Anterior"))) _monsterShopSelection = Mathf.Max(0, first - ShopPageSize);
                     if (GUI.Button(new Rect(218, 350, 110, 26), T("Next", "Próxima"))) _monsterShopSelection = Mathf.Min(
                         Mathf.Max(0, _eggsForSale.Count - 1), first + ShopPageSize);
-                    if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) SetMonsterShopPage(MonsterShopPage.Services);
+                    if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) SetMonsterShopPage(MonsterShopPage.Services);
                     break;
                 case MonsterShopPage.ConfirmBuy:
                     if (GUI.Button(new Rect(103, 249, 215, 30), WithInteractHint("Buy", "Comprar"))) BuySelectedEgg();
-                    if (GUI.Button(new Rect(320, 249, 215, 30), T("Cancel [Esc]", "Cancelar [Esc]")))
+                    if (GUI.Button(new Rect(320, 249, 215, 30), WithCancelHint("Cancel", "Cancelar")))
                     { _monsterShopPage = MonsterShopPage.Buy; _shopPurchaseMessage = null; }
                     break;
                 case MonsterShopPage.Sell:
@@ -413,11 +429,11 @@ namespace AzureDreamsReimagined
                         if (DrawShopOption(i, i - start, price.name + "   " + price.sell + "G"))
                         { SelectMonsterShopOption(i); break; }
                     }
-                    if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) SetMonsterShopPage(MonsterShopPage.Services);
+                    if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) SetMonsterShopPage(MonsterShopPage.Services);
                     break;
                 case MonsterShopPage.Confirm:
                     if (GUI.Button(new Rect(103, 249, 215, 30), WithInteractHint("I'll sell.", "Aceito."))) SellSelectedEgg();
-                    if (GUI.Button(new Rect(320, 249, 215, 30), T("My mistake. [Esc]", "Cancelar [Esc]"))) DeclineEggSale();
+                    if (GUI.Button(new Rect(320, 249, 215, 30), WithCancelHint("My mistake.", "Cancelar"))) DeclineEggSale();
                     break;
             }
         }

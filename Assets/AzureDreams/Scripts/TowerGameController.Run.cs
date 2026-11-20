@@ -46,6 +46,7 @@ namespace AzureDreamsReimagined
             _runInventory = null;
             _townInventory.IdentifyAllDungeonItems();
             _townStorage.IdentifyAllDungeonItems();
+            SecondTowerItems.End();
             _message = survived
                 ? T($"You returned with {carried} salvage. You now have {_gold} G.", $"Você voltou com {carried} em tesouros. Agora tem {_gold} G.")
                 : T($"You were rescued from the Tower and kept {reward} G of the {carried} you found.", $"Você foi resgatado da torre e ficou com {reward} G dos {carried} G que encontrou.");
@@ -54,6 +55,7 @@ namespace AzureDreamsReimagined
             if (_starterJoinedThisRun) TownSaveVariables.SetBool("starter_kewne_received", true);
             _starterJoinedThisRun = false;
             TownSaveVariables.SetInt(StoryPrefix + "day", StoryDay + 1);
+            ApplyPendingConstruction();
             if (survived) ScheduleWreathHomecoming();
             TownSaveVariables.SetInt(TownReputation.WakeEntryKey, 0);
             TownRetailScriptFlags.CreatePersistent().ClearBit(TownReputation.WreathSpokenFlag);

@@ -26,21 +26,37 @@ Shader "AzureDreams/PSX Indexed CLUT"
         float4 _IndexTex_TexelSize, _ClutTex_TexelSize;
         float4 _Color;
         float _PaletteRow, _SemiTransparency, _BlendAlpha;
+        // Optional PS1 look, toggled from the graphics menu (see PostProcessingController),
+        // applied via global shader properties so every retail surface picks it up uniformly.
+        // 0 = disabled (default, unaffected look). Same technique as PsxVertexLit.shader.
+        float _PSXVertexSnapResolution;
+        float _PSXAffineWarpStrength;
         struct appdata { float4 vertex : POSITION; float2 uv : TEXCOORD0; float4 color : COLOR; };
-        struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float4 color : COLOR; };
+        struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float4 color : COLOR; float w : TEXCOORD1; };
         v2f vert(appdata v)
         {
             v2f o;
-            o.pos = UnityObjectToClipPos(v.vertex);
-            o.uv = v.uv;
+            float4 clipPos = UnityObjectToClipPos(v.vertex);
+            if (_PSXVertexSnapResolution > 0)
+            {
+                float2 snapRes = float2(_PSXVertexSnapResolution,
+                    _PSXVertexSnapResolution * _ScreenParams.y / _ScreenParams.x);
+                clipPos.xy = round(clipPos.xy / clipPos.w * snapRes) / snapRes * clipPos.w;
+            }
+            o.pos = clipPos;
+            o.w = clipPos.w;
+            // Pre-multiply by w; ReadPixel divides back out by the recovered w_pixel, cancelling
+            // the hardware's perspective-correct interpolation down to screen-space-linear UVs.
+            o.uv = v.uv * lerp(1.0, clipPos.w, saturate(_PSXAffineWarpStrength));
             o.color = v.color * _Color;
             return o;
         }
         float4 ReadPixel(v2f i, out float blendPixel)
         {
             // Point sample at texel centres. Never interpret sRGB or filtered bytes as indices.
+            float2 uv = i.uv / lerp(1.0, i.w, saturate(_PSXAffineWarpStrength));
             float2 size = _IndexTex_TexelSize.zw;
-            float2 pixel = min(floor(saturate(i.uv) * size), size - 1);
+            float2 pixel = min(floor(saturate(uv) * size), size - 1);
             float index = floor(tex2D(_IndexTex, (pixel + 0.5) / size).r * 255.0 + 0.5);
             clip(15.5 - index);
             float row = clamp(floor(_PaletteRow + 0.5), 0, 15);

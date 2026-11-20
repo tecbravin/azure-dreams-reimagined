@@ -55,12 +55,17 @@ Shader "AzureDreams/PSX Vertex Snap Affine"
                 o.w = clipPos.w;
                 float2 uv = TRANSFORM_TEX(v.uv, _MainTex);
                 
-                // Affine warp: interpolate UVs in screen space without perspective division
+                // Affine warp: interpolate UVs in screen space without perspective division.
+                // Hardware perspective-correct interpolation always computes
+                // w_pixel * lerp_screenspace(attribute / w_vertex). Feeding it uv * w (not uv / w)
+                // makes the w_vertex division cancel the pre-multiplication, leaving
+                // w_pixel * lerp_screenspace(uv) -- i.e. plain screen-space-linear UVs once the
+                // fragment shader divides back out by the recovered w_pixel. Dividing by w here
+                // (as a previous version of this shader did) fed the hardware the wrong quantity
+                // and produced warping unrelated to the intended PS1 affine look.
                 if (_AffineWarp > 0)
                 {
-                    // PS1 affine: UVs are interpolated linearly in screen space
-                    // This causes texture warping on oblique surfaces
-                    o.uv = uv * lerp(1.0, 1.0 / clipPos.w, _AffineWarp);
+                    o.uv = uv * lerp(1.0, clipPos.w, _AffineWarp);
                 }
                 else
                 {
@@ -72,11 +77,12 @@ Shader "AzureDreams/PSX Vertex Snap Affine"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // Affine correction: divide by w to get proper UV (but with warping artifacts)
+                // Recover the screen-space-linear UV by dividing back out the w the vertex
+                // stage multiplied in (see vert() above).
                 float2 uv = i.uv;
                 if (_AffineWarp > 0)
                 {
-                    uv = uv / lerp(1.0, 1.0 / i.w, _AffineWarp);
+                    uv = uv / lerp(1.0, i.w, _AffineWarp);
                 }
                 
                 fixed4 col = tex2D(_MainTex, uv);

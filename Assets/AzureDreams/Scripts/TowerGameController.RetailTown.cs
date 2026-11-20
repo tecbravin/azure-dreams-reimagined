@@ -137,8 +137,8 @@ namespace AzureDreamsReimagined
 
         private void PlaceRetailFacadeDoors()
         {
-            var catalog = Resources.Load<TextAsset>(FacadeDoorResources + "placements");
-            var material = Resources.Load<Material>(FacadeDoorResources + "FacadeDoor");
+            var catalog = AssetMode.Load<TextAsset>(FacadeDoorResources + "placements");
+            var material = AssetMode.Load<Material>(FacadeDoorResources + "FacadeDoor");
             if (!catalog || !material)
             {
                 Debug.LogWarning("Town facade doors could not load their placement catalog or material.");
@@ -148,12 +148,22 @@ namespace AzureDreamsReimagined
             if (doors == null) return;
 
             var textures = new Dictionary<string, Texture2D>();
-            foreach (var placement in doors)
+            foreach (var authoredPlacement in doors)
             {
-                if (IsBuiltLot(new Vector2(placement.x, placement.z))) continue;
+                var placement = authoredPlacement;
+                var upgradedHome = placement.interior == "KohHome" ? BuiltKohHome() : null;
+                // Construction replaces static town geometry, but the opening door
+                // is a separate actor. Move it to stamp 28's entrance instead of
+                // discarding it with the old level-one facade.
+                if (upgradedHome != null && upgradedHome.Id == "home_1")
+                {
+                    placement.x = upgradedHome.Entrance.x;
+                    placement.z = upgradedHome.Entrance.y;
+                }
+                else if (IsBuiltLot(new Vector2(placement.x, placement.z))) continue;
                 if (!textures.TryGetValue(placement.style, out var texture))
                 {
-                    texture = Resources.Load<Texture2D>(FacadeDoorResources + placement.style);
+                    texture = AssetMode.Load<Texture2D>(FacadeDoorResources + placement.style);
                     textures.Add(placement.style, texture);
                 }
                 if (!texture) continue;
@@ -171,7 +181,7 @@ namespace AzureDreamsReimagined
         private void LoadTownWallSurfaces()
         {
             if (_townWallSurfaces != null) return;
-            var asset = Resources.Load<TextAsset>("Town/Retail/town_stone_walls");
+            var asset = AssetMode.Load<TextAsset>("Town/Retail/town_stone_walls");
             if (!asset) return;
             var walls = JsonUtility.FromJson<TownWallData>(asset.text);
             _townWallSurfaces = walls.surfaces;
@@ -214,6 +224,7 @@ namespace AzureDreamsReimagined
 
         private bool RetailTownGroundOpen(Vector3 position, float radius)
         {
+            if (FountainWalkwayOpen(position, radius)) return true;
             // The captured height grid contains water beneath all three bridges.
             // A bridge deck is a valid walking surface even when that grid cell
             // is underwater; its own triangle bounds keep Koh on the walkway.
@@ -259,6 +270,8 @@ namespace AzureDreamsReimagined
 
         private float RetailTownGround(Vector3 position)
         {
+            float fountainGround = FountainSurface(position, 1.01f);
+            if (!float.IsNegativeInfinity(fountainGround)) return fountainGround;
             int x = Mathf.RoundToInt(position.x);
             int z = Mathf.RoundToInt(position.z);
             if (!_interior && _constructionGround.TryGetValue(z * RetailTownSize + x, out float builtGround))
@@ -294,7 +307,8 @@ namespace AzureDreamsReimagined
 
         private Vector3 RetailTownActorPosition(Vector3 position, float offset)
         {
-            position.y = RetailTownHeight(position) + offset;
+            float fountainGround = FountainSurface(position, 1.01f);
+            position.y = (float.IsNegativeInfinity(fountainGround) ? RetailTownHeight(position) : fountainGround) + offset;
             return position;
         }
     }

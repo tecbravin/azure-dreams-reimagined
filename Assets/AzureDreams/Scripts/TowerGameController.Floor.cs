@@ -74,7 +74,7 @@ namespace AzureDreamsReimagined
             if (_towerFloorLayout == null) _towerFloorLayout = new TowerFloorManager();
             if (InTowerTutorial)
             {
-                var tutorialMap = Resources.Load<TextAsset>("Town/Retail/tutorial_floor");
+                var tutorialMap = AssetMode.Load<TextAsset>("Town/Retail/tutorial_floor");
                 if (tutorialMap && tutorialMap.bytes is { Length: CoreDungeon.GridSize * CoreDungeon.GridSize * 6 } terrain)
                     _towerFloorLayout.GenerateTutorial(terrain, TutorialEntrance, TutorialElevator);
                 else
@@ -91,6 +91,7 @@ namespace AzureDreamsReimagined
             else
             {
                 _towerItemTraps.AddEquipmentToGeneratedLoot();
+                if (InSecondTower) ApplySecondTowerLoot();
                 bool cherrlHerbActive = TownSaveVariables.GetInt(StoryPrefix + "cherrl.stage") >= CherrlHerbAvailable;
                 _towerItemTraps.ConfigureCherrlHealingHerb(!cherrlHerbActive ||
                     TownSaveVariables.GetBool(CherrlHealingQuestCompleted));
@@ -134,7 +135,9 @@ namespace AzureDreamsReimagined
                     levelOverride: 1, allowSpawnSleep: false);
             else if (_floor == TowerFloorRules.BeldoFloor && !TownSaveVariables.GetBool(BeldoClearedKey))
             {
-                SpawnManagedCreature(new Vector2Int(32, 22), BeldoBossSpecies);
+                // Retail layout 1 places Beldo at (32, 24), at the head of the arena.
+                SpawnManagedCreature(_towerFloorLayout.Retail != null ? new Vector2Int(32, 24) : new Vector2Int(32, 22),
+                    BeldoBossSpecies);
             }
             else if (TowerFloorRules.AllowsRandomMonsters(_floor))
             {
@@ -148,7 +151,7 @@ namespace AzureDreamsReimagined
                 for (int i = 0; i < count; i++)
                 {
                     if (!TryFindManagedCreatureCell(false, out var cell)) break;
-                    var species = TowerEncounterTable.Roll(_floor, _towerRun.Rng);
+                    var species = RollTowerSpecies();
                     bool carriesWaterMedal = i == 0 && spawnMedalPicket;
                     SpawnManagedCreature(cell, carriesWaterMedal ? AzureDreams.Core.MonsterSpecies.PICKET : species,
                         carriesWaterMedal);
@@ -167,7 +170,8 @@ namespace AzureDreamsReimagined
                     if (_towerItemTraps.TrapAt(cell) != null) CreateTrapMarker(cell);
                 }
             PlanMonsterDen();
-            if (_floor != TowerFloorRules.BeldoFloor) CreateTowerElevator();
+            if (CanAscendFromFloor) CreateTowerElevator();
+            if (_floor == 2) CreateSecondTowerElevator();
             ConfigurePlayerView();
             InitializeTowerEvents();
             if (_floor == 1)
@@ -296,7 +300,7 @@ namespace AzureDreamsReimagined
             if (_turnsUntilReinforcement <= 0 || --_turnsUntilReinforcement > 0) return;
             _turnsUntilReinforcement = 25 + RollSpawnRange(36);
             if (TryFindManagedCreatureCell(true, out var cell))
-                SpawnManagedCreature(cell, TowerEncounterTable.Roll(_floor, run.Rng));
+                SpawnManagedCreature(cell, RollTowerSpecies());
         }
 
         private Vector2Int FindManagedActorCell(Vector2Int preferred, params Vector2Int[] blocked)

@@ -18,6 +18,8 @@ namespace AzureDreamsReimagined
         private const int BlueCollarIconSlot = 17;
         private static byte[] _groundIconSlots;
         private static Texture2D _groundIconAtlas;
+        private Sprite _musicBoxInventorySprite;
+        private Sprite _dumplingsInventorySprite;
         private static Texture2D _retailHudFrames;
         private GUIStyle _portugueseHpStyle;
         private static readonly Sprite[] GroundIcons = new Sprite[GroundIconColumns * GroundIconRows];
@@ -34,6 +36,18 @@ namespace AzureDreamsReimagined
 
         private Sprite ItemDisplaySprite(int kind, int subtype)
         {
+            if (kind == QuestItemKind && subtype == OctopusDumplingId)
+            {
+                if (!_dumplingsInventorySprite && AssetMode.Load<Texture2D>("Tower/Dumplings") is { } dumplings)
+                    _dumplingsInventorySprite = Sprite.Create(dumplings, new Rect(0, 0, dumplings.width, dumplings.height), new Vector2(0.5f, 0.5f), 16f);
+                if (_dumplingsInventorySprite) return _dumplingsInventorySprite;
+            }
+            if (kind == 13 && subtype == 4)
+            {
+                if (!_musicBoxInventorySprite && AssetMode.Load<Texture2D>("Tower/MusicBox") is { } box)
+                    _musicBoxInventorySprite = Sprite.Create(box, new Rect(0, 0, box.width, box.height), new Vector2(0.5f, 0.5f), 16f);
+                if (_musicBoxInventorySprite) return _musicBoxInventorySprite;
+            }
             if (kind == Items.Kind.Herb && subtype == ShopMedicinalHerbSubtype) subtype = 1;
             int slot = GroundIconSlot(kind, subtype);
             string name = kind switch
@@ -50,6 +64,9 @@ namespace AzureDreamsReimagined
 
         private Sprite SuppliedItemSprite(string name)
         {
+            // Reimagined: redesigned icon when one exists; Classic: original 16px icons only.
+            var redesigned = ReimaginedItemSprite(name);
+            if (redesigned) return redesigned;
             if (_itemSpritesByName == null)
             {
                 _itemSpritesByName = new Dictionary<string, Sprite>();
@@ -68,7 +85,7 @@ namespace AzureDreamsReimagined
         {
             if (_groundIconSlots == null || _groundIconSlots.Length == 0)
             {
-                var map = Resources.Load<TextAsset>("Tower/GroundItemMap");
+                var map = AssetMode.Load<TextAsset>("Tower/GroundItemMap");
                 if (map) _groundIconSlots = map.bytes;
             }
             if (_groundIconSlots == null) return 0;
@@ -81,7 +98,7 @@ namespace AzureDreamsReimagined
             if (slot == 0 || slot >= GroundIcons.Length) return null;
             if (GroundIcons[slot]) return GroundIcons[slot];
 
-            if (!_groundIconAtlas) _groundIconAtlas = Resources.Load<Texture2D>("Tower/GroundItemIcons");
+            if (!_groundIconAtlas) _groundIconAtlas = AssetMode.Load<Texture2D>("Tower/GroundItemIcons");
             if (!_groundIconAtlas) return null;
             float cellWidth = _groundIconAtlas.width / (float)GroundIconColumns;
             float cellHeight = _groundIconAtlas.height / (float)GroundIconRows;
@@ -129,7 +146,7 @@ namespace AzureDreamsReimagined
         {
             get
             {
-                if (!_retailHudFrames) _retailHudFrames = Resources.Load<Texture2D>("Tower/RetailHudFrames");
+                if (!_retailHudFrames) _retailHudFrames = AssetMode.Load<Texture2D>("Tower/RetailHudFrames");
                 // The six original 128-square bands share the same UVs in the restored atlas.
                 return _retailHudFrames && _retailHudFrames.width >= 128 &&
                     _retailHudFrames.height == _retailHudFrames.width * 6;
@@ -201,7 +218,7 @@ namespace AzureDreamsReimagined
                 float fill = (gauge.width - 4f) * Mathf.Clamp01(_health / (float)Mathf.Max(1, maxHp));
                 DrawHudFill(new Rect(gauge.x + 2f, gauge.y + 2f, fill, gauge.height - 4f), new Color(0.35f, 0.76f, 0.93f));
             }
-            DrawHudText(new Rect(floor.x + 12f, floor.y, 55f, floor.height), T($"{_floor}F", $"{_floor}º"), _bodyStyle);
+            DrawFloorHudText(new Rect(floor.x + 12f, floor.y, 55f, floor.height));
             float levelInset = level < 10 ? 30f : 26f;
             DrawHudText(new Rect(levelDial.x + levelInset, levelDial.y + 17f, 40f, 26f), $"{level}", _bodyStyle);
             DrawHudText(new Rect(levelDial.x + 48f, levelDial.y - 6f, 30f, 23f), T("LV", "NÍV"), _messageStyle);
@@ -210,7 +227,7 @@ namespace AzureDreamsReimagined
             {
                 _portugueseHpStyle ??= new GUIStyle(_bodyStyle)
                 {
-                    fontSize = 14,
+                    fontSize = 12,
                     alignment = TextAnchor.MiddleCenter,
                     wordWrap = false
                 };

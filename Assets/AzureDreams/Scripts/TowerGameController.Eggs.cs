@@ -31,7 +31,7 @@ namespace AzureDreamsReimagined
 
         private GameObject RegisteredMonsterPrefab(int species)
         {
-            if (!_eggFamiliarPrefabs) _eggFamiliarPrefabs = Resources.Load<EggFamiliarPrefabs>("Town/Retail/EggFamiliarPrefabs");
+            if (!_eggFamiliarPrefabs) _eggFamiliarPrefabs = AssetMode.Load<EggFamiliarPrefabs>("Town/Retail/EggFamiliarPrefabs");
             return _eggFamiliarPrefabs ? _eggFamiliarPrefabs.Find(species) : null;
         }
         private readonly Dictionary<int, ActorDefinition> _hatchedDefinitions = new();
@@ -47,7 +47,7 @@ namespace AzureDreamsReimagined
         {
             if (_eggCatalog == null)
             {
-                var asset = Resources.Load<TextAsset>("Town/Retail/egg_catalog");
+                var asset = AssetMode.Load<TextAsset>("Town/Retail/egg_catalog");
                 if (asset) _eggCatalog = JsonUtility.FromJson<EggCatalog>(asset.text);
             }
             return _eggCatalog;
@@ -97,6 +97,7 @@ namespace AzureDreamsReimagined
             if (!TowerFloorRules.AllowsRandomMonsters(_floor) || RollSpawnRange(4) != 0) return;
             var floors = GetEggCatalog()?.floors;
             var choices = floors == null ? null : Array.Find(floors, e => e.floor == _floor)?.choices;
+            if (InSecondTower) choices = SecondTowerEggChoices(floors);
             if (choices == null || choices.Length == 0) return;
             int total = 0;
             foreach (var choice in choices)

@@ -1,0 +1,242 @@
+{
+  "source": "TOWN/TOWN.BIN, US retail, 0x569960-0x56C61A. English pages preserve the original 0x11 message boundaries. Portuguese is translated.",
+  "entries": [
+    {
+      "sourceOffset": "0x569960",
+      "english": [
+        "Yes, it’s rice."
+      ],
+      "portuguese": [
+        "Sim, é arroz."
+      ]
+    },
+    {
+      "sourceOffset": "0x569981",
+      "english": [
+        "The fermented soy bean dish, Natto, reflects the heart of Monsbaiya.",
+        "I hear they do not eat this on the western side of the land.",
+        "But as far as I’m concerned, although my parents come from the west, they both eat Natto,",
+        "and thus I was brought up eating Natto.",
+        "I love this dish, and feel sorry for those who don’t understand this great taste."
+      ],
+      "portuguese": [
+        "O prato de soja fermentada, natto, reflete o coração de Monsbaiya. Ouvi dizer que não comem isso no lado oeste destas terras. Mas meus pais vieram do oeste e ambos comem natto, então cresci comendo natto.",
+        "Adoro este prato e tenho pena de quem não entende seu sabor maravilhoso."
+      ]
+    },
+    {
+      "sourceOffset": "0x569c26",
+      "english": [
+        "Yes, this tofu has taste to it.",
+        "And the green onion used is diced cleanly, leaving it fresh and crispy, and bringing out",
+        "the taste of the tofu."
+      ],
+      "portuguese": [
+        "Sim, este tofu tem sabor. A cebolinha é picada com cuidado, permanecendo fresca e crocante e realçando o sabor do tofu."
+      ]
+    },
+    {
+      "sourceOffset": "0x569d45",
+      "english": [
+        "This dish uses the sand fish that cross the desert from the north in large schools every",
+        "year.",
+        "The sand fish are fish about the size of the palm of your hand, and live in the sand.",
+        "Underneath its tough scales, its meat is soaked with oil and water to help it get across",
+        "the desert.",
+        "Its great taste is loved by everyone.",
+        "Our sand fish sandwich is called the Sand−sand.",
+        "When the chef here makes something using this fish, he can amazingly improve the",
+        "flavor."
+      ],
+      "portuguese": [
+        "Este prato usa o peixe-da-areia, que todo ano atravessa o deserto vindo do norte em grandes cardumes. São peixes do tamanho da palma da mão que vivem na areia.",
+        "Debaixo das escamas resistentes, sua carne guarda óleo e água para ajudá-los a atravessar o deserto. Todos adoram seu sabor. Nosso sanduíche de peixe-da-areia se chama Sand-sand.",
+        "Quando o cozinheiro daqui prepara algo com esse peixe, consegue melhorar seu sabor de forma impressionante."
+      ]
+    },
+    {
+      "sourceOffset": "0x56a0ce",
+      "english": [
+        "If you want Zuroro, with yam grated into it, to keep the breaded coating on your cutlet",
+        "firm, Koppe would be the chef to do it for you.",
+        "This makes the breaded coating light and crispy, and will bring out the true taste of",
+        "the meat."
+      ],
+      "portuguese": [
+        "Se você quer uma costeleta zuroro com inhame ralado e uma cobertura empanada firme, Koppe é o cozinheiro certo. Isso deixa o empanado leve e crocante e realça o verdadeiro sabor da carne."
+      ]
+    },
+    {
+      "sourceOffset": "0x56a29a",
+      "english": [
+        "The crystallization of the spices pop up here and there like crystal balls.",
+        "The curry made here is not aiming to be the high class curry at your common Indian",
+        "restaurant,",
+        "but more something you would enjoy at home, bringing out that homely flavor.",
+        "It’s a taste that does not discriminate, that is fit for everyone.",
+        "Having said that, though, it’s not something that you could make at home.",
+        "The smoothness and depth in it’s taste is something only a professional chef could",
+        "possibly make."
+      ],
+      "portuguese": [
+        "Os temperos cristalizados aparecem aqui e ali como bolas de cristal. O curry daqui não tenta ser aquele curry sofisticado de um restaurante indiano comum.",
+        "Ele lembra algo que você comeria em casa, com aquele sabor caseiro. É um sabor que agrada a todos. Mesmo assim, não é algo que se consiga fazer em casa.",
+        "A suavidade e a profundidade do sabor só poderiam vir de um cozinheiro profissional."
+      ]
+    },
+    {
+      "sourceOffset": "0x56a65d",
+      "english": [
+        "The rice in Monsbaiya is famous for its uniqueness in that when the rice is fried,",
+        "as heat passes through, the rice grain twists.",
+        "But Koppe is something else. When he makes fried rice, he manages to get each and every",
+        "last grain twisted, adding texture to the rice.",
+        "It takes fried rice to a whole new level."
+      ],
+      "portuguese": [
+        "O arroz de Monsbaiya é famoso porque seus grãos se retorcem quando são fritos e o calor os atravessa. Mas Koppe é extraordinário. Ao fazer arroz frito, ele consegue retorcer até o último grão, dando textura ao arroz.",
+        "Eleva o arroz frito a outro nível."
+      ]
+    },
+    {
+      "sourceOffset": "0x56a8bf",
+      "english": [
+        "I hear Koppe owns a Niwawa bird at home.",
+        "The comb of this Niwawa bird apparently grows fairly quickly.",
+        "Every morning Koppe will cut a bit of the comb off, and use it for cooking.",
+        "He’ll soak this with sauce several times.",
+        "The meat and onions are cooked with this sauce until they soak up the taste.",
+        "The harmony between the juicy meat and the fresh onion is just perfect."
+      ],
+      "portuguese": [
+        "Ouvi dizer que Koppe cria uma ave Niwawa em casa. Parece que a crista dela cresce bem depressa. Toda manhã ele corta um pedaço da crista para cozinhar. Ele a mergulha várias vezes no molho.",
+        "A carne e as cebolas são cozidas nesse molho até absorverem o sabor. A harmonia entre a carne suculenta e a cebola fresca é perfeita."
+      ]
+    },
+    {
+      "sourceOffset": "0x56ab9a",
+      "english": [
+        "The prawns used are the best, and there is great energy used in preparing these dishes.",
+        "The prawns that can be seen peeking through the batter, seems to shine ever so",
+        "brightly.",
+        "They say the brighter the prawns are, the better the taste.  Well, this one’s very",
+        "bright and looks very delicious."
+      ],
+      "portuguese": [
+        "Os camarões usados são os melhores, e há muita dedicação no preparo destes pratos. Os camarões que aparecem por baixo da massa parecem brilhar intensamente. Dizem que quanto mais brilhante o camarão, melhor o sabor.",
+        "Este está muito brilhante e parece delicioso."
+      ]
+    },
+    {
+      "sourceOffset": "0x56adde",
+      "english": [
+        "I never thought I’d be able to eat Stewed Beef on Rice in Monsbaiya.",
+        "The cow.  This is the rare animal known to have wandered from the mythical land.",
+        "The gods of this mythical land are known to have enjoyed eating the meat of this animal,",
+        "which they call beef.",
+        "This dish is no doubt a mythical, mystical dish loved by the gods."
+      ],
+      "portuguese": [
+        "Nunca pensei que conseguiria comer carne cozida com arroz em Monsbaiya. A vaca é um animal raro que dizem ter vindo da terra mítica. Os deuses dessa terra gostavam de comer a carne desse animal, chamada carne bovina.",
+        "Este é, sem dúvida, um prato mítico e místico amado pelos deuses."
+      ]
+    },
+    {
+      "sourceOffset": "0x56b066",
+      "english": [
+        "Yep!  This tastes great!",
+        "This tempura uses seasonal vegetables and seafood.",
+        "Since this city is located in the middle of a desert, this dish, where freshness of the",
+        "ingredients is essential, is considered a delicacy here.",
+        "The raw ingredients are covered in batter and then fried quickly at high temperatures,",
+        "so you get tempura that is crispy on the outside and juicy on the inside.",
+        "Since the ingredients change daily, and it is not a heavy dish, you have people like",
+        "Mr. Ghosh who will eat it every day.",
+        "Koppe calls this dish his Special.",
+        "I believe that shows that he’s most confident about this dish out of the whole menu."
+      ],
+      "portuguese": [
+        "Sim! Está ótimo! Este tempurá usa legumes e frutos do mar da estação. Como esta cidade fica no meio de um deserto, um prato que exige ingredientes frescos assim é considerado uma iguaria.",
+        "Os ingredientes crus são cobertos de massa e fritos rapidamente em alta temperatura. Assim, o tempurá fica crocante por fora e suculento por dentro.",
+        "Como os ingredientes mudam diariamente e é um prato leve, pessoas como o senhor Ghosh o comem todos os dias. Koppe chama este prato de seu Especial.",
+        "Acho que isso mostra que é o prato em que ele mais confia de todo o cardápio."
+      ]
+    },
+    {
+      "sourceOffset": "0x56b53a",
+      "english": [
+        "When vinegar is added to the rice of Monsbaiya, the rice will change to any of seven",
+        "colors, depending on the proportion of vinegar used.",
+        "This restaurant prepares four different batches of vinegared rice, each used for a different",
+        "selection of the sushi ingredients.",
+        "The vinegared rice here is slightly red.",
+        "It’s the highest grade, so the rice has more taste to it.",
+        "With this sushi, you order the sushi to enjoy the taste of the rice rather than what",
+        "comes on top.",
+        "This really has the best tasting vinegared rice.",
+        "It gives you the feeling that, yes, you are eating sushi!"
+      ],
+      "portuguese": [
+        "Quando se acrescenta vinagre ao arroz de Monsbaiya, ele assume uma de sete cores conforme a proporção de vinagre.",
+        "Este restaurante prepara quatro tipos de arroz avinagrado, cada qual para uma seleção de ingredientes de sushi. Este arroz é levemente vermelho. É da categoria mais alta, por isso tem mais sabor.",
+        "Neste sushi, você saboreia o arroz mais do que a cobertura. Este arroz avinagrado realmente tem o melhor sabor. Dá aquela sensação de estar comendo sushi de verdade!"
+      ]
+    },
+    {
+      "sourceOffset": "0x56b9a7",
+      "english": [
+        "When vinegar is added to the rice of Monsbaiya, the rice will change to any of seven",
+        "colors, depending on the proportion of vinegar used.",
+        "This restaurant prepares four different batches of vinegared rice, each used for a different",
+        "selection of the sushi ingredients.",
+        "This vinegared rice here is slightly blue.",
+        "It matches perfectly with any fish with a shiny outer skin.",
+        "There are people that dislike this type of fish, but I recommend that you try it once",
+        "with this vinegared rice."
+      ],
+      "portuguese": [
+        "Quando se acrescenta vinagre ao arroz de Monsbaiya, ele assume uma de sete cores conforme a proporção de vinagre.",
+        "Este restaurante prepara quatro tipos de arroz avinagrado, cada qual para uma seleção de ingredientes de sushi. Este arroz é levemente azul. Combina perfeitamente com peixes de pele brilhante.",
+        "Algumas pessoas não gostam desse tipo de peixe, mas recomendo experimentá-lo uma vez com este arroz avinagrado."
+      ]
+    },
+    {
+      "sourceOffset": "0x56bd62",
+      "english": [
+        "When vinegar is added to the rice of Monsbaiya, the rice will change to any of seven",
+        "colors, depending on the proportion of vinegar used.",
+        "This restaurant prepares four different batches of vinegared rice, each used for a different",
+        "selection of the sushi ingredients.",
+        "This vinegared rice here is slightly yellow. It has the most common taste...",
+        "So as you’re eating, the taste of the rice will mix with the fresh ingredient, giving a",
+        "sensation of melting on your tongue..."
+      ],
+      "portuguese": [
+        "Quando se acrescenta vinagre ao arroz de Monsbaiya, ele assume uma de sete cores conforme a proporção de vinagre.",
+        "Este restaurante prepara quatro tipos de arroz avinagrado, cada qual para uma seleção de ingredientes de sushi. Este arroz é levemente amarelo. É o sabor mais comum...",
+        "Ao comer, o sabor do arroz se mistura ao ingrediente fresco, dando a sensação de derreter na língua..."
+      ]
+    },
+    {
+      "sourceOffset": "0x56c106",
+      "english": [
+        "When vinegar is added to the rice of Monsbaiya, the rice will change to any of seven",
+        "colors, depending on the proportion of vinegar used.",
+        "This restaurant prepares four different batches of vinegared rice, each used for a different",
+        "selection of the sushi ingredients.",
+        "This vinegared rice here is slightly green.",
+        "In the language of the gods, fish caught in the nearby sea is referred to as ”Edomae”.",
+        "Koppe says all the fish he uses are Edomae.",
+        "How in the world does he bring these kinds of fresh ingredients to this city,",
+        "in the middle of the desert?",
+        "... actually, the truth may be frightening, it would probably be better just not thinking",
+        "about it..."
+      ],
+      "portuguese": [
+        "Quando se acrescenta vinagre ao arroz de Monsbaiya, ele assume uma de sete cores conforme a proporção de vinagre.",
+        "Este restaurante prepara quatro tipos de arroz avinagrado, cada qual para uma seleção de ingredientes de sushi. Este arroz é levemente verde. Na língua dos deuses, o peixe pescado no mar próximo é chamado de Edomae.",
+        "Koppe diz que todos os peixes que usa são Edomae. Como ele traz ingredientes frescos assim para esta cidade, no meio do deserto? Na verdade, a resposta pode ser assustadora. Talvez seja melhor nem pensar nisso..."
+      ]
+    }
+  ]
+}

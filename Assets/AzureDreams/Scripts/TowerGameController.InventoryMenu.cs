@@ -147,7 +147,7 @@ namespace AzureDreamsReimagined
 
         private int InventoryMenuRowCount() => _inventoryMenu switch
         {
-            InventoryMenu.Main => 3,
+            InventoryMenu.Main => TrollCanUnequip(RootFamiliar) ? 4 : 3,
             InventoryMenu.Commands => InventoryCollarActor(_commandCollar)?.Species == (byte)MonsterSpecies.U_BOAT
                 ? 7 : HasSpeciesCommand(InventoryCollarActor(_commandCollar)) ? 6 : 5,
             InventoryMenu.Familiar => _area == Area.Tower && (_familiar || _blueCollarAlly?.View) ? 4 : 2,
@@ -161,6 +161,11 @@ namespace AzureDreamsReimagined
             {
                 case InventoryMenu.Main when RootFamiliar is { } selected:
                     if (IsFamiliarLost(selected)) return;
+                    if (TrollCanUnequip(selected))
+                    {
+                        if (row == 0) { UnequipActiveTroll(selected); return; }
+                        row--;
+                    }
                     if (row == 0)
                     {
                         _commandCollar = InventoryActorCollar(_inventoryActorSlot);
@@ -302,7 +307,7 @@ namespace AzureDreamsReimagined
             float statusWidth = Mathf.Min(228f, width - panel.xMax - 36f);
             if (statusWidth >= 140f)
             {
-                var status = new Rect(width - statusWidth - 18f, panel.y, statusWidth, 207f);
+                var status = new Rect(width - statusWidth - 18f, panel.y, statusWidth, Mathf.Min(280f,height-panel.y-40f));
                 DrawDialogueFrame(status);
                 if (RootFamiliar is { } familiar && _familiarOrderPicker != FamiliarOrderPicker.None)
                 {
@@ -313,7 +318,7 @@ namespace AzureDreamsReimagined
                 DrawInventoryText(new Rect(status.x + 10f, status.yMax + 3f, status.width - 20f, 22f),
                     _inventoryMenu == InventoryMenu.Main
                         ? T("Left/Right: character", "Esq./Dir.: personagem")
-                        : T("PgUp/PgDn: character", "PgUp/PgDn: personagem"), _messageStyle);
+                        : InventoryCharacterHint, _messageStyle);
             }
             if (count == 0)
                 DrawInventoryText(new Rect(panel.x + 8f, panel.y + 8f, panel.width - 16f, 46f),
@@ -322,8 +327,7 @@ namespace AzureDreamsReimagined
             {
                 string label = _inventoryMenu switch
                 {
-                    InventoryMenu.Main when RootFamiliar != null => row == 0 ? T("Command", "Comandar") :
-                        row == 1 ? T("Change AI", "Mudar IA") : T("Fuse", "Fundir"),
+                    InventoryMenu.Main when RootFamiliar != null => FamiliarRootActionLabel(row),
                     InventoryMenu.Main => row == 0 ? T("Items", "Itens") : row == 1 ? T("Command", "Comandar") : T("Ground", "Chão"),
                     InventoryMenu.Familiar => row switch
                     {
@@ -339,7 +343,8 @@ namespace AzureDreamsReimagined
                 var button = new Rect(panel.x + 8f, panel.y + 8f + row * 30f, panel.width - 16f, 27f);
                 bool enabled = GUI.enabled;
                 if (RootFamiliar is { } familiarActor)
-                    GUI.enabled = enabled && !IsFamiliarLost(familiarActor) && (row != 2 ||
+                    GUI.enabled = enabled && !IsFamiliarLost(familiarActor) &&
+                        (row != (TrollCanUnequip(familiarActor) ? 3 : 2) ||
                         (HasBlueCollar && _familiar && _blueCollarAlly?.View && !IsFamiliarLost(_familiarActor) &&
                         !IsFamiliarLost(_blueCollarAlly.Actor)));
                 else if (_inventoryMenu == InventoryMenu.Familiar && row < 2)
@@ -414,6 +419,11 @@ namespace AzureDreamsReimagined
                 {
                     if (IsSubmerged(actor)) Surface(actor, from);
                     else Dive(actor, view, from);
+                }
+                else if (actor.Species == (byte)MonsterSpecies.MANOEVA)
+                {
+                    if (!RevertManoevaDisguise(actor))
+                        AddSpeciesMessage(T("There is nothing to revert.", "Não há nada para desfazer."));
                 }
                 else if (IsSpeciesObstacleCaster(actor) && !TryQueueSpeciesObstacle(actor, view, from, direction))
                     AddSpeciesMessage(T("The familiar could not place the obstacle.", "O familiar não conseguiu criar o obstáculo."));

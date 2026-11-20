@@ -74,6 +74,7 @@ namespace AzureDreamsReimagined
         private void RefreshInventoryCommands()
         {
             var inventory = CarriedInventory;
+            MigrateFamiliarEquipment(inventory);
             _inventoryEntries = inventory?.DungeonItems;
             int rawCount = _inventoryEntries?.Count ?? 0;
             int herbCount = _potionItem && inventory != null ? inventory.GetCount(_potionItem) : 0;
@@ -107,14 +108,15 @@ namespace AzureDreamsReimagined
                 ItemKind.Herb => true,
                 ItemKind.Seed => true,
                 ItemKind.Fruit => true,
-                ItemKind.Ball => true,
+                // The Acid Rain ball can never be handed to a familiar.
+                ItemKind.Ball => !IsAcidRainBall(item),
                 ItemKind.Sword => IsTrollWeapon(item),
                 _ => false
             };
 
         private bool CanGiveToFamiliar(DungeonItemEntry item) =>
             (_area == Area.Town && _familiarDefinition && item != null &&
-                item.Kind != ItemKind.Ball && (!IsTrollWeapon(item) || IsTroll(_familiarActor))) ||
+                (item.Kind != ItemKind.Ball || TeachesFamiliar(item)) && (!IsTrollWeapon(item) || IsTroll(_familiarActor))) ||
             _familiar != null ||
             (item != null && IsGiveableToFamiliar(item) && CanFeedCarriedFamiliar(item)) ||
             (IsTrollWeapon(item) && IsTroll(_blueCollarAlly?.Actor));
@@ -167,14 +169,17 @@ namespace AzureDreamsReimagined
         private void DrawItemCommands(float width, float height)
         {
             if (!_inventoryOpen || _itemCommandIndex < 0) return;
-            float x = width / 2f + 10f;
-            float y = height * 0.24f;
-            DrawDialogueFrame(new Rect(x, y, 224, 36 + _availableItemCommands.Count * 31));
-            DrawInventoryText(new Rect(x + 10, y + 6, 210, 24), SelectedRawIndex <= FamiliarInventoryRow ?
-                T("Familiar actions", "Ações do familiar") : T("Item actions", "Ações do item"), _bodyStyle);
-            for (int i = 0; i < _availableItemCommands.Count; i++)
-                if (DrawInventoryButton(new Rect(x + 10, y + 31 + i * 31, 204, 28),
-                    CommandText(_availableItemCommands[i]), i == _itemCommandIndex))
+            float panelWidth=Mathf.Min(310f,width-32f);
+            const float rowHeight=36f, gap=4f;
+            float panelHeight=44f+_availableItemCommands.Count*(rowHeight+gap);
+            float x=Mathf.Min(width/2f+10f,width-panelWidth-16f);
+            float y=Mathf.Max(16f,(height-panelHeight)*.5f);
+            DrawDialogueFrame(new Rect(x,y,panelWidth,panelHeight));
+            DrawInventoryFittedText(new Rect(x+10f,y+6f,panelWidth-20f,30f),SelectedRawIndex<=FamiliarInventoryRow ?
+                T("Familiar actions","Ações do familiar") : T("Item actions","Ações do item"),_bodyStyle);
+            for(int i=0;i<_availableItemCommands.Count;i++)
+                if(DrawInventoryFittedButton(new Rect(x+10f,y+40f+i*(rowHeight+gap),panelWidth-20f,rowHeight),
+                    CommandText(_availableItemCommands[i]),i==_itemCommandIndex))
                 { ExecuteItemCommand(_availableItemCommands[i]); break; }
         }
 
@@ -213,6 +218,7 @@ namespace AzureDreamsReimagined
             _itemTargetSource = null;
             _discardedUnderKoh = null;
             _townDroppedItems.Clear();
+            _townItemStacks.Clear();
             _itemCommandIndex = -1;
             _thrownEggs.RemoveAll(ally => !ally.Salamander || _area != Area.Tower || ally.Turns <= 0);
             _blueCollarAlly = null;
@@ -284,12 +290,11 @@ namespace AzureDreamsReimagined
                 bool redTroll = (_familiar || (!inTower && _familiarDefinition)) && IsTroll(_familiarActor);
                 bool blueTroll = IsTroll(_blueCollarAlly?.Actor);
                 bool useBlue = blueTroll && (!redTroll ||
-                    (inventory.HasEquipped(FamiliarEquipped, false) && !inventory.HasEquipped(BlueFamiliarEquipped, false)));
+                    (_familiarActor.Weapon != null && _blueCollarAlly.Actor.Weapon == null));
                 if (redTroll || blueTroll)
                 {
-                    byte wearer = useBlue ? BlueFamiliarEquipped : FamiliarEquipped;
                     var recipient = useBlue ? _blueCollarAlly.Actor : _familiarActor;
-                    if (!inventory.CanSetEquipped(index, wearer, lockCursed: true))
+                    if (Inventory.IsCursedEquipment(recipient.Weapon))
                     {
                         ShowLockedEquipmentMessage();
                         return;
@@ -298,8 +303,7 @@ namespace AzureDreamsReimagined
                     {
                         bool active = useBlue ? _blueCollarAlly?.Actor == recipient && recipient.Hp > 0 :
                             (_familiar || (!inTower && _familiarDefinition)) && _familiarActor == recipient && recipient.Hp > 0;
-                        if (!active || !inventory.SetEquipped(index, wearer, lockCursed: true)) return;
-                        PlayRetailSound(RetailSfx.Equip);
+                        if (!active || !GiveTrollWeapon(inventory, index, recipient, lockCursed: true)) return;
                         _message = T($"{TowerCombatName(recipient)} equipped {InventoryItemName(item)}.",
                             $"{TowerCombatName(recipient)} equipou {InventoryItemName(item)}.");
                         RefreshInventoryCommands();
@@ -307,6 +311,8 @@ namespace AzureDreamsReimagined
                     return;
                 }
             }
+            // A ball with 10+ charges teaches its spell instead of being cast.
+            if (giving && TryGiveBallToLearn(inventory, index, item, Remove)) return;
             if (giving && !_familiar && (inTower || !_familiarDefinition) && !CanFeedCarriedFamiliar(item)) return;
             if (giving && Equipment(item)) command = ItemCommand.Drop;
             if (command == ItemCommand.Drop)
@@ -330,7 +336,7 @@ namespace AzureDreamsReimagined
                     if (!Remove())
                     {
                         if (_area == Area.Tower) ConsumeGroundItem(destination);
-                        else if (_townDroppedItems.Remove(destination, out var drop)) RemoveGenerated(drop.view);
+                        else if (RemoveTownGroundItem(destination, out var drop)) RemoveGenerated(drop.view);
                         return;
                     }
                     if (!giving && _area == Area.Tower && destination == _playerCell) _discardedUnderKoh = destination;
@@ -341,16 +347,19 @@ namespace AzureDreamsReimagined
             }
             if (command == ItemCommand.Hold)
             {
-                if (_carriedView || _heldTownPot) { _message = T("Your hands are full.", "Suas mÃ£os estÃ£o ocupadas."); return; }
-                ScheduleInventoryAction(() =>
+                if (_carriedView || _heldTownPot) { _message = T("Your hands are full.", "Suas mãos estão ocupadas."); return; }
+                System.Action hold = () =>
                 {
                     if (!Remove()) return;
                     _carriedItem = OffBody(item);
                     _carriedView = CreateGroundItemView(_playerCell, _carriedItem);
-                    if (_area == Area.Town) _inventoryOpen = false;
-                    PresentTownInventoryItem();
+                    _inventoryOpen = false;
+                    if (_area == Area.Tower) PresentCarry(0f);
+                    else PresentTownInventoryItem();
                     RefreshInventoryCommands();
-                });
+                };
+                if (_area == Area.Tower) hold();
+                else ScheduleInventoryAction(hold);
                 return;
             }
             if (_area == Area.Town && item.Kind == MonsterEgg.Kind)
@@ -360,6 +369,7 @@ namespace AzureDreamsReimagined
                 return;
             }
             var target = giving ? _familiarActor : _playerActor;
+            if (giving && RefusesLevaFruit(item, target)) return;
             if (giving && item.Kind == ItemKind.Ball && MonsterExhausted(target))
             { _message = T("The familiar is out of MP.", "O familiar está sem PM."); return; }
             if (!CanUseInventoryEffect(item, giving))
@@ -382,6 +392,7 @@ namespace AzureDreamsReimagined
                 if (giving && (_familiarActor != target || (!_familiar &&
                     (inTower || !_familiarDefinition) && !CanFeedCarriedFamiliar(item)))) return;
                 if (giving && item.Kind == ItemKind.Fruit && item.Subtype == 7 && !CanRevertToEgg(target)) return;
+                if (giving && RefusesLevaFruit(item, target)) return;
                 if (item.Kind == ItemKind.Crystal && item.Subtype == 1 && !TryFindHatchCell(out _)) return;
                 var upgradeTarget = usingSand ? SandUpgradeTarget(item) : null;
                 if (usingSand && upgradeTarget == null) return;
@@ -444,6 +455,7 @@ namespace AzureDreamsReimagined
             else if (sourceIndex < 0 || sourceIndex >= items.Count || !IsTruthGlasses(items[sourceIndex])) return;
 
             var item = items[targetIndex];
+            SecondTowerItems.Learn(item);
             var identified = item.Kind == MonsterEgg.Kind ? MonsterEgg.Identify(item) :
                 new DungeonItemEntry(item.Subtype, item.Kind, item.Param, (byte)(item.Flags & ~Inventory.UnrevealedEquipmentFlag));
             if (!inventory.ReplaceDungeonItem(targetIndex, item.Kind, identified)) return;
@@ -563,7 +575,7 @@ namespace AzureDreamsReimagined
 
         private bool CanPlaceInventoryItem(Vector2Int cell) => _area == Area.Tower
             ? _towerItemTraps != null && !_itemMarkers.ContainsKey(cell) && cell != _stairCell
-            : !_townDroppedItems.ContainsKey(cell);
+            : true;
 
         private bool PlaceInventoryItem(Vector2Int cell, DungeonItemEntry item)
         {
@@ -577,17 +589,18 @@ namespace AzureDreamsReimagined
             {
                 var view = CreateGroundItemView(cell, item);
                 if (UsingRetailTown) view.transform.position = RetailTownActorPosition(view.transform.position, WorldItemHeight);
-                _townDroppedItems.Add(cell, (item, view));
+                view = MakeTownItemBlock(cell, view);
+                _townDroppedItems[cell] = (item, view);
             }
             return true;
         }
 
         private bool TryCollectDroppedTownItem()
         {
-            if (!_townDroppedItems.TryGetValue(_playerCell, out var drop) ||
+            if (!TryTownGroundItemCell(out var cell) || !_townDroppedItems.TryGetValue(cell, out var drop) ||
                 (drop.item.Kind != ItemKind.Coin && !_townInventory.HasSpace())) return false;
             PlayRetailSound(drop.item.Kind == ItemKind.Coin ? RetailSfx.CoinPickup : RetailSfx.Pickup);
-            _townDroppedItems.Remove(_playerCell);
+            RemoveTownGroundItem(cell, out _);
             var item = drop.item.Kind == MonsterEgg.Kind ? MonsterEgg.Identify(drop.item) : drop.item;
             if (!CreditCoinPickup(item))
             {
@@ -608,7 +621,7 @@ namespace AzureDreamsReimagined
         private void ReleaseTownInventoryItem(bool throwing)
         {
             if (_carriedItem == null) return;
-            Vector2Int cell = _playerCell;
+            Vector2Int cell = _playerCell + new Vector2Int(Mathf.RoundToInt(_townFacing.x), Mathf.RoundToInt(_townFacing.y));
             if (throwing)
             {
                 var step = new Vector2Int(Mathf.RoundToInt(_townFacing.x), Mathf.RoundToInt(_townFacing.y));
@@ -619,6 +632,9 @@ namespace AzureDreamsReimagined
                     if (CanPlaceInventoryItem(next)) cell = next;
                 }
             }
+            var target = CellPosition(cell);
+            float support = Mathf.Max(TownTerrainHeight(target), TownItemTop(target, 0f, null));
+            if (!TownPositionOpen(target, support)) return;
             if (!PlaceInventoryItem(cell, _carriedItem)) return;
             if (throwing && _carriedView)
                 StartCoroutine(AnimateThrownTownItem(_townDroppedItems[cell].view, _carriedView.transform.position));

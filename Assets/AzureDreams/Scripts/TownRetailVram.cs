@@ -24,8 +24,8 @@ namespace AzureDreamsReimagined
 
         public static TownRetailVram LoadVariant0()
         {
-            var image = Resources.Load<TextAsset>("Town/Retail/town_vram_variant_0");
-            var coverage = Resources.Load<TextAsset>("Town/Retail/town_vram_variant_0_written");
+            var image = AssetMode.Load<TextAsset>("Town/Retail/town_vram_variant_0");
+            var coverage = AssetMode.Load<TextAsset>("Town/Retail/town_vram_variant_0_written");
             if (image == null || coverage == null) throw new InvalidDataException("Town VRAM snapshot is missing.");
             return new TownRetailVram(image.bytes, coverage.bytes);
         }

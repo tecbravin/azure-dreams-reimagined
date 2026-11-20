@@ -152,6 +152,8 @@ namespace AzureDreamsReimagined
             PersistTownProgress();
         }
 
+        private const string OkamiReimaginedPortrait = "Dialogue/Aunt_variant1_frame0";
+
         private bool StoryTalk(NPCController npc, string en, string pt, Action next = null)
         {
             return StoryTalk(npc, en, pt, null, next);
@@ -194,6 +196,9 @@ namespace AzureDreamsReimagined
         private bool StoryAsk(NPCController npc, string en, string pt, string portraitPath,
             params (string Label, Action Apply)[] choices)
         {
+            // Okami has no retail portrait; Reimagined gives her the redesigned aunt portrait, Classic none.
+            if (portraitPath == null && npc && npc.npcId == "okami" && AssetMode.IsReimagined)
+                portraitPath = OkamiReimaginedPortrait;
             _storySpeaker = npc;
             _storyChoices = choices;
             _storyChoice = 0;
@@ -319,6 +324,7 @@ namespace AzureDreamsReimagined
             _message = string.Empty;
             if (finishWakeUpVisit)
             {
+                FinishRestaurantMeal();
                 _vivianFonScoutPlaying = false;
                 _vivianRoseScenePlaying = false;
                 _furGhoshScenePlaying = false;
@@ -336,6 +342,7 @@ namespace AzureDreamsReimagined
             CloseStoryPrompt(finishWakeUpVisit: false);
             PlayRetailSound(RetailSfx.Confirm);
             apply?.Invoke();
+            if (!_storySpeaker) FinishRestaurantMeal();
             if (!_storySpeaker) FinishWakeUpVisit();
         }
 
@@ -1683,7 +1690,7 @@ namespace AzureDreamsReimagined
                     return VivianClosedBarConversation(npc);
                 return false;
             }
-            if (stage == 3 && StoryRoom == BarRoom)
+            if (stage == 3 && StoryRoom == BarRoom && StoryNewDay(route))
                 return VivianFirstMeeting(npc);
             if (stage == 4 && (StoryRoom is CasinoRoom or CasinoSlotsRoom) && StoryBuilding("casino"))
                 return TownSaveVariables.GetBool(VivianCasinoVisitKey)

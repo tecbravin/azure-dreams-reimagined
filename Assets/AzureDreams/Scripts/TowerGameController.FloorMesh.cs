@@ -144,8 +144,18 @@ namespace AzureDreamsReimagined
                 MoveWithTerrain(visitor.gameObject, new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z)));
             }
 
+            var retail = _towerFloorLayout.Retail;
             foreach (var cell in _towerFloorLayout.OpenCells)
-                _towerFloorLayout.SetHeight(cell.x, cell.y, newHeight(cell));
+            {
+                int height = newHeight(cell);
+                if (retail != null)
+                {
+                    // Retail cells carry their own height value; move the cell's tile with the terrain change.
+                    int index = retail.Index(cell.x, cell.y);
+                    retail.Value[index] = (short)(retail.Value[index] + height - _towerFloorLayout.GroundHeight(cell.x, cell.y));
+                }
+                _towerFloorLayout.SetHeight(cell.x, cell.y, height);
+            }
             RemoveSurface(_managedFloorMesh);
             RemoveSurface(_managedWallMesh);
             BuildManagedFloorMeshes(includeBackdrop: false);
@@ -164,9 +174,11 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_retailTitleLensMaterial) Destroy(_retailTitleLensMaterial);
             if (_windowSkin) Destroy(_windowSkin);
             ReleaseAreaMusic();
             ReleaseStreamedPortraits();
+            ReleaseStreamedTextures();
             ClearGenerated();
             if (_sacredTileSprite) Destroy(_sacredTileSprite);
             if (_towerTrapSprite) Destroy(_towerTrapSprite);
@@ -192,6 +204,11 @@ namespace AzureDreamsReimagined
 
         private void BuildManagedFloorMeshes(bool includeBackdrop = true)
         {
+            if (UsesRetailFloorMesh)
+            {
+                BuildRetailFloorMeshes(includeBackdrop);
+                if (_managedFloorMesh) return;
+            }
             int upperIndex = _floor is >= 12 and <= 39 ? (_floor - 12) / 2 : -1;
             Material retailTiles = _floor <= 2 ? _earlyTowerTiles :
                 _floor == 3 ? _thirdFloorTiles : _floor <= 5 ? _fourthFifthFloorTiles :
@@ -211,7 +228,7 @@ namespace AzureDreamsReimagined
             {
                 float x = cell.x, z = cell.y;
                 float y = TowerGroundY(cell);
-                float floorSurface = cell == _towerFloorLayout.StairsUpCell && HasRetailElevatorArt && _floor != TowerFloorRules.BeldoFloor
+                float floorSurface = cell == _towerFloorLayout.StairsUpCell && HasRetailElevatorArt && CanAscendFromFloor
                     ? y - 0.035f : y;
                 bool corridor = _towerItemTraps.IsCorridor(cell);
                 bool openCorridorEdge = corridor && _floor != 2 && !InTowerTutorial;
@@ -385,6 +402,12 @@ namespace AzureDreamsReimagined
         private void UpdateTowerBackdropRotation()
         {
             if (!_towerBackdrop || _area != Area.Tower) return;
+            if (UsesRetailFloorMesh && _retailBackdropMesh)
+            {
+                UpdateRetailBackdrop();
+                UpdateRetailWater();
+                return;
+            }
             // Retail floor setup calls create_wrapped_texture_scroll(2). Its source
             // offset wraps with a 0x1F mask, so two pixels advance through a 32 px
             // cycle on each 30 Hz game frame. Map that cycle to one full wall turn.

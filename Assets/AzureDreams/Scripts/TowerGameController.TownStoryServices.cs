@@ -6,6 +6,7 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private const string PattyMeals = StoryPrefix + "patty.meals";
+        private const string PattyAllMealsDay = StoryPrefix + "patty.allMealsDay";
         private const string PattyMealDue = StoryPrefix + "patty.mealDue";
         private const string PattyGhoshCheapMealSeen = StoryPrefix + "patty.ghoshCheapMealSeen";
         private const string PattyRouteVersion = StoryPrefix + "patty.routeVersion";
@@ -74,9 +75,9 @@ namespace AzureDreamsReimagined
             int due = TownSaveVariables.GetInt(PattyMealDue);
             if (due > 0) return PattyOutstandingMeal(npc, due);
             int stage = PattyStage();
-            if (stage == PattyFirstMeal) return PattyFirstVisit(npc);
+            if (stage == PattyFirstMeal) return PattyFirstSceneReady ? PattyFirstVisit(npc) : PattyRegularVisit(npc);
             if (stage == PattySecondMeal)
-                return StoryNewDay(route) ? PattySecondVisit(npc) : PattyRegularVisit(npc);
+                return StoryNewDay(route) ? PattySecondVisit(npc) : PattyClosedVisit(npc);
             if (stage == PattyChooseMeal)
                 return StoryNewDay(route) ? PattyThirdVisit(npc) : PattyRegularVisit(npc);
             if (stage == PattyOctopusMeal)
@@ -148,6 +149,49 @@ namespace AzureDreamsReimagined
             return true;
         }
 
+        private bool PattyFirstSceneReady
+        {
+            get
+            {
+                int allMeals = (1 << RestaurantMeals.Length) - 1;
+                if ((TownSaveVariables.GetInt(PattyMeals) & allMeals) != allMeals) return false;
+                int completedDay = TownSaveVariables.GetInt(PattyAllMealsDay, -1);
+                if (completedDay < 0)
+                {
+                    // Older saves have the meal mask but no completion date.
+                    // Start their next-day wait now instead of triggering on entry.
+                    TownSaveVariables.SetInt(PattyAllMealsDay, StoryDay);
+                    TownSaveVariables.Save();
+                    return false;
+                }
+                return StoryDay > completedDay;
+            }
+        }
+
+        private bool PattyRestaurantClosed
+        {
+            get
+            {
+                int stage = PattyStage();
+                return (stage == PattyFirstMeal && PattyFirstSceneReady) ||
+                    (stage == PattySecondMeal && !StoryNewDay("patty"));
+            }
+        }
+
+        // The later private scenes also take place without Koppe or the regular
+        // customers. Ghosh is spawned explicitly by his dialogue sequences.
+        private bool PattyAloneInRestaurant => PattyRestaurantClosed ||
+            (PattyStage() is PattyChooseMeal or PattyOctopusMeal or PattyGhoshScene && StoryNewDay("patty")) ||
+            PattyStage() == PattyFinalTalk;
+
+        private bool PattyClosedVisit(NPCController npc)
+        {
+            PattySequence(npc, 0, null,
+                ("Hi {name}.\nWe’re closed today.", "Oi, {name}.\nHoje estamos fechados."),
+                ("My father still hasn't returned from his trip.", "Meu pai ainda não voltou da viagem."));
+            return true;
+        }
+
         private void PattyFirstMealMenu(NPCController npc) =>
             PattyAsk(npc, 0, "Let's see, what should I make.", "Vamos ver, o que eu devo fazer.",
                 (T("I’ll tell you what I’d like.", "Vou dizer o que eu quero."), () => PattySpecialtyMenu(npc)),
@@ -158,23 +202,23 @@ namespace AzureDreamsReimagined
         private void PattySpecialtyMenu(NPCController npc) =>
             PattyAsk(npc, 0, "What would you like?", "O que você gostaria?",
                 (T("Deep Fried Prawns", "Camarões fritos"), () => PattySequence(npc, 0,
-                    () => ServePattyFirstMeal(npc),
+                    () => ServePattyFirstMeal(npc, 8),
                     ("I’m glad you chose Deep Fried Prawns.\nI’m pretty good at making this.",
                         "Que bom que escolheu Camarões Fritos.\nEu sei fazer muito bem esse prato."),
                     ("Just wait a moment.", "Espere só um momento."))),
                 (T("Crystal curry", "Curry de cristal"), () =>
-                    PattyTalk(npc, 0, "Okay, curry it is.", "Certo, então vai ser curry.", () => ServePattyFirstMeal(npc))),
+                    PattyTalk(npc, 0, "Okay, curry it is.", "Certo, então vai ser curry.", () => ServePattyFirstMeal(npc, 5))),
                 (T("Spiral fried rice", "Arroz frito em espiral"), () =>
                     PattyTalk(npc, 0, "Okay, fried rice it is.", "Certo, então vai ser arroz frito.",
-                        () => ServePattyFirstMeal(npc))));
+                        () => ServePattyFirstMeal(npc, 6))));
 
-        private void ServePattyFirstMeal(NPCController npc)
+        private void ServePattyFirstMeal(NPCController npc, int dish)
         {
             // The first meal is prepared privately while Koppe is away.
             AdvanceTownStory("patty", PattySecondMeal);
-            StartCoroutine(PlayPattyServeAnimation(npc));
             PattyTalk(npc, 0, "I'm almost done, can you wait at the table?",
-                "Já está quase pronto, pode esperar à mesa?", () => PattyFirstMealAfter(npc));
+                "Já está quase pronto, pode esperar à mesa?", () => BeginRestaurantMeal(npc,
+                    () => ShowRestaurantDishDescription(npc, dish, () => PattyFirstMealAfter(npc))));
         }
 
         // TOWN.BIN 0x56E6CE–0x56EB54.
@@ -300,6 +344,9 @@ namespace AzureDreamsReimagined
             if (TownSaveVariables.GetInt(PattyMealDue) > 0) return;
             int mask = TownSaveVariables.GetInt(PattyMeals) | (1 << index);
             TownSaveVariables.SetInt(PattyMeals, mask);
+            int allMeals = (1 << RestaurantMeals.Length) - 1;
+            if ((mask & allMeals) == allMeals && TownSaveVariables.GetInt(PattyAllMealsDay, -1) < 0)
+                TownSaveVariables.SetInt(PattyAllMealsDay, StoryDay);
             if (advance > 0)
             {
                 _gold -= meal.Gold;
@@ -310,17 +357,18 @@ namespace AzureDreamsReimagined
                 TownSaveVariables.SetInt(PattyMealDue, meal.Gold);
                 PersistTownProgress();
             }
-            StartCoroutine(PlayPattyServeAnimation(npc));
             System.Action afterServe = advance switch
             {
-                PattySecondMeal => () => PattyFirstMealAfter(npc),
-                PattyChooseMeal => () => PattyTalk(npc, 0, "Here you go, enjoy.", "Aqui está. Aproveite."),
-                PattyOctopusMeal => () => PattyThirdMealAfter(npc),
-                PattyGhoshScene => () => PattyOctopusMealAfter(npc),
+                PattySecondMeal => () => ShowRestaurantDishDescription(npc, index, () => PattyFirstMealAfter(npc)),
+                PattyChooseMeal => () => PattyTalk(npc, 0, "Here you go, enjoy.", "Aqui está. Aproveite.",
+                    () => ShowRestaurantDishDescription(npc, index, null)),
+                PattyOctopusMeal => () => ShowRestaurantDishDescription(npc, index, () => PattyThirdMealAfter(npc)),
+                PattyGhoshScene => () => ShowRestaurantDishDescription(npc, index, () => PattyOctopusMealAfter(npc)),
                 _ => () => PattyTalk(npc, 0, "Here you are.", "Aqui está.",
-                    () => PattyRegularMealAtTable(npc, index, meal.Gold))
+                    () => ShowRestaurantDishDescription(npc, index, () => PattyRegularMealAtTable(npc, index, meal.Gold)))
             };
-            PattyTalk(npc, portrait, meal.DescriptionEnglish, meal.DescriptionPortuguese, afterServe);
+            PattyTalk(npc, portrait, meal.DescriptionEnglish, meal.DescriptionPortuguese,
+                () => BeginRestaurantMeal(npc, afterServe));
         }
 
         // TOWN.BIN 0x56CEBD–0x56D092.
@@ -1316,6 +1364,9 @@ namespace AzureDreamsReimagined
                         AdvanceTownStory(route, FurFirstPurchase);
                         FurOpenStore();
                     });
+            // Every later step waits for a Tower trip after the previous one (town_event_reference.json).
+            if (stage != FurFirstPurchase && !StoryNewDay(route))
+                return FurTalk(npc, 0, "Welcome.\n... so what do you want today?", "Bem-vindo.\n... então, o que você quer hoje?", FurOpenStore);
             if (stage == FurReturnCustomer)
                 return FurFirstTowerConversation(npc);
             if (stage == FurFiveFloorTalk && TownSaveVariables.GetInt(TownReputation.HighestFloorKey) >= 5)

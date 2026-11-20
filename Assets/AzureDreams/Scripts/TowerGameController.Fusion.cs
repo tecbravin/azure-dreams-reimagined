@@ -228,84 +228,6 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private IEnumerator PresentFamiliarFusion(FusionPreview preview)
-        {
-            var redView = _familiar;
-            var blueView = _fusionSecond != null ? _fusionSecond.View : 
-                           (HasBlueCollar ? _blueCollarFamiliar?.View : null);
-            if (blueView == null && HasBlueCollar)
-            {
-                blueView = _blueCollarAlly?.View;
-            }
-            if (_fusionFirst != null && _fusionSecond != null)
-            {
-                // Use the selected familiars' views if available
-                var fView = _familiarActor == _fusionFirst.Actor ? _familiar : (_fusionSecond?.View);
-                var bView = _fusionSecond != null ? _fusionSecond.View : (_fusionFirst?.View);
-                if (fView != null && bView != null)
-                {
-                    redView = fView;
-                    blueView = bView;
-                }
-            }
-            Vector3 redStart = redView.transform.position, blueStart = blueView.transform.position;
-            Vector3 center = (redStart + blueStart) * 0.5f;
-            var redSprites = redView.GetComponentsInChildren<SpriteRenderer>();
-            var blueSprites = blueView.GetComponentsInChildren<SpriteRenderer>();
-            var redColors = System.Array.ConvertAll(redSprites, sprite => sprite.color);
-            var blueColors = System.Array.ConvertAll(blueSprites, sprite => sprite.color);
-            string musicCue = _playingMusicCue;
-            _fusionPlaying = true;
-            try
-            {
-                // MERGE.STR, file 1/channel 0, sectors 0 through 0x52f.
-                var cue = Resources.Load<AudioClip>("Sfx/Retail/Fusion");
-                SetAreaMusicPaused(true);
-                if (cue) PlayRetailClip(cue, 0.75f);
-                else PlayRetailSound(RetailSfx.Restore);
-                bool flashed = false;
-                float duration = cue ? cue.length : 7f;
-                for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
-                {
-                    if (!redView || !blueView || _familiar != redView || _blueCollarAlly?.View != blueView) yield break;
-                    float gather = Mathf.SmoothStep(0f, 1f, elapsed / 4.5f);
-                    float darkness = Mathf.Lerp(Mathf.SmoothStep(1f, 0.28f, elapsed / 2f), 1f,
-                        Mathf.InverseLerp(6.6f, duration, elapsed));
-                    float rise = Mathf.Sin(gather * Mathf.PI) * 0.65f;
-                    Vector3 lift = Vector3.up * rise;
-                    redView.transform.position = Vector3.Lerp(redStart, center, gather) + lift;
-                    blueView.transform.position = Vector3.Lerp(blueStart, center, gather) + lift;
-                    float fade = Mathf.InverseLerp(6.6f, 4.5f, elapsed);
-                    Tint(redSprites, redColors, darkness, preview.BlueSurvives ? fade : 1f);
-                    Tint(blueSprites, blueColors, darkness, preview.BlueSurvives ? 1f : fade);
-                    if (!flashed && elapsed >= 4.5f)
-                    {
-                        flashed = true;
-                        SpawnFx(_fxMagic, center);
-                    }
-                    yield return null;
-                }
-                if (_familiar != redView || _blueCollarAlly?.View != blueView || !redView || !blueView) yield break;
-                ApplyFamiliarFusion(preview, redView, blueView);
-            }
-            finally
-            {
-                Tint(redSprites, redColors, 1f, 1f);
-                Tint(blueSprites, blueColors, 1f, 1f);
-                if (redView) redView.transform.position = redStart;
-                if (blueView) blueView.transform.position = blueStart;
-                if (musicCue == _playingMusicCue && !_levelUpMusicActive) SetAreaMusicPaused(false);
-                _fusionPlaying = false;
-            }
-            TryStartFloorCollapse();
-
-            static void Tint(SpriteRenderer[] sprites, Color[] colors, float brightness, float alpha)
-            {
-                for (int i = 0; i < sprites.Length; i++)
-                    if (sprites[i]) sprites[i].color = colors[i] * new Color(brightness, brightness, brightness, alpha);
-            }
-        }
-
         private void ApplyFamiliarFusion(FusionPreview preview, GameObject redView, GameObject blueView)
         {
             var winner = preview.BlueSurvives ? preview.Blue : preview.Red;
@@ -354,6 +276,7 @@ namespace AzureDreamsReimagined
             if (_familiarOrders.TryGetValue(winner, out var orders)) orders.Target = null;
             // Keep the living record so status timers and order references remain valid.
             winner.Flags14 = (winner.Flags14 & ~(LevaFusionProtection | 7)) | (preview.Result.Flags14 & 7);
+            donor.Flags14 &= ~LevaFusionProtection;
             winner.Flags1C = (winner.Flags1C & ~7) | (preview.Result.Flags1C & 7);
             ApplyFusionTalents(winner, preview.Result.StatusFlags);
             winner.MpRaw = preview.Result.MpRaw;

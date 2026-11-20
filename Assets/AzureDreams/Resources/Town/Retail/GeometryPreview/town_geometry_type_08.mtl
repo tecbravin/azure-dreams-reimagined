@@ -1,0 +1,126 @@
+# Textures decoded from the full Town VRAM snapshot.
+newmtl page_000a_clut_7582
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000a_clut_7582.png
+
+newmtl page_000d_clut_7580
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7580.png
+
+newmtl page_000d_clut_7581
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7581.png
+
+newmtl page_000d_clut_7582
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7582.png
+
+newmtl page_0015_clut_7140
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0015_clut_7140.png
+
+newmtl page_0015_clut_71ce
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0015_clut_71ce.png
+
+newmtl page_0015_clut_720b
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0015_clut_720b.png
+
+newmtl page_0016_clut_718b
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_718b.png
+
+newmtl page_0016_clut_724e
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_724e.png
+
+newmtl page_0016_clut_7287
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7287.png
+
+newmtl page_0016_clut_728d
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_728d.png
+
+newmtl page_0016_clut_72c0
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c0.png
+
+newmtl page_0016_clut_72c1
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c1.png
+
+newmtl page_0016_clut_72c2
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c2.png
+
+newmtl page_0016_clut_72c3
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c3.png
+
+newmtl page_0016_clut_72c4
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c4.png
+
+newmtl page_0016_clut_72c5
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c5.png
+
+newmtl page_0016_clut_72c6
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_72c6.png
+
+newmtl page_0095_clut_7000
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7000.png
+
+newmtl page_0095_clut_7080
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7080.png
+
+newmtl page_0095_clut_7100
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7100.png

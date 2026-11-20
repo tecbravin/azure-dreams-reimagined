@@ -118,12 +118,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5151358256163527516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90e4b97d40d4898aafabb33daee6634, type: 3}
+  m_Script: {fileID: 11500000, guid: b41398141b3e54e4a27ff211aa4131c9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  _sheet: {fileID: 2800000, guid: 980f372032505334a90856103e318e0a, type: 3}
-  _material: {fileID: 0}
-  _pixelsPerUnit: 131
-  _parts:
-  - rectangle: {x: 0, y: 0, width: 112, height: 128}
-    offset: {x: 0, y: 0}
+  m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.RetailTownResidentSpriteView
+  _atlas: {fileID: 2800000, guid: b29cb89a9eab53ac949c5871395f17e6, type: 3}
+  _animationData: {fileID: 4900000, guid: 4d4618eeaf2250daa5968efd466d9930, type: 3}
+  _pixelsPerUnit: 26.666666

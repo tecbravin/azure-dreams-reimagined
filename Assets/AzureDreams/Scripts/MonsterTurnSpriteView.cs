@@ -78,13 +78,19 @@ namespace AzureDreamsReimagined
         private void Awake()
         {
             int communitySpecies = _indexedSpecies != 0 ? _indexedSpecies : SpeciesFromName(transform.root.name);
-            // Cyclone has a captured retail sheet whose layout and artwork are
-            // authoritative. The community dump for it is incomplete, so never
-            // replace that sheet with the generic fallback atlas.
-            bool keepRetailCycloneAtlas = communitySpecies == 29 && _atlas;
+            if (communitySpecies == 22 && AssetMode.Load<Texture2D>("Tower/TrollUnarmedActions") is { } unarmed)
+            {
+                UseEquipmentAtlas(unarmed);
+                return;
+            }
+            // Cyclone and Noise have captured sheets whose layout and artwork are
+            // authoritative. The community dumps for them are incomplete (Cyclone's
+            // body only; Noise drops its flute in most walk/attack cels), so never
+            // replace those sheets with the generic fallback atlas.
+            bool keepRetailCycloneAtlas = KeepsAuthoredAtlas(communitySpecies) && _atlas;
             if (communitySpecies > 0 && !keepRetailCycloneAtlas)
             {
-                var communityAtlas = Resources.Load<Texture2D>($"Monsters/Community/monster_{communitySpecies:x2}");
+                var communityAtlas = AssetMode.Load<Texture2D>($"Monsters/Community/monster_{communitySpecies:x2}");
                 if (communityAtlas)
                 {
                     _atlas = communityAtlas;
@@ -100,6 +106,10 @@ namespace AzureDreamsReimagined
             position.y = -0.55f;
             transform.localPosition = position;
         }
+
+        private const int CycloneSpecies = 29;
+        private const int NoiseSpecies = 23;
+        private static bool KeepsAuthoredAtlas(int species) => species is CycloneSpecies or NoiseSpecies;
 
         private static int SpeciesFromName(string name)
         {
@@ -140,14 +150,45 @@ namespace AzureDreamsReimagined
 
         internal void SetActionAtlas(Texture2D atlas)
         {
+            if (atlas && atlas.name.StartsWith("Troll", StringComparison.Ordinal))
+            { UseEquipmentAtlas(atlas); return; }
             if (!_usingCommunityAtlas && _atlas && atlas.width == _atlas.width && atlas.height == _atlas.height) _atlas = atlas;
+        }
+
+        internal void UseEquipmentAtlas(Texture2D atlas)
+        {
+            if (!atlas || atlas.height != 5 * 64 || atlas.width != 16 * 64) return;
+            StopAllCoroutines();
+            ClearCommunityFrames();
+            _communitySourceActions.Clear();
+            _communityLoadStarted = true;
+            _usingCommunityAtlas = false;
+            _indexedSpecies = 0;
+            _atlas = atlas;
+            _columns = 16;
+            _renderer = GetComponent<SpriteRenderer>();
+            BuildFrames(atlas);
+        }
+
+        internal void UseRetailAtlas(int species, Texture2D atlas)
+        {
+            if (!atlas || atlas.width != 20 * IndexedCellSize || atlas.height != Rows * IndexedCellSize) return;
+            StopAllCoroutines();
+            ClearCommunityFrames();
+            _communitySourceActions.Clear();
+            _usingCommunityAtlas = false;
+            _atlas = atlas;
+            _indexedSpecies = species;
+            _columns = atlas.width / IndexedCellSize;
+            _renderer = GetComponent<SpriteRenderer>();
+            SetPalette(species, MonsterPaletteVariant.Enemy);
         }
 
         internal void UseCommunityAtlas(int species, Texture2D atlas)
         {
             // Do not overwrite Cyclone's extracted retail action atlas. It is
             // deliberately separate from the partial community frame export.
-            if (species == 29 && _atlas && _atlas.width == 16 * CellSize && _atlas.height == Rows * CellSize)
+            if (KeepsAuthoredAtlas(species) && _atlas && _atlas.width == 16 * CellSize && _atlas.height == Rows * CellSize)
             {
                 _indexedSpecies = 0;
                 _usingCommunityAtlas = false;
@@ -338,6 +379,17 @@ namespace AzureDreamsReimagined
 
         internal void PresentAction(float progress) => _progress = progress;
 
+        internal Vector2 Facing => _direction;
+        internal int DefeatSpecies
+        {
+            get
+            {
+                if (_indexedSpecies != 0) return _indexedSpecies;
+                int species = transform.parent ? SpeciesFromName(transform.parent.name) : 0;
+                return species != 0 ? species : SpeciesFromName(name);
+            }
+        }
+
         /// <summary>Plays the extracted defeat sequence before this view is retired.</summary>
         internal float BeginDefeat()
         {
@@ -420,12 +472,22 @@ namespace AzureDreamsReimagined
                         : AttackStart + Mathf.Clamp((int)(_progress * 5f), 0, 4);
                 else if (!hit && _walking)
                     column = WalkStart + Mathf.Clamp((int)(_walkProgress * 5f), 0, 4);
+                if (CycloneAttacking)
+                {
+                    // Retail Cyclone attack (advance_backward_forward_motion): it backs up, then
+                    // dashes forward spinning; show the whirl by turning through all facings.
+                    int spin = (Mathf.RoundToInt(angle / 45f) + Mathf.FloorToInt(_progress * 16f)) & 7;
+                    row = Mathf.Abs(4 - spin);
+                    _renderer.flipX = spin is >= 1 and <= 3;
+                }
                 _renderer.sprite = _frames[row * _columns + column];
             }
+            PresentCycloneWhirl();
 
-            if (_attackLunge > 0f || UsesRetailLayout)
+            if (_attackLunge > 0f || UsesRetailLayout || IsCyclone)
             {
                 float distance = hit || _sleeping || _casting || _progress >= 1f ? 0f : _attackLunge * Mathf.Sin(_progress * Mathf.PI);
+                if (CycloneAttacking) distance = CycloneDashOffset(_progress);
                 Vector3 worldOffset = new Vector3(_direction.x, 0f, _direction.y).normalized * distance;
                 // Some retail directions hold one pose. Keep the body alive during those holds.
                 if (UsesRetailLayout)
@@ -438,6 +500,84 @@ namespace AzureDreamsReimagined
                 Vector3 localOffset = transform.parent.InverseTransformVector(worldOffset);
                 transform.localPosition += localOffset - _previousLunge;
                 _previousLunge = localOffset;
+            }
+        }
+
+        internal bool CycloneView => IsCyclone;
+        private int _viewSpecies = -1;
+        private bool IsCyclone
+        {
+            get
+            {
+                if (_viewSpecies < 0) _viewSpecies = DefeatSpecies;
+                return !_usingCommunityAtlas && _viewSpecies == CycloneSpecies;
+            }
+        }
+        private bool CycloneAttacking => IsCyclone && !_casting && !_sleeping && !_defeated && _progress < 1f &&
+            !(_locomotion && _locomotion.HitProgress < 1f);
+
+        // Phase 0/1 back up for six ticks; the dash then covers twice that distance and returns.
+        private static float CycloneDashOffset(float progress)
+        {
+            if (progress < 0.3f) return -0.18f * (progress / 0.3f);
+            float dash = (progress - 0.3f) / 0.7f;
+            return Mathf.Lerp(-0.18f, 0.42f, Mathf.Sin(Mathf.Min(1f, dash * 1.6f) * Mathf.PI * 0.5f)) * (1f - dash * dash);
+        }
+
+        private SpriteRenderer[] _whirls;
+        private Sprite _whirlSprite;
+        private Sprite _whirlSource;
+
+        /// <summary>
+        /// The two wind effects create_directional_effect / create_offset_directional_effect spawn at the
+        /// dash (sprite entry 0x30): they ride the dash for six ticks and spin through eight palette rows
+        /// before vanishing at tick eight.  Drawn as translucent, rapidly turning copies of the body.
+        /// </summary>
+        private void PresentCycloneWhirl()
+        {
+            bool active = CycloneAttacking && _progress >= 0.3f;
+            if (!active)
+            {
+                if (_whirls != null) foreach (var whirl in _whirls) if (whirl) whirl.enabled = false;
+                return;
+            }
+            if (_whirls == null)
+            {
+                _whirls = new SpriteRenderer[2];
+                for (int i = 0; i < _whirls.Length; i++)
+                {
+                    var child = new GameObject("Cyclone whirl " + (i + 1));
+                    child.transform.SetParent(transform, false);
+                    _whirls[i] = child.AddComponent<SpriteRenderer>();
+                    _whirls[i].sharedMaterial = _renderer.sharedMaterial;
+                    _whirls[i].sortingOrder = _renderer.sortingOrder + 1;
+                }
+            }
+            var source = _renderer.sprite;
+            if (source && source != _whirlSource)
+            {
+                if (_whirlSprite) Destroy(_whirlSprite);
+                _whirlSource = source;
+                _whirlSprite = Sprite.Create(source.texture, source.rect, new Vector2(0.5f, 0.5f),
+                    source.pixelsPerUnit, 0, SpriteMeshType.FullRect);
+            }
+            float t = (_progress - 0.3f) / 0.7f;
+            float centre = source ? (0.5f - source.pivot.y / source.rect.height) * source.rect.height / source.pixelsPerUnit : 0.3f;
+            for (int i = 0; i < _whirls.Length; i++)
+            {
+                var whirl = _whirls[i];
+                whirl.enabled = true;
+                whirl.sprite = _whirlSprite;
+                whirl.flipX = _renderer.flipX;
+                // Eight palette steps of the retail effect: alternate pale wind and green tints.
+                int step = (Mathf.FloorToInt(t * 8f) + i * 3) & 7;
+                Color tint = step % 2 == 0 ? new Color(0.85f, 1f, 0.9f) : new Color(0.45f, 0.9f, 0.6f);
+                tint.a = (t < 0.75f ? 0.55f : 0.55f * (1f - (t - 0.75f) / 0.25f)) * (i == 0 ? 1f : 0.7f);
+                whirl.color = tint;
+                float scale = 1.05f + 0.25f * t + 0.12f * i;
+                whirl.transform.localScale = Vector3.one * scale;
+                whirl.transform.localPosition = new Vector3(0f, centre, -0.01f * (i + 1));
+                whirl.transform.localRotation = Quaternion.Euler(0f, 0f, (i == 0 ? -1f : 1f) * t * 1080f + i * 45f);
             }
         }
 
@@ -473,6 +613,7 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_whirlSprite) Destroy(_whirlSprite);
             ClearFrames();
             ClearCommunityFrames();
         }

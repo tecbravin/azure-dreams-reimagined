@@ -7,6 +7,9 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private enum TheaterAct { None, Dance, Comedy, Results }
+        private enum ComedyAnswer { Agree, TalkBack, Either }
+        private enum ComedyBeat { Curtain, FonLine, KohReply, Laugh, Scold, Bonk, Next, Bow, CurtainClose }
+
         private TheaterAct _theaterAct;
         private int _comedyLine, _comedyMistakes;
         private float _theaterStarted, _comedyNextAt;
@@ -20,27 +23,64 @@ namespace AzureDreamsReimagined
         private const string ComedyExitMusicCue = "ExitComedians.mp3";
         private bool _theaterOnStage;
         private bool _theaterAnswerReady, _comedyFinished;
-        // TOWN.BIN 0x4B7D8A–0x4B9238.
-        private static readonly (string En, string Pt, bool Agree)[] ComedyLines =
+
+        // Comedy staging state.
+        private ComedyBeat _comedyBeat;
+        private float _comedyBeatStarted, _comedyBeatLength;
+        private string _comedySpeaker, _comedyText;
+        private bool _comedySlap;
+        private Vector3 _comedyKohBase, _comedyFonBase, _comedyKohScale;
+        private Texture2D _spotlightTexture, _impactTexture;
+        private Vector3 _comedyImpactPoint;
+        private float _comedyImpactAt = -10f, _comedyLaughAt = -10f;
+        private bool _comedyAnswerWasTalkBack, _comedyAnswerTimedOut;
+
+        // TOWN.BIN 0x4B7D8A-0x4B9238 (show script).  × agrees, ○ talks back;
+        // a wrong agree runs 0x8001C129, a wrong talk-back 0x8001C1E5 and no
+        // answer 0x8001C29B (each ends in a bonk).  "Laugh" lines play scene
+        // selector 0x701 (audience laughter) after Koh's reply.
+        private static readonly (string En, string Pt, ComedyAnswer Answer,
+            string AgreeEn, string AgreePt, string TalkEn, string TalkPt, bool Laugh)[] ComedyLines =
         {
-            ("Hi everyone!\nWe’re Fon and Dodo! I’m Fon! And this is the Poet.", "Olá, pessoal!\nSomos Fon e Dodo! Eu sou Fon! E este é o Poeta.", false),
-            ("Yes! Well, as you can see, we’ve been given the opportunity to stand up here to entertain you! Does everyone here from the town of Monsbaiya know what a performer does?",
-                "Sim! Como podem ver, tivemos a oportunidade de subir aqui para divertir vocês! Todo mundo aqui em Monsbaiya sabe o que faz um artista?", true),
+            ("Hi everyone!\nWe’re Fon and Dodo! I’m Fon! And this is the Poet.",
+                "Olá, pessoal!\nSomos Fon e Dodo! Eu sou Fon! E este é o Poeta.", ComedyAnswer.TalkBack,
+                "[What is your name?\nAnd your blood type?]", "[Qual é o seu nome?\nE o seu tipo sanguíneo?]",
+                "[Hold on!  My name’s Dodo!]", "[Peraí! Meu nome é Dodo!]", true),
+            ("Yes! Well, as you can see, we’ve been given the opportunity to stand up here to entertain you!\nDoes everyone here from the town of Monsbaiya know what a performer does?",
+                "Sim! Como podem ver, tivemos a oportunidade de subir aqui para divertir vocês!\nTodo mundo aqui em Monsbaiya sabe o que faz um artista?", ComedyAnswer.Agree,
+                "[Well, do you know?]", "[E aí, vocês sabem?]", null, null, false),
             ("Ah, we’re the ones behind the meat counter, separating the sirloin from the bone; grinding, cutting, or stuffing sausages to the customer’s liking, at your local meat store.",
-                "Ah, somos quem fica atrás do balcão do açougue, desossando o contrafilé e moendo, cortando ou enchendo linguiças ao gosto do freguês.", false),
-            ("We’ve got the best pepperoni in town! Can I see a show of hands to see how many want pepperoni?",
-                "Temos o melhor pepperoni da cidade! Quem quer pepperoni? Levante a mão!", false),
-            ("Performer!? You mean...\nYou and I are people that perform!?", "Artista!? Quer dizer...\nQue eu e você fazemos apresentações!?", true),
-            ("Perform, right?\nIt’s a good smelling word for the things we do.", "Apresentar, certo?\nÉ uma palavra muito cheirosa para o que fazemos.", false),
-            ("Fur-Worm?\nThose are the hairy worms that, ah, eat strawberries right?", "Lagarta peluda?\nDaquelas que, ah, comem morangos, certo?", false),
-            ("Fur-worm dolls!  A tradition of Monsbaiya! Oh, by the way, a few years ago, on my way home from buying a hamburger for a dime, I saw a bunch of furry caterpillars hanging from a tree!",
-                "Bonecas de lagarta peluda! Uma tradição de Monsbaiya! Ah, a propósito, faz uns anos eu voltava para casa depois de comprar um hambúrguer por dez centavos e vi um monte de lagartas peludas penduradas numa árvore!", false),
-            ("Calm down. So, now do you understand what it is to be a performer?", "Calma. Então, agora você entendeu o que é ser artista?", false),
-            ("Yes, we’re performers! In particular, we’re stand up comedians, and we’re here to provide you with laughter.",
-                "Sim, somos artistas! Mais precisamente, somos comediantes e estamos aqui para fazer vocês rirem.", true),
-            ("!!\nDon’t laugh! You guys looked at us and laughed, didn’t you!", "!!\nNão riam! Vocês olharam para nós e riram, não foi!", false),
-            ("Don’t stop me!\nDoesn’t it bother you?\nThese guys are laughing at us!", "Não me segure!\nIsso não incomoda você?\nEstão rindo da gente!", false),
-            ("Fur-Worm?", "Lagarta peluda?", false)
+                "Ah, somos quem fica atrás do balcão do açougue, desossando o contrafilé e moendo, cortando ou enchendo linguiças ao gosto do freguês.", ComedyAnswer.TalkBack,
+                null, null, "[No, that would be a Butcher!]", "[Não, isso aí é açougueiro!]", true),
+            ("We’ve got the best pepperoni in town!\nCan I see a show of hands to see how many want pepperoni?",
+                "Temos o melhor pepperoni da cidade!\nQuem quer pepperoni? Levante a mão!", ComedyAnswer.TalkBack,
+                null, null, "[I’m telling ya!  That’s a Butcher!\nThe subject is Performer!  Performer!]",
+                "[Estou dizendo! Isso é açougueiro!\nO assunto é Artista! Artista!]", true),
+            ("Performer!?\nYou mean...\nYou and I are people that perform!?", "Artista!?\nQuer dizer...\nQue eu e você fazemos apresentações!?",
+                ComedyAnswer.Agree, "[That’s right!]", "[Isso mesmo!]", null, null, false),
+            ("Perform, right?\nIt’s a good smelling word for the things we do.", "Apresentar, certo?\nÉ uma palavra muito cheirosa para o que fazemos.",
+                ComedyAnswer.TalkBack, null, null,
+                "[Close but yet so way way off.  That’s Perfume!\nWe’re PERFORMERS, here to PER-FORM!]",
+                "[Quase, mas muito longe. Isso é Perfume!\nSomos ARTISTAS, aqui para nos APRE-SENTAR!]", true),
+            ("Fur-Worm?\nThose are the hairy worms that, ah, eat strawberries right?", "Lagarta peluda?\nDaquelas que, ah, comem morangos, certo?",
+                ComedyAnswer.TalkBack, null, null, "[What in the world are you\ntalking about?]", "[Do que é que você\nestá falando?]", true),
+            ("Fur-worm dolls!  A tradition of Monsbaiya!\nOh, by the way, a few years ago, on my way home from buying a hamburger for a dime, I saw a bunch of furry caterpillars hanging from a tree!",
+                "Bonecas de lagarta peluda! Uma tradição de Monsbaiya!\nAh, a propósito, faz uns anos eu voltava para casa depois de comprar um hambúrguer por dez centavos e vi um monte de lagartas peludas penduradas numa árvore!",
+                ComedyAnswer.TalkBack, null, null,
+                "[What are you talking about!  You’re going way off the topic!\nAnd a burger cost a dime a few years ago?  Exactly how long ago?]",
+                "[Do que você está falando! Está fugindo do assunto!\nE um hambúrguer custava dez centavos faz uns anos? Faz quanto tempo?]", true),
+            ("Calm down.\nSo, now do you understand what it is to be a performer?", "Calma.\nEntão, agora você entendeu o que é ser artista?",
+                ComedyAnswer.Either, "[Yes, but you’re the one\nconfusing the audience!]", "[Sim, mas é você quem está\nconfundindo a plateia!]",
+                "[!!  You’re the one\nconfusing the audience!]", "[!! É você quem está\nconfundindo a plateia!]", true),
+            ("Yes, we’re performers!\nIn particular, we’re stand up comedians, and we’re here to provide you with laughter.",
+                "Sim, somos artistas!\nMais precisamente, somos comediantes e estamos aqui para fazer vocês rirem.", ComedyAnswer.Agree,
+                "[That’s right!]", "[Isso mesmo!]", null, null, false),
+            ("!!\nDon’t laugh!\nYou guys looked at us and laughed, didn’t you!", "!!\nNão riam!\nVocês olharam para nós e riram, não foi!",
+                ComedyAnswer.TalkBack, null, null, "[Hey, hey, come on!  What’s\ngotten into you!?]", "[Ei, ei, calma aí! O que\ndeu em você!?]", true),
+            ("Don’t stop me!\nDoesn’t it bother you?\nThese guys are laughing at us!", "Não me segure!\nIsso não incomoda você?\nEstão rindo da gente!",
+                ComedyAnswer.Agree, "[That’s a good thing.\nAs comedians, to keep ’em laughing is the only way we’re going to survive!]",
+                "[Isso é bom.\nComo comediantes, fazer eles rirem é o único jeito de sobreviver!]", null, null, true),
+            ("Fur-Worm?", "Lagarta peluda?", ComedyAnswer.TalkBack, null, null, "[I give up!]", "[Eu desisto!]", true)
         };
 
         private bool TheaterService(NPCController npc)
@@ -142,9 +182,16 @@ namespace AzureDreamsReimagined
             performer.transform.position = _theaterStage;
             if (act == TheaterAct.Comedy)
             {
-                _player.transform.position = _theaterStage + new Vector3(-0.85f, TownActorFootOffset, 0f);
+                _comedyKohBase = _theaterStage + new Vector3(-0.85f, TownActorFootOffset, 0f);
+                _comedyFonBase = _theaterStage;
+                _comedyKohScale = _player.transform.localScale;
+                _player.transform.position = _comedyKohBase;
                 _townFacing = Vector2.down;
                 if (_kohSprite) _kohSprite.SetFacing(_townFacing);
+                CaptureComedyAudience();
+                SetComedyBeat(ComedyBeat.Curtain, 1.4f);
+                // Show start: scene selector 0x700 (applause) as the curtain opens.
+                PlayTheaterSound("Theater700");
             }
             UpdateCameraFollow(snap: true);
             _theaterStarted = Time.unscaledTime;
@@ -153,7 +200,87 @@ namespace AzureDreamsReimagined
             _theaterAnswerReady = false;
             _comedyFinished = false;
             _message = string.Empty;
-            PlayRetailSound(RetailSfx.Confirm);
+            if (act != TheaterAct.Comedy) PlayRetailSound(RetailSfx.Confirm);
+        }
+
+        private void PlayTheaterSound(string clipName, float gain = 0.75f)
+        {
+            if (!Application.isPlaying || _sfxVolume <= 0f) return;
+            var clip = AssetMode.Load<AudioClip>("Sfx/Retail/" + clipName);
+            if (clip) PlayRetailClip(clip, gain);
+        }
+
+        private readonly System.Collections.Generic.List<(Transform View, Vector3 Base)> _comedyAudience = new();
+
+        private void CaptureComedyAudience()
+        {
+            _comedyAudience.Clear();
+            foreach (var person in _townPeople)
+                if (person && person != _theaterPerformer && person.npcId != "vivian" && person.gameObject.activeInHierarchy)
+                    _comedyAudience.Add((person.transform, person.transform.position));
+        }
+
+        private void SetComedyBeat(ComedyBeat beat, float length, string speaker = null, string text = null)
+        {
+            _comedyBeat = beat;
+            _comedyBeatStarted = Time.unscaledTime;
+            _comedyBeatLength = length;
+            _comedySpeaker = speaker;
+            _comedyText = text;
+            _theaterAnswerReady = beat == ComedyBeat.FonLine;
+        }
+
+        private string FonName => _theaterPerformer && _theaterPerformer.TryGetComponent<CharacterStats>(out var stats) ? stats.displayName : "Fon";
+
+        private void StartComedyLine()
+        {
+            var line = ComedyLines[_comedyLine];
+            string text = T(line.En, line.Pt);
+            // Long lines get extra time to be read before the answer window closes.
+            SetComedyBeat(ComedyBeat.FonLine, 4f + text.Length * 0.035f, FonName, text);
+        }
+
+        private void AnswerComedyLine(bool answered, bool agree)
+        {
+            if (_comedyBeat != ComedyBeat.FonLine || _theaterAct != TheaterAct.Comedy) return;
+            var line = ComedyLines[_comedyLine];
+            _comedyAnswerTimedOut = !answered;
+            _comedyAnswerWasTalkBack = answered && !agree;
+            bool correct = answered && (line.Answer == ComedyAnswer.Either ||
+                                        (agree ? line.Answer == ComedyAnswer.Agree : line.Answer == ComedyAnswer.TalkBack));
+            if (correct)
+            {
+                string reply = agree ? T(line.AgreeEn, line.AgreePt) : T(line.TalkEn, line.TalkPt);
+                if (string.IsNullOrEmpty(agree ? line.AgreeEn : line.TalkEn))
+                {
+                    SetComedyBeat(line.Laugh ? ComedyBeat.Laugh : ComedyBeat.Next, line.Laugh ? 1.5f : 0.3f);
+                    if (line.Laugh) StartComedyLaugh();
+                    return;
+                }
+                _comedySlap = !agree;
+                SetComedyBeat(ComedyBeat.KohReply, 2.2f + reply.Length * 0.02f, HeroName, reply);
+                if (_comedySlap) PlayRetailSound(RetailSfx.WeaponSwing, 0.45f);
+                return;
+            }
+
+            _comedySlap = false;
+            if (!answered)
+            {
+                SetComedyBeat(ComedyBeat.Scold, 2f, FonName, _comedyLine == 0
+                    ? T("Hurry up and say something!\nYou’re name’s Dodo!", "Anda, diga alguma coisa!\nSeu nome é Dodo!")
+                    : T("Say something!", "Diga alguma coisa!"));
+                return;
+            }
+            string koh = agree
+                ? (_comedyLine == 0 ? T(line.AgreeEn, line.AgreePt) : T("[That’s right!]", "[Isso mesmo!]"))
+                : T("[You gotta be kidding!]", "[Só pode estar brincando!]");
+            SetComedyBeat(ComedyBeat.KohReply, 1.8f, HeroName, koh);
+        }
+
+        private void StartComedyLaugh()
+        {
+            _comedyLaughAt = Time.unscaledTime;
+            PlayTheaterSound("Theater701");
         }
 
         private bool HandleTheaterAct()
@@ -187,35 +314,154 @@ namespace AzureDreamsReimagined
 
             if (_theaterAct == TheaterAct.Results)
             {
+                AnimateComedyStage();
+                if (_comedyBeat == ComedyBeat.CurtainClose && Time.unscaledTime - _comedyBeatStarted < _comedyBeatLength) return true;
                 if (confirm || cancel) FinishComedyDialogue();
                 return true;
             }
-            if (!_theaterAnswerReady && Time.unscaledTime >= _comedyNextAt)
+
+            float beatTime = Time.unscaledTime - _comedyBeatStarted;
+            bool beatDone = beatTime >= _comedyBeatLength;
+            switch (_comedyBeat)
             {
-                if (_comedyFinished)
-                {
+                case ComedyBeat.Curtain:
+                    if (beatDone) StartComedyLine();
+                    break;
+                case ComedyBeat.FonLine:
+                    if (confirm || cancel) AnswerComedyLine(true, confirm);
+                    else if (beatDone) AnswerComedyLine(false, false);
+                    break;
+                case ComedyBeat.KohReply:
+                    if (_comedySlap && _comedyImpactAt < _comedyBeatStarted && beatTime >= 0.18f)
+                    {
+                        _comedyImpactAt = Time.unscaledTime;
+                        _comedyImpactPoint = _theaterPerformer.transform.position + Vector3.up * 0.9f;
+                        PlayRetailSound(RetailSfx.Hit);
+                    }
+                    if (!beatDone && !(confirm && beatTime > 0.4f)) break;
+                    if (IsCorrectReplyBeat())
+                    {
+                        var line = ComedyLines[_comedyLine];
+                        if (line.Laugh) { SetComedyBeat(ComedyBeat.Laugh, 1.5f); StartComedyLaugh(); }
+                        else SetComedyBeat(ComedyBeat.Next, 0.3f);
+                    }
+                    else
+                    {
+                        // 0x8001C129 / 0x8001C1E5: Fon scolds, then bonks.
+                        string scold = _comedyLine == 0 && !_comedyAnswerWasTalkBack
+                            ? T("No way!  Your name is Dodo!", "Nada disso! Seu nome é Dodo!")
+                            : _comedyAnswerWasTalkBack
+                                ? T("This is not where you talk\nbackkkkk!", "Aqui não é hora de\nretrucaaaaar!")
+                                : T("What are you agreeing for!\nTalk back, why don’t you!?", "Por que está concordando!\nRetruque, ora essa!?");
+                        SetComedyBeat(ComedyBeat.Scold, 2f, FonName, scold);
+                    }
+                    break;
+                case ComedyBeat.Scold:
+                    if (!beatDone && !(confirm && beatTime > 0.4f)) break;
+                    SetComedyBeat(ComedyBeat.Bonk, 1f, FonName, _comedyText);
+                    PlayRetailSound(RetailSfx.WeaponSwing, 0.6f);
+                    break;
+                case ComedyBeat.Bonk:
+                    if (_comedyImpactAt < _comedyBeatStarted && beatTime >= 0.3f)
+                    {
+                        _comedyImpactAt = Time.unscaledTime;
+                        _comedyImpactPoint = _player.transform.position + Vector3.up * 0.75f;
+                        PlayRetailSound(RetailSfx.Punch);
+                        _comedyMistakes++;
+                    }
+                    if (beatDone) SetComedyBeat(ComedyBeat.Next, 0.25f);
+                    break;
+                case ComedyBeat.Laugh:
+                    if (beatDone) SetComedyBeat(ComedyBeat.Next, 0.2f);
+                    break;
+                case ComedyBeat.Next:
+                    if (!beatDone) break;
+                    _comedyLine++;
+                    if (_comedyMistakes >= 3)
+                    {
+                        // Three bonks: Koh faints and the curtain falls.
+                        _comedyFinished = true;
+                        PlayTheaterSound("Theater702", 0.6f);
+                        _theaterAct = TheaterAct.Results;
+                        SetComedyBeat(ComedyBeat.CurtainClose, 1.6f);
+                    }
+                    else if (_comedyLine >= ComedyLines.Length)
+                    {
+                        SetComedyBeat(ComedyBeat.Bow, 3f, FonName, T("Thank you very much, we love\nyou!", "Muito obrigado, adoramos\nvocês!"));
+                        PlayTheaterSound("Theater700");
+                        StartComedyLaugh();
+                        PlayAreaMusic(ComedyExitMusicCue, loop: false);
+                    }
+                    else StartComedyLine();
+                    break;
+                case ComedyBeat.Bow:
+                    if (!beatDone) break;
+                    _comedyFinished = true;
                     _theaterAct = TheaterAct.Results;
-                    PlayAreaMusic(ComedyExitMusicCue, loop: false);
-                    return true;
-                }
-                _theaterAnswerReady = true;
-                _comedyNextAt = Time.unscaledTime + 5f;
+                    SetComedyBeat(ComedyBeat.CurtainClose, 1.6f, FonName, _comedyText);
+                    break;
             }
-            if (_theaterAnswerReady && (confirm || cancel || Time.unscaledTime >= _comedyNextAt))
-                ScoreComedyLine(confirm || cancel, confirm);
+            AnimateComedyStage();
             return true;
         }
 
-        private void ScoreComedyLine(bool answered, bool agree)
+        private bool IsCorrectReplyBeat()
         {
-            if (!_theaterAnswerReady || _theaterAct != TheaterAct.Comedy) return;
-            bool correct = answered && agree == ComedyLines[_comedyLine].Agree;
-            if (!correct) _comedyMistakes++;
-            PlayRetailSound(correct ? RetailSfx.Confirm : RetailSfx.Hit);
-            _comedyLine++;
-            _comedyFinished = _comedyMistakes >= 3 || _comedyLine == ComedyLines.Length;
-            _theaterAnswerReady = false;
-            _comedyNextAt = Time.unscaledTime + 0.55f;
+            if (_comedyAnswerTimedOut) return false;
+            var line = ComedyLines[_comedyLine];
+            return line.Answer == ComedyAnswer.Either ||
+                   (_comedyAnswerWasTalkBack ? line.Answer == ComedyAnswer.TalkBack : line.Answer == ComedyAnswer.Agree);
+        }
+
+        /// <summary>Stage movement: Fon bobs while talking, Koh's talk-back slap, Fon's bonk, the audience laughing.</summary>
+        private void AnimateComedyStage()
+        {
+            if (!_player || !_theaterPerformer) return;
+            float t = Time.unscaledTime - _comedyBeatStarted;
+            Vector3 koh = _comedyKohBase, fon = _comedyFonBase;
+            Vector3 kohScale = _comedyKohScale;
+            Vector3 towardFon = (_comedyFonBase - _comedyKohBase); towardFon.y = 0f; towardFon.Normalize();
+            switch (_comedyBeat)
+            {
+                case ComedyBeat.FonLine:
+                case ComedyBeat.Scold:
+                    fon += Vector3.up * Mathf.Abs(Mathf.Sin(t * 9f)) * 0.06f;
+                    break;
+                case ComedyBeat.KohReply when _comedySlap:
+                {
+                    float lunge = t < 0.18f ? t / 0.18f : Mathf.Clamp01(1f - (t - 0.18f) / 0.25f);
+                    koh += towardFon * 0.42f * lunge + Vector3.up * Mathf.Sin(Mathf.Clamp01(t / 0.43f) * Mathf.PI) * 0.12f;
+                    if (t >= 0.18f && t < 0.4f) fon -= towardFon * 0.12f * (1f - (t - 0.18f) / 0.22f);
+                    break;
+                }
+                case ComedyBeat.Bonk:
+                {
+                    float swing = t < 0.3f ? t / 0.3f : Mathf.Clamp01(1f - (t - 0.3f) / 0.35f);
+                    fon -= towardFon * 0.45f * swing;
+                    fon += Vector3.up * Mathf.Sin(Mathf.Clamp01(t / 0.65f) * Mathf.PI) * 0.25f;
+                    if (t >= 0.3f)
+                    {
+                        float squash = Mathf.Clamp01(1f - (t - 0.3f) / 0.5f);
+                        kohScale = new Vector3(kohScale.x * (1f + 0.18f * squash), kohScale.y * (1f - 0.28f * squash), kohScale.z);
+                    }
+                    break;
+                }
+                case ComedyBeat.Bow:
+                    fon += Vector3.up * Mathf.Abs(Mathf.Sin(t * 4f)) * 0.08f;
+                    koh += Vector3.up * Mathf.Abs(Mathf.Sin(t * 4f + 1f)) * 0.08f;
+                    break;
+                case ComedyBeat.CurtainClose when _comedyMistakes >= 3:
+                    // Koh faints on the third bonk.
+                    kohScale = new Vector3(kohScale.x * 1.25f, kohScale.y * 0.55f, kohScale.z);
+                    break;
+            }
+            _player.transform.position = koh;
+            _player.transform.localScale = kohScale;
+            _theaterPerformer.transform.position = fon;
+
+            float laugh = Time.unscaledTime - _comedyLaughAt;
+            foreach (var (view, basePoint) in _comedyAudience)
+                if (view) view.position = basePoint + Vector3.up * (laugh < 1.6f ? Mathf.Abs(Mathf.Sin(laugh * 14f + basePoint.x)) * 0.09f : 0f);
         }
 
         private void FinishComedyDialogue()
@@ -273,10 +519,15 @@ namespace AzureDreamsReimagined
             }
             if (_theaterOnStage && _player)
             {
+                if (_theaterAct is TheaterAct.Comedy or TheaterAct.Results && _comedyKohScale != Vector3.zero)
+                    _player.transform.localScale = _comedyKohScale;
                 _player.transform.position = _theaterPlayerHome;
                 _townFacing = _theaterPlayerFacing;
                 if (_kohSprite) _kohSprite.SetFacing(_townFacing);
             }
+            foreach (var (view, basePoint) in _comedyAudience)
+                if (view) view.position = basePoint;
+            _comedyAudience.Clear();
             _theaterOnStage = false;
             _afterTheaterDance = null;
             if (_playingMusicCue is VivianDanceMusicCue or ComedyMusicCue or ComedyExitMusicCue)
@@ -286,7 +537,130 @@ namespace AzureDreamsReimagined
         }
 
         private Vector3 FrameTheaterCamera(Vector3 point) => _theaterPerformer && _theaterAct != TheaterAct.None
-            ? _theaterPerformer.transform.position : point;
+            ? (_theaterAct == TheaterAct.Dance ? _theaterPerformer.transform.position : Vector3.Lerp(_comedyKohBase, _comedyFonBase, 0.5f))
+            : point;
+
+        // ------------------------------------------------------------ drawing
+
+        private Texture2D SpotlightTexture()
+        {
+            if (_spotlightTexture) return _spotlightTexture;
+            const int size = 128;
+            _spotlightTexture = new Texture2D(size, size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, name = "Stage spotlight" };
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = (x + 0.5f) / size * 2f - 1f, dy = (y + 0.5f) / size * 2f - 1f;
+                    float r = Mathf.Sqrt(dx * dx + dy * dy);
+                    byte alpha = (byte)(Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.55f, 1f, r)) * 200f);
+                    pixels[y * size + x] = new Color32(0, 0, 8, alpha);
+                }
+            _spotlightTexture.SetPixels32(pixels);
+            _spotlightTexture.Apply(false);
+            return _spotlightTexture;
+        }
+
+        private Texture2D ImpactTexture()
+        {
+            if (_impactTexture) return _impactTexture;
+            const int size = 64;
+            _impactTexture = new Texture2D(size, size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, name = "Comedy impact star" };
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = (x + 0.5f) / size * 2f - 1f, dy = (y + 0.5f) / size * 2f - 1f;
+                    float angle = Mathf.Atan2(dy, dx), r = Mathf.Sqrt(dx * dx + dy * dy);
+                    float edge = 0.55f + 0.42f * Mathf.Abs(Mathf.Cos(angle * 4f));
+                    Color32 c = r > edge ? new Color32(0, 0, 0, 0)
+                        : r > edge - 0.14f ? new Color32(230, 90, 20, 255)
+                        : new Color32(255, 236, 90, 255);
+                    pixels[y * size + x] = c;
+                }
+            _impactTexture.SetPixels32(pixels);
+            _impactTexture.Apply(false);
+            return _impactTexture;
+        }
+
+        private Vector2 TheaterGuiPoint(Vector3 world, float width, float height)
+        {
+            var camera = _gameCamera ? _gameCamera : Camera.main;
+            if (!camera) return new Vector2(width * 0.5f, height * 0.45f);
+            Vector3 screen = camera.WorldToScreenPoint(world);
+            return new Vector2(screen.x * width / Screen.width, (Screen.height - screen.y) * height / Screen.height);
+        }
+
+        private void DrawComedyStage(float width, float height)
+        {
+            if (Event.current.type != EventType.Repaint) return;
+            // Spotlight on the duo; the house lights stay down during the act.
+            Vector2 center = TheaterGuiPoint(Vector3.Lerp(_comedyKohBase, _comedyFonBase, 0.5f) + Vector3.up * 0.6f, width, height);
+            float radius = Mathf.Min(width, height) * 0.36f;
+            var hole = new Rect(center.x - radius * 1.25f, center.y - radius, radius * 2.5f, radius * 2f);
+            var dark = new Color(0f, 0f, 0.03f, 200f / 255f);
+            DrawHudFill(new Rect(0f, 0f, width, Mathf.Max(0f, hole.y)), dark);
+            DrawHudFill(new Rect(0f, hole.yMax, width, Mathf.Max(0f, height - hole.yMax)), dark);
+            DrawHudFill(new Rect(0f, hole.y, Mathf.Max(0f, hole.x), hole.height), dark);
+            DrawHudFill(new Rect(hole.xMax, hole.y, Mathf.Max(0f, width - hole.xMax), hole.height), dark);
+            GUI.DrawTexture(hole, SpotlightTexture(), ScaleMode.StretchToFill, true);
+
+            // Impact star for slaps and bonks.
+            float impact = Time.unscaledTime - _comedyImpactAt;
+            if (impact >= 0f && impact < 0.35f)
+            {
+                Vector2 p = TheaterGuiPoint(_comedyImpactPoint, width, height);
+                float s = Mathf.Lerp(26f, 58f, impact / 0.35f);
+                var previous = GUI.color;
+                GUI.color = new Color(1f, 1f, 1f, 1f - impact / 0.35f);
+                GUI.DrawTexture(new Rect(p.x - s, p.y - s, s * 2f, s * 2f), ImpactTexture(), ScaleMode.StretchToFill, true);
+                GUI.color = previous;
+            }
+            // Spinning stars over Koh after a bonk.
+            if (_comedyBeat is ComedyBeat.Bonk or ComedyBeat.Next && impact >= 0f && impact < 1.1f && _comedyImpactPoint.y > 0f &&
+                Vector3.Distance(_comedyImpactPoint, _player.transform.position) < 1.5f)
+            {
+                Vector2 head = TheaterGuiPoint(_player.transform.position + Vector3.up * 1.05f, width, height);
+                for (int i = 0; i < 3; i++)
+                {
+                    float a = impact * 9f + i * Mathf.PI * 2f / 3f;
+                    var star = new Rect(head.x + Mathf.Cos(a) * 26f - 7f, head.y + Mathf.Sin(a) * 8f - 7f, 14f, 14f);
+                    GUI.DrawTexture(star, ImpactTexture(), ScaleMode.StretchToFill, true);
+                }
+            }
+            // Audience laughter.
+            float laugh = Time.unscaledTime - _comedyLaughAt;
+            if (laugh >= 0f && laugh < 1.6f)
+                foreach (var (view, _) in _comedyAudience)
+                {
+                    if (!view) continue;
+                    Vector2 p = TheaterGuiPoint(view.position + Vector3.up * (1.4f + laugh * 0.3f), width, height);
+                    var previous = GUI.color;
+                    GUI.color = new Color(1f, 0.95f, 0.6f, 1f - laugh / 1.6f);
+                    GUI.Label(new Rect(p.x - 30f, p.y - 12f, 60f, 24f), "HA HA", _bodyStyle);
+                    GUI.color = previous;
+                }
+
+            // Curtains open at the start and close at the end of the act.
+            float open = _comedyBeat switch
+            {
+                ComedyBeat.Curtain => Mathf.Clamp01((Time.unscaledTime - _comedyBeatStarted) / _comedyBeatLength),
+                ComedyBeat.CurtainClose => 1f - Mathf.Clamp01((Time.unscaledTime - _comedyBeatStarted) / _comedyBeatLength),
+                _ => 1f
+            };
+            if (open < 1f)
+            {
+                float half = width * 0.5f * (1f - open);
+                for (int side = 0; side < 2; side++)
+                {
+                    float x0 = side == 0 ? 0f : width - half;
+                    DrawHudFill(new Rect(x0, 0f, half, height), new Color(0.55f, 0.04f, 0.08f, 1f));
+                    for (float fold = 18f; fold < half; fold += 36f)
+                        DrawHudFill(new Rect(side == 0 ? x0 + fold : x0 + half - fold - 8f, 0f, 8f, height), new Color(0.38f, 0.02f, 0.05f, 1f));
+                }
+                DrawHudFill(new Rect(0f, 0f, width, 26f), new Color(0.75f, 0.55f, 0.15f, 1f));
+            }
+        }
 
         private bool DrawTheaterAct(float width, float height)
         {
@@ -307,26 +681,42 @@ namespace AzureDreamsReimagined
                 }
                 return true;
             }
-            var box = new Rect(width * 0.13f, height - 124f, width * 0.74f, 108f);
-            DrawDialogueFrame(box, dialoguePole: true);
-            string text = _theaterAct == TheaterAct.Results
-                ? (_comedyMistakes < 3 ? T("Thank you very much, we love you!", "Muito obrigado, adoramos vocês!") : T("Three bonks! The show is over.", "Três pancadas! Fim do espetáculo."))
-                : _theaterAnswerReady ? T(ComedyLines[_comedyLine].En, ComedyLines[_comedyLine].Pt)
-                    : T($"Fon and Dodo · Bonks: {_comedyMistakes}/3", $"Fon e Dodo · Pancadas: {_comedyMistakes}/3");
-            DrawHudText(new Rect(box.x + 12f, box.y + 8f, box.width - 24f, 52f), text, _messageStyle, dialogue: true);
-            if (_theaterAnswerReady)
+
+            DrawComedyStage(width, height);
+            bool closing = _theaterAct == TheaterAct.Results && _comedyBeat == ComedyBeat.CurtainClose &&
+                           Time.unscaledTime - _comedyBeatStarted < _comedyBeatLength;
+            string speaker = _comedySpeaker;
+            string text = _comedyText;
+            if (_theaterAct == TheaterAct.Results && !closing)
             {
-                float timeLeft = Mathf.Clamp01((_comedyNextAt - Time.unscaledTime) / 5f);
+                speaker = FonName;
+                text = _comedyMistakes < 3 ? T("Thank you very much, we love you!", "Muito obrigado, adoramos vocês!")
+                    : T("Three bonks! The show is over.", "Três pancadas! Fim do espetáculo.");
+            }
+            var box = new Rect(width * 0.13f, height - 124f, width * 0.74f, 108f);
+            if (!string.IsNullOrEmpty(text))
+            {
+                DrawDialogueFrame(box, dialoguePole: true);
+                if (!string.IsNullOrEmpty(speaker))
+                    DrawHudText(new Rect(box.x + 12f, box.y + 4f, box.width - 24f, 20f), speaker, _bodyStyle, dialogue: true);
+                DrawHudText(new Rect(box.x + 12f, box.y + 24f, box.width - 24f, 52f), text, _messageStyle, dialogue: true);
+            }
+            DrawHudText(new Rect(width - 190f, 12f, 178f, 22f),
+                T($"Bonks: {_comedyMistakes}/3", $"Pancadas: {_comedyMistakes}/3"), _bodyStyle);
+            if (_theaterAnswerReady && _comedyBeat == ComedyBeat.FonLine)
+            {
+                float timeLeft = Mathf.Clamp01(1f - (Time.unscaledTime - _comedyBeatStarted) / _comedyBeatLength);
                 DrawHudFill(new Rect(box.x + 12f, box.yMax - 42f, (box.width - 24f) * timeLeft, 3f),
                     new Color(0.9f, 0.67f, 0.25f));
                 float button = (box.width - 32f) * 0.5f;
-                if (GUI.Button(new Rect(box.x + 12f, box.yMax - 34f, button, 25f), WithInteractHint("Agree", "Concordar")))
-                    ScoreComedyLine(true, true);
+                if (GUI.Button(new Rect(box.x + 12f, box.yMax - 34f, button, 25f), "× " + WithInteractHint("Agree", "Concordar")))
+                    AnswerComedyLine(true, true);
                 if (GUI.Button(new Rect(box.xMax - button - 12f, box.yMax - 34f, button, 25f),
-                    T("Talk back", "Retruque") + $" [{_cancel?.GetBindingDisplayString() ?? "Esc"}]"))
-                    ScoreComedyLine(true, false);
+                    "○ " + T("Talk back", "Retrucar") + $" [{_cancel?.GetBindingDisplayString() ?? "Esc"}]"))
+                    AnswerComedyLine(true, false);
             }
-            if (_theaterAct == TheaterAct.Results && GUI.Button(new Rect(box.xMax - 135f, box.yMax - 34f, 123f, 25f), T("Continue", "Continuar")))
+            if (_theaterAct == TheaterAct.Results && !closing &&
+                GUI.Button(new Rect(box.xMax - 135f, box.yMax - 34f, 123f, 25f), T("Continue", "Continuar")))
                 FinishComedyDialogue();
             return true;
         }

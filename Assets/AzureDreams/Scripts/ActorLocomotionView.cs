@@ -24,6 +24,7 @@ namespace AzureDreamsReimagined
         private SilverSpriteView _silverSprite;
         private TownCharacterSpriteView _townCharacterSprite;
         private TownHumanoidView _townHumanoid;
+        private RetailTownResidentSpriteView _retailTownSprite;
         private Vector3 _walkOffset, _hitDirection;
         private float _hitStartedAt = float.NegativeInfinity;
         internal const float HitDuration = 0.22f;
@@ -49,6 +50,8 @@ namespace AzureDreamsReimagined
         public bool IsMoving { get; private set; }
         public bool IsRunningNow { get; private set; }
 
+        public void UseRetailTownSprite(RetailTownResidentSpriteView view) => _retailTownSprite = view;
+
         private void Awake() => Initialize();
 
         private void Initialize()
@@ -62,6 +65,8 @@ namespace AzureDreamsReimagined
             _silverSprite = GetComponent<SilverSpriteView>();
             _townCharacterSprite = GetComponent<TownCharacterSpriteView>();
             _townHumanoid = GetComponent<TownHumanoidView>();
+            _retailTownSprite = GetComponent<RetailTownResidentSpriteView>();
+            if (_retailTownSprite) return;
             if (_townHumanoid) return;
             _animator = GetComponentInChildren<Animator>();
             if (_animator != null && _animator.runtimeAnimatorController != null)
@@ -132,6 +137,11 @@ namespace AzureDreamsReimagined
             IsMoving = moving;
             IsRunningNow = moving && running;
             direction.y = 0f;
+            if (_retailTownSprite)
+            {
+                _retailTownSprite.Present(direction, moving);
+                return;
+            }
             if (_townHumanoid)
             {
                 _townHumanoid.Present(direction, cycle, moving);

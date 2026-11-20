@@ -41,7 +41,10 @@ namespace AzureDreamsReimagined
             if (_portraitRequests.Count < 2 && !_portraitRequests.ContainsKey(path) &&
                 (!_portraitRetryAfter.TryGetValue(path, out float retry) || Time.unscaledTime >= retry))
             {
-                var request = UnityWebRequestTexture.GetTexture(StreamedMediaUrl(path), nonReadable: true);
+                // Classic has no original for redesigned-only images: show nothing instead of a broken request.
+                string resolved = AssetMode.ResolveMedia(path);
+                if (resolved == null) return null;
+                var request = UnityWebRequestTexture.GetTexture(StreamedMediaUrl(resolved), nonReadable: true);
                 request.timeout = 15;
                 _portraitRequests.Add(path, request);
                 StartCoroutine(LoadPortrait(path, request));
@@ -92,6 +95,78 @@ namespace AzureDreamsReimagined
             _portraitLru.Clear();
             _portraitRetryAfter.Clear();
             _streamedImageBytes = 0;
+        }
+
+        // Cache generico (sem LRU) para texturas/sprites grandes usados raramente - tela de titulo,
+        // prologo, icones de dialogo. Diferente de _streamedPortraits (que troca retrato a retrato e
+        // pode descartar o mais antigo a qualquer momento), essas poucas imagens ficam na memoria ate
+        // a cena/estilo mudar (ReleaseStreamedTextures), porque varias podem estar visiveis ao mesmo
+        // tempo (ex.: tia + avo no flashback da chuva) e descartar uma no meio da cena a faria sumir.
+        private readonly Dictionary<string, Texture2D> _streamedTextures = new();
+        private readonly HashSet<string> _streamedTextureRequests = new();
+        private readonly Dictionary<string, float> _streamedTextureRetryAfter = new();
+        private readonly Dictionary<string, Sprite> _streamedSprites = new();
+
+        private Texture2D StreamMediaTexture(string relativePath, FilterMode filterMode, TextureWrapMode wrapMode)
+        {
+            if (_streamedTextures.TryGetValue(relativePath, out var cached)) return cached;
+            if (_streamedTextureRequests.Contains(relativePath) ||
+                (_streamedTextureRetryAfter.TryGetValue(relativePath, out float retry) && Time.unscaledTime < retry))
+                return null;
+            // Classic pode nao ter um correspondente para um arquivo so-Reimagined: mostra nada em vez
+            // de pedir um caminho que nao existe.
+            // Callers pass the stem ("Title/Newborn"); the files on disk are PNGs.
+            string file = Path.HasExtension(relativePath) ? relativePath : relativePath + ".png";
+            string resolved = AssetMode.ResolveMedia(file);
+            if (resolved == null) return null;
+            _streamedTextureRequests.Add(relativePath);
+            StartCoroutine(LoadMediaTexture(relativePath, resolved, filterMode, wrapMode));
+            return null;
+        }
+
+        private IEnumerator LoadMediaTexture(string relativePath, string resolved, FilterMode filterMode, TextureWrapMode wrapMode)
+        {
+            var request = UnityWebRequestTexture.GetTexture(StreamedMediaUrl(resolved), nonReadable: true);
+            request.timeout = 15;
+            yield return request.SendWebRequest();
+            _streamedTextureRequests.Remove(relativePath);
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                var texture = DownloadHandlerTexture.GetContent(request);
+                texture.filterMode = filterMode;
+                texture.wrapMode = wrapMode;
+                _streamedTextures[relativePath] = texture;
+                _streamedTextureRetryAfter.Remove(relativePath);
+            }
+            else
+            {
+                _streamedTextureRetryAfter[relativePath] = Time.unscaledTime + 20f;
+                Debug.LogWarning($"Media texture '{relativePath}' could not load: {request.error}", this);
+            }
+            request.Dispose();
+        }
+
+        // pixelsPerUnit deve bater com o spritePixelsToUnits que o PNG original tinha configurado no
+        // importer (conferido em cada .meta antes de mover o arquivo), senao o sprite aparece com a
+        // escala errada em cena. pivot sempre 0.5/0.5 para esses arquivos (idem ao original).
+        private Sprite StreamMediaSprite(string relativePath, float pixelsPerUnit, FilterMode filterMode = FilterMode.Point)
+        {
+            if (_streamedSprites.TryGetValue(relativePath, out var cachedSprite)) return cachedSprite;
+            var texture = StreamMediaTexture(relativePath, filterMode, TextureWrapMode.Clamp);
+            if (!texture) return null;
+            var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                Vector2.one * 0.5f, pixelsPerUnit, 0, SpriteMeshType.FullRect);
+            _streamedSprites[relativePath] = sprite;
+            return sprite;
+        }
+
+        private void ReleaseStreamedTextures()
+        {
+            foreach (var texture in _streamedTextures.Values) if (texture) Destroy(texture);
+            _streamedTextures.Clear();
+            _streamedSprites.Clear();
+            _streamedTextureRequests.Clear();
+            _streamedTextureRetryAfter.Clear();
         }
     }
 }

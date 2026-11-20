@@ -193,7 +193,10 @@ namespace AzureDreamsReimagined
             _prologueSkipNeedsRelease = false;
             _prologueHold = 0f;
             _prologueBlack = 0f;
-            if (!_prologueAngel) _prologueAngel = Resources.Load<Texture2D>("Title/AngelOpeningFrames");
+            // Textura grande (sprite sheet da animacao de voo) agora vem de StreamingAssets - pode nao
+            // estar pronta neste frame; o timer so e sincronizado quando ela chega de verdade, em
+            // DrawPrologueAngel (senao a animacao perderia os primeiros quadros do voo).
+            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Bilinear, TextureWrapMode.Repeat);
             _prologueAngelStarted = Time.unscaledTime;
             SetPrologue(Prologue.Angel);
             PlayAreaMusic(AngelMusicCue);
@@ -446,7 +449,9 @@ namespace AzureDreamsReimagined
 
         private void PlaceBirthSprite(string name, Vector3 position)
         {
-            var sprite = Resources.Load<Sprite>("Title/" + name);
+            // WreathResting e Newborn usam spritePixelsToUnits: 96 no importer original (conferido
+            // nos .meta antes de mover os arquivos) - precisa bater aqui ou a escala em cena fica errada.
+            var sprite = StreamMediaSprite("Title/" + name, 96f);
             if (!sprite) return;
             var pose = new GameObject(name);
             pose.transform.SetParent(_prologueCast.transform, false);
@@ -631,7 +636,8 @@ namespace AzureDreamsReimagined
         private void SetRainPose(ref SpriteRenderer actor, string name, string direction, Vector3 position,
             float height, bool flipX = false)
         {
-            var sprite = Resources.Load<Sprite>($"Title/RainCast/{name}{direction}");
+            // Todo o elenco de RainCast usa spritePixelsToUnits: 48 no importer original.
+            var sprite = StreamMediaSprite($"Title/RainCast/{name}{direction}", 48f);
             if (!sprite) return;
             if (!actor)
             {
@@ -783,20 +789,23 @@ namespace AzureDreamsReimagined
             SetPrologue(Prologue.Off);
         }
 
-        private void DrawJordaImpactStars(float height)
+        private void DrawJordaImpactStars(float width, float height)
         {
             if (!_jordaImpactPlaying || !_player || Event.current.type != EventType.Repaint) return;
-            if (!_jordaImpactStar) _jordaImpactStar = Resources.Load<Texture2D>("Title/JordaImpactStar");
-            var camera = Camera.main;
+            if (!_jordaImpactStar) _jordaImpactStar = StreamMediaTexture("Title/JordaImpactStar", FilterMode.Point, TextureWrapMode.Clamp);
+            var camera = _gameCamera ? _gameCamera : Camera.main;
             if (!_jordaImpactStar || !camera) return;
             Vector3 point = camera.WorldToScreenPoint(_player.transform.position + Vector3.up * 1.3f);
             if (point.z <= 0f) return;
+            // Prologue UI uses scaled coordinates, while the projection is in screen pixels.
+            float centerX = point.x * width / Screen.width;
+            float centerY = height - point.y * height / Screen.height;
             float angle = (Time.unscaledTime - _jordaImpactStarted) * 5f;
             for (int i = 0; i < 3; i++)
             {
                 float orbit = angle + i * Mathf.PI * 2f / 3f;
-                float x = point.x + Mathf.Cos(orbit) * 25f;
-                float y = height - point.y + Mathf.Sin(orbit) * 9f;
+                float x = centerX + Mathf.Cos(orbit) * 25f;
+                float y = centerY + Mathf.Sin(orbit) * 9f;
                 GUI.DrawTexture(new Rect(x - 9f, y - 9f, 18f, 18f), _jordaImpactStar);
             }
         }
@@ -818,7 +827,7 @@ namespace AzureDreamsReimagined
             if ((_prologue is Prologue.BirthFilm or Prologue.StormFilm or Prologue.TowerFilm or Prologue.TimeSkipFilm) &&
                 _prologueFilmTexture && Event.current.type == EventType.Repaint)
                 DrawPrologueFilm(screen, _prologueFilmTexture);
-            DrawJordaImpactStars(height);
+            DrawJordaImpactStars(width, height);
             if ((_prologue is Prologue.Rain or Prologue.ReturnInRain) && Event.current.type == EventType.Repaint)
             {
                 DrawHudFill(screen, new Color(0.04f, 0.06f, 0.13f, 0.47f));
@@ -977,8 +986,10 @@ namespace AzureDreamsReimagined
         private void DrawPrologueAngel(Rect screen)
         {
             if (Event.current.type != EventType.Repaint) return;
-            if (!_prologueAngel) _prologueAngel = Resources.Load<Texture2D>("Title/AngelOpeningFrames");
+            bool angelWasMissing = !_prologueAngel;
+            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Bilinear, TextureWrapMode.Repeat);
             if (!_prologueAngel) return;
+            if (angelWasMissing) _prologueAngelStarted = Time.unscaledTime; // reinicia o timer so quando a textura chega (streaming assincrono)
 
             const int frameCount = 10;
             const float flapFramesPerSecond = 12f;

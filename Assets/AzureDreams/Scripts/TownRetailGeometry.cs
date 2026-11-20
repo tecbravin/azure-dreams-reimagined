@@ -46,8 +46,8 @@ namespace AzureDreamsReimagined
 
         public static TownRetailGeometry LoadType0()
         {
-            var bytes = Resources.Load<TextAsset>("Town/Retail/town_geometry_type_0");
-            var metadata = Resources.Load<TextAsset>("Town/Retail/town_geometry_type_0_metadata");
+            var bytes = AssetMode.Load<TextAsset>("Town/Retail/town_geometry_type_0");
+            var metadata = AssetMode.Load<TextAsset>("Town/Retail/town_geometry_type_0_metadata");
             if (bytes == null || metadata == null)
                 throw new InvalidDataException("Town geometry payload or metadata is missing.");
             return new TownRetailGeometry(bytes.bytes, metadata.text);

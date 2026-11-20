@@ -13,45 +13,116 @@ namespace AzureDreamsReimagined
         private const int BarryRowsPerPage = 5;
         private const byte ShopMedicinalHerbSubtype = 15;
         private const int ShopMedicinalHerbPrice = 20;
+        private const int HushMedicinalHerbPrice = 15;
         private static readonly (byte Kind, byte Subtype, int Price) ShopMedicinalHerb =
-            (ItemKind.Herb, ShopMedicinalHerbSubtype, ShopMedicinalHerbPrice);
-        private enum BarryShopPage { Closed, Services, Buy, Sell, Farewell }
+            (ItemKind.Herb, ShopMedicinalHerbSubtype, HushMedicinalHerbPrice);
+        private enum BarryShopPage { Closed, Services, Buy, Sell, Farewell, Temper }
 
-        private static readonly (byte Kind, byte Subtype, int Price)[] BarryStock =
+        private const string BarryFloor10Stock = "blacksmith.stock.floor_10_unlocked";
+        private const string BarryFloor15Stock = "blacksmith.stock.floor_15_unlocked";
+        private const string BarryFloor20Stock = "blacksmith.stock.floor_20_unlocked";
+        private const string BarryFloor25Stock = "blacksmith.stock.floor_25_unlocked";
+        private const string BarryStockFlagsMigrated = "blacksmith.stock.flags_initialized";
+        private const string BarryFloor15StockMigrated = "blacksmith.stock.floor_15_initialized";
+        private static readonly (byte Kind, byte Subtype, int Price, int Floor)[] BarryStock =
         {
-            (ItemKind.Sword, RustySwordSubtype, 100),
-            (ItemKind.Sword, 3, 200),
-            (ItemKind.Wand, FireStaffSubtype, 300),
-            ShopMedicinalHerb
+            (ItemKind.Sword, RustySwordSubtype, 100, 0),
+            (ItemKind.Sword, 3, 200, 0),
+            (ItemKind.Wand, FireStaffSubtype, 300, 0),
+            (ItemKind.Herb, ShopMedicinalHerbSubtype, ShopMedicinalHerbPrice, 0),
+            (ItemKind.Wand, 1, 20, 0),       // Wooden Wand
+            (ItemKind.Shield, 1, 100, 0),    // Wood Shield
+            (ItemKind.Sword, 2, 100, 0),     // Copper Sword
+            (ItemKind.Wand, 7, 300, 10),     // Stream Wand
+            (ItemKind.Wand, 8, 300, 10),     // Gulf Wand (Gulfwind)
+            (ItemKind.Shield, 4, 200, 10),   // Copper Shield
+            (ItemKind.Sword, 14, 0, 10),     // Troll Hammer: twice resale (StockOffer)
+            (ItemKind.Sword, 13, 0, 15),     // Troll Sword: twice resale (StockOffer)
+            (ItemKind.Sword, 4, 300, 20),    // Steel Sword
+            (ItemKind.Shield, 6, 600, 20),   // Steel Shield
+            (ItemKind.Shield, 8, 1200, 25),  // Scorch Shield
+            (ItemKind.Shield, 9, 1200, 25),  // Ice Shield
+            (ItemKind.Shield, 10, 1200, 25), // Earth Shield
+            (ItemKind.Sword, 5, 800, 25),    // Fire Sword
+            (ItemKind.Sword, 7, 800, 25),    // Gulfwind Sword
+            (ItemKind.Sword, 6, 800, 25),    // Blizzard Sword
+            (ItemKind.Sword, 15, 0, 25)      // Bow Gun: twice resale (StockOffer)
         };
+        private readonly List<int> _barryStockRows = new();
+
+        private static void UnlockBarryStockForFloor(int floor)
+        {
+            bool changed = false;
+            foreach (var entry in new[] { (Floor: 10, Key: BarryFloor10Stock), (Floor: 15, Key: BarryFloor15Stock), (Floor: 20, Key: BarryFloor20Stock), (Floor: 25, Key: BarryFloor25Stock) })
+            {
+                if (floor < entry.Floor || TownSaveVariables.GetBool(entry.Key)) continue;
+                TownSaveVariables.SetBool(entry.Key, true);
+                changed = true;
+            }
+            if (changed) TownSaveVariables.Save();
+        }
+
+        private void ReadBarryStock()
+        {
+            if (!TownSaveVariables.GetBool(BarryStockFlagsMigrated) || !TownSaveVariables.GetBool(BarryFloor15StockMigrated))
+            {
+                UnlockBarryStockForFloor(TownSaveVariables.GetInt(TownReputation.HighestFloorKey));
+                TownSaveVariables.SetBool(BarryStockFlagsMigrated, true);
+                TownSaveVariables.SetBool(BarryFloor15StockMigrated, true);
+                TownSaveVariables.Save();
+            }
+            _barryStockRows.Clear();
+            for (int i = 0; i < BarryStock.Length; i++)
+            {
+                string flag = BarryStock[i].Floor switch { 10 => BarryFloor10Stock, 15 => BarryFloor15Stock, 20 => BarryFloor20Stock, 25 => BarryFloor25Stock, _ => null };
+                if (flag == null || TownSaveVariables.GetBool(flag)) _barryStockRows.Add(i);
+            }
+        }
 
         // Base resale values indexed by retail subtype. Zero denotes a weapon Barry will not buy.
-        private static readonly int[] BarrySwordValues = { 0, 1000, 50, 100, 150, 400, 400, 400, 800, 10000, 10000, 0, 0, 0, 0, 0, 50 };
+        private static readonly int[] BarrySwordValues = { 0, 1000, 50, 100, 150, 400, 400, 400, 800, 10000, 10000, 0, 0, 1000, 1000, 4000, 50 };
         private static readonly int[] BarryWandValues = { 0, 10, 5000, 1000, 100, 1000, 150, 150, 150, 500, 150 };
         private static readonly int[] BarryShieldValues = { 0, 50, 30, 1000, 100, 150, 300, 1500, 600, 600, 600, 600 };
 
         private readonly List<(int Index, DungeonItemEntry Item, int Price)> _barryOffers = new();
         private BarryShopPage _barryPage;
         private bool _hospitalHerbShop;
+        private bool _wreathItemSale;
+        private static byte[] _nativeResaleValues;
+
+        private int CurrentItemResalePrice(DungeonItemEntry item)
+        {
+            if (!_wreathItemSale || Inventory.IsGear(item)) return BarryResalePrice(item);
+            if (_nativeResaleValues == null)
+                _nativeResaleValues = AssetMode.Load<TextAsset>("Town/Retail/item_resale")?.bytes;
+            int offset = (item.Kind * 256 + item.Subtype) * 2;
+            if (_nativeResaleValues == null || offset + 1 >= _nativeResaleValues.Length) return 0;
+            return _nativeResaleValues[offset] | (_nativeResaleValues[offset + 1] << 8);
+        }
         private int _barrySelection;
         private bool _barryConfirm;
         private string _barryFeedback;
 
         private void SetBarryShopPage(BarryShopPage page)
         {
+            bool returnToWreath = page == BarryShopPage.Closed && _wreathItemSale;
+            if (returnToWreath) _wreathItemSale = false;
             _barryPage = page;
             if (page == BarryShopPage.Closed) _hospitalHerbShop = false;
             _barrySelection = 0;
             _barryConfirm = false;
             _barryFeedback = null;
             _barryOffers.Clear();
+            if (returnToWreath) ReturnToWreathServices();
+            if (page == BarryShopPage.Buy && !_hospitalHerbShop) ReadBarryStock();
+            if (page == BarryShopPage.Temper) { ReadBarryTemperOffers(); return; }
             if (page != BarryShopPage.Sell) return;
 
             var items = _townInventory.DungeonItems;
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                int price = BarryResalePrice(item);
+                int price = CurrentItemResalePrice(item);
                 if (price > 0 && !Equipped(item)) _barryOffers.Add((i, item, price));
             }
         }
@@ -75,10 +146,11 @@ namespace AzureDreamsReimagined
 
         private int BarryOptionCount => _barryPage switch
         {
-            BarryShopPage.Services => 3,
+            BarryShopPage.Services => 4,
             BarryShopPage.Farewell => 1,
-            BarryShopPage.Buy => _hospitalHerbShop ? 1 : BarryStock.Length,
+            BarryShopPage.Buy => _hospitalHerbShop ? 1 : _barryStockRows.Count,
             BarryShopPage.Sell => _barryOffers.Count,
+            BarryShopPage.Temper => _barryOffers.Count,
             _ => 0
         };
 
@@ -90,7 +162,7 @@ namespace AzureDreamsReimagined
                 _barryConfirm = false;
                 _barryFeedback = null;
             }
-            else SetBarryShopPage(_hospitalHerbShop || _barryPage is BarryShopPage.Services or BarryShopPage.Farewell
+            else SetBarryShopPage(_wreathItemSale || _hospitalHerbShop || _barryPage is BarryShopPage.Services or BarryShopPage.Farewell
                 ? BarryShopPage.Closed : BarryShopPage.Services);
         }
 
@@ -117,7 +189,7 @@ namespace AzureDreamsReimagined
         {
             PlayRetailSound(RetailSfx.Confirm);
             if (_barryPage == BarryShopPage.Services)
-                SetBarryShopPage(index == 0 ? BarryShopPage.Buy : index == 1 ? BarryShopPage.Sell : BarryShopPage.Farewell);
+                SetBarryShopPage(index == 0 ? BarryShopPage.Buy : index == 1 ? BarryShopPage.Sell : index == 2 ? BarryShopPage.Temper : BarryShopPage.Farewell);
             else if (_barryPage == BarryShopPage.Farewell)
                 SetBarryShopPage(BarryShopPage.Closed);
             else
@@ -128,8 +200,14 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private (byte Kind, byte Subtype, int Price) StockOffer(int index) =>
-            _hospitalHerbShop ? ShopMedicinalHerb : BarryStock[index];
+        private (byte Kind, byte Subtype, int Price) StockOffer(int index)
+        {
+            if (_hospitalHerbShop) return ShopMedicinalHerb;
+            var offer = BarryStock[_barryStockRows[index]];
+            int price = offer.Kind == ItemKind.Sword && offer.Subtype is 13 or 14 or 15
+                ? BarrySwordValues[offer.Subtype] * 2 : offer.Price;
+            return (offer.Kind, offer.Subtype, price);
+        }
 
         private DungeonItemEntry BarryStockItem(int index)
         {
@@ -142,6 +220,7 @@ namespace AzureDreamsReimagined
         private void TradeWithBarry()
         {
             if (!_barryConfirm || _barrySelection >= BarryOptionCount) return;
+            if (_barryPage == BarryShopPage.Temper) { TradeBarryTemper(); return; }
             PlayRetailSound(RetailSfx.Confirm);
             bool buying = _barryPage == BarryShopPage.Buy;
             if (buying)
@@ -166,7 +245,7 @@ namespace AzureDreamsReimagined
                 var items = _townInventory.DungeonItems;
                 if (offer.Index >= items.Count || Equipped(items[offer.Index]) ||
                     items[offer.Index].Kind != offer.Item.Kind || items[offer.Index].Subtype != offer.Item.Subtype ||
-                    BarryResalePrice(items[offer.Index]) != offer.Price || _gold > int.MaxValue - offer.Price ||
+                    CurrentItemResalePrice(items[offer.Index]) != offer.Price || _gold > int.MaxValue - offer.Price ||
                     !_townInventory.ConsumeDungeonItem(offer.Index, offer.Item.Kind)) return;
                 _gold += offer.Price;
             }
@@ -183,8 +262,9 @@ namespace AzureDreamsReimagined
         {
             if (_barryPage == BarryShopPage.Closed) return;
             DrawHudPanel(new Rect(85, 86, 470, 301));
-            GUI.Label(new Rect(103, 101, 310, 24), _hospitalHerbShop ? T("Hospital - Hush", "Hospital - Hush") : T("Blacksmith - Barry", "Ferraria - Barry"));
+            GUI.Label(new Rect(103, 101, 310, 24), _wreathItemSale ? T("Wreath - Sell Items", "Wreath - Vender Itens") : _hospitalHerbShop ? T("Hospital - Hush", "Hospital - Hush") : T("Blacksmith - Barry", "Ferraria - Barry"));
             GUI.Label(new Rect(429, 101, 110, 24), _gold + "G");
+            if (_barryPage == BarryShopPage.Temper) { DrawBarryTemper(); return; }
 
             if (_barryPage == BarryShopPage.Farewell)
             {
@@ -214,10 +294,14 @@ namespace AzureDreamsReimagined
 
             string[] services = _barryPage == BarryShopPage.Services
                 ? new[] { T("I’ve come to buy.", "Vim comprar."), T("I’ve come to sell.", "Vim vender."),
+                    T("Temper", "Temperar"),
                     T("Just looking around.", "Só estou olhando.") }
                 : null;
             // TOWN.BIN 0x61B2BC–0x61B7D4.
-            string prompt = services != null ? string.Empty : buying
+            string prompt = _wreathItemSale
+                ? (_barryOffers.Count > 0 ? T("Choose an item to sell.", "Escolha um item para vender.")
+                    : T("You have no items available to sell.", "Você não tem itens disponíveis para vender."))
+                : services != null ? string.Empty : buying
                 ? _hospitalHerbShop ? T("Choose an item.", "Escolha um item.") :
                     T("Due to the ancient ruins, we’ve seen an increase in hunters, so as a result we’re always out of items.\nSo there’s not much to sell.\nWhat are you looking for.",
                         "Por causa das ruínas antigas, tem vindo mais caçadores e, por isso, as mercadorias estão sempre acabando.\nEntão não há muito para vender.\nO que você procura.")
@@ -239,7 +323,7 @@ namespace AzureDreamsReimagined
             if (_barryConfirm || _barryPage == BarryShopPage.Closed) return;
             if (first > 0 && GUI.Button(new Rect(103, 350, 110, 26), T("Previous", "Anterior"))) _barrySelection = first - BarryRowsPerPage;
             if (first + BarryRowsPerPage < BarryOptionCount && GUI.Button(new Rect(218, 350, 110, 26), T("Next", "Próxima"))) _barrySelection = first + BarryRowsPerPage;
-            if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) BackFromBarryShop();
+            if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) BackFromBarryShop();
         }
     }
 }

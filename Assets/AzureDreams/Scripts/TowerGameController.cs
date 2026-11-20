@@ -285,16 +285,20 @@ namespace AzureDreamsReimagined
             _runAction.Enable();
             _inventoryAction = new InputAction("Inventory", InputActionType.Button, _inventoryBinding);
             _inventoryAction.Enable();
-            _familiarCommand = new InputAction("Familiar follow or wait", InputActionType.Button, "<Keyboard>/k");
+            _familiarCommand = new InputAction("Familiar follow or wait", InputActionType.Button, "<Keyboard>/j");
             _familiarCommand.Enable();
             _skipAction = new InputAction("Skip turn", InputActionType.Button, "<Keyboard>/t");
             _skipAction.Enable();
             InitializeSettings();
             SubscribeTownEvents();
+            SubscribeAssetMode();
         }
 
         private void OnDisable()
         {
+            ResetArcade(restorePlayer: true);
+            ResetRacetrack();
+            ResetRestaurantMeal();
             EndHomeBath();
             ReleaseAngelPresentation();
             ResetLevelUpCelebration();
@@ -309,6 +313,8 @@ namespace AzureDreamsReimagined
             }
             ReleaseSettings();
             UnsubscribeTownEvents();
+            UnsubscribeAssetMode();
+            ReleaseReimaginedItemSprites();
             StopTowerEntrance();
             ResetElevatorAscent();
             if (_entranceAudio) _entranceAudio.Stop();
@@ -341,9 +347,9 @@ namespace AzureDreamsReimagined
             if (!_gameCamera)
                 _gameCamera = Camera.main;
             // Load optional FX prefabs from Resources/FX if not assigned.
-            if (!_fxAttack) _fxAttack = Resources.Load<GameObject>("FX/FX_Lightning");
-            if (!_fxMagic) _fxMagic = Resources.Load<GameObject>("FX/FX_Magic");
-            if (!_fxDust) _fxDust = Resources.Load<GameObject>("FX/FX_Dust");
+            if (!_fxAttack) _fxAttack = AssetMode.Load<GameObject>("FX/FX_Lightning");
+            if (!_fxMagic) _fxMagic = AssetMode.Load<GameObject>("FX/FX_Magic");
+            if (!_fxDust) _fxDust = AssetMode.Load<GameObject>("FX/FX_Dust");
             // PS1-style fog
             AzureDreamsReimagined.Rendering.PsxFogSetup.ApplyLinearFog(
                 new Color(0.05f, 0.05f, 0.12f), 8f, 30f);
@@ -477,9 +483,9 @@ namespace AzureDreamsReimagined
                 if (_familiarDefinition) RestoreTownFamiliarVitals(_familiarActor);
                 foreach (var familiar in _bagFamiliars) RestoreTownFamiliarVitals(familiar.Actor);
             }
-            if (HandleTitleInput() || HandlePrologueInput() || _changingInterior || _kewneSkipTransition || _goUpTransition || _kohCollapsePlaying) return;
+            if (HandleTitleInput() || HandlePrologueInput() || _changingInterior || _wakeUpVisitorArriving || _wakeUpVisitorLeaving || _kewneSkipTransition || _goUpTransition || _goDownTransition || _kohCollapsePlaying) return;
             if (_player) _unsavedPlaySeconds += Time.unscaledDeltaTime;
-            if (TickHomeBath(Time.unscaledDeltaTime)) return;
+            if (TickHomeBath(Time.unscaledDeltaTime) || _restaurantMealAnimating) return;
             if (HandleBeldoVision() || HandleBeldoEncounter()) return;
             if (_elevatorAscending)
             {
@@ -496,7 +502,7 @@ namespace AzureDreamsReimagined
             if (TickLevelUpCelebration(Time.unscaledDeltaTime)) return;
             if (_debugItemPickerOpen) { HandleDebugItemPickerInput(); return; }
             if (_debugQuestPickerOpen) { HandleDebugQuestPickerInput(); return; }
-            if (HandleTheaterAct() || HandleBowlingInput() || HandleRacetrackInput() || HandleCasinoInput() || HandleSettingsInput()) return;
+            if (HandleTheaterAct() || HandleArcadeInput() || HandleGymInput() || HandleBowlingInput() || HandleRacetrackInput() || HandleCasinoInput() || HandleSettingsInput()) return;
             if (Keyboard.current != null && Keyboard.current.numpad7Key.wasPressedThisFrame)
             {
                 _testInvulnerable = !_testInvulnerable;
@@ -549,8 +555,20 @@ namespace AzureDreamsReimagined
             ReadCameraControls();
             Vector2 direction = ReadMovementDirection();
             if (_area == Area.Tower && HandleTowerInteractInput(direction, runHeld)) return;
+            if (_area == Area.Town && _ridingAuraBike)
+            {
+                if (_interact?.WasPressedThisFrame() == true) { TryAuraBikeInteraction(); return; }
+                if (MoveAuraBike(direction, Time.deltaTime)) return;
+            }
+            if (_area == Area.Town && Keyboard.current?.fKey.wasPressedThisFrame == true &&
+                !_activeTownNpc && !_heldTownPot && _carriedItem == null && TryTownGroundItemCell(out _))
+            {
+                if (!TryCollectDroppedTownItem())
+                    _message = T("There is no room in your inventory.", "Não há espaço no inventário.");
+                return;
+            }
             if (_area == Area.Town && _liftAction != null && _liftAction.WasPressedThisFrame())
-            { if (_carriedItem != null) ReleaseTownInventoryItem(false); else TryTownPotLift(); return; }
+            { if (_carriedItem != null) ReleaseTownInventoryItem(false); else if (!TryLiftTownInventoryItem()) TryTownPotLift(); return; }
             if (_area == Area.Town && _carriedItem != null && _attackAction?.WasPressedThisFrame() == true)
             { ReleaseTownInventoryItem(true); return; }
             if (_area == Area.Town && _heldTownPot && _attackAction?.WasPressedThisFrame() == true)
@@ -579,7 +597,7 @@ namespace AzureDreamsReimagined
             { TryTowerAction(Vector2Int.zero); return; }
             if (_area == Area.Town)
             {
-                MoveInTown(direction, Time.deltaTime, runHeld);
+                MoveInTown(direction, Time.deltaTime, runHeld || _autorun);
                 if (direction != Vector2.zero && _townJumpHeight <= TownGroundTolerance) TryExitInterior();
                 return;
             }
@@ -666,11 +684,12 @@ namespace AzureDreamsReimagined
         {
             if (_area == Area.Town && _townJumpHeight > 0f) return;
             if (_turnBusy || (_area == Area.Tower && KohIsAsleep)) return;
-            if (_area == Area.Tower && _floor < 40 && _playerCell == _stairCell && !_carriedView)
+            if (_area == Area.Tower && CanAscendFromFloor && _playerCell == _stairCell && !_carriedView)
             {
                 _checkpointMenu = CheckpointMenu.Ascend;
                 return;
             }
+            if (_area == Area.Tower && TrySecondTowerElevator(fromInteract: true)) return;
             if (TryTowerEventInteraction() || TryInspectGroundItem() || TryOpenTrapRearm()) return;
 
             if (_area == Area.Town)
@@ -686,11 +705,12 @@ namespace AzureDreamsReimagined
                     return;
                 }
                 if (_activeTownNpc && TryTownConversation()) return;
+                if (TryAuraBikeInteraction()) return;
                 if (_townObjectDialogueOpen && TryTownObjectInteraction()) return;
                 if (TryTownGateInteraction()) return;
                 if (TryCollectDroppedTownItem() || TryCollectNearbyTownItem()) return;
                 if (TryTownObjectInteraction()) return;
-                if (TryBowlingInteraction() || TryRacetrackInteraction() || TryCasinoInteraction() || TryMonsterShopCounter()) return;
+                if (TryBowlingInteraction() || TryCasinoInteraction() || TryMonsterShopCounter()) return;
                 if (TryConstructionEntrance()) return;
                 if (TryKohHomeInteraction()) return;
                 if (TryTownConversation()) return;
@@ -760,7 +780,7 @@ namespace AzureDreamsReimagined
             {
                 var rowanCell = new Vector2Int(9, 4);
                 _npcCells.Add(rowanCell);
-                var rowanPrefab = Resources.Load<GameObject>("Town/NPC_Rowan");
+                var rowanPrefab = AssetMode.Load<GameObject>("Town/NPC_Rowan");
                 var rowan = Spawn(rowanPrefab ? rowanPrefab : _npcPrefab, rowanCell, "Townsperson - Rowan");
                 rowan.transform.position = new Vector3(rowan.transform.position.x, 0f, rowan.transform.position.z);
             }
@@ -786,6 +806,7 @@ namespace AzureDreamsReimagined
         private void EnterTower()
         {
             TownSaveVariables.SetBool(WreathFruitAvailable, true);
+            TownSaveVariables.SetBool(WeedyFruitGivenKey, false);
             TownSaveVariables.Save();
             TownEventBus.Publish(TownEventBus.EventId.PlayerLeftTown);
             bool enteringWithKewne = _kewneTutorialChoice.HasValue;
@@ -829,6 +850,21 @@ namespace AzureDreamsReimagined
             BuildTowerFloor();
             if (!_enteringViaTrigger) TownEventBus.Publish(TownEventBus.EventId.PlayerEnteredTower);
             if (!_kewneSkipTransition) StartCoroutine(PlayTowerArrival());
+            else
+            {
+                // Holding cancel through the Kewne intro (SkipKewneMeeting) calls EnterTower
+                // with _kewneSkipTransition already true, which also skips PlayTowerArrival -
+                // the walk-in cutscene that normally opens the floor 1 inner tower door and
+                // then clears _innerTowerDoor so CrossesClosedTowerDoor stops blocking it.
+                // BuildTowerFloor above still creates that door closed either way, so without
+                // this it stayed shut and impassable (both to Koh and monsters) for the rest
+                // of the run whenever the intro was skipped. Finish it instantly instead.
+                if (_innerTowerDoor)
+                {
+                    _innerTowerDoor.SetOpen(1f);
+                    _innerTowerDoor = null;
+                }
+            }
         }
 
         private void ReturnToTown(bool survived)
@@ -844,9 +880,12 @@ namespace AzureDreamsReimagined
 
         private void BuildTowerFloor()
         {
-            if (_floor > TownSaveVariables.GetInt(TownReputation.HighestFloorKey))
+            // The second tower (floors 41+) does not count towards the main tower's record.
+            if (_floor <= TowerFloorRules.BeldoFloor && _floor > TownSaveVariables.GetInt(TownReputation.HighestFloorKey))
                 TownSaveVariables.SetInt(TownReputation.HighestFloorKey, _floor);
+            if (_floor <= TowerFloorRules.BeldoFloor) UnlockBarryStockForFloor(_floor);
             _floorStartTurn = _completedTowerTurns;
+            BeginSecondTowerFloor();
             PlayAreaMusic(TowerMusicCue(_floor));
             if (UsesManagedTowerLayout)
             {
@@ -1055,10 +1094,19 @@ namespace AzureDreamsReimagined
             Texture2D actionAtlas = null)
         {
             var actor = Spawn(prefab, cell, objectName);
+            // Koh and familiar prefabs may acquire locomotion only after Spawn.
+            // Attach depth correction to the actor path itself, not just NPCs
+            // or prefabs which happen to serialize ActorLocomotionView.
+            if (_area == Area.Town)
+            {
+                if (!actor.TryGetComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>(out var depth))
+                    depth=actor.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
+                depth.SetInterior(_interior);
+            }
             // Primitive fallbacks need the locomotion view to move their mesh off the root.
             if (!prefab) ConfigureLocomotion(actor);
             var feet = Vector3.down * TownActorFootOffset;
-            float visualScale = koh ? 1.8f : 2f;
+            float visualScale = koh ? RetailTownResidentSpriteView.KohVisualScale : 2f;
             foreach (Transform visual in actor.transform)
             {
                 visual.localPosition = feet + (visual.localPosition - feet) * visualScale;
@@ -1068,7 +1116,7 @@ namespace AzureDreamsReimagined
                 ConfigureLocomotion(actor).EnableMonsterFacing();
             if (!koh && species is >= 1 and <= 45 && !actor.TryGetComponent<KewneSpriteView>(out _))
             {
-                var communityAtlas = Resources.Load<Texture2D>($"Monsters/Community/monster_{species:x2}");
+                var communityAtlas = AssetMode.Load<Texture2D>($"Monsters/Community/monster_{species:x2}");
                 if (communityAtlas)
                 {
                     var monsterView = actor.GetComponentInChildren<MonsterTurnSpriteView>();
@@ -1114,6 +1162,11 @@ namespace AzureDreamsReimagined
             instance.transform.position = CellPosition(cell);
             instance.transform.SetParent(transform, true);
             instance.name = objectName;
+            if (_area == Area.Town && (instance.GetComponent<NPCController>() || instance.GetComponent<ActorLocomotionView>()))
+                instance.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>().SetInterior(_interior);
+            if (instance.TryGetComponent<NPCController>(out var resident) &&
+                !RetailResidentBanks.Apply(instance, resident.npcId))
+                OriginalTownSpriteView.Apply(instance, resident.npcId);
             // Only this controller may drive actor transforms.
             foreach (var driver in instance.GetComponentsInChildren<PlayerController>()) driver.enabled = false;
             foreach (var driver in instance.GetComponentsInChildren<MonsterAI>()) driver.enabled = false;
@@ -1219,10 +1272,14 @@ namespace AzureDreamsReimagined
 
         private void ClearGenerated()
         {
+            ResetArcade();
+            ResetRestaurantMeal();
             EndHomeBath();
             ResetPoolPresentation();
             ResetLevelUpCelebration();
             ResetBowling();
+            ResetGym();
+            ResetRacetrack(preserveTransition: _raceScreen == RaceScreen.Loading);
             EndTheaterAct();
             if (_storySpeaker) CloseStoryPrompt();
             ResetBeldoEncounter();
@@ -1290,6 +1347,7 @@ namespace AzureDreamsReimagined
             _trapTerrainChanges.Clear();
             _trapReversalUntil = 0;
             _trapGoUp = false;
+            _trapGoDown = false;
             _trapRearmCell = null;
             _trapDisarmCell = null;
             _groundItemPrompt = null;
@@ -1337,14 +1395,24 @@ namespace AzureDreamsReimagined
             {
                 _bodyStyle = new GUIStyle(GUI.skin.label)
                 {
-                    fontSize = 17,
+                    // Reduced from 17: OpenDyslexic's taller ascent/descent metrics
+                    // were overflowing fixed-height row Rects sized for the old font
+                    // (e.g. the Inventory list), causing visible top-of-glyph clipping.
+                    fontSize = 15,
                     fontStyle = FontStyle.Bold,
                     alignment = TextAnchor.MiddleLeft,
+                    richText = true,
                     normal = { textColor = Color.white }
                 };
-                _messageStyle = new GUIStyle(_bodyStyle) { fontSize = 15, wordWrap = true, fontStyle = FontStyle.Normal };
+                _messageStyle = new GUIStyle(_bodyStyle) { fontSize = 13, wordWrap = true, fontStyle = FontStyle.Normal };
                 _dialogueTextStyle = new GUIStyle(_messageStyle) { alignment = TextAnchor.UpperLeft, clipping = TextClipping.Clip };
                 _logLineStyle = new GUIStyle(_messageStyle) { wordWrap = false, clipping = TextClipping.Clip };
+                // Dialogue/log text stays the default white (set above). A couple of
+                // message categories get their own color baked in via <color> rich-text
+                // tags at the point the message is built (damage: red, see RecordTowerHit/
+                // RecordTowerHazard) or their own tinted style (XP notice: blue, below) -
+                // everything else is left plain white.
+                _experienceNoticeStyle = new GUIStyle(_bodyStyle) { normal = { textColor = TowerStatusColors.Paralysis } };
             }
 
             float scale = Mathf.Max(0.5f, Mathf.Min(Screen.width / 640f, Screen.height / 480f));
@@ -1370,7 +1438,8 @@ namespace AzureDreamsReimagined
                 GUI.matrix = previousMatrix;
                 return;
             }
-            if (DrawTheaterAct(width, height) || DrawBowling(width, height) || DrawRacetrack(width, height) || DrawCasino(width, height))
+            DrawGym(width, height);
+            if (DrawTheaterAct(width, height) || DrawArcade(width, height) || DrawBowling(width, height) || DrawRacetrack(width, height) || DrawCasino(width, height))
             {
                 GUI.matrix = previousMatrix;
                 return;
@@ -1417,9 +1486,7 @@ namespace AzureDreamsReimagined
                 DrawRetailTowerHud(width);
             else if (!_activeTownNpc)
             {
-                var money = new Rect(width - 175f, 24f, 159f, 34f);
-                DrawRetailHudPlaque(money);
-                DrawHudText(new Rect(money.x + 8f, money.y, money.width - 16f, money.height), T("MONEY", "OURO") + $"     {_gold}G", _bodyStyle);
+                DrawTownMoneyHud(width);
             }
 
             if (_towerArrivalPlaying)
@@ -1428,6 +1495,7 @@ namespace AzureDreamsReimagined
                 GUI.matrix = previousMatrix;
                 return;
             }
+            DrawFusionStatusWindows(width);
             if (HasVisibleMessage) DrawMessageWindow(width, height);
             if (_showControls)
             {
@@ -1436,7 +1504,7 @@ namespace AzureDreamsReimagined
                 DrawHudText(new Rect(box.x + 10f, box.y, box.width - 20f, box.height), ControlsHint(), _messageStyle);
             }
             if (_area == Area.Tower && Time.unscaledTime < _experienceNoticeUntil)
-                DrawHudText(new Rect(width * 0.5f - 100f, height * 0.38f, 240f, 24f), _experienceNotice, _bodyStyle);
+                DrawHudText(new Rect(width * 0.5f - 100f, height * 0.38f, 240f, 24f), _experienceNotice, _experienceNoticeStyle);
             if (_homeStorageOpen)
             {
                 DrawHomeStorage(width, height);
@@ -1457,9 +1525,7 @@ namespace AzureDreamsReimagined
             DrawBeldoDialogue(width, height);
             DrawTrapRearm(width, height);
             DrawGroundItemPrompt(width, height);
-            if (GUI.Button(new Rect(width - 175f, _area == Area.Town ? 65f : 58f, 159f, 26f),
-                    T("Settings [M]", "Configurações [M]")))
-                OpenSettings();
+
             GUI.matrix = previousMatrix;
             if (!_inventoryOpen) DrawMinimap();
         }
@@ -1469,7 +1535,15 @@ namespace AzureDreamsReimagined
 
         private void DrawMessageWindow(float width, float height)
         {
-            const float logLineHeight = 21f;
+            // Was a flat 21 (tuned for LiberationSans at this style's 15pt size). OpenDyslexic
+            // is a visibly taller face - bigger x-height, chunkier ascenders/descenders - so a
+            // fixed 21 clipped the bottom of its descenders (g/y/p/j) against _logLineStyle's
+            // TextClipping.Clip, and let wrapped lines sit closer together than the glyphs
+            // actually need. Measure the real line height from whatever font is active instead
+            // of a magic number, so this keeps working if the font changes again later. "Ag"
+            // probes both an ascender and a descender in one go; floor it at the old 21 so
+            // nothing shrinks below what already fit.
+            float logLineHeight = Mathf.Max(21f, _logLineStyle.CalcHeight(new GUIContent("Ag"), 1000f));
             const float inset = 13f;
             const float padding = 9f;
             const float sliderWidth = 14f;
@@ -1482,14 +1556,25 @@ namespace AzureDreamsReimagined
             bool visitorChoices = _visitorStage is VisitorStage.Choice or VisitorStage.Challenge;
             int choiceRows = visitorChoices ? 2 : KewneMeetingSpeaking ? (_kewneMeeting == KewneMeeting.Question ? 2 : 1) : 0;
             float maxHeight = height * 0.65f;
-            float choicesHeight = storyChoices
-                ? Mathf.Min(MeasureStoryChoices(textWidth), Mathf.Min(VisibleStoryChoices * DialogueChoiceRowHeight, maxHeight * 0.72f))
-                : choiceRows * DialogueChoiceRowHeight;
+            // A story prompt with a single "Continue"/"Continuar" option has nothing to
+            // actually choose - it is just acknowledging a line - so it gets the small
+            // lifted-page-corner icon in DrawContinuePrompt instead of a full-width choice
+            // button bar, matching how the original handled a plain "press to advance" cue.
+            bool kewneContinue = KewneMeetingSpeaking && _kewneMeeting != KewneMeeting.Question;
+            bool singleContinueChoice = kewneContinue || (storyChoices && _storyChoices.Length == 1 &&
+                _storyChoices[0].Label == T("Continue", "Continuar"));
+            float choicesHeight = singleContinueChoice
+                ? 0f
+                : storyChoices
+                    ? Mathf.Min(MeasureStoryChoices(textWidth), Mathf.Min(VisibleStoryChoices * DialogueChoiceRowHeight, maxHeight * 0.72f))
+                    : choiceRows * DialogueChoiceRowHeight;
             float reservedHeight = padding * 2f + (choicesHeight > 0f ? choiceGap + choicesHeight : 0f);
 
             if (speaking)
             {
-                string fullLine = choicesHeight > 0f ? _dialogueLine : _dialogueLine + "  ›";
+                // Suppress the inline "›" advance cue for the single-Continue case too -
+                // DrawContinuePrompt below draws its own icon, so showing both would be redundant.
+                string fullLine = (choicesHeight > 0f || singleContinueChoice) ? _dialogueLine : _dialogueLine + "  ›";
                 float fullHeight = Mathf.Max(logLineHeight, _dialogueTextStyle.CalcHeight(new GUIContent(fullLine), textWidth) + 2f);
                 float textHeight = Mathf.Min(fullHeight, Mathf.Max(1f, maxHeight - reservedHeight));
                 float panelHeight = Mathf.Max(height * 0.23f, textHeight + reservedHeight);
@@ -1503,6 +1588,11 @@ namespace AzureDreamsReimagined
                 var textRect = new Rect(panel.x + inset, panel.y + padding, textWidth, textHeight);
                 DrawDialogueText(textRect, line, fullLine);
 
+                if (singleContinueChoice)
+                {
+                    DrawContinuePrompt(panel, kewneContinue ? () => AdvanceKewneMeeting(_kewneMeetingSelection) : null);
+                    return;
+                }
                 var choices = new Rect(textRect.x, panel.yMax - padding - choicesHeight, textWidth, choicesHeight);
                 if (storyChoices) DrawStoryChoices(choices);
                 else if (visitorChoices) DrawVisitorChoices(choices);
@@ -1574,6 +1664,69 @@ namespace AzureDreamsReimagined
             return second != null && DrawInventoryButton(row, second, selected == 1) ? 1 : -1;
         }
 
+        private Texture2D _pageCornerIcon;
+
+        // Original PSX dialogue boxes cue "press to continue" with a small icon instead
+        // of a full choice button when there is nothing to actually pick. Reimagined's
+        // single-option "Continue"/"Continuar" story prompts had no equivalent - they drew
+        // a full-width button bar - so this recreates that cue as a small animated icon
+        // resembling a book page corner being lifted, tucked into the panel's bottom-right.
+        private void DrawContinuePrompt(Rect panel, System.Action advance = null)
+        {
+            if (_pageCornerIcon == null) _pageCornerIcon = BuildPageCornerIcon();
+            const float iconSize = 20f;
+            const float margin = 10f;
+            float bob = Mathf.Sin(Time.unscaledTime * 3.2f) * 2f; // gentle lift/settle motion
+            var icon = new Rect(panel.xMax - margin - iconSize, panel.yMax - margin - iconSize + bob, iconSize, iconSize);
+            if (Event.current.type == EventType.Repaint)
+                GUI.DrawTexture(icon, _pageCornerIcon, ScaleMode.ScaleToFit, true);
+            // Clicking anywhere on the box also advances, same as the interact button
+            // (handled separately in HandleTownStory for keyboard/controller) - the icon
+            // is just the visual cue, not the only way to continue.
+            if (GUI.Button(panel, GUIContent.none, GUIStyle.none))
+            {
+                if (advance != null) advance();
+                else PickStoryChoice(0);
+            }
+        }
+
+        private static Texture2D BuildPageCornerIcon()
+        {
+            const int size = 28;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            var page = new Color32(232, 221, 186, 255);  // parchment face of the lifted corner
+            var edge = new Color32(255, 250, 230, 255);  // bright rim where the raised paper catches light
+            var shade = new Color32(150, 120, 74, 255);  // shadow pinched into the fold's tip
+            var clear = new Color32(0, 0, 0, 0);
+            var pixels = new Color32[size * size];
+            const int leg = size - 2;
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    int dx = (size - 1) - x;
+                    int dy = (size - 1) - y;
+                    int d = dx + dy; // taxicab distance from the bottom-right corner
+                    Color32 color = clear;
+                    if (d <= leg)
+                    {
+                        if (d <= 5) color = shade;
+                        else if (d >= leg - 3) color = edge;
+                        else color = page;
+                    }
+                    pixels[y * size + x] = color;
+                }
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply(false, true);
+            return tex;
+        }
+
         private static string T(string en, string ptBr) => GameLanguage.Text(en, ptBr);
 
         private static void DrawHudPanel(Rect rect) => DrawDialogueFrame(rect);
@@ -1606,6 +1759,7 @@ namespace AzureDreamsReimagined
         private GUISkin _windowSkin;
         private GUIStyle _dialogueTextStyle;
         private GUIStyle _logLineStyle;
+        private GUIStyle _experienceNoticeStyle;
 
         private void InitialiseWindowSkin(GUISkin original)
         {

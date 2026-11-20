@@ -1,0 +1,192 @@
+# Textures decoded from the full Town VRAM snapshot.
+newmtl page_0006_clut_73c6
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_73c6.png
+
+newmtl page_0006_clut_73ce
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_73ce.png
+
+newmtl page_0006_clut_73cf
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_73cf.png
+
+newmtl page_0006_clut_7402
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_7402.png
+
+newmtl page_0006_clut_7403
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_7403.png
+
+newmtl page_0006_clut_7448
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_7448.png
+
+newmtl page_0006_clut_744e
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0006_clut_744e.png
+
+newmtl page_000a_clut_7582
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000a_clut_7582.png
+
+newmtl page_000d_clut_7580
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7580.png
+
+newmtl page_000d_clut_7581
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7581.png
+
+newmtl page_000d_clut_7582
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_000d_clut_7582.png
+
+newmtl page_0016_clut_7180
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7180.png
+
+newmtl page_0016_clut_7183
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7183.png
+
+newmtl page_0016_clut_7186
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7186.png
+
+newmtl page_0016_clut_7188
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7188.png
+
+newmtl page_0016_clut_7189
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7189.png
+
+newmtl page_0016_clut_71c7
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_71c7.png
+
+newmtl page_0016_clut_71c8
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_71c8.png
+
+newmtl page_0016_clut_71cb
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_71cb.png
+
+newmtl page_0016_clut_7206
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7206.png
+
+newmtl page_0016_clut_7207
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7207.png
+
+newmtl page_0016_clut_7208
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7208.png
+
+newmtl page_0016_clut_7209
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7209.png
+
+newmtl page_0016_clut_720a
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_720a.png
+
+newmtl page_0016_clut_7240
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7240.png
+
+newmtl page_0016_clut_728f
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_728f.png
+
+newmtl page_0016_clut_7e8b
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0016_clut_7e8b.png
+
+newmtl page_0095_clut_7000
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7000.png
+
+newmtl page_0095_clut_7040
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7040.png
+
+newmtl page_0095_clut_7080
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7080.png
+
+newmtl page_0095_clut_70c0
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_70c0.png
+
+newmtl page_0095_clut_7100
+Ka 1 1 1
+Kd 1 1 1
+d 1
+map_Kd textures/page_0095_clut_7100.png

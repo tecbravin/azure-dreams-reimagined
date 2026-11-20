@@ -40,6 +40,8 @@ namespace AzureDreamsReimagined
         private bool _townWasRunningOnGround;
         private float _townWalkCycle;
         private const float TownGravity = 18f;
+        private const float TownJumpHeight = 1.8f;
+        private void BeginTownJump() => _townJumpVelocity=Mathf.Sqrt(2f*TownGravity*TownJumpHeight);
         private const float TownAirAccelerationRate = 3f;
         private const float TownActorRadius = 0.30f;
         private const float TownActorFootOffset = 0.55f;
@@ -85,6 +87,7 @@ namespace AzureDreamsReimagined
         {
             if (_area != Area.Town || !_player || deltaTime <= 0f || float.IsNaN(deltaTime)) return;
             if (_townFlow && _townFlow.State.Current != TownGameState.State.TownIdle) return;
+            if (MoveAuraBike(input, deltaTime)) return;
             if (input.sqrMagnitude > 0.0001f)
             {
                 _townFacing = input.normalized;
@@ -106,7 +109,7 @@ namespace AzureDreamsReimagined
                 _townMomentum = Vector2.ClampMagnitude(input, 1f) * speed;
                 _townAirSpeedLimit = speed;
                 if (!_poolKohSwimming && _wait != null && _wait.WasPressedThisFrame())
-                    _townJumpVelocity = Mathf.Sqrt(2f * TownGravity * 1.8f);
+                    BeginTownJump();
             }
             else if (input.sqrMagnitude > 0.0001f)
             {
@@ -195,8 +198,8 @@ namespace AzureDreamsReimagined
 
         private float TownObstacleTop(Vector3 position, float radius, Transform ignored = null)
         {
-            float top = Mathf.Max(TownPotTop(position, radius, ignored),
-                Mathf.Max(TownWallTop(position, radius), TownRoundObstacleTop(position, radius)));
+            float top = Mathf.Max(FountainObstacleTop(position, radius), Mathf.Max(TownItemTop(position, radius, ignored), Mathf.Max(TownPotTop(position, radius, ignored),
+                Mathf.Max(TownWallTop(position, radius), TownRoundObstacleTop(position, radius)))));
             return _interior ? Mathf.Max(top, _interior.FurnitureTop(position, radius)) : top;
         }
 
@@ -245,7 +248,8 @@ namespace AzureDreamsReimagined
         private void QueueMonsterSpriteAction(GameObject actor, Vector2Int direction, bool casting = false, int? targetHeight = null)
         {
             if (!actor) return;
-            PlayRetailSound(casting ? RetailSfx.Spell : RetailSfx.MonsterAttack);
+            bool cycloneDash = !casting && actor.GetComponentInChildren<MonsterTurnSpriteView>() is { CycloneView: true };
+            PlayRetailSound(casting ? RetailSfx.Spell : cycloneDash ? RetailSfx.CycloneDash : RetailSfx.MonsterAttack);
             if ((casting || targetHeight.HasValue) && actor.TryGetComponent<KewneSpriteView>(out var kewne))
             {
                 _kewneActions.Add((kewne, direction, targetHeight));
@@ -367,19 +371,25 @@ namespace AzureDreamsReimagined
                 bool skipsAction = (beldo && !_beldoIntroduced) || MonsterExhausted(cs.Actor) ||
                     ItemImmobilized(cs.Actor) || SlowBlocksAction(cs.Actor);
                 bool soloOpponent = beldo || (_ghoshDuelActive && cs.Actor.Species == (byte)MonsterSpecies.GHOSH);
-                bool targetFamiliar = !soloOpponent && _familiar && !IsSubmerged(_familiarActor) && !IsSacredTile(_familiarCell) &&
-                    (IsSacredTile(_playerCell) || Distance(cs.Cell, _familiarCell) < Distance(cs.Cell, _playerCell));
-                var targetCell = targetFamiliar ? _familiarCell : _playerCell;
+                // Monstros decidem com base em onde Koh vai ficar neste turno (sua acao ja
+                // "aconteceu" do ponto de vista da IA), nao em onde ele estava antes de agir -
+                // assim eles reagem a posicao final de Koh, igual a um turno sequencial.
+                var kohActedCell = destination;
+                bool targetFamiliar = !soloOpponent && _familiar && !IsSubmerged(_familiarActor) &&
+                    !_manoevaDisguised.ContainsKey(_familiarActor) && !IsSacredTile(_familiarCell) &&
+                    (IsSacredTile(kohActedCell) || Distance(cs.Cell, _familiarCell) < Distance(cs.Cell, kohActedCell));
+                var targetCell = targetFamiliar ? _familiarCell : kohActedCell;
                 bool targetBlue = !soloOpponent && _blueCollarAlly != null && _blueCollarAlly.Actor.Hp > 0 &&
-                    !IsSubmerged(_blueCollarAlly.Actor) && !IsSacredTile(_blueCollarAlly.Cell) &&
+                    !IsSubmerged(_blueCollarAlly.Actor) && !_manoevaDisguised.ContainsKey(_blueCollarAlly.Actor) &&
+                    !IsSacredTile(_blueCollarAlly.Cell) &&
                     (IsSacredTile(targetCell) || Distance(cs.Cell, _blueCollarAlly.Cell) < Distance(cs.Cell, targetCell));
                 if (targetBlue) targetCell = _blueCollarAlly.Cell;
                 bool confused = Combat.HasStatus(cs.Actor, StatusId.CONFUSION);
                 bool blind = Combat.HasStatus(cs.Actor, StatusId.BLIND);
                 bool fleeing = _holyBellTurns > 0;
                 bool canAct = !skipsAction && !IsFrog(cs.Actor) && !fleeing && !confused && !blind;
-                if (HasSpeciesCommand(cs.Actor) && TryEnemySpeciesAction(cs, canAct,
-                    canAct && FamiliarHasSight(cs.Cell, _playerCell)))
+                if ((HasSpeciesCommand(cs.Actor) || HasInvoluntarySpeciesAction(cs.Actor)) && TryEnemySpeciesAction(cs, canAct,
+                    canAct && FamiliarHasSight(cs.Cell, kohActedCell)))
                 {
                     AddIntent(cs.Actor, Vector2Int.zero, CoreTurns.PriorityMonster);
                     continue;
@@ -388,17 +398,38 @@ namespace AzureDreamsReimagined
                 bool tooFarFromTarget = Distance(cs.Cell, targetCell) > 8;
                 bool canAttack = !skipsAction && !IsFrog(cs.Actor) && !IsSubmerged(cs.Actor) &&
                     !fleeing && !IsSacredTile(targetCell) && !tooFarFromTarget;
-                bool attack = canAttack && Distance(cs.Cell, targetCell) == 1;
+                // Troll ataca a distancia arremessando uma arma quando alinhado (linha, coluna
+                // ou diagonal) e com linha de visao livre - ver select_creature_action_and_target.c,
+                // case MONSTER_TROLL, no decomp (ele usa a mesma resolucao de ataque normal, so
+                // que a distancia maior, por isso entra aqui e nao no sistema generico de magias).
+                bool trollRangedAttack = canAttack && !confused && !blind &&
+                    cs.Actor.Species == (byte)MonsterSpecies.TROLL &&
+                    Distance(cs.Cell, targetCell) is > 1 and <= 10 &&
+                    (targetCell.x == cs.Cell.x || targetCell.y == cs.Cell.y ||
+                     Mathf.Abs(targetCell.x - cs.Cell.x) == Mathf.Abs(targetCell.y - cs.Cell.y)) &&
+                    FamiliarHasSight(cs.Cell, targetCell, clearShot: true) && RollSpawnRange(4) == 0;
+                bool attack = canAttack && (Distance(cs.Cell, targetCell) == 1 || trollRangedAttack);
                 var (spellPower, spellStatus, spellId) = canAttack && !confused && !blind && !attack
                     ? PrepareMonsterSpell(cs.Actor, cs.Cell, targetCell) : default;
-                if (attack && !confused && !blind && TryMandaraSpin(cs.Actor))
-                    spellStatus = StatusId.CONFUSION;
+                if (attack && !confused && !blind)
+                {
+                    // Mandara (confusao), Zu/Cyclone (paralisia) e Blume (lavagem cerebral)
+                    // aplicam seu efeito no ataque corpo a corpo EM VEZ de dano normal, igual ao
+                    // decomp (checks de STATUS_* antes de usar a habilidade). Troll nao entra
+                    // aqui - o ataque a distancia dele e so dano fisico normal. Viper (veneno)
+                    // tambem substitui o dano. Weadog e diferente: ele causa dano normal E
+                    // drena MP ao mesmo tempo (ver bloco 'else if (attack)' abaixo), por isso
+                    // nao entra em TryStatusOnAttack.
+                    if (TryMandaraSpin(cs.Actor)) spellStatus = StatusId.CONFUSION;
+                    else if (TryStatusOnAttack(cs.Actor, out var onAttackStatus)) spellStatus = onAttackStatus;
+                }
                 bool cast = spellPower > 0 || spellStatus != 0;
-                var monsterStep = skipsAction || attack || cast ? Vector2Int.zero : fleeing ? HolyBellStep(cs.Cell) : confused || blind || tooFarFromTarget
+                var monsterStep = skipsAction || attack || cast || _manoevaDisguised.ContainsKey(cs.Actor) ? Vector2Int.zero : fleeing ? HolyBellStep(cs.Cell) : confused || blind || tooFarFromTarget
                     ? RandomTowerStep(cs.Cell, avoidSacredTiles: true)
                     : ChaseStep(cs.Cell, targetCell, avoidSacredTiles: true);
                 if (cs.Cell + monsterStep == summonCell) monsterStep = Vector2Int.zero;
                 AddIntent(cs.Actor, monsterStep, CoreTurns.PriorityMonster);
+                if (attack || cast) RevertManoevaDisguise(cs.Actor);
                 if (cast)
                 {
                     var target = targetBlue ? _blueCollarAlly.Actor : targetFamiliar ? _familiarActor : _playerActor;
@@ -447,15 +478,32 @@ namespace AzureDreamsReimagined
                     else if (targetFamiliar) _pendingFamiliarDamage += damage;
                     else _pendingPlayerDamage += damage;
                     RecordTowerHit(cs.Actor, target, damage, needsActiveFamiliar: targetFamiliar && !targetBlue);
+                    // Weadog drena MP no mesmo golpe que causa dano normal (nao substitui o dano,
+                    // diferente de Zu/Blume/Viper - ver TryStatusOnAttack).
+                    if (cs.Actor.Species == (byte)MonsterSpecies.WEADOG && RollSpawnRange(4) == 0)
+                        _pendingMonsterStatuses.Add((cs.Actor, target, targetCell, StatusId.MP_DRAIN, false));
                 }
             }
             int familiarTargetIndex = -1;
+            bool familiarHasManualOrder = executeFamiliarCommands && _familiar &&
+                _pendingFamiliarCommands.ContainsKey(_familiarActor);
             if (_familiar && pushedActor == _familiarActor)
                 AddIntent(_familiarActor, pushStep, CoreTurns.PriorityPlayer);
             else if (_familiar && familiarCasting)
             {
                 AddIntent(_familiarActor, Vector2Int.zero, CoreTurns.PriorityFamiliar);
                 QueueMonsterSpriteAction(_familiar, _towerFacing, casting: true);
+            }
+            else if (_familiar && !familiarHasManualOrder && _familiarActor.Species == (byte)MonsterSpecies.MANOEVA &&
+                !_manoevaDisguised.ContainsKey(_familiarActor) && ManoevaCanDisguise &&
+                RollSpeciesAiOnce(_familiarActor, 16) && TryManoevaDisguise(_familiarActor, _familiarCell))
+            {
+                AddIntent(_familiarActor, Vector2Int.zero, CoreTurns.PriorityFamiliar);
+            }
+            else if (_familiar && !familiarHasManualOrder &&
+                _manoevaDisguised.TryGetValue(_familiarActor, out var familiarItemForm) && familiarItemForm)
+            {
+                AddIntent(_familiarActor, Vector2Int.zero, CoreTurns.PriorityFamiliar);
             }
             else if (_familiar)
             {
@@ -475,6 +523,7 @@ namespace AzureDreamsReimagined
                     SpendMonsterMp(_familiarActor, 256);
                     QueueCreatureDamage(_familiarActor, target, WithItemCombatEffects(_familiarActor, FamiliarWeaponDamage(),
                         _creatures[target].Actor, _familiarCell, targetCell));
+                    RevertManoevaDisguise(_familiarActor);
                 }
             }
 
@@ -485,23 +534,39 @@ namespace AzureDreamsReimagined
                 if (blue != _pushedEggAlly)
                 {
                     SetActorCell(blue.Actor, blue.Cell);
-                    Vector2Int? redDestination = null;
-                    if (_familiar)
+                    bool bluePendingCommand = executeFamiliarCommands && _pendingFamiliarCommands.ContainsKey(blue.Actor);
+                    if (!bluePendingCommand && blue.Actor.Species == (byte)MonsterSpecies.MANOEVA &&
+                        !_manoevaDisguised.ContainsKey(blue.Actor) && ManoevaCanDisguise &&
+                        RollSpeciesAiOnce(blue.Actor, 16) && TryManoevaDisguise(blue.Actor, blue.Cell))
                     {
-                        var redIntent = _turnIntents.Find(intent => intent.Actor == _familiarActor);
-                        redDestination = _familiarCell + new Vector2Int(redIntent.DeltaX, redIntent.DeltaY);
+                        AddIntent(blue.Actor, Vector2Int.zero, CoreTurns.PriorityFamiliar);
                     }
-                    var (blueStep, target) = PlanFamiliarTurn(blue.Actor, blue.View, blue.Cell, destination,
-                        summonCell ?? reservedPushCell, redDestination, executeFamiliarCommands);
-                    AddIntent(blue.Actor, blueStep, CoreTurns.PriorityFamiliar);
-                    if (target >= 0)
+                    else if (!bluePendingCommand &&
+                        _manoevaDisguised.TryGetValue(blue.Actor, out var blueItemForm) && blueItemForm)
                     {
-                        var targetCell = _creatures[target].Cell;
-                        QueueMonsterSpriteAction(blue.View, targetCell - blue.Cell,
-                            targetHeight: TowerTileHeight(targetCell) - TowerTileHeight(blue.Cell));
-                        SpendMonsterMp(blue.Actor, 256);
-                        QueueCreatureDamage(blue.Actor, target, WithItemCombatEffects(blue.Actor, blue.Actor.CurrentAttack,
-                            _creatures[target].Actor, blue.Cell, targetCell));
+                        AddIntent(blue.Actor, Vector2Int.zero, CoreTurns.PriorityFamiliar);
+                    }
+                    else
+                    {
+                        Vector2Int? redDestination = null;
+                        if (_familiar)
+                        {
+                            var redIntent = _turnIntents.Find(intent => intent.Actor == _familiarActor);
+                            redDestination = _familiarCell + new Vector2Int(redIntent.DeltaX, redIntent.DeltaY);
+                        }
+                        var (blueStep, target) = PlanFamiliarTurn(blue.Actor, blue.View, blue.Cell, destination,
+                            summonCell ?? reservedPushCell, redDestination, executeFamiliarCommands);
+                        AddIntent(blue.Actor, blueStep, CoreTurns.PriorityFamiliar);
+                        if (target >= 0)
+                        {
+                            var targetCell = _creatures[target].Cell;
+                            QueueMonsterSpriteAction(blue.View, targetCell - blue.Cell,
+                                targetHeight: TowerTileHeight(targetCell) - TowerTileHeight(blue.Cell));
+                            SpendMonsterMp(blue.Actor, 256);
+                            QueueCreatureDamage(blue.Actor, target, WithItemCombatEffects(blue.Actor, blue.Actor.CurrentAttack,
+                                _creatures[target].Actor, blue.Cell, targetCell));
+                            RevertManoevaDisguise(blue.Actor);
+                        }
                     }
                 }
             }
@@ -549,6 +614,32 @@ namespace AzureDreamsReimagined
 
         private bool TryMandaraSpin(CoreActor actor) =>
             actor.Species == (byte)MonsterSpecies.MANDARA && CanCastMagic(actor) && RollSpawnRange(4) == 0;
+
+        // Zu/Cyclone (paralisia), Blume (lavagem cerebral) e Viper (veneno) trocam o dano
+        // normal do ataque corpo a corpo por um efeito de status, igual ao decomp (cada um
+        // checa o status antes de usar a habilidade em select_creature_action_and_target.c).
+        // Weadog NAO entra aqui - ele causa dano normal E drena MP ao mesmo tempo, ver o
+        // bloco 'else if (attack)' em CommitMonsterTurn.
+        private bool TryStatusOnAttack(CoreActor actor, out sbyte status)
+        {
+            status = 0;
+            switch ((MonsterSpecies)actor.Species)
+            {
+                case MonsterSpecies.ZU:
+                case MonsterSpecies.CYCLONE:
+                    status = StatusId.PARALYSIS;
+                    break;
+                case MonsterSpecies.BLUME:
+                    status = StatusId.BRAINWASH;
+                    break;
+                case MonsterSpecies.VIPER:
+                    status = StatusId.POISON;
+                    break;
+                default:
+                    return false;
+            }
+            return RollSpawnRange(4) == 0;
+        }
 
         private (int Power, sbyte Status, int Spell) PrepareMonsterSpell(CoreActor actor, Vector2Int from, Vector2Int target)
         {
@@ -605,6 +696,9 @@ namespace AzureDreamsReimagined
             if (actor == null) return 0;
             for (int i = 0; i < 4; i++)
                 if (actor.StatusId(i) == StatusId.SPEED) return actor.StatusValue(i);
+            // Picket's innate 'Quick' trait (Haste - takes two actions per turn): always hasted
+            // when no explicit Speed status (e.g. a Slow trap) overrides it above.
+            if (actor.Species == (byte)MonsterSpecies.PICKET) return 2;
             return 0;
         }
 
@@ -726,6 +820,17 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>All views share this one clock; no actor runs its own turn coroutine.</summary>
+        private bool HopsBetweenTowerBlocks(Vector3 from, Vector2Int cell) =>
+            EnteredTowerCell(from, cell) && Mathf.Abs(CellPosition(cell).y - from.y) > 0.01f;
+
+        private Vector3 TowerStepPosition(Vector3 from, Vector2Int cell, float progress)
+        {
+            var position = Vector3.Lerp(from, CellPosition(cell), progress);
+            if (HopsBetweenTowerBlocks(from, cell))
+                position.y += 0.28f * (4f * progress * (1f - progress));
+            return position;
+        }
+
         public void TickTurnPresentation(float deltaTime)
         {
             if (!_turnBusy || _area != Area.Tower || deltaTime < 0f || float.IsNaN(deltaTime)) return;
@@ -736,24 +841,28 @@ namespace AzureDreamsReimagined
             }
             _turnElapsed += deltaTime;
             float duration = _quickTowerStep ? _turnDuration * 0.65f : _turnDuration;
-            Vector3 playerDestination = CellPosition(_playerCell);
-            bool hopsBetweenBlocks = EnteredTowerCell(_playerFrom, _playerCell) &&
-                Mathf.Abs(playerDestination.y - _playerFrom.y) > 0.01f;
+            bool hopsBetweenBlocks = HopsBetweenTowerBlocks(_playerFrom, _playerCell);
+            for (int ci = 0; ci < _creatures.Count; ci++)
+                if (_creatures[ci].View)
+                    hopsBetweenBlocks |= HopsBetweenTowerBlocks(_creatureFroms[ci], _creatures[ci].Cell);
+            if (_familiar) hopsBetweenBlocks |= HopsBetweenTowerBlocks(_familiarFrom, _familiarCell);
+            if (_blueCollarAlly?.View)
+                hopsBetweenBlocks |= HopsBetweenTowerBlocks(_blueFamiliarFrom, _blueCollarAlly.Cell);
+            if (_pushedEggAlly?.View && _pushedEggAlly != _blueCollarAlly)
+                hopsBetweenBlocks |= HopsBetweenTowerBlocks(_pushedEggFrom, _pushedEggAlly.Cell);
             if (hopsBetweenBlocks) duration = Mathf.Max(duration, 0.22f);
             float t = Mathf.Clamp01(_turnElapsed / Mathf.Max(0.02f, duration));
             if (_player)
             {
-                Vector3 position = Vector3.Lerp(_playerFrom, playerDestination, t);
-                if (hopsBetweenBlocks) position.y += 0.28f * (4f * t * (1f - t));
-                _player.transform.position = position;
+                _player.transform.position = TowerStepPosition(_playerFrom, _playerCell, t);
             }
             for (int ci = 0; ci < _creatures.Count; ci++)
-                if (_creatures[ci].View) _creatures[ci].View.transform.position = Vector3.Lerp(_creatureFroms[ci], CellPosition(_creatures[ci].Cell), t);
-            if (_familiar) _familiar.transform.position = Vector3.Lerp(_familiarFrom, CellPosition(_familiarCell), t);
+                if (_creatures[ci].View) _creatures[ci].View.transform.position = TowerStepPosition(_creatureFroms[ci], _creatures[ci].Cell, t);
+            if (_familiar) _familiar.transform.position = TowerStepPosition(_familiarFrom, _familiarCell, t);
             if (_blueCollarAlly?.View)
-                _blueCollarAlly.View.transform.position = Vector3.Lerp(_blueFamiliarFrom, CellPosition(_blueCollarAlly.Cell), t);
+                _blueCollarAlly.View.transform.position = TowerStepPosition(_blueFamiliarFrom, _blueCollarAlly.Cell, t);
             if (_pushedEggAlly?.View && _pushedEggAlly != _blueCollarAlly)
-                _pushedEggAlly.View.transform.position = Vector3.Lerp(_pushedEggFrom, CellPosition(_pushedEggAlly.Cell), t);
+                _pushedEggAlly.View.transform.position = TowerStepPosition(_pushedEggFrom, _pushedEggAlly.Cell, t);
             PresentTurnLocomotion(t);
             foreach (var view in _monsterSpriteActions)
                 if (view) view.PresentAction(t);
@@ -897,8 +1006,18 @@ namespace AzureDreamsReimagined
                     FinishGhoshDuel(creature, !lostGhoshDuel);
                 else if (!_revertedActors.Remove(creature.Actor))
                 {
-                    PlayRetailSound(RetailSfx.MonsterDefeat);
+                    // update_actor_defeat_removal: 0x806 for Ifrit/Manoeva, 0x805 otherwise;
+                    // Baloon's own defeat callback plays its pop (0x807).
+                    PlayRetailSound(MonsterDefeatPresenter.IsBaloon(creature.Actor.Species) ? RetailSfx.BaloonPop :
+                        MonsterDefeatPresenter.UsesAlternateCue(creature.Actor.Species) ? RetailSfx.MonsterDefeatAlt :
+                        RetailSfx.MonsterDefeat);
                     if (creature.CarriesWaterMedal) DropWaterMedal(creature.Cell);
+                    // Viper carregando um ovo (TryViperGrabEgg): cai de volta no chao ao ser derrotada.
+                    if (_viperCarriedEgg.TryGetValue(creature.Actor, out var carriedEgg))
+                    {
+                        DropTowerReward(creature.Cell, carriedEgg);
+                        _viperCarriedEgg.Remove(creature.Actor);
+                    }
                     _finishingBlows.TryGetValue(creature.Actor, out var finisher);
                     string defeat = DescribeDefeatAndGrantExperience(creature.Actor, finisher.Actor);
                     defeats = JoinTowerMessages(defeats, defeat);
@@ -918,7 +1037,6 @@ namespace AzureDreamsReimagined
                 _message = T("Your familiar cannot fight and returns to the bag.", "Seu familiar nÃƒÂ£o pode lutar e volta para a bolsa.");
             }
             ResolveSelfiRescue();
-            ResolveManoevaClones();
             ResolveSpeciesObstacles();
             damage = JoinTowerMessages(damage, _speciesActionMessages);
             TickTowerVitals();
@@ -956,6 +1074,12 @@ namespace AzureDreamsReimagined
             if (_trapGoUp)
             {
                 StartCoroutine(PlayGoUpTransition());
+                CoreTurns.BeginTurn();
+                return;
+            }
+            if (_trapGoDown)
+            {
+                StartCoroutine(PlayGoDownTransition());
                 CoreTurns.BeginTurn();
                 return;
             }
@@ -1005,13 +1129,18 @@ namespace AzureDreamsReimagined
             return FindEggSpecies(actor.Species)?.name ?? ((AzureDreams.Core.MonsterSpecies)actor.Species).ToString();
         }
 
+        // Red damage number for the tower message log/dialogue box (white by default,
+        // see TowerGameController.cs's lazy GUIStyle init). Styles there have richText
+        // enabled, so this renders instead of showing the raw tag.
+        private static string DamageLogSpan(int damage) => $"<color=#FF5454>{damage}</color>";
+
         private void RecordTowerHit(CoreActor attacker, CoreActor target, int damage, bool needsActiveFamiliar = false, int? element = null)
         {
             if (damage <= 0) return;
             string source = TowerCombatName(attacker);
             string name = TowerCombatName(target);
-            _turnDamageMessages.Add((target, T($"{source} hit {name} for {damage} damage.",
-                $"{source} atingiu {name} e causou {damage} de dano."), needsActiveFamiliar, true, attacker,
+            _turnDamageMessages.Add((target, T($"{source} hit {name} for {DamageLogSpan(damage)} damage.",
+                $"{source} atingiu {name} e causou {DamageLogSpan(damage)} de dano."), needsActiveFamiliar, true, attacker,
                 element ?? (GearElement(CombatGear(attacker, false)) is var weaponElement && weaponElement != 0
                     ? weaponElement : UnitElement(attacker))));
         }
@@ -1020,8 +1149,8 @@ namespace AzureDreamsReimagined
         {
             if (damage <= 0) return;
             string name = TowerCombatName(target);
-            _turnDamageMessages.Add((target, T($"{name} took {damage} damage from {sourceEn}.",
-                $"{name} sofreu {damage} de dano por {sourcePt}."), false, false, null, 0));
+            _turnDamageMessages.Add((target, T($"{name} took {DamageLogSpan(damage)} damage from {sourceEn}.",
+                $"{name} sofreu {DamageLogSpan(damage)} de dano por {sourcePt}."), false, false, null, 0));
         }
 
         private void ResolveMonsterWakeUps()
@@ -1071,7 +1200,7 @@ namespace AzureDreamsReimagined
         private void RetireTowerHitView(GameObject view)
         {
             var monster = view ? view.GetComponentInChildren<MonsterTurnSpriteView>() : null;
-            float defeatDuration = monster ? monster.BeginDefeat() : 0f;
+            float defeatDuration = monster ? MonsterDefeatPresenter.Begin(monster, monster.DefeatSpecies, monster.Facing) : 0f;
             if (defeatDuration > 0f)
             {
                 foreach (var collider in view.GetComponentsInChildren<Collider>()) collider.enabled = false;
@@ -1139,9 +1268,14 @@ namespace AzureDreamsReimagined
             }
             CheckGroundItemOnArrival();
             if (InTowerTutorial) CheckTutorialSpot();
-            if (_playerCell == _stairCell && _floor < 40 && !_elevatorDeclined && !_carriedView && !ItemImmobilized(_playerActor))
+            if (_playerCell == _stairCell && CanAscendFromFloor && !_elevatorDeclined && !_carriedView && !ItemImmobilized(_playerActor))
                 _checkpointMenu = CheckpointMenu.Ascend;
-            if (_playerCell != _stairCell) _elevatorDeclined = false;
+            else if (_playerCell == _stairCell && InSecondTower && AtSecondTowerTop)
+                ShowNoMoreFloors();
+            else if (OnSecondTowerElevator && !ItemImmobilized(_playerActor))
+                TrySecondTowerElevator(fromInteract: false);
+            if (_playerCell != _stairCell && _playerCell != SecondTowerElevatorCell) _elevatorDeclined = false;
+            if (_playerCell != SecondTowerElevatorCell) _ascendToSecondTower = false;
         }
         private static void Animate(PsxSpriteRenderer renderer, bool moving)
         {
@@ -1184,9 +1318,16 @@ namespace AzureDreamsReimagined
             if (_kohSprite)
             {
                 bool inTown = _area == Area.Town;
-                // The interior camera is closer. Keep Koh's apparent size consistent without changing room framing.
-                float framingScale = inTown && _interior ? InteriorCameraDistance / _townCameraDistance : 1f;
-                _kohSprite.ConfigurePresentation(_gameCamera, inTown, framingScale, GameplayCameraPitch);
+                // Interiors use a closer camera for tighter room framing, which makes every
+                // sprite read larger on screen via perspective - this used to be compensated
+                // away here by shrinking Koh's own scale (InteriorCameraDistance/_townCameraDistance,
+                // about 0.74x), but no other town resident (TownCharacterSpriteView and friends)
+                // applies that compensation, so Koh ended up looking noticeably smaller than
+                // every NPC standing next to him indoors. The retail game never corrected for
+                // camera-distance perspective changes either (same finding as the tower pitch
+                // stretch fix above), so Koh now stays at his authored size everywhere, same as
+                // every other character.
+                _kohSprite.ConfigurePresentation(_gameCamera, inTown, 1f, GameplayCameraPitch);
                 _kohSprite.SetFacing(_area == Area.Tower ? (Vector2)_towerFacing : _townFacing);
             }
             for (int ci = 0; ci < _creatures.Count; ci++)

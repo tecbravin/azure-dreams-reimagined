@@ -32,8 +32,8 @@ namespace AzureDreamsReimagined
         private Vector2 _titleImageScroll;
         private bool _manualZoom;
         private float _titleMainStarted;
-        private Texture2D _titleFlare;
         private const float TitleAscentSeconds = 3.2f;
+        private const float TitleMenuArrivalSeconds = TitleAscentSeconds + 105f / 60f;
 
         private bool HasAutomaticProgress => SaveSystem.HasSave ||
             TownSaveVariables.HasValue("gold") || TownSaveVariables.HasValue("level") ||
@@ -41,6 +41,7 @@ namespace AzureDreamsReimagined
 
         private void ShowTitle()
         {
+            _titleConfirmRow = -1;
             _titleAutosave = HasAutomaticProgress;
             _titleAutomaticSummary = _titleAutosave ? ReadAutomaticSaveSummary() : null;
             _titleHasSave = _titleAutosave;
@@ -150,10 +151,11 @@ namespace AzureDreamsReimagined
         private bool HandleTitleInput()
         {
             if (_titlePage == TitlePage.Closed) return false;
+            if (_titleConfirmRow >= 0) { TickTitleConfirmation(); return true; }
             var keys = Keyboard.current;
             bool confirm = keys != null && (keys.enterKey.wasPressedThisFrame || keys.numpadEnterKey.wasPressedThisFrame) ||
                 _interact?.WasPressedThisFrame() == true;
-            bool back = keys != null && keys.qKey.wasPressedThisFrame;
+            bool back = keys != null && (_cancel?.WasPressedThisFrame() == true);
             if (_titlePage == TitlePage.Opening)
             {
                 if (confirm || back || (!_openingPlayer.isPrepared && Time.realtimeSinceStartup > _openingPrepareDeadline))
@@ -166,6 +168,11 @@ namespace AzureDreamsReimagined
             int step = (MenuDirectionPressed(2) ? 1 : 0) - (MenuDirectionPressed(1) ? 1 : 0);
             if (_titlePage == TitlePage.Main)
             {
+                if (Time.unscaledTime - _titleMainStarted < TitleMenuArrivalSeconds && (confirm || step != 0))
+                {
+                    _titleMainStarted = Time.unscaledTime - TitleMenuArrivalSeconds - 1f;
+                    return true;
+                }
                 int previous = _titleSelection;
                 if (step != 0)
                 {
@@ -205,10 +212,21 @@ namespace AzureDreamsReimagined
 
         private void SelectTitleOption(int row)
         {
+            if (_titleConfirmRow >= 0 || row == 1 && !_titleHasSave) return;
             _titleSelection = row;
-            // The original menu uses 0x503 for confirmation. Continuing uses
-            // the separate 0x505 retail cue so the two start choices differ.
-            PlayRetailSound(row == 1 ? RetailSfx.Pickup : RetailSfx.Confirm);
+            if (row is 0 or 1)
+            {
+                _titleConfirmRow = row;
+                _titleConfirmStarted = Time.unscaledTime;
+                PlayRetailSound(RetailSfx.TitleStart);
+                return;
+            }
+            PlayRetailSound(RetailSfx.TitleOptions);
+            CompleteTitleOption(row);
+        }
+
+        private void CompleteTitleOption(int row)
+        {
             switch (row)
             {
                 case 0:
@@ -349,7 +367,7 @@ namespace AzureDreamsReimagined
                 if (DrawInventoryButton(new Rect(panel.x + 13f, panel.y + 105f, panel.width - 26f, 30f),
                     T("Start new game", "Iniciar novo jogo"))) BeginNewGame();
                 if (DrawInventoryButton(new Rect(panel.x + 13f, panel.y + 142f, panel.width - 26f, 30f),
-                    T("Back [Esc]", "Voltar [Esc]"))) BackFromTitlePage();
+                    WithCancelHint("Back", "Voltar"))) BackFromTitlePage();
                 return;
             }
             GUILayout.BeginArea(new Rect(panel.x + 12f, panel.y + 9f, panel.width - 24f, panel.height - 18f));
@@ -361,14 +379,14 @@ namespace AzureDreamsReimagined
                     if (DrawTitleSubButton(1, T("Manual", "Manual"))) SelectTitleSettings(1);
                     break;
             }
-            if (GUILayout.Button(T("Back [Esc]", "Voltar [Esc]"))) BackFromTitlePage();
+            if (GUILayout.Button(WithCancelHint("Back", "Voltar"))) BackFromTitlePage();
             GUILayout.EndArea();
         }
 
         private void DrawTitleMenu(Rect screen)
         {
             float elapsed = Time.unscaledTime - _titleMainStarted;
-            if (elapsed < 1.3f) return;
+            if (elapsed < TitleMenuArrivalSeconds) return;
             _titleOptionStyle ??= new GUIStyle(GUI.skin.label)
             {
                 alignment = TextAnchor.MiddleCenter,
@@ -377,9 +395,12 @@ namespace AzureDreamsReimagined
 
             float rowHeight = Mathf.Min(42f, Mathf.Min(screen.height * 0.073f, screen.width / 8f));
             float rowWidth = rowHeight * 8f;
-            _titleOptionStyle.fontSize = Mathf.Max(1, Mathf.RoundToInt(rowHeight));
+            // Leave ~22% headroom below rowHeight: setting fontSize equal to the
+            // row's pixel height left zero margin for the font's actual ascent+descent,
+            // which OpenDyslexic's taller metrics overflowed (title text clipped at top).
+            _titleOptionStyle.fontSize = Mathf.Max(1, Mathf.RoundToInt(rowHeight * 0.78f));
             float left = (screen.width - rowWidth) * 0.5f;
-            float arrival = Mathf.Clamp01((elapsed - 1.3f) / 0.65f);
+            float arrival = Mathf.Clamp01((elapsed - TitleMenuArrivalSeconds) / 0.65f);
             float lowestTop = screen.height - 4f * rowHeight - 21f;
             float top = Mathf.Lerp(lowestTop, Mathf.Min(lowestTop, screen.height * 0.59f), arrival);
 
@@ -394,60 +415,7 @@ namespace AzureDreamsReimagined
             DrawTitleOption(new Rect(left, top + 3f * rowHeight, rowWidth, rowHeight), 3, T("Gallery", "Galeria"), arrival: arrival);
         }
 
-        private void DrawTitleFlare(Rect screen, float ascent)
-        {
-            if (Event.current.type != EventType.Repaint || ascent < 0.52f) return;
-            if (!_titleFlare)
-            {
-                _titleFlare = new Texture2D(64, 64, TextureFormat.RGBA32, false)
-                {
-                    name = "Title lens flare",
-                    hideFlags = HideFlags.HideAndDontSave,
-                    filterMode = FilterMode.Bilinear,
-                    wrapMode = TextureWrapMode.Clamp
-                };
-                var pixels = new Color32[64 * 64];
-                for (int y = 0; y < 64; y++)
-                for (int x = 0; x < 64; x++)
-                {
-                    float dx = (x - 31.5f) / 31.5f;
-                    float dy = (y - 31.5f) / 31.5f;
-                    float radius = Mathf.Sqrt(dx * dx + dy * dy);
-                    float glow = Mathf.Pow(Mathf.Clamp01(1f - radius), 2.5f);
-                    pixels[y * 64 + x] = new Color32(255, 245, 205, (byte)(glow * 255f));
-                }
-                _titleFlare.SetPixels32(pixels);
-                _titleFlare.Apply(false, true);
-            }
-
-            float strength = Mathf.Clamp01((ascent - 0.52f) * 3f);
-            float pulse = 0.83f + 0.17f * Mathf.Sin(Time.unscaledTime * 3.7f);
-            float xPos = screen.width * 0.715f;
-            float yPos = screen.height * 0.50f;
-            float size = Mathf.Min(screen.width, screen.height) * 0.22f;
-            Color old = GUI.color;
-            // A lens flare should read as the camera catching the sun: concentric
-            // bloom and small circular ghosts along the optical axis.  The old
-            // horizontal/vertical bars read as a UI cross rather than sunlight.
-            void DrawOrb(float centerX, float centerY, float radius, Color color)
-            {
-                GUI.color = color;
-                GUI.DrawTexture(new Rect(centerX - radius, centerY - radius, radius * 2f, radius * 2f), _titleFlare);
-            }
-
-            DrawOrb(xPos, yPos, size * 1.32f, new Color(1f, 0.77f, 0.38f, strength * pulse * 0.16f));
-            DrawOrb(xPos, yPos, size * 0.78f, new Color(1f, 0.90f, 0.60f, strength * pulse * 0.42f));
-            DrawOrb(xPos, yPos, size * 0.35f, new Color(1f, 0.98f, 0.84f, strength * pulse * 0.91f));
-
-            // Reflections move towards the centre of the lens, like a real camera
-            // looking into a bright sky, instead of producing hard star-shaped rays.
-            Vector2 opticalAxis = new(screen.center.x - xPos, screen.center.y - yPos);
-            DrawOrb(xPos + opticalAxis.x * 0.30f, yPos + opticalAxis.y * 0.30f, size * 0.13f,
-                new Color(0.95f, 0.70f, 0.36f, strength * pulse * 0.32f));
-            DrawOrb(xPos + opticalAxis.x * 0.57f, yPos + opticalAxis.y * 0.57f, size * 0.075f,
-                new Color(0.55f, 0.82f, 0.72f, strength * pulse * 0.26f));
-            GUI.color = old;
-        }
+        private void DrawTitleFlare(Rect screen, float ascent) => DrawRetailTitleLens(screen);
 
         private void DrawTitleOption(Rect row, int option, string label, bool enabled = true, float arrival = 1f)
         {
@@ -462,17 +430,13 @@ namespace AzureDreamsReimagined
                 var band = new Rect(row.center.x - bandWidth * 0.5f, row.y + 2f, bandWidth, row.height - 4f);
                 DrawHudFill(band, new Color(0.08f, 0.17f, 0.31f, 0.58f));
 
-                if (_titleMenuCrystal)
-                {
-                    float size = row.height * 0.68f;
-                    float y = row.center.y - size * 0.5f;
-                    GUI.DrawTexture(new Rect(band.x - size - 4f, y, size, size), _titleMenuCrystal, ScaleMode.ScaleToFit);
-                    GUI.DrawTexture(new Rect(band.xMax + 4f, y, size, size), _titleMenuCrystal, ScaleMode.ScaleToFit);
-                }
+                DrawRetailTitleCrystals(row, band);
             }
 
             float pulse = selected ? 0.92f + 0.08f * Mathf.Sin(Time.unscaledTime * 4f) : 1f;
-            float opacity = (selected ? 1f : enabled ? 0.70f : 0.38f) * arrival * pulse;
+            float flightTicks = _titleConfirmRow >= 0 ? (Time.unscaledTime - _titleConfirmStarted) * 60f : 0f;
+            float departing = _titleConfirmRow < 0 ? 1f : selected ? (((int)flightTicks >> 3 & 1) == 0 ? 1f : .15f) : Mathf.Clamp01(1f-flightTicks/18f);
+            float opacity = (selected ? 1f : enabled ? 0.70f : 0.38f) * arrival * pulse * departing;
             Color previousColor = GUI.contentColor;
             GUI.contentColor = new Color(0f, 0f, 0f, opacity);
             const float outline = 1.35f;
@@ -499,7 +463,7 @@ namespace AzureDreamsReimagined
             GUILayout.BeginArea(new Rect(panel.x + 10f, panel.y + 8f, panel.width - 20f, panel.height - 16f));
             GUILayout.BeginHorizontal();
             GUILayout.Label(manual ? T("Game Manual (English)", "Manual do jogo (em inglês)") : T("Portrait Gallery", "Galeria de retratos"), _bodyStyle);
-            if (GUILayout.Button(T("Back [Esc]", "Voltar [Esc]"), GUILayout.Width(104f))) BackFromTitlePage();
+            if (GUILayout.Button(WithCancelHint("Back", "Voltar"), GUILayout.Width(104f))) BackFromTitlePage();
             GUILayout.EndHorizontal();
             if (manual)
             {

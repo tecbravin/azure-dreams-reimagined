@@ -7,7 +7,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        [SerializeField] private string _inventoryBinding = "<Keyboard>/tab";
+        [SerializeField] private string _inventoryBinding = "<Keyboard>/i";
         [SerializeField] private Texture2D _kohStatusFaces;
         [SerializeField] private Texture2D _kewneMenuPortrait;
         [SerializeField] private Texture2D _hatchedEggInventoryIcon;
@@ -275,9 +275,12 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        private static int InventoryCharacterDelta(Keyboard keyboard) =>
-            keyboard?.pageUpKey.wasPressedThisFrame == true ? -1 :
-            keyboard?.pageDownKey.wasPressedThisFrame == true ? 1 : 0;
+        private int InventoryCharacterDelta(Keyboard keyboard) =>
+            _rotateLeftAction?.WasPressedThisFrame() == true ? -1 :
+            _rotateRightAction?.WasPressedThisFrame() == true ? 1 : 0;
+
+        private string InventoryCharacterKeys => $"{_rotateLeftAction?.GetBindingDisplayString() ?? "K"}/{_rotateRightAction?.GetBindingDisplayString() ?? "L"}";
+        private string InventoryCharacterHint => T($"{InventoryCharacterKeys}: character", $"{InventoryCharacterKeys}: personagem");
 
         private void DrawTowerInventory(float width, float height)
         {
@@ -293,9 +296,10 @@ namespace AzureDreamsReimagined
                 DrawFamiliarInventoryPrompt(width, height);
                 return;
             }
-            float panelWidth = Mathf.Min(228f, (width - 44f) * 0.5f);
-            var items = new Rect(width * 0.5f - panelWidth - 5f, height * 0.25f, panelWidth, 207f);
-            var stats = new Rect(items.xMax + 10f, items.y, panelWidth, items.height);
+            var layout = InventoryPanels(width,height,FamiliarInventoryCount,_familiarStatus);
+            var items = layout.Items;
+            var stats = layout.Stats;
+            float panelWidth = items.width;
             DrawDialogueFrame(items);
             DrawDialogueFrame(stats);
             var collarActor = InventoryCollarActor(InventoryActorCollar(_inventoryActorSlot));
@@ -306,18 +310,25 @@ namespace AzureDreamsReimagined
             }
             int count = VisibleItemCount;
             int itemCount = count - FamiliarInventoryCount;
-            DrawInventoryText(new Rect(items.x + 10f, items.y + 6f, panelWidth - 20f, 22f),
-                _familiarStatus ? T("Familiars", "Familiares") :
-                    T("Items", "Itens") + $" {itemCount}/{Inventory.SlotCapacity}", _bodyStyle);
-            if (!_familiarStatus && _itemCommandIndex < 0 && itemCount > 1 && DrawInventoryButton(
-                new Rect(items.xMax - 88, items.y + 6, 78, 24), T("Sort", "Ordenar"))) SortInventory();
+            // Familiars share the same 20 slots as items (see HomeStorage's combined
+            // "_townInventory.TotalItems + FamiliarInventoryCount" tally), so the header
+            // counts both toward the total here too - showing only itemCount/SlotCapacity
+            // understated how full the bag actually was whenever familiars were carried.
+            bool showSort = !_familiarStatus && _itemCommandIndex < 0 && itemCount > 1;
+            DrawInventoryFittedText(new Rect(items.x + 10f, items.y + 6f, panelWidth - 54f - (showSort ? 104f : 0f), 30f),
+                _familiarStatus ? T("Familiars", "Familiares") + $" {FamiliarInventoryCount}/{Inventory.SlotCapacity}" :
+                    T("Items", "Itens") + $" {count}/{Inventory.SlotCapacity}", InventoryEmphasisStyle(_bodyStyle));
+            if (!_familiarStatus && _itemCommandIndex < 0 && itemCount > 1 && DrawInventoryFittedButton(
+                new Rect(items.xMax - 136, items.y + 6, 92, 24), T("Sort", "Ordenar"))) SortInventory();
+            DrawCornerSettingsButton(new Rect(items.xMax-36f,items.y+6f,26f,26f));
             DrawInventoryTabs(items);
             int first = _familiarStatus ? Mathf.Max(0, _inventoryOffset) / InventoryRowsPerPage * InventoryRowsPerPage :
                 FirstItemRowOnPage;
             int end = _familiarStatus ? FamiliarInventoryCount : count;
             for (int i = first; i < first + InventoryRowsPerPage; i++)
             {
-                var row = new Rect(items.x + 10f, items.y + 61f + (i - first) * 24f, panelWidth - 20f, 23f);
+                float rowHeight=(items.height-80f-(!_familiarStatus && OccupiedInventoryPageCount>1 ? 24f : 0f))/InventoryRowsPerPage;
+                var row = new Rect(items.x + 10f, items.y + 73f + (i - first) * rowHeight, panelWidth - 20f, rowHeight-2f);
                 if (i >= end)
                 {
                     if (!_familiarStatus)
@@ -335,7 +346,7 @@ namespace AzureDreamsReimagined
                     ? T("Familiar: ", "Familiar: ") + (reserve?.Name ?? FamiliarDisplayName)
                     : item == null ? T("Medicinal Herb", "Erva medicinal") : InventoryItemName(item);
                 if (item != null && Equipped(item)) label += " [E]";
-                if (item?.Kind == ItemKind.Ball) label += $" ({Mathf.Max(0, (int)item.Param)})";
+                if (item?.Kind == ItemKind.Ball && !SecondTowerItems.IsUnknown(item)) label += $" ({Mathf.Max(0, (int)item.Param)})";
                 var hitArea = row;
                 bool focused = i == _inventoryOffset;
                 if (focused) DrawInventoryFocusBand(hitArea);
@@ -345,7 +356,7 @@ namespace AzureDreamsReimagined
                 {
                     if (Event.current.type == EventType.Repaint)
                     {
-                        var iconRect = new Rect(row.x, row.y + 1f, 20f, 20f);
+                        var iconRect = new Rect(row.x, row.center.y - 10f, 20f, 20f);
                         if (familiarInBag)
                         {
                             if (_hatchedEggInventoryIcon)
@@ -360,54 +371,48 @@ namespace AzureDreamsReimagined
                 if (focused) DrawInventoryFocusMarker(hitArea);
                 row.xMin = Mathf.Max(row.xMin, hitArea.x + 27f);
                 if (familiarRow) DrawFamiliarInventoryName(row, label, labelStyle, reserve);
-                else DrawInventoryText(row, label, labelStyle);
+                else DrawInventoryFittedText(row, label, labelStyle);
                 if (_itemCommandIndex < 0 && GUI.Button(hitArea, GUIContent.none, GUIStyle.none))
                 { _inventoryOffset = i; OpenItemCommands(); }
             }
-            float descriptionY = items.yMax + 8f;
-            if (!_familiarStatus && FamiliarInventoryCount > 0)
-                descriptionY = DrawInventoryFamiliarStrip(items);
+            if (!_familiarStatus && OccupiedInventoryPageCount>1) DrawInventoryNextPage(items);
+            float descriptionY = layout.Description.y;
+            var shortcuts = new Rect(items.x,items.yMax+10f,items.width,56f);
+            DrawDialogueFrame(shortcuts);
+            DrawInventoryFamiliarStrip(stats,layout.Description.y-10f);
             if (_inventoryOffset >= 0)
             {
-                var description = new Rect(items.x, descriptionY, panelWidth * 2f + 10f, 48f);
+                var description = new Rect(items.x, descriptionY, layout.Description.width, layout.Description.height);
                 DrawDialogueFrame(description);
                 var selected = SelectedInventoryItem(out _);
                 if (SelectedRawIndex <= FamiliarInventoryRow)
-                    DrawInventoryText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
-                        T("E: Familiar actions", "E: Ações do familiar"), _messageStyle);
+                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f),
+                        T("E: Familiar actions", "E: Ações do familiar"));
                 else if (selected != null)
-                    DrawInventoryText(new Rect(description.x + 10f, description.y + 5f, description.width - 20f, 38f),
-                        ItemDescription(selected) + (selected.Kind == ItemKind.Ball ?
+                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f),
+                        ItemDescription(selected) + (selected.Kind == ItemKind.Ball && !SecondTowerItems.IsUnknown(selected) ?
                             "  " + BallChargeText(selected) + T(" · Spell Lv. ", " · Nív. da magia ") +
-                            BallSpellLevel(selected.Param) : ""), _messageStyle);
+                            BallSpellLevel(selected.Param) : ""));
             }
 
             int actorRow = _familiarStatus ? SelectedRawIndex : InventoryActorRow(_inventoryActorSlot);
             bool viewingFamiliar = actorRow <= FamiliarInventoryRow;
             var actor = DrawInventoryActorStatus(stats, actorRow);
             if (FamiliarInventoryCount > 0 && _itemCommandIndex < 0 &&
-                DrawInventoryButton(new Rect(stats.x + 10f, viewingFamiliar ? (_familiarStatus ? descriptionY + 52f : stats.yMax + 8f) :
-                    stats.yMax - 51f, stats.width - 20f, 21f),
+                DrawInventoryFittedButton(new Rect(shortcuts.x+8f,shortcuts.y+4f,shortcuts.width-16f,24f),
                     _familiarStatus ? T("Items [F]", "Itens [F]") : T("Familiars [F]", "Familiares [F]")))
                 ToggleInventoryFamiliars();
-            if (!viewingFamiliar)
-            {
-                bool canInspectGroundItem = _area == Area.Tower && _inventoryPage + 1 >= OccupiedInventoryPageCount &&
-                    ItemUnderKoh(_playerCell) != null;
-                DrawInventoryText(new Rect(stats.x + 10f, stats.yMax - 29f, panelWidth - 20f, 27f),
-                    canInspectGroundItem
-                        ? T("Left: tabs · Right: ground item\nPgUp/PgDn: character", "Esq.: abas · Dir.: item no chão\nPgUp/PgDn: personagem")
-                        : T("Left/Right: tabs\nPgUp/PgDn: character", "Esq./Dir.: abas\nPgUp/PgDn: personagem"), _messageStyle);
-            }
+            DrawInventoryFittedText(new Rect(shortcuts.x+8f,shortcuts.y+30f,shortcuts.width-16f,22f),
+                T($"Left/Right: tabs · {InventoryCharacterKeys}: character", $"Esq./Dir.: abas · {InventoryCharacterKeys}: personagem"),_messageStyle);
             if (_familiarStatus && actor != null && _itemCommandIndex < 0)
             {
-                var talents = new Rect(stats.x, stats.yMax + 88f, stats.width, 67f);
-                DrawDialogueFrame(talents);
-                DrawInventoryText(new Rect(talents.x + 8f, talents.y + 5f, talents.width - 16f, talents.height - 10f),
-                    T("Talents: ", "Talentos: ") + DescribeTalents(actor), _messageStyle);
+                var talents = new Rect(layout.Description.x+10f,descriptionY+33f,layout.Description.width-20f,layout.Description.height-40f);
+                DrawInventoryParagraph(talents,T("Talents: ", "Talentos: ")+DescribeTalents(actor),3);
             }
             DrawItemCommands(width, height);
         }
+
+        private bool _drawingInventoryStats;
 
         private ActorRecord DrawInventoryActorStatus(Rect panel, int actorRow)
         {
@@ -415,23 +420,29 @@ namespace AzureDreamsReimagined
             var reserve = ReserveForRow(actorRow);
             var actor = familiar ? reserve?.Actor ?? _familiarActor : _playerActor;
             string name = familiar ? reserve?.Name ?? FamiliarDisplayName : "Koh";
-            DrawActorStatus(panel, name, actor, familiar,
+            var body = _bodyStyle;
+            var message = _messageStyle;
+            _bodyStyle = InventoryFitStyle(body,body.fontSize+6,false);
+            _messageStyle = InventoryFitStyle(message,message.fontSize+6,false);
+            _drawingInventoryStats=true;
+            try { DrawActorStatus(panel, name, actor, familiar,
                 reserve?.Actor.Hp ?? (familiar ? _familiarHealth : _health),
                 reserve?.Actor.MaxHp ?? (familiar ? FamiliarMaxHealth : KohMaxHealth),
                 reserve?.Actor.CurrentAttack ?? (familiar ? FamiliarWeaponDamage() : _playerActor.CurrentAttack),
-                actor?.CurrentDefense ?? 0);
+                actor?.CurrentDefense ?? 0); }
+            finally { _bodyStyle=body; _messageStyle=message; _drawingInventoryStats=false; }
             return actor;
         }
 
-        private float DrawInventoryFamiliarStrip(Rect items)
+        private float DrawInventoryFamiliarStrip(Rect items,float bottom)
         {
-            const float rowHeight = 22f;
+            const float rowHeight = 28f;
             int count = FamiliarInventoryCount;
-            var panel = new Rect(items.x, items.yMax + 6f, items.width, 28f + Mathf.Min(count, 3) * rowHeight);
+            var panel = new Rect(items.x, items.yMax + 10f, items.width, Mathf.Max(56f,bottom-items.yMax-10f));
             DrawDialogueFrame(panel);
             DrawInventoryText(new Rect(panel.x + 9f, panel.y + 3f, panel.width - 18f, 20f), T("Familiars", "Familiares"), _bodyStyle);
             var list = new Rect(panel.x + 9f, panel.y + 22f, panel.width - 18f, panel.height - 25f);
-            float rowWidth = list.width - (count > 3 ? 16f : 0f);
+            float rowWidth = list.width - (count > 1 ? 16f : 0f);
             _inventoryFamiliarScroll = GUI.BeginScrollView(list, _inventoryFamiliarScroll,
                 new Rect(0f, 0f, rowWidth, count * rowHeight));
             int clicked = -1;
@@ -463,7 +474,7 @@ namespace AzureDreamsReimagined
             float tabWidth = (panel.width - 20f - gap * (InventoryPageCount - 1)) / InventoryPageCount;
             for (int page = 0; page < OccupiedInventoryPageCount; page++)
             {
-                var tab = new Rect(panel.x + 10f + page * (tabWidth + gap), panel.y + 33f, tabWidth, 22f);
+                var tab = new Rect(panel.x + 10f + page * (tabWidth + gap), panel.y + 42f, tabWidth, 24f);
                 if (DrawInventoryButton(tab, (page + 1).ToString(), !_familiarStatus && page == _inventoryPage) && _itemCommandIndex < 0)
                     SelectInventoryPage(page);
                 if (!_familiarStatus && page == _inventoryPage)
@@ -484,7 +495,7 @@ namespace AzureDreamsReimagined
 
             if (collarSlot == 0)
             {
-                DrawInventoryText(row, label, style);
+                DrawInventoryFittedText(row, label, InventoryEmphasisStyle(style));
                 return;
             }
 
@@ -501,7 +512,7 @@ namespace AzureDreamsReimagined
             }
             row.xMax = badge.x - 4f;
             GUI.BeginGroup(row);
-            DrawInventoryText(new Rect(Vector2.zero, row.size), label, style);
+            DrawInventoryFittedText(new Rect(Vector2.zero, row.size), label, InventoryEmphasisStyle(style));
             GUI.EndGroup();
         }
 
@@ -600,9 +611,10 @@ namespace AzureDreamsReimagined
             }
             if (actor == null)
             {
-                DrawInventoryText(new Rect(stats.x + 10f, stats.y + 6f, stats.width - 20f, 22f), name, _bodyStyle);
+                DrawInventoryFittedText(new Rect(stats.x + 10f, stats.y + 6f, stats.width - 20f, 22f), name, _bodyStyle);
                 return;
             }
+            bool large = _drawingInventoryStats || stats.height >= 260f;
             float left = stats.x + 10f, top = stats.y + 8f, width = stats.width - 20f;
             if (Event.current.type == EventType.Repaint)
             {
@@ -621,21 +633,21 @@ namespace AzureDreamsReimagined
                         new Rect(x / 160f, 1f - (y + 32f) / 64f, 32f / 160f, 0.5f));
                 }
             }
-            DrawInventoryText(new Rect(left + 53f, top, width - 53f, 20f), HeroName, _bodyStyle);
-            DrawInventoryText(new Rect(left + 53f, top + 23f, width - 105f, 20f), T("TAMER", "DOMADOR"), _messageStyle);
-            DrawInventoryText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
+            DrawInventoryFittedText(new Rect(left + 53f, top, width - 53f, large ? 30f : 20f), HeroName, large ? InventoryEmphasisStyle(_bodyStyle) : _bodyStyle);
+            DrawInventoryFittedText(new Rect(left + 53f, top + (large ? 28f : 23f), width - 105f, large ? 24f : 20f), T("TAMER", "DOMADOR"), _messageStyle);
+            DrawInventoryFittedText(new Rect(left + width - 48f, top + (large ? 28f : 23f), 48f, large ? 24f : 20f),
                 T("LV ", "NÍV ") + Mathf.Max(1, actor.Level), _messageStyle);
-            DrawInventoryText(new Rect(left, top + 50f, 50f, 33f), T("HLTH", "VIDA"), _bodyStyle);
+            DrawInventoryFittedText(new Rect(left, top + 50f, 50f, 33f), T("HLTH", "VIDA"), _bodyStyle);
             DrawFamiliarStatusIcon(new Rect(left + 50f, top + 51f, 14f, 14f), "hp");
-            DrawInventoryText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
-                T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", _messageStyle);
+            DrawInventoryFittedText(new Rect(left + 68f, top + (large ? 54f : 49f), width - 68f, large ? 28f : 17f),
+                T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", large ? InventoryEmphasisStyle(_messageStyle) : _messageStyle);
 
             var inventory = CarriedInventory;
             float shieldX = left + (width + 49f) * 0.5f;
-            DrawGear(new Rect(left + 50f, top + 67f, 14f, 14f), false);
-            DrawGear(new Rect(shieldX, top + 67f, 14f, 14f), true);
-            DrawStatusAttributes(left, top, width, actor, attack, defense);
-            DrawDialogueFrame(new Rect(left - 5f, top + 138f, width + 10f, stats.height - 146f));
+            DrawGear(new Rect(left + 50f, top + (large ? 84f : 67f), 14f, 14f), false);
+            DrawGear(new Rect(shieldX, top + (large ? 84f : 67f), 14f, 14f), true);
+            DrawStatusAttributes(left, top, width, actor, attack, defense, large);
+
 
             void DrawGear(Rect iconRect, bool shield)
             {
@@ -647,7 +659,7 @@ namespace AzureDreamsReimagined
                     if (icon) DrawItemSprite(iconRect, icon);
                 }
                 int strength = IsFrog(actor) ? 0 : shield ? PlayerShieldDefense() : EquipmentBonus(inventory, PlayerEquipped, false);
-                DrawInventoryText(new Rect(iconRect.xMax + 4f, iconRect.y - 1f, 32f, 17f), strength.ToString(), _messageStyle);
+                DrawInventoryFittedText(new Rect(iconRect.xMax + 4f, iconRect.y - 1f, 40f, large ? 22f : 17f), strength.ToString(), large ? InventoryEmphasisStyle(_messageStyle) : _messageStyle);
             }
         }
 
@@ -656,12 +668,13 @@ namespace AzureDreamsReimagined
         private Texture2D FamiliarStatusTexture(string path)
         {
             if (!_familiarStatusTextures.TryGetValue(path, out var texture))
-                _familiarStatusTextures[path] = texture = Resources.Load<Texture2D>(path);
+                _familiarStatusTextures[path] = texture = AssetMode.Load<Texture2D>(path);
             return texture;
         }
 
         private void DrawFamiliarStatus(Rect panel, string name, ActorRecord actor, int health, int maxHp, int attack, int defense)
         {
+            bool large = _drawingInventoryStats || panel.height >= 260f;
             float left = panel.x + 10f, width = panel.width - 20f, top = panel.y + 8f;
             string species = FindEggSpecies(actor.Species)?.name ?? ((MonsterSpecies)actor.Species).ToString();
             if (actor.Species == 0) species = name;
@@ -675,39 +688,62 @@ namespace AzureDreamsReimagined
                 GUI.color = color;
             }
             DrawFamiliarStatusIcon(new Rect(left + 53f, top + 2f, 17f, 17f), FamiliarGenusIcon(genus));
-            GUI.BeginGroup(new Rect(left + 74f, top, width - 74f, 20f));
+            GUI.BeginGroup(new Rect(left + 74f, top, width - 74f, large ? 30f : 20f));
             string displayName = (actor.Flags14 & LevaFusionProtection) != 0 ? name + " [Leva]" : name;
-            DrawInventoryText(new Rect(0f, 0f, width - 74f, 20f), displayName, _bodyStyle);
+            DrawInventoryFittedText(new Rect(0f, 0f, width - 74f, large ? 30f : 20f), displayName, large ? InventoryEmphasisStyle(_bodyStyle) : _bodyStyle);
             GUI.EndGroup();
-            DrawInventoryText(new Rect(left + 53f, top + 23f, width - 105f, 20f), species.ToUpperInvariant(), _messageStyle);
-            DrawInventoryText(new Rect(left + width - 48f, top + 23f, 48f, 20f),
+            DrawInventoryFittedText(new Rect(left + 53f, top + (large ? 28f : 23f), width - 105f, large ? 24f : 20f), species.ToUpperInvariant(), _messageStyle);
+            DrawInventoryFittedText(new Rect(left + width - 48f, top + (large ? 28f : 23f), 48f, large ? 24f : 20f),
                 T("LV ", "NÍV ") + Mathf.Max(1, actor.Level), _messageStyle);
 
-            DrawInventoryText(new Rect(left, top + 51f, 51f, 34f), T("HLTH", "VIDA"), _bodyStyle);
-            DrawFamiliarStatusIcon(new Rect(left + 50f, top + 52f, 14f, 14f), "hp");
-            DrawFamiliarStatusIcon(new Rect(left + 50f, top + 69f, 14f, 14f), "mp");
-            DrawInventoryText(new Rect(left + 68f, top + 49f, width - 68f, 17f),
-                T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", _messageStyle);
-            DrawInventoryText(new Rect(left + 68f, top + 66f, width - 68f, 17f),
-                T("MP ", "PM ") + $"{actor.CurrentMp} / {actor.MaxMp}", _messageStyle);
+            if (!large) DrawInventoryFittedText(new Rect(left, top + 51f, 51f, 34f), T("HLTH", "VIDA"), _bodyStyle);
+            DrawFamiliarStatusIcon(new Rect(left + (large ? 2f : 50f), top + (large ? 60f : 52f), 14f, 14f), "hp");
+            DrawFamiliarStatusIcon(new Rect(left + (large ? 2f : 50f), top + (large ? 88f : 69f), 14f, 14f), "mp");
+            DrawInventoryFittedText(new Rect(left + (large ? 20f : 68f), top + (large ? 54f : 49f), large ? width*.52f-30f : width-68f, large ? 28f : 17f),
+                T("HP ", "PV ") + $"{Mathf.Max(0, health)} / {maxHp}", large ? InventoryEmphasisStyle(_messageStyle) : _messageStyle);
+            DrawInventoryFittedText(new Rect(left + (large ? 20f : 68f), top + (large ? 82f : 66f), large ? width*.52f-30f : width-68f, large ? 28f : 17f),
+                T("MP ", "PM ") + $"{actor.CurrentMp} / {actor.MaxMp}", large ? InventoryEmphasisStyle(_messageStyle) : _messageStyle);
 
-            DrawStatusAttributes(left, top, width, actor, attack, defense);
+            DrawStatusAttributes(left, top+(large ? 22f : 0f), width, actor, attack, defense, large);
 
-            var spells = new Rect(left - 5f, top + 138f, width + 10f, 57f);
-            DrawDialogueFrame(spells);
+            var heldWeapon = actor.Weapon;
+            bool heldFruit = HasLevaFruit(actor);
+            bool hasHeldItem = heldWeapon != null || heldFruit;
+            if (hasHeldItem)
+            {
+                var held = heldWeapon ?? new DungeonItemEntry(4, ItemKind.Fruit, 0, 0);
+                DrawInventoryItemIcon(new Rect(left+(large ? width*.52f : 0f), top + (large ? 54f : 136f), 14f, 14f), held);
+                DrawInventoryFittedText(new Rect(left+(large ? width*.52f : 0f)+18f, top+(large ? 52f : 135f), large ? width*.48f-18f : width-18f,large ? 24f : 16f),
+                    heldWeapon != null ? InventoryItemName(heldWeapon) : T("Leva Fruit", "Fruta Leva"), _messageStyle);
+            }
+            var spells = large
+                ? new Rect(left+width*.52f,top+(hasHeldItem ? 78f : 54f),width*.48f,54f)
+                : new Rect(left-5f,top+(hasHeldItem ? 154f : 138f),width+10f,hasHeldItem ? 41f : 57f);
+            if (!large) DrawDialogueFrame(spells);
             DrawFamiliarSpells(spells, actor);
         }
 
-        private void DrawStatusAttributes(float left, float top, float width, ActorRecord actor, int attack, int defense)
+        private void DrawStatusAttributes(float left, float top, float width, ActorRecord actor, int attack, int defense, bool large = false)
         {
-            float half = width * 0.5f;
-            DrawInventoryText(new Rect(left, top + 85f, half, 17f), T("ATK ", "ATQ ") + attack, _messageStyle);
-            DrawInventoryText(new Rect(left + half, top + 85f, half, 17f), "DEF " + (IsFrog(actor) ? Mathf.Max(1, defense / 2) : defense), _messageStyle);
-            DrawInventoryText(new Rect(left, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveAttack, _messageStyle);
-            DrawInventoryText(new Rect(left + half, top + 102f, half, 17f), T("MAX ", "MÁX ") + actor.EffectiveDefense, _messageStyle);
-            DrawInventoryText(new Rect(left, top + 119f, 35f, 16f), "EXP", _messageStyle);
-            DrawExperienceStars(new Rect(left + 38f, top + 120f, width - 38f, 13f), ExperienceHalfStars(actor.Level, actor.Experience));
+            var style = large ? InventoryEmphasisStyle(_messageStyle) : _messageStyle;
+            float columnWidth=width*(large ? .34f : .5f);
+            float defenseX=left+width*(large ? .39f : .5f);
+            float rowHeight=large ? 28f : 17f;
+            DrawValue(left,top+(large ? 110f : 85f),T("ATK","ATQ"),attack);
+            DrawValue(defenseX,top+(large ? 110f : 85f),"DEF",IsFrog(actor) ? Mathf.Max(1,defense/2) : defense);
+            DrawValue(left,top+(large ? 138f : 102f),T("MAX","MÁX"),actor.EffectiveAttack);
+            DrawValue(defenseX,top+(large ? 138f : 102f),T("MAX","MÁX"),actor.EffectiveDefense);
+            void DrawValue(float x,float y,string label,int value)
+            {
+                float numberWidth=columnWidth*.4f;
+                DrawInventoryFittedText(new Rect(x,y,columnWidth-numberWidth,rowHeight),label,style);
+                DrawInventoryFittedText(new Rect(x+columnWidth-numberWidth,y,numberWidth,rowHeight),value.ToString(),InventoryNumberStyle(style));
+            }
+            DrawInventoryFittedText(new Rect(left, top + (large ? 166f : 119f), 45f, large ? 24f : 16f), "EXP", _messageStyle);
+            DrawExperienceStars(new Rect(left + 48f, top + (large ? 172f : 120f), width - 48f, 13f), ExperienceHalfStars(actor.Level, actor.Experience));
         }
+
+        private Texture2D _monsterPortraitSheet;
 
         private void DrawFamiliarStatusPortrait(Rect portrait, ActorRecord actor, string species)
         {
@@ -718,7 +754,26 @@ namespace AzureDreamsReimagined
                 GUI.DrawTextureWithTexCoords(region, _kewneStatusSheet, new Rect(28f / 319f, 1f - 181f / 273f, 93f / 319f, 140f / 273f));
                 return;
             }
-            _weedyBook ??= Resources.Load<TextAsset>("Town/WeedyBook/pages") is { } book
+            // Status portraits are the drawn genus portraits (Spriters "Monster Portraits": three 30x32 columns
+            // fire/water/wind under a 16 px genus header, one row per species from Dragon to Maximum).
+            if (!IsFrog(actor) && actor.Species >= (byte)MonsterSpecies.DRAGON && actor.Species <= (byte)MonsterSpecies.MAXIMUM)
+            {
+                _monsterPortraitSheet ??= AssetMode.Load<Texture2D>("Tower/MonsterPortraits");
+                if (_monsterPortraitSheet)
+                {
+                    if (Event.current.type != EventType.Repaint) return;
+                    int column = UnitElement(actor) switch { Element.Water => 1, Element.Wind => 2, _ => 0 };
+                    int row = actor.Species - (byte)MonsterSpecies.DRAGON;
+                    float sheetWidth = _monsterPortraitSheet.width, sheetHeight = _monsterPortraitSheet.height;
+                    var cell = new Rect(column * 30f / sheetWidth, 1f - (16f + (row + 1) * 32f) / sheetHeight,
+                        30f / sheetWidth, 32f / sheetHeight);
+                    float width = portrait.height * 30f / 32f;
+                    GUI.DrawTextureWithTexCoords(new Rect(portrait.center.x - width * 0.5f, portrait.y, width, portrait.height),
+                        _monsterPortraitSheet, cell);
+                    return;
+                }
+            }
+            _weedyBook ??= AssetMode.Load<TextAsset>("Town/WeedyBook/pages") is { } book
                 ? JsonUtility.FromJson<MonsterBook>(book.text) : null;
             var page = _weedyBook?.pages == null ? null : System.Array.Find(_weedyBook.pages,
                 entry => string.Equals(entry.name, species, System.StringComparison.OrdinalIgnoreCase));
@@ -790,19 +845,19 @@ namespace AzureDreamsReimagined
                 DrawSpell(actor.U8(offset), actor.U8(offset + 1));
             }
             if (row == 0) DrawSpell(UnitProfile(actor.Species)?.nativeSpellId ?? 0, actor.Level);
-            if (row == 0) DrawInventoryText(new Rect(panel.x + 6f, panel.y + 6f, panel.width - 12f, 17f),
+            if (row == 0) DrawInventoryFittedText(new Rect(panel.x + 6f, panel.y + 6f, panel.width - 12f, _drawingInventoryStats ? 21f : 17f),
                 T("No spells", "Sem magias"), _messageStyle);
 
             void DrawSpell(int id, int level)
             {
                 int family = SpellFamily(id);
                 if (row >= 3 || family < 0 || !shown.Add(family)) return;
-                float y = panel.y + 4f + row++ * 16f;
+                float y = panel.y + 2f + row++ * (_drawingInventoryStats ? 17f : panel.height < 50f ? 12f : 16f);
                 int element = id == 49 ? Element.Water : (id - 1) % 3 == 0 ? Element.Fire :
                     (id - 1) % 3 == 1 ? Element.Water : Element.Wind;
                 DrawFamiliarStatusIcon(new Rect(panel.x + 6f, y + 1f, 13f, 13f), FamiliarGenusIcon(element));
-                DrawInventoryText(new Rect(panel.x + 23f, y, panel.width - 79f, 16f), FamiliarSpellNames[family], _messageStyle);
-                DrawInventoryText(new Rect(panel.xMax - 49f, y, 45f, 16f), T("LV ", "NÍV ") + Mathf.Clamp(level, 1, 99), _messageStyle);
+                DrawInventoryFittedText(new Rect(panel.x + 23f, y, panel.width - 73f, _drawingInventoryStats ? 19f : 16f), FamiliarSpellNames[family], _messageStyle);
+                DrawInventoryFittedText(new Rect(panel.xMax - 47f, y, 43f, _drawingInventoryStats ? 19f : 16f), T("LV ", "NÍV ") + Mathf.Clamp(level, 1, 99), _messageStyle);
             }
         }
 
@@ -824,6 +879,9 @@ namespace AzureDreamsReimagined
         {
             if (Inventory.IsUnrevealedEquipment(item))
                 return T("The properties of this equipment are unknown.", "As propriedades deste equipamento são desconhecidas.");
+            if (SecondTowerItems.IsUnknown(item))
+                return T("An unidentified item. Use it or look at it through Truth Glasses to learn what it is.",
+                    "Um item não identificado. Use-o ou examine-o com os Óculos da Verdade para descobrir o que é.");
             var text = InventoryText.Find(item);
             if (text == null) return InventoryItemName(item);
             string description = T(text.descriptionEn, text.descriptionPtBr);
@@ -852,6 +910,7 @@ namespace AzureDreamsReimagined
         {
             if (item.Kind == MonsterEgg.Kind) return DescribeEgg(item);
             if (item.Kind == ItemKind.Familiar) return FindEggSpecies(item.Subtype)?.name ?? T("Familiar", "Familiar");
+            if (SecondTowerItems.IsUnknown(item)) return SecondTowerItems.AppearanceName(item);
             if (Inventory.IsUnrevealedEquipment(item))
                 return item.Kind switch
                 {

@@ -18,7 +18,7 @@ for f in source.rglob('*'):
  rel=f.relative_to(source)
  if rel.parts[0]=='textures': dest=target/'Textures/Extracted/VirtualMonsbaia'/f.name
  elif f.suffix in ('.obj','.mtl'): dest=target/'Models/Extracted/VirtualMonsbaia'/rel
- elif f.suffix in ('.3dm','.bin'): dest=assets/'StreamingAssets/Extracted/VirtualMonsbaia'/rel
+ elif f.suffix in ('.3dm','.bin'): continue  # raw capture: stays in extracted_assets/virtual_monsbaia
  else: dest=target/'Data/Extracted/VirtualMonsbaia'/rel
  if f.suffix=='.mtl':
   texdir=target/'Textures/Extracted/VirtualMonsbaia'

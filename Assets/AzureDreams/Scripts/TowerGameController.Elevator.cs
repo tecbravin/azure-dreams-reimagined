@@ -27,7 +27,7 @@ namespace AzureDreamsReimagined
         private const int QuakeWarningTurn = 0x401;
         private const int FloorCollapseTurn = 1220;
 
-        private bool CanQuake => _floor < TowerFloorRules.BeldoFloor &&
+        private bool CanQuake => _floor != TowerFloorRules.BeldoFloor &&
             _towerRun?.CurrentState == TowerRunManager.State.InTower;
 
         private bool TryStartFloorCollapse()
@@ -74,7 +74,7 @@ namespace AzureDreamsReimagined
         private void CreateTowerElevator()
         {
             if (!HasRetailElevatorArt)
-                _elevatorSheet = Resources.Load<Texture2D>("Tower/ElevatorSheet");
+                _elevatorSheet = AssetMode.Load<Texture2D>("Tower/ElevatorSheet");
             if (!HasRetailElevatorArt)
             {
                 _elevatorPlatform = CreateMarker(_stairCell, "Tower Stairs", _accentMaterial, PrimitiveType.Cylinder, 0.7f).transform;
@@ -119,7 +119,7 @@ namespace AzureDreamsReimagined
             AddElevatorFamiliar(_familiar, right * 0.76f, new Color(1f, 0.21f, 0.25f), 1f);
             AddElevatorFamiliar(_blueCollarAlly?.View, -right * 0.76f, new Color(0.22f, 0.52f, 1f), -1f);
             PresentElevatorFamiliars(0f, Vector3.zero);
-            var sound = Resources.Load<AudioClip>("Tower/ElevatorAscent");
+            var sound = AssetMode.Load<AudioClip>("Tower/ElevatorAscent");
             if (!sound) return;
             if (!_elevatorAudio)
             {

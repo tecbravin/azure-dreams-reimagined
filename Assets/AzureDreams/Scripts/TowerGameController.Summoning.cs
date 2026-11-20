@@ -11,30 +11,64 @@ namespace AzureDreamsReimagined
         private Sprite[] _closeBagFrames;
         private bool _pullingFamiliarFromBag;
 
+        // The sheet is the Spriters Resource "Tower - OpenBag" layout (Resources/Tower/SummoningSheet),
+        // either at its native 256 px or upscaled to 512 px; rectangles are authored for 512.
+        private float SummoningSheetScale
+        {
+            get
+            {
+                if (!_summoningSheet) _summoningSheet = AssetMode.Load<Texture2D>("Tower/SummoningSheet");
+                if (!_summoningSheet || _summoningSheet.width != _summoningSheet.height ||
+                    (_summoningSheet.width != 256 && _summoningSheet.width != 512)) return 0f;
+                return _summoningSheet.width / 512f;
+            }
+        }
+
         private Sprite[] FamiliarLightFrames()
         {
-            if (!_summoningSheet || _summoningSheet.width != 512 || _summoningSheet.height != 512)
-                return null;
+            float scale = SummoningSheetScale;
+            if (scale <= 0f) return null;
             if (_summoningFrames?.Length == 4) return _summoningFrames;
 
             var frames = new Sprite[4];
             for (int i = 0; i < frames.Length; i++)
                 frames[i] = Sprite.Create(_summoningSheet,
-                    new Rect(256 + i * 64, _summoningSheet.height - 338, 64, 178),
-                    new Vector2(27f / 64f, 6f / 178f), 96f, 0, SpriteMeshType.FullRect);
+                    new Rect((256 + i * 64) * scale, _summoningSheet.height - 338 * scale, 64 * scale, 178 * scale),
+                    new Vector2(27f / 64f, 6f / 178f), 96f * scale, 0, SpriteMeshType.FullRect);
             _summoningFrames = frames;
             return _summoningFrames;
         }
 
-        private void AddStoredFamiliarLight(GameObject familiar)
+        private Sprite _storedFamiliarBeamSprite;
+
+        // Retail's Monster Hut shows a stored familiar (or egg) glowing under a plain light ray, with no
+        // bag underneath it. frames[^1] from FamiliarLightFrames is the bag-pulling animation's last frame,
+        // which has the brown pot/bag baked into its lower third (correct for PresentFamiliarSummoning, the
+        // only other place that uses those frames) -- using it here left a floating pot under every stored
+        // familiar and egg. Crop just the beam, stopping at the frame's own transparent gap above the pot.
+        private Sprite StoredFamiliarBeamSprite()
         {
-            var frames = FamiliarLightFrames();
-            if (!familiar || frames is not { Length: > 0 } || !frames[^1]) return;
+            float scale = SummoningSheetScale;
+            if (scale <= 0f) return null;
+            if (_storedFamiliarBeamSprite) return _storedFamiliarBeamSprite;
+            const int frame = 3; // fully grown beam, same frame FamiliarLightFrames used for this.
+            var rect = new Rect((256 + frame * 64) * scale, _summoningSheet.height - 314 * scale, 64 * scale, 90 * scale);
+            _storedFamiliarBeamSprite = Sprite.Create(_summoningSheet, rect, new Vector2(27f / 64f, 0.05f),
+                96f * scale, 0, SpriteMeshType.FullRect);
+            return _storedFamiliarBeamSprite;
+        }
+
+        private void AddStoredFamiliarLight(GameObject target)
+        {
+            var beamSprite = StoredFamiliarBeamSprite();
+            if (!target || !beamSprite) return;
 
             var beam = new GameObject("Stored familiar light");
-            beam.transform.SetParent(familiar.transform, false);
+            beam.transform.SetParent(target.transform, false);
+            float parentScale = target.transform.localScale.x;
+            if (parentScale != 0f) beam.transform.localScale = Vector3.one / parentScale;
             var sprite = beam.AddComponent<SpriteRenderer>();
-            sprite.sprite = frames[^1];
+            sprite.sprite = beamSprite;
             sprite.sortingOrder = -2;
             beam.AddComponent<AzureDreamsReimagined.Rendering.CameraFacingSprite>();
         }
@@ -115,11 +149,12 @@ namespace AzureDreamsReimagined
         private Sprite[] CreateBagPoseFrames(int top, int bottom)
         {
             var frames = new Sprite[8];
+            float scale = Mathf.Max(0.5f, SummoningSheetScale);
             float height = bottom - top;
             for (int i = 0; i < frames.Length; i++)
                 frames[i] = Sprite.Create(_summoningSheet,
-                    new Rect(i * 64, _summoningSheet.height - bottom, 64, height),
-                    new Vector2(26f / 64f, 3f / height), 96f, 0, SpriteMeshType.FullRect);
+                    new Rect(i * 64 * scale, _summoningSheet.height - bottom * scale, 64 * scale, height * scale),
+                    new Vector2(26f / 64f, 3f / height), 96f * scale, 0, SpriteMeshType.FullRect);
             return frames;
         }
     }

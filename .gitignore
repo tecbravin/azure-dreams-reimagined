@@ -25,3 +25,9 @@ Build/
 Builds/
 *.zip
 .utmp/
+# IDE / Python caches
+.vs/
+__pycache__/
+*.pyc
+# Unity Test Runner temp scenes
+InitTestScene*.unity*

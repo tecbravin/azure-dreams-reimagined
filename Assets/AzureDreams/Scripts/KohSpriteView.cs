@@ -60,6 +60,13 @@ namespace AzureDreamsReimagined
         private Sprite[] _liftFrames;
         private bool _lifting;
         private bool _swimming;
+        private bool _dining;
+        private bool _diningEating;
+        private float _diningStartedAt;
+        private Texture2D _diningAtlas;
+        private Sprite[] _diningFrames;
+        private const int DiningCell = 80;
+        private const int DiningColumns = 8;
         private bool _inTown;
         private float PlaybackSpeed => _inTown ? 1f : TowerGameController.TowerAnimationSpeed;
         private float _framingScale = 1f;
@@ -74,13 +81,19 @@ namespace AzureDreamsReimagined
             _gameplayCamera = camera;
             _inTown = inTown;
             _framingScale = framingScale;
+            // _uprightHeightScale is kept for LiftHandPosition's town-only hand offset below,
+            // but it must NOT scale Koh's own sprite: that stretched his height by 1/cos(pitch)
+            // (about 1.8x at the tower's 56.25 degree pitch), tall enough to poke through
+            // ceiling beams and wall decorations that were sized for his authored height.
+            // A Y-axis billboard's screen height is genuinely foreshortened at a steep pitch,
+            // but the retail game never corrected for that, so Koh's own scale must stay
+            // exactly his authored size here.
             _uprightHeightScale = 1f / Mathf.Cos(cameraPitch * Mathf.Deg2Rad);
             if (_renderer)
             {
                 _baseVisualScale ??= _renderer.transform.localScale;
                 _baseVisualPosition ??= _renderer.transform.localPosition;
                 var scale = _baseVisualScale.Value * _framingScale;
-                scale.y *= _uprightHeightScale;
                 _renderer.transform.localScale = scale;
                 _visualUnitsPerPixel = scale.y / RetailPixelsPerUnit;
             }
@@ -112,6 +125,31 @@ namespace AzureDreamsReimagined
         internal void PresentSwimming(bool swimming)
         {
             _swimming = swimming;
+        }
+
+        internal void PresentDining(bool seated, bool eating = false)
+        {
+            if (_dining != seated || _diningEating != eating) _diningStartedAt = Time.unscaledTime;
+            _dining = seated;
+            _diningEating = eating;
+            if (!seated || _diningFrames != null) return;
+            var asset = AssetMode.Load<TextAsset>("Town/Retail/koh-dining");
+            if (!asset) return;
+            _diningAtlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+            { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+            if (!_diningAtlas.LoadImage(asset.bytes, true) ||
+                _diningAtlas.width != DiningColumns * DiningCell || _diningAtlas.height != AtlasRows * DiningCell)
+            {
+                Destroy(_diningAtlas);
+                _diningAtlas = null;
+                return;
+            }
+            _diningFrames = new Sprite[AtlasRows * DiningColumns];
+            for (int row = 0; row < AtlasRows; row++)
+            for (int column = 0; column < DiningColumns; column++)
+                _diningFrames[row * DiningColumns + column] = Sprite.Create(_diningAtlas,
+                    new Rect(column * DiningCell, (AtlasRows - 1 - row) * DiningCell, DiningCell, DiningCell),
+                    new Vector2(40f, 19f) / DiningCell, RetailPixelsPerUnit, 0, SpriteMeshType.FullRect);
         }
 
         private float LiftProgress => Mathf.Clamp01((Time.time - _liftStartedAt) * PlaybackSpeed / LiftDuration);
@@ -170,7 +208,7 @@ namespace AzureDreamsReimagined
             if (!sleeping || _retailFrames == null) return;
             _sleepStartedAt = Time.unscaledTime - (alreadyLying ? 1f : 0f);
             if (_sleepFrames != null) return;
-            var asset = Resources.Load<TextAsset>("Tower/koh-retail-sleep");
+            var asset = AssetMode.Load<TextAsset>("Tower/koh-retail-sleep");
             if (!asset) return;
             var atlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
             {
@@ -282,10 +320,10 @@ namespace AzureDreamsReimagined
             if (_retailLocomotion && _retailLocomotion.width == AtlasColumns * CellSize &&
                 _retailLocomotion.height == AtlasRows * CellSize)
             {
-                var grounding = Resources.Load<TextAsset>("Tower/koh-retail-grounding");
+                var grounding = AssetMode.Load<TextAsset>("Tower/koh-retail-grounding");
                 if (grounding) _grounding = JsonUtility.FromJson<RetailGrounding>(grounding.text);
                 _retailFrames = new Sprite[AtlasRows * AtlasColumns];
-                _equipmentAtlas = Resources.Load<Texture2D>("Tower/KohEquipment");
+                _equipmentAtlas = AssetMode.Load<Texture2D>("Tower/KohEquipment");
                 float runClearance = 0f;
                 for (int row = 0; row < AtlasRows; row++)
                 {
@@ -412,7 +450,7 @@ namespace AzureDreamsReimagined
             float depth = Vector3.Dot(facing, forward);
             float stride = walking ? Mathf.Sin(_clock * (2f * Mathf.PI / FramesPerCycle)) : 0f;
             float swing = _attackProgress < 0f ? 0f : Mathf.Sin(_attackProgress * Mathf.PI);
-            bool handsFree = !_sleeping && !_bagPose && _pushEffort == 0f && !_swimming;
+            bool handsFree = !_sleeping && !_bagPose && _pushEffort == 0f && !_swimming && !_dining;
             int facingRow = AtlasRowByOctant[octant];
             Sprite weaponFrame = EquipmentFrame(_weaponRow, facingRow);
             Sprite shieldFrame = EquipmentFrame(_shieldRow, facingRow);
@@ -470,23 +508,47 @@ namespace AzureDreamsReimagined
         {
             if (!_renderer) return;
             if (!_locomotion) _locomotion = GetComponent<ActorLocomotionView>();
-            bool walking = !_sleeping && !_paralyzed && _locomotion && _locomotion.IsMoving;
+            bool walking = !_sleeping && !_paralyzed && !_dining && _locomotion && _locomotion.IsMoving;
             bool running = _locomotion && _locomotion.IsRunningNow;
             AdvanceWalkClock();
             var camera = _gameplayCamera;
             var facing = new Vector3(_facing.x, 0f, _facing.y);
             float angle = Mathf.Atan2(facing.x, facing.z) * Mathf.Rad2Deg;
             var visual = _renderer.transform;
-            float idleBob = _swimming
-                ? Mathf.Sin(Time.time * PlaybackSpeed * (walking ? 7f : 3.5f)) * 0.035f
-                : !_sleeping && !_paralyzed && !walking && !_airborne && !_lifting && _pushEffort == 0f && _attackProgress < 0f
-                    ? (1f - Mathf.Cos(Time.time * PlaybackSpeed * 4f)) * 0.015f : 0f;
+            float idleBob = _swimming ? Mathf.Sin(Time.time * PlaybackSpeed * (walking ? 7f : 3.5f)) * 0.035f : 0f;
+            // Standing-still breathing: a slow, tiny Y-axis stretch instead of moving the
+            // whole sprite up and down (the old idleBob here made Koh look like he was
+            // bobbing/floating in place). Koh's pivot sits near his feet (see pivotY in
+            // CreateRetailBodyFrame), so scaling the sprite's own transform around that
+            // pivot keeps the feet planted and concentrates the motion in what's farthest
+            // from the pivot - chest and head - which reads as breathing rather than a
+            // body-wide bounce. ~2.5% stretch, slow (~0.9s half-cycle) pace.
+            bool breathing = !_swimming && !_dining && !_sleeping && !_paralyzed && !walking &&
+                !_airborne && !_lifting && _pushEffort == 0f && _attackProgress < 0f && _levelUpProgress < 0f;
+            float breathScale = breathing ? 1f + Mathf.Sin(Time.time * PlaybackSpeed * 1.3f) * 0.025f : 1f;
+            if (_baseVisualScale.HasValue)
+            {
+                var scale = _baseVisualScale.Value * _framingScale;
+                scale.y *= breathScale;
+                visual.localScale = scale;
+            }
             if (camera)
             {
                 angle -= camera.transform.eulerAngles.y;
                 float lean = -12f * _pushEffort * Vector3.Dot(facing.normalized, camera.transform.right);
-                // Keep the sprite above its feet so the camera pitch cannot push its head behind a nearby wall.
-                var billboard = Quaternion.Euler(0f, camera.transform.eulerAngles.y, 0f);
+                // Full camera-facing billboard (yaw AND pitch), same technique as
+                // Rendering.CameraFacingSprite (used by every NPC/monster sprite:
+                // "transform.rotation = camera.transform.rotation"). This used to be
+                // yaw-only ("Quaternion.Euler(0, camera.eulerAngles.y, 0)") to keep the
+                // sprite upright regardless of camera pitch, but an upright billboard is
+                // genuinely foreshortened the more the camera looks down at it - and the
+                // town (35 degree pitch), interior (55 degree) and tower (56.25 degree)
+                // cameras all pitch differently, so Koh ended up a different, flatter
+                // proportion indoors/in the tower than in the town exterior, while every
+                // NPC standing right next to him (full billboard, zero foreshortening at
+                // any pitch) stayed consistent. Matching their technique keeps Koh's
+                // proportions identical everywhere, same as the rest of the cast.
+                var billboard = camera.transform.rotation;
                 visual.rotation = billboard * Quaternion.Euler(0f, 0f, lean);
             }
             int octant = Mathf.RoundToInt(angle / 45f) & 7;
@@ -513,6 +575,16 @@ namespace AzureDreamsReimagined
 
         private void PresentBody(int octant, bool walking, bool running)
         {
+            if (_dining && _diningFrames != null)
+            {
+                // Town Koh groups 223-227 hold the seated pose. Groups 218-222
+                // supply six eating cels with six original ticks per cel.
+                float elapsed = Time.unscaledTime - _diningStartedAt;
+                int column = _diningEating ? 2 + Mathf.FloorToInt(elapsed * 10f) % 6 : 0;
+                _renderer.flipX = octant is >= 1 and <= 3;
+                _renderer.sprite = _diningFrames[AtlasRowByOctant[octant] * DiningColumns + column];
+                return;
+            }
             if (_swimming && !_sleeping && !_lifting && _attackProgress < 0f && _retailFrames != null)
             {
                 // The retail locomotion cells provide the directional body poses;
@@ -595,7 +667,7 @@ namespace AzureDreamsReimagined
         private void LoadHitFrames()
         {
             _hitFramesRequested = true;
-            var asset = Resources.Load<TextAsset>("Tower/koh-retail-hit");
+            var asset = AssetMode.Load<TextAsset>("Tower/koh-retail-hit");
             if (!asset) return;
 
             var atlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
@@ -622,6 +694,9 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_diningFrames != null)
+                foreach (var frame in _diningFrames) if (frame) Destroy(frame);
+            if (_diningAtlas) Destroy(_diningAtlas);
             if (_hitFrames != null)
                 foreach (var frame in _hitFrames) if (frame) Destroy(frame);
             if (_hitAtlas) Destroy(_hitAtlas);

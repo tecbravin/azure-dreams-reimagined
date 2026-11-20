@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667f936350d9af940874671e61975a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: AzureDreams.Runtime::AzureDreamsReimagined.TowerGameController
-  _towerCameraDistance: 8
+  _towerCameraDistance: 10
   _townCameraDistance: 9.5
   _elevatorSheet: {fileID: 2800000, guid: c782e905ce6a45b1b6ea1a2c51ee6d5e, type: 3}
   _floorTwoGhosh: {fileID: 7132721350194096456, guid: 23366712572665746b7601aa94dfe589, type: 3}
@@ -270,17 +270,17 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 7c6e7a9484372b54da91f93f8e7fd0b7, type: 2}
   _postProcessPrefab: {fileID: 5988649611767384915, guid: 4321e91d8b48b464a9efb498eacf65e3, type: 3}
   _startInTower: 0
-  _inventoryBinding: <Keyboard>/tab
+  _inventoryBinding: <Keyboard>/i
   _kohStatusFaces: {fileID: 2800000, guid: 8fa5bad2b51df20448677446c62e79df, type: 3}
   _kewneMenuPortrait: {fileID: 2800000, guid: f0936b4180be61f4ebb879c5ee054c0d, type: 3}
   _hatchedEggInventoryIcon: {fileID: 2800000, guid: 889422c5c7ff44d0bb0f151a232eca0c, type: 3}
   _kewneStatusSheet: {fileID: 2800000, guid: 0f21906084e009e4188bc4c1f9804fb7, type: 3}
-  _liftBinding: <Keyboard>/l
-  _mapBinding: <Keyboard>/rightShift
+  _liftBinding: <Keyboard>/x
+  _mapBinding: <Keyboard>/m
   _townMoveSpeed: 4
   _turnDuration: 0.16
   _prologuePriest: {fileID: 5151358256163527516, guid: 1cb287197f0e437ab46fa4c3e19fcb87, type: 3}
-  _windowFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  _windowFont: {fileID: 12800000, guid: a5b658ea7c014483aeeb067375c3e1f3, type: 3}
   _prologueAngel: {fileID: 2800000, guid: 9874b9629b3d4ae5990b2085a5dc6074, type: 3}
   _groundItemSprites:
   - {fileID: 21300000, guid: 065b294701f889f4cb0a708f5b65b1c8, type: 3}

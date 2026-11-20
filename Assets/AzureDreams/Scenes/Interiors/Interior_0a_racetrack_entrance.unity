@@ -93,17 +93,24 @@ MonoBehaviour:
   - {fileID: 2800000, guid: dd5c2bb989d27a74484e770f8e9f4058, type: 3}
   - {fileID: 2800000, guid: 1c255bd9eda2bba418ec8e0e866893e7, type: 3}
   - {fileID: 2800000, guid: bc189ecc6e53e804db9d4adcc7508bf1, type: 3}
-  entryPosition: {x: 14, y: 0, z: 9}
+  entryPosition: {x: 22.5, y: 0, z: 17.5}
+  useArrivalPosition: 1
+  arrivalPosition: {x: 22.5, y: 0, z: 15.5}
   residentPrefabs:
-  - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
-  - {fileID: 5151358256163527516, guid: 0ce4b08aa70141fab4b7b5bd140ed015, type: 3}
-  - {fileID: 5151358256163527516, guid: 6f7e72650bb34971a25a19ffe2410ba1, type: 3}
-  - {fileID: 5151358256163527516, guid: 3ce9804cc9724aa3abea2ca5c3b4c721, type: 3}
+  - {fileID: 5151358256163527516, guid: 4d7a48de0731469fa74230b9cbeacedd, type: 3}
+  - {fileID: 5151358256163527516, guid: af62ce194f644fe8908549b57d22cf29, type: 3}
+  - {fileID: 5151358256163527516, guid: da0e5f4384c74d18821d1320c2967ddf, type: 3}
+  - {fileID: 5151358256163527516, guid: a8f436526f1a4e1da6ba17050deb41c9, type: 3}
   residentCells:
-  - {x: 17, y: 10}
-  - {x: 21, y: 13}
-  - {x: 18, y: 14}
-  - {x: 23, y: 15}
+  - {x: 22, y: 10}
+  - {x: 19, y: 14}
+  - {x: 25, y: 13}
+  - {x: 24, y: 15}
+  residentOffsets:
+  - {x: 0.5, y: 0, z: 0.35}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

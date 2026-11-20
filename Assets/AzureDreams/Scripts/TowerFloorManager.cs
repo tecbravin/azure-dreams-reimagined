@@ -41,6 +41,12 @@ namespace AzureDreamsReimagined
         /// <summary>Per-cell ground height (flat = 0). Populated by generation.</summary>
         public int[,] Heights { get; private set; }
 
+        /// <summary>Retail cell data of the current floor (rendering and terrain), when built from retail data.</summary>
+        public RetailTowerFloor Retail { get; private set; }
+
+        // setup_dungeon_floor_encounters: floor 1 rolls events 3-6, i.e. fixed layouts 3, 6, 7 and 8.
+        private static readonly int[] FirstFloorLayouts = { 3, 6, 7, 8 };
+
         /// <summary>Whether the current floor has been generated.</summary>
         public bool IsGenerated => Dungeon != null;
 
@@ -50,10 +56,12 @@ namespace AzureDreamsReimagined
         public void Generate(int floorNumber, int seed)
         {
             if (floorNumber < 1) floorNumber = 1;
+            Retail = null;
+            if (TryGenerateRetail(floorNumber, seed)) return;
             if (floorNumber == 2)
             {
                 // NTSC-U DUNGEON.BIN sector 3995, fixed encounter layout.
-                var asset = Resources.Load<TextAsset>("Town/Retail/floor_02");
+                var asset = AssetMode.Load<TextAsset>("Town/Retail/floor_02");
                 var terrain = asset ? asset.bytes : null;
                 if (terrain == null || terrain.Length != CoreDungeon.GridSize * CoreDungeon.GridSize * 6)
                     terrain = ReadEmbeddedSecondFloor();
@@ -75,6 +83,129 @@ namespace AzureDreamsReimagined
             LocateStairs();
             RebuildOpenCells();
             GenerateHeightPatches(seed);
+        }
+
+        /// <summary>
+        /// Retail floors: fixed layouts for floors 1, 2 and 40 (setup_run_and_load_track track records) and the
+        /// retail random generator (generate_floor_layout) with the floor's texture variant everywhere else.
+        /// </summary>
+        private bool TryGenerateRetail(int floorNumber, int seed)
+        {
+            RetailTowerFloor retail;
+            Vector2Int entrance, exit;
+            if (floorNumber == 2)
+            {
+                // NTSC-U DUNGEON.BIN layout 2 (sector 3995): the fixed encounter floor.
+                retail = RetailTowerFloor.CreateFixed(2, false);
+                entrance = new Vector2Int(31, 56);
+                exit = new Vector2Int(55, 9);
+                if (retail != null)
+                {
+                    // The second-tower elevator takes the matching centre of the
+                    // north-west ring: give it the lift pad tile (kind 1) of (55, 9).
+                    int pad = retail.Index(TowerGameController.SecondTowerElevatorCell.x, TowerGameController.SecondTowerElevatorCell.y);
+                    retail.Kind[pad] = retail.Kind[retail.Index(exit.x, exit.y)];
+                    retail.Value[pad] = retail.Value[retail.Index(exit.x, exit.y)];
+                    retail.Flags[pad] = retail.Flags[retail.Index(exit.x, exit.y)];
+                }
+            }
+            else if (floorNumber == TowerFloorRules.BeldoFloor)
+            {
+                // Layout 1 with the 0x2A arena tileset; Beldo stands at (32, 24).
+                retail = RetailTowerFloor.CreateFixed(1, true);
+                entrance = new Vector2Int(32, 49);
+                exit = new Vector2Int(32, 26);
+            }
+            else if (floorNumber == 1)
+            {
+                retail = RetailTowerFloor.CreateFixed(FirstFloorLayouts[new CoreRng(unchecked((uint)seed)).Next() & 3], false);
+                entrance = new Vector2Int(31, 61);
+                exit = new Vector2Int(31, 17);
+                if (retail != null)
+                    foreach (var marker in retail.Markers)
+                        if (marker.Kind == 2) exit = marker.Cell;
+            }
+            else
+            {
+                // Floor 31 carries the Beldo vision record, which disables the den room (dungeon_floor_flags).
+                retail = RetailTowerFloor.CreateRandom(floorNumber, seed, floorNumber == 31);
+                entrance = exit = default;
+                if (retail != null && !PickRetailStairs(retail, seed, out entrance, out exit)) retail = null;
+            }
+            if (retail == null) return false;
+            BuildFromRetail(retail, floorNumber, seed, entrance, exit);
+            return true;
+        }
+
+        // place_random_floor_elevators / select_dungeon_spawn_tile: the exit lift stands on a free room tile;
+        // Koh arrives in a different room when the floor has more than one.
+        private static bool PickRetailStairs(RetailTowerFloor retail, int seed, out Vector2Int entrance, out Vector2Int exit)
+        {
+            var random = new System.Random(seed ^ 0x5A17);
+            entrance = exit = default;
+            if (retail.Rooms.Count == 0) return false;
+            bool Pick(int roomIndex, out Vector2Int cell)
+            {
+                var room = retail.Rooms[roomIndex];
+                for (int attempt = 0; attempt < 200; attempt++)
+                {
+                    cell = new Vector2Int(room.x + random.Next(room.width), room.y + random.Next(room.height));
+                    int i = retail.Index(cell.x, cell.y);
+                    if (retail.IsWalkable(cell.x, cell.y) && retail.Kind[i] >= 19 && retail.Kind[i] <= 38) return true;
+                }
+                cell = default;
+                return false;
+            }
+            int exitRoom = random.Next(retail.Rooms.Count);
+            int entryRoom = retail.Rooms.Count > 1 ? (exitRoom + 1 + random.Next(retail.Rooms.Count - 1)) % retail.Rooms.Count : exitRoom;
+            if (!Pick(exitRoom, out exit) || !Pick(entryRoom, out entrance)) return false;
+            for (int attempt = 0; entrance == exit && attempt < 20; attempt++) Pick(entryRoom, out entrance);
+            return entrance != exit;
+        }
+
+        private void BuildFromRetail(RetailTowerFloor retail, int floor, int seed, Vector2Int entrance, Vector2Int exit)
+        {
+            int size = CoreDungeon.GridSize;
+            CurrentFloor = floor;
+            Seed = seed;
+            Retail = retail;
+            Dungeon = new CoreDungeon(seed, floor);
+            Heights = new int[size, size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    bool walkable = retail.IsWalkable(x, y);
+                    // Keep the central doorway traversable in the Unity event flow.
+                    if (floor == 2 && y == 35 && (x == 31 || x == 32)) walkable = true;
+                    Dungeon.Grid[y, x] = !walkable ? CoreDungeon.TileType.Wall :
+                        retail.InRoom(x, y) ? CoreDungeon.TileType.Floor : CoreDungeon.TileType.Corridor;
+                    Heights[y, x] = retail.GroundHeight(x, y);
+                }
+            int rooms = Mathf.Min(retail.Rooms.Count, Dungeon.Rooms.Length);
+            for (int i = 0; i < rooms; i++)
+            {
+                var room = retail.Rooms[i];
+                Dungeon.Rooms[i] = new CoreDungeon.Room { X = room.x, Y = room.y, Width = room.width, Height = room.height };
+            }
+            SetRoomCount(Dungeon, rooms);
+            Dungeon.Grid[entrance.y, entrance.x] = CoreDungeon.TileType.StairsDown;
+            Dungeon.Grid[exit.y, exit.x] = CoreDungeon.TileType.StairsUp;
+            LocateStairs();
+            RebuildOpenCells();
+        }
+
+        // The pure core keeps RoomCount private to its own generator.
+        private static void SetRoomCount(CoreDungeon dungeon, int count)
+        {
+            var property = typeof(CoreDungeon).GetProperty(nameof(CoreDungeon.RoomCount));
+            var setter = property?.GetSetMethod(true);
+            if (setter != null)
+            {
+                setter.Invoke(dungeon, new object[] { count });
+                return;
+            }
+            typeof(CoreDungeon).GetField("<RoomCount>k__BackingField",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.SetValue(dungeon, count);
         }
 
         // Backup of floor_02.bytes (retail sector 3995), for players with an incomplete asset import.
@@ -147,7 +278,11 @@ namespace AzureDreamsReimagined
         }
 
         internal void GenerateTutorial(byte[] terrain, Vector2Int entrance, Vector2Int exit)
-            => LoadFixedTerrain(terrain, 1, 173, entrance, exit);
+        {
+            LoadFixedTerrain(terrain, 1, 173, entrance, exit);
+            // The tutorial terrain is retail layout 9; draw it with its retail tileset.
+            Retail = RetailTowerFloor.CreateFixed(9, false);
+        }
 
         private void LoadFixedTerrain(byte[] terrain, int floor, int seed, Vector2Int entrance, Vector2Int exit)
         {
@@ -157,6 +292,7 @@ namespace AzureDreamsReimagined
                 throw new ArgumentException("Invalid retail fixed-floor map.", nameof(terrain));
             CurrentFloor = floor;
             Seed = seed;
+            Retail = null;
             Dungeon = new CoreDungeon(Seed, CurrentFloor);
             Heights = new int[size, size];
             for (int y = 0; y < size; y++)
@@ -209,7 +345,7 @@ namespace AzureDreamsReimagined
             if (inward == Vector2Int.zero) return false;
             Dungeon.Grid[entry.y, entry.x] = CoreDungeon.TileType.Floor;
             Dungeon.Grid[best.y, best.x] = CoreDungeon.TileType.StairsDown;
-            Heights[best.y, best.x] = 0;
+            if (Retail == null) Heights[best.y, best.x] = 0;
             StairsDownCell = best;
             return true;
         }
@@ -247,7 +383,7 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>Reset to floor 1.</summary>
-        public void Reset() { CurrentFloor = 1; Seed = 0; StairsDownCell = Vector2Int.zero; StairsUpCell = Vector2Int.zero; Dungeon = null; Heights = null; _openCells.Clear(); }
+        public void Reset() { Retail = null; CurrentFloor = 1; Seed = 0; StairsDownCell = Vector2Int.zero; StairsUpCell = Vector2Int.zero; Dungeon = null; Heights = null; _openCells.Clear(); }
 
         /// <summary>Is the cell walkable on the current floor?</summary>
         public bool IsWalkable(int x, int y)

@@ -84,8 +84,10 @@ with (capture / "Monsbaiya.obj").open() as model:
             if bridge_deck:
                 surface.update(heightB=ys[1], heightC=ys[2])
                 bridge.append(surface)
-            else:
+            elif material not in flowers:
                 tops.append(surface)
+            # Decorative flowers do not block movement. Keep their samples
+            # below so the native height grid is still restored to ground.
             if pond_island:
                 continue
             for z in range(math.ceil(min(a[1], b[1], c[1])), math.floor(max(a[1], b[1], c[1])) + 1):
@@ -145,7 +147,8 @@ for points in components(low_tree_tiers):
         x, z = (min(xs)+max(xs))/2, (min(zs)+max(zs))/2
         if (x, z) not in trunks:
             small_trees[(x, z)] = max(small_trees.get((x, z), 0), max(ys))
-props.extend(round_obstacle(x, z, 0.30, top) for (x,z), top in sorted(small_trees.items()))
+# Shrubs are decorative: retain their canopy-ground cleanup below, but
+# do not emit solid props for the low foliage clusters.
 
 for faces in tree_tiles.values():
     # Remove canopy samples from the ground map. Low trunk/plant collision is

@@ -54,7 +54,7 @@ namespace AzureDreamsReimagined
             var panel = new Rect((width - panelWidth) * 0.5f, (height - panelHeight) * 0.5f, panelWidth, panelHeight);
             DrawDialogueFrame(panel);
             _saveSlotLabel ??= new GUIStyle(_messageStyle)
-                { fontSize = 13, wordWrap = false, clipping = TextClipping.Clip };
+                { fontSize = 12, wordWrap = false, clipping = TextClipping.Clip };
             _saveSlotHeading ??= new GUIStyle(_saveSlotLabel) { fontStyle = FontStyle.Bold };
             DrawHudText(new Rect(panel.x + 12f, panel.y + 6f, panel.width - 24f, 22f), title,
                 _saveSlotHeading, dialogue: true);
@@ -87,7 +87,7 @@ namespace AzureDreamsReimagined
 
             if (clicked != int.MinValue) select(clicked);
             else if (DrawInventoryButton(new Rect(panel.x + 10f, panel.yMax - 25f, panel.width - 20f, 20f),
-                T("Back [Esc]", "Voltar [Esc]"))) cancel();
+                WithCancelHint("Back", "Voltar"))) cancel();
         }
 
         private void DrawSaveSlotCard(Rect card, string label, SaveSystem.Checkpoint data, bool selected)
@@ -105,7 +105,8 @@ namespace AzureDreamsReimagined
             }
 
             int Read(string key, int fallback = 0) => (int)(data.ProgressValue(key) ?? fallback);
-            int reached = Mathf.Max(Read(TownReputation.HighestFloorKey), data.floor > 0 ? Mathf.Max(1, data.floor - 1) : 0);
+            int reached = Mathf.Max(Read(TownReputation.HighestFloorKey),
+                data.floor > 0 ? Mathf.Clamp(data.floor - 1, 1, TowerFloorRules.BeldoFloor) : 0);
             var flags = new TownRetailScriptFlags(index => unchecked((uint)Read("retail_flag_word_" + index)), (_, _) => { });
             int milestones = TownReputation.CompletedRoutes(key => Read(key), flags.IsFlagSet);
             if (Read(BeldoClearedKey) == 1)
@@ -130,8 +131,7 @@ namespace AzureDreamsReimagined
             }
             string highest = reached > 0 ? $"{reached}" : data.ProgressValue(TownReputation.HighestFloorKey).HasValue ? "0" : "\u2014";
             string location = data.floor == 0 ? T("Town (Monsbaiya)", "Cidade (Monsbaiya)") :
-                T($"Tower {Mathf.Max(1, data.floor - 1)}F  \u2192  Continue at {data.floor}F",
-                    $"Torre {Mathf.Max(1, data.floor - 1)}\u00ba andar  \u2192  Retomar no {data.floor}\u00ba");
+                SaveFloorLocation(data.floor);
 
             float half = (card.width - 22f) * 0.5f;
             DrawHudText(new Rect(card.x + 10f, card.y + 3f, half, 18f),

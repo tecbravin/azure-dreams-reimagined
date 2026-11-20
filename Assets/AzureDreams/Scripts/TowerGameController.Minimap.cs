@@ -11,7 +11,7 @@ namespace AzureDreamsReimagined
         private const float MapHoldSeconds = 0.55f;
         private const float MapTransitionSeconds = 0.22f;
 
-        [SerializeField] private string _mapBinding = "<Keyboard>/rightShift";
+        [SerializeField] private string _mapBinding = "<Keyboard>/m";
 
         private InputAction _mapAction;
         private Texture2D _mapTexture;

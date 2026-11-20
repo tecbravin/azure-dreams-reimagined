@@ -42,6 +42,46 @@ namespace AzureDreamsReimagined
         public Rect[] furnitureFootprints;
         [Tooltip("Jumpable furniture footprints and their top Y coordinates.")]
         public FurnitureSurface[] furnitureSurfaces;
+        private readonly List<FurnitureSurface> _capturedFurniture=new();
+        internal IEnumerable<FurnitureSurface> FurnitureSurfaces()
+        {
+            if(furnitureSurfaces!=null) foreach(var surface in furnitureSurfaces) yield return surface;
+            foreach(var surface in _capturedFurniture) yield return surface;
+        }
+
+        private void RecoverFurnitureSurfaces(Geometry data)
+        {
+            _capturedFurniture.Clear();
+            if(data?.vertices==null || data.surfaces==null || !heights) return;
+            var ground=heights.bytes;
+            if(ground.Length<128*128*2) return;
+            foreach(var surface in data.surfaces)
+            {
+                var triangles=surface.triangles;
+                if(triangles==null) continue;
+                for(int i=0;i+2<triangles.Length;i+=3)
+                {
+                    var a=data.vertices[triangles[i]];var b=data.vertices[triangles[i+1]];var c=data.vertices[triangles[i+2]];
+                    if(a.y<.2f || a.y>2.5f || Mathf.Abs(a.y-b.y)>.001f || Mathf.Abs(a.y-c.y)>.001f) continue;
+                    float minX=Mathf.Min(a.x,b.x,c.x),maxX=Mathf.Max(a.x,b.x,c.x);
+                    float minZ=Mathf.Min(a.z,b.z,c.z),maxZ=Mathf.Max(a.z,b.z,c.z);
+                    if(maxX-minX<.02f || maxZ-minZ<.02f) continue;
+                    int x=Mathf.FloorToInt((minX+maxX)*.5f),z=Mathf.FloorToInt((minZ+maxZ)*.5f);
+                    if(x<0 || z<0 || x>=128 || z>=128) continue;
+                    int index=(z*128+x)*2;float floor=unchecked((short)(ground[index]|ground[index+1]<<8))/256f;
+                    // Keep the native walkable floor/stairs. Recover only raised
+                    // horizontal furniture missing from the coarse navigation map.
+                    if(floor<=-127f || a.y-floor<.2f) continue;
+                    var bounds=Rect.MinMaxRect(minX,minZ,maxX,maxZ);
+                    bool duplicate=false;
+                    foreach(var existing in FurnitureSurfaces())
+                        if(Mathf.Abs(existing.top-a.y)<.01f && existing.footprint.xMin<=minX+.001f && existing.footprint.xMax>=maxX-.001f &&
+                            existing.footprint.yMin<=minZ+.001f && existing.footprint.yMax>=maxZ-.001f){duplicate=true;break;}
+                    if(!duplicate) _capturedFurniture.Add(new FurnitureSurface{footprint=bounds,top=a.y});
+                }
+            }
+        }
+
         private Mesh _mesh;
         private Material[] _runtimeMaterials;
 
@@ -94,8 +134,7 @@ namespace AzureDreamsReimagined
         {
             position = MapLayoutPosition(position);
             float top = float.NegativeInfinity;
-            if (furnitureSurfaces == null) return top;
-            foreach (var surface in furnitureSurfaces)
+            foreach (var surface in FurnitureSurfaces())
             {
                 var bounds = surface.footprint;
                 if (position.x > bounds.xMin - radius && position.x < bounds.xMax + radius &&
@@ -133,6 +172,7 @@ namespace AzureDreamsReimagined
         {
             if (_mesh || !geometry) return;
             var data = JsonUtility.FromJson<Geometry>(geometry.text);
+            RecoverFurnitureSurfaces(data);
             if (UsesMirroredCoordinateFrame && data.vertices != null)
                 for (int i = 0; i < data.vertices.Length; i++)
                     data.vertices[i] = MapLayoutPosition(data.vertices[i]);
@@ -183,6 +223,7 @@ namespace AzureDreamsReimagined
         }
         private void OnDisable()
         {
+            _capturedFurniture.Clear();
             if (_runtimeMaterials != null)
                 foreach (var material in _runtimeMaterials)
                     if (material)

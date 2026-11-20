@@ -1105,8 +1105,8 @@
       "id": 2,
       "en": "Leather Shield",
       "ptBr": "Escudo de couro",
-      "descriptionEn": "Rustproof leather shield. DEF 1.",
-      "descriptionPtBr": "Escudo de couro imune à ferrugem. DEF 1.",
+      "descriptionEn": "Rustproof leather shield. DEF 1. Increases evasion.",
+      "descriptionPtBr": "Escudo de couro imune à ferrugem. DEF 1. Aumenta evasão.",
       "gear": 1,
       "icon": "shield"
     },
@@ -1199,6 +1199,16 @@
       "descriptionPtBr": "Tem 20% de chance de devolver 20% do dano recebido ao atacante. DEF 5.",
       "gear": 5,
       "icon": "shield"
+    },
+    {
+      "kind": 13,
+      "id": 4,
+      "gear": 0,
+      "en": "Music Box",
+      "ptBr": "Caixa de música",
+      "descriptionEn": "A small music box what plays\nsoothing music.",
+      "descriptionPtBr": "Uma pequena caixa de música que toca uma melodia relaxante.",
+      "icon": "music_box"
     }
   ],
   "sourceLanguage": "en",

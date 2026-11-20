@@ -107,10 +107,7 @@ namespace AzureDreamsReimagined
                     break;
                 case GroundItemAction.Lift:
                     if (_carriedView) _message = T("Your hands are full.", "Suas mãos estão ocupadas.");
-                    else ScheduleInventoryAction(() =>
-                    {
-                        if (TakeFloorObject(cell)) PresentCarry(0f);
-                    });
+                    else if (TakeFloorObject(cell)) PresentCarry(0f);
                     break;
             }
         }
@@ -130,9 +127,10 @@ namespace AzureDreamsReimagined
                     _message = T("Your hands are full.", "Suas mãos estão ocupadas.");
                     return;
                 }
-                _townDroppedItems.Remove(cell);
+                RemoveTownGroundItem(cell, out _);
                 _carriedItem = OffBody(drop.item);
                 _carriedView = drop.view;
+                if (_carriedView.TryGetComponent<BoxCollider>(out var body)) body.enabled = false;
                 PresentTownInventoryItem();
             }
             else if (action == GroundItemAction.Use)
@@ -141,7 +139,7 @@ namespace AzureDreamsReimagined
                     _message = T("Place the egg in the monster hut to hatch it.", "Coloque o ovo no alojamento para chocá-lo.");
                 else if (CanUseInventoryEffect(drop.item, false) && drop.item.Kind != ItemKind.Sand)
                 {
-                    _townDroppedItems.Remove(cell);
+                    RemoveTownGroundItem(cell, out _);
                     RemoveGenerated(drop.view);
                     ApplyInventoryEffect(drop.item, _playerActor);
                     PersistTownProgress();
@@ -202,7 +200,7 @@ namespace AzureDreamsReimagined
         private bool CreditCoinPickup(DungeonItemEntry item)
         {
             if (item.Kind != ItemKind.Coin) return false;
-            int amount = CoinPickupValue(item);
+            int amount = BlessedCoinValue(CoinPickupValue(item));
             if (_area == Area.Tower)
             {
                 _towerRun.AddLoot(amount);

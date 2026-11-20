@@ -6,7 +6,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        [SerializeField] private string _liftBinding = "<Keyboard>/l";
+        [SerializeField] private string _liftBinding = "<Keyboard>/x";
         private InputAction _liftAction;
         private GameObject _carriedView;
         private CreatureState _carriedMonster;
@@ -79,6 +79,9 @@ namespace AzureDreamsReimagined
             }
 
             PresentCarry(0f);
+            // Picking up a floor item only changes ownership; monsters and
+            // familiars still spend a turn when lifted, as before.
+            if (_carriedItem != null) return true;
             return TryTowerAction(Vector2Int.zero);
         }
 

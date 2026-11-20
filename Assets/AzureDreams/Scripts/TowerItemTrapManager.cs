@@ -11,7 +11,7 @@ namespace AzureDreamsReimagined
     internal enum TowerTrapEffect
     {
         Slam, Rust, Poison, Frog, Blind, Chaos, Prison, Bomb, Bump, Crack,
-        GoUp, Reversal, Seal, Sleep, Slow, Upheaval, Warp
+        GoUp, Reversal, Seal, Sleep, Slow, Upheaval, Warp, GoDown
     }
 
     public sealed class TowerTrapState
@@ -235,9 +235,12 @@ namespace AzureDreamsReimagined
             // Swords/shields: -1 184/1024, 0 728/1024, +1/+2 56/1024 each.
             // Wands: -1 128/1024, otherwise 0.
             int sample = Mathf.Clamp(roll, 0, 1023);
+            // Reimagined: Jorda's blessing (TowerGameController.PriestBlessed) moves ~5% of the
+            // cursed -1 roll to +0. The Dark Sword below stays cursed regardless.
+            int blessing = TowerGameController.PriestBlessed ? TowerGameController.BlessedCurseReduction : 0;
             sbyte modifier = kind == CoreItems.Kind.Wand
-                ? sample < 128 ? (sbyte)-1 : (sbyte)0
-                : sample < 184 ? (sbyte)-1
+                ? sample < 128 - blessing ? (sbyte)-1 : (sbyte)0
+                : sample < 184 - blessing ? (sbyte)-1
                 : sample < 912 ? (sbyte)0
                 : sample < 968 ? (sbyte)1
                 : (sbyte)2;
@@ -282,12 +285,19 @@ namespace AzureDreamsReimagined
             TowerTrapEffect.Prison, TowerTrapEffect.Bomb, TowerTrapEffect.Bump,
             TowerTrapEffect.Crack, TowerTrapEffect.Upheaval, TowerTrapEffect.Seal,
             TowerTrapEffect.Sleep, TowerTrapEffect.Slow, TowerTrapEffect.Warp,
-            TowerTrapEffect.Reversal, TowerTrapEffect.GoUp
+            TowerTrapEffect.Reversal, TowerTrapEffect.GoUp, TowerTrapEffect.GoDown
         };
 
-        private static TowerTrapEffect GeneratedTrapEffect(int floor, int index) =>
-            floor <= 2 ? TowerTrapEffect.Slam :
-            GeneratedTrapEffects[((floor - 3) * 5 + index) % GeneratedTrapEffects.Length];
+        private static TowerTrapEffect GeneratedTrapEffect(int floor, int index)
+        {
+            if (floor <= 2) return TowerTrapEffect.Slam;
+            var effect = GeneratedTrapEffects[((floor - 3) * 5 + index) % GeneratedTrapEffects.Length];
+            // Go Down nunca aparece nos andares 1-3 (cedo demais para descer) nem no andar do
+            // Beldo (TowerFloorRules.BeldoFloor) - pedido explicito do usuario.
+            if (effect == TowerTrapEffect.GoDown && (floor == 3 || floor == TowerFloorRules.BeldoFloor))
+                return TowerTrapEffect.Slam;
+            return effect;
+        }
 
         /// <summary>
         /// Spawn traps on the current floor. Returns placed trap cells.

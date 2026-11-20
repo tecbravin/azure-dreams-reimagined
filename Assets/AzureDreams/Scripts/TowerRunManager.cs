@@ -88,6 +88,14 @@ namespace AzureDreamsReimagined
             CurrentState = State.FloorTransition;
         }
 
+        /// <summary>Move straight to another floor (the floor-2 elevator to the second tower).</summary>
+        public void JumpToFloor(int floor)
+        {
+            if (CurrentState != State.InTower || floor < 1) return;
+            Floor = floor;
+            CurrentState = State.FloorTransition;
+        }
+
         /// <summary>Complete a floor transition (back to InTower).</summary>
         public void CompleteFloorTransition()
         {

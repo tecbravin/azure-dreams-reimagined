@@ -21,7 +21,7 @@ namespace AzureDreamsReimagined
         {
             public int unitId, baseHp, baseMp, baseAtk, baseDef, baseAgility, baseLuck, baseExp;
             public int growthHp, growthMp, growthAtk, growthDef, growthAgility, growthLuck, growthExp, talentIds;
-            public int nativeElement, nativeSpellId, hiddenSpellId, likesPitas, likesBigPitas;
+            public int nativeElement, nativeSpellId, hiddenSpellId, likesPitas, likesBigPitas, likesMetal;
             public bool pushable;
             public string accuracy, evolvesInto;
         }
@@ -73,7 +73,7 @@ namespace AzureDreamsReimagined
         {
             if (_progression == null)
             {
-                var asset = Resources.Load<TextAsset>("Town/Retail/unit_progression");
+                var asset = AssetMode.Load<TextAsset>("Town/Retail/unit_progression");
                 if (!asset) asset = _monsterMechanics;
                 if (asset) _progression = JsonUtility.FromJson<ProgressionCatalog>(asset.text);
             }
@@ -218,7 +218,8 @@ namespace AzureDreamsReimagined
             var floors = GetProgression()?.floors;
             var floor = floors == null ? null : Array.Find(floors, data => data.floor == _floor);
             var entry = floor?.entries == null ? null : Array.Find(floor.entries, data => data.unitId == (int)species);
-            if (TryGetLevelStats((int)species, levelOverride ?? entry?.level ?? 1, out var stats)) ApplyFreshStats(actor, stats);
+            if (TryGetLevelStats((int)species, levelOverride ?? SecondTowerMonsterLevel(species) ?? entry?.level ?? 1, out var stats))
+                ApplyFreshStats(actor, stats);
             else actor.MaxHp = actor.Hp = StatByte(_creatureDefinition ? _creatureDefinition.MaxHealth : 10);
             if (allowSpawnSleep && !InTowerTutorial && species != BeldoBossSpecies && !levelOverride.HasValue && _towerRun?.Rng is { } rng)
                 RollMonsterSpawnSleep(actor, rng);
@@ -241,9 +242,9 @@ namespace AzureDreamsReimagined
                 TowerEncounterTable.TrollHammer => "TrollHammerActions",
                 TowerEncounterTable.TrollBowGun => "TrollBowActions",
                 TowerEncounterTable.TrollSword => "TrollSwordActions",
-                _ => null
+                _ => "TrollUnarmedActions"
             };
-            return atlas == null ? null : Resources.Load<Texture2D>("Tower/" + atlas);
+            return atlas == null ? null : AssetMode.Load<Texture2D>("Tower/" + atlas);
         }
 
         private void RestoreLegacyFamiliarProgression(ActorRecord actor, ActorDefinition definition, int hatchedSpecies, int experience)

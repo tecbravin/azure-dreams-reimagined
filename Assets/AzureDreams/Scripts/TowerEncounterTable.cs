@@ -72,8 +72,9 @@ namespace AzureDreamsReimagined
 
         public static Species Roll(int floor, RetailRng rng)
         {
-            // The current run can continue beyond the documented 40 floors.
-            if (floor > Floors.Length) floor = 39;
+            // The second tower (floors 41+) rolls its own random groups
+            // (TowerGameController.RollTowerSpecies); keep a safe fallback here.
+            if (floor > Floors.Length) floor = 3 + (floor - Floors.Length - 1) % 37;
             if (floor < 1 || Floors[floor - 1].Length == 0)
                 throw new ArgumentOutOfRangeException(nameof(floor));
 

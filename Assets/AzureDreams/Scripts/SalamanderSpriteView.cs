@@ -12,9 +12,9 @@ namespace AzureDreamsReimagined
 
         internal bool Initialize()
         {
-            var body = Resources.Load<Texture2D>(Art + "Body");
-            var fire = Resources.Load<Texture2D>(Art + "Fire");
-            var attack = Resources.Load<Texture2D>(Art + "Attack");
+            var body = AssetMode.Load<Texture2D>(Art + "Body");
+            var fire = AssetMode.Load<Texture2D>(Art + "Fire");
+            var attack = AssetMode.Load<Texture2D>(Art + "Attack");
             if (!body || !fire || !attack) return false;
             body.filterMode = fire.filterMode = attack.filterMode = FilterMode.Point;
 

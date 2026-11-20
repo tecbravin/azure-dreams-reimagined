@@ -103,8 +103,10 @@ namespace AzureDreamsReimagined
 
         private static readonly BuildingProject[] BuildingProjects =
         {
+            // Level 2 is rebuilt from the retail tiles (record 2 -> stamp 28, Tools/build_koh_house_lots.py):
+            // a smaller house whose door recess is centred on x 56 in the front wall at z 53.
             new("home_1", "Expand Koh's house I", "Ampliar a casa do Koh I", 6000, "KohHome",
-                Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(50, 47, 61, 53), new(56, 56),
+                Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(52, 48, 60, 53), new(56, 53),
                 replaceBounds: Rect.MinMaxRect(50, 44, 62, 58)),
             new("home_2", "Expand Koh's house II", "Ampliar a casa do Koh II", 60000, "KohHome",
                 Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(50, 47, 61, 53), new(56, 56), "home",
@@ -190,6 +192,39 @@ namespace AzureDreamsReimagined
         private static string ConstructionLotKey(BuildingProject project) =>
             ConstructionKey + project.Id + ConstructionLotSuffix;
 
+        // Retail: paying Tonka only stores a pending building record; into_dn_door_jobs
+        // (apply_building_pending_updates) turns it into a built record on the next Tower trip.
+        // The port applies it when the run ends, so the building is standing on the way back.
+        private const string PendingConstructionKey = ConstructionKey + "pending";
+        private const string PendingFountainKey = ConstructionKey + "fountain.pending";
+        private static string PendingConstructionId => TownSaveVariables.GetString(PendingConstructionKey);
+        private static bool ConstructionPending => !string.IsNullOrEmpty(PendingConstructionId);
+
+        private static void ApplyPendingConstruction()
+        {
+            if (TownSaveVariables.GetBool(PendingFountainKey))
+            {
+                TownSaveVariables.SetBool(ConstructionKey + "fountain", true);
+                TownSaveVariables.SetBool(PendingFountainKey, false);
+            }
+            string id = PendingConstructionId;
+            if (string.IsNullOrEmpty(id)) return;
+            var project = Array.Find(BuildingProjects, candidate => candidate.Id == id);
+            if (project != null)
+            {
+                if (project.Id == "home_1" || project.Id == "home_2")
+                    TownSaveVariables.SetInt(HomeRankKey, Mathf.Max(CurrentHomeRank, project.Id == "home_1" ? 1 : 2));
+                else if (project.HutRank > 0)
+                    TownSaveVariables.SetInt(HutRankKey, Mathf.Max(CurrentHutRank, project.HutRank));
+                else
+                {
+                    TownSaveVariables.SetBool(ConstructionKey + project.Id, true);
+                    if (project.Id == "theater") TownSaveVariables.SetBool(StoryPrefix + "fon.theaterBuilt", true);
+                }
+            }
+            TownSaveVariables.SetString(PendingConstructionKey, string.Empty);
+        }
+
         private static ConstructionLot DefaultConstructionLot(BuildingProject project)
         {
             int slot = project.Id switch
@@ -231,7 +266,8 @@ namespace AzureDreamsReimagined
                 bool occupied = false;
                 foreach (var candidate in BuildingProjects)
                 {
-                    if (candidate.Id == project.Id || !UsesFlexibleConstructionLot(candidate) || !ProjectBuilt(candidate))
+                    if (candidate.Id == project.Id || !UsesFlexibleConstructionLot(candidate) ||
+                        (!ProjectBuilt(candidate) && candidate.Id != PendingConstructionId))
                         continue;
                     if (SavedConstructionLot(candidate)?.Slot == lot.Slot)
                     {
@@ -904,6 +940,7 @@ namespace AzureDreamsReimagined
         {
             var flags = TownRetailScriptFlags.CreatePersistent();
             int highestFloor = TownSaveVariables.GetInt(TownReputation.HighestFloorKey);
+            if (npc.npcId == "jorda" && InTempleRoom && TryPriestDecurse(npc)) return true;
             switch (npc.npcId)
             {
                 case "tonka" when InCarpenterShop:
@@ -925,8 +962,8 @@ namespace AzureDreamsReimagined
                     if (!StoryBuilding("alley") && !flags.IsFlagSet(BowlingPlanFlag))
                         return JordaBowlingProposal(npc);
                     if (StoryBuilding("casino"))
-                        return JordaTalk(npc, "Ha, ha, ha...", "Ha, ha, ha...");
-                    return JordaTalk(npc, "Look at how beautiful this place is!", "Veja como este lugar está bonito!");
+                        return JordaTempleShop(npc, "Ha, ha, ha...", "Ha, ha, ha...");
+                    return JordaTempleShop(npc, "Look at how beautiful this place is!", "Veja como este lugar está bonito!");
                 case "construction_fon" or "carpenter_fon" when !StoryBuilding("theater"):
                     return FonConstructionStory(npc, flags.IsFlagSet(TheaterPlanFlag));
                 case "theater_door_fon" when StoryBuilding("theater"):
@@ -954,7 +991,10 @@ namespace AzureDreamsReimagined
             else if (StoryStage("vivian") >= 4)
                 SpawnStoryResident("dar", "construction_fon", "Fon", new Vector2Int(87, 70));
             if (!StoryBuilding("circuit"))
+            {
                 SpawnStoryResident("dar", "construction_silver", "Silver", new Vector2Int(21, 45));
+                SpawnSilverTownNyuels();
+            }
         }
 
         // TOWN.BIN 0x5EA806–0x5EAFC3.
@@ -972,6 +1012,10 @@ namespace AzureDreamsReimagined
                     ("Oh, it’s you {name}.", "Ah, é você, {name}."),
                     ("You’re looking much more like your father than the last time I saw you some time ago.",
                         "Você está muito mais parecido com seu pai do que da última vez que o vi, já faz algum tempo."));
+
+            if (ConstructionPending)
+                return StoryTalk(npc, "Oh, it’s you {name}.\nI’m still busy with the job you paid for.\nIt’ll be finished by the time you come back from the tower.",
+                    "Ah, é você, {name}.\nAinda estou ocupado com a obra que você pagou.\nVai estar pronta quando você voltar da torre.");
 
             return CurrentHomeRank switch
             {
@@ -1008,6 +1052,13 @@ namespace AzureDreamsReimagined
         private void RefreshConstructionProjects()
         {
             _availableConstructionProjects.Clear();
+            if (ConstructionPending)
+            {
+                _constructionRow = 0;
+                _constructionMessage = T("I’m still working on your last order. Come back after your next trip to the tower.",
+                    "Ainda estou trabalhando na sua última encomenda. Volte depois da sua próxima ida à torre.");
+                return;
+            }
             foreach (var project in BuildingProjects)
                 if (!ProjectBuilt(project) && ProjectRequirement(project) == null)
                     _availableConstructionProjects.Add(project);
@@ -1091,7 +1142,7 @@ namespace AzureDreamsReimagined
         {
             if (!_constructionConfirm || !InCarpenterShop) return;
             var project = _availableConstructionProjects[_constructionRow];
-            if (ProjectBuilt(project) || ProjectRequirement(project) != null) return;
+            if (ConstructionPending || ProjectBuilt(project) || ProjectRequirement(project) != null) return;
             if (UsesFlexibleConstructionLot(project) && _selectedConstructionLot == null) return;
             if (_gold < project.Price)
             {
@@ -1100,33 +1151,22 @@ namespace AzureDreamsReimagined
             }
             string scene = project.HutRank > 0 ? HutScenes[project.HutRank] :
                 project.Id == "home_1" ? HomeScenes[1] : project.Interior == "KohHome" ? HomeScenes[2] : project.Interior;
-            if ((project.Bounds.width > 0 && !Resources.Load<TextAsset>(ConstructionResources + project.Lot)) ||
+            if ((project.Bounds.width > 0 && !AssetMode.Load<TextAsset>(ConstructionResources + project.Lot)) ||
                 (scene != null && !Application.CanStreamedLevelBeLoaded("Assets/AzureDreams/Scenes/Interiors/" + scene + ".unity")))
             {
                 _constructionMessage = T("This project is unavailable in this build.", "Esta obra não está disponível nesta versão.");
                 return;
             }
-            if (project.Id == "home_1" || project.Id == "home_2")
-                TownSaveVariables.SetInt(HomeRankKey, project.Id == "home_1" ? 1 : 2);
-            else if (project.HutRank > 0)
-                TownSaveVariables.SetInt(HutRankKey, project.HutRank);
-            else
-            {
-                TownSaveVariables.SetBool(ConstructionKey + project.Id, true);
-                if (_selectedConstructionLot != null)
-                    TownSaveVariables.SetInt(ConstructionLotKey(project), _selectedConstructionLot.Slot);
-            }
+            // Built on the next Tower trip (ApplyPendingConstruction), not on payment.
+            TownSaveVariables.SetString(PendingConstructionKey, project.Id);
+            if (_selectedConstructionLot != null)
+                TownSaveVariables.SetInt(ConstructionLotKey(project), _selectedConstructionLot.Slot);
             _gold -= project.Price;
             PersistTownProgress();
             _constructionConfirm = false;
             _constructionChoosingLot = false;
             _selectedConstructionLot = null;
             RefreshConstructionProjects();
-            if (project.Id == "theater")
-            {
-                TownSaveVariables.SetBool(StoryPrefix + "fon.theaterBuilt", true);
-                PersistTownProgress();
-            }
             var tonka = _townPeople.Find(npc => npc && npc.npcId == "tonka");
             if (tonka)
             {
@@ -1167,7 +1207,7 @@ namespace AzureDreamsReimagined
                         (i == _constructionLotRow ? "› " : "") + lot.Name))
                     { SelectConstructionLot(i); break; }
                 }
-                if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) BackFromCarpenter();
+                if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) BackFromCarpenter();
                 return;
             }
             string prompt = _availableConstructionProjects.Count > 0 ? T("So what do you want me to build?", "Então, o que você quer que eu construa?") :
@@ -1184,7 +1224,7 @@ namespace AzureDreamsReimagined
             if (first > 0 && GUI.Button(new Rect(103, 350, 110, 26), T("Previous", "Anterior"))) _constructionRow = first - ConstructionRows;
             if (first + ConstructionRows < _availableConstructionProjects.Count &&
                 GUI.Button(new Rect(218, 350, 110, 26), T("Next", "Próxima"))) _constructionRow = first + ConstructionRows;
-            if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) BackFromCarpenter();
+            if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) BackFromCarpenter();
         }
 
         private void ResetConstructionView()
@@ -1200,6 +1240,8 @@ namespace AzureDreamsReimagined
 
         private void ApplyTownConstruction(GameObject town)
         {
+            _fountainCollisionRoot = null;
+            _fountainFaces.Clear();
             var shader = Shader.Find("AzureDreams/TownCaptured");
             if (!shader) return;
             foreach (var project in BuildingProjects)
@@ -1207,15 +1249,22 @@ namespace AzureDreamsReimagined
                 if (project.Bounds.width <= 0 || !ProjectBuilt(project)) continue;
                 // The second upgrade replaces the intermediate exterior.
                 if (project.Id == "home_1" && CurrentHomeRank >= 2) continue;
-                var data = Resources.Load<TextAsset>(ConstructionResources + project.Lot);
+                var data = AssetMode.Load<TextAsset>(ConstructionResources + project.Lot);
                 if (!data) continue;
                 var placedProject = PlaceProjectOnSavedLot(project);
                 _builtTownLots.Add(placedProject);
-                if (placedProject.Footprint.width > 0) _townBuildings.Add(placedProject.Footprint);
+                if (placedProject.Footprint.width > 0 && placedProject.Id != "fountain") _townBuildings.Add(placedProject.Footprint);
                 // The final house upgrade has a raised east wing. Its collision must
                 // cover the complete captured exterior, not just the small centre
                 // section, otherwise Koh can walk through the visible extension.
                 if (placedProject.Id == "home_2") _townBuildings.Add(Rect.MinMaxRect(58f, 50f, 62f, 57f));
+                // Level 2 yard: the well and the two flower planters beside the house are solid.
+                if (placedProject.Id == "home_1")
+                {
+                    _townBuildings.Add(Rect.MinMaxRect(52f, 55f, 54f, 57f));
+                    _townBuildings.Add(Rect.MinMaxRect(51f, 51f, 52f, 53f));
+                    _townBuildings.Add(Rect.MinMaxRect(60f, 51f, 61f, 53f));
+                }
                 CreateConstructionMesh(RetailTownObjectRoot(town.transform.parent), shader, data, placedProject);
             }
             if (_builtTownLots.Count == 0) return;
@@ -1273,7 +1322,7 @@ namespace AzureDreamsReimagined
             {
                 string textureName = reader.ReadString();
                 int count = reader.ReadInt32();
-                var texture = Resources.Load<Texture2D>(ConstructionResources + "Textures/" + textureName);
+                var texture = AssetMode.Load<Texture2D>(ConstructionResources + "Textures/" + textureName);
                 var material = new Material(shader) { mainTexture = texture };
                 materials[sub] = material;
                 _constructionGeometry.Add(material);
@@ -1308,6 +1357,7 @@ namespace AzureDreamsReimagined
             root.transform.localPosition = new Vector3(project.WorldOffset.x, 0f, project.WorldOffset.y);
             root.AddComponent<MeshFilter>().sharedMesh = mesh;
             root.AddComponent<MeshRenderer>().sharedMaterials = materials;
+            if (project.Id == "fountain") SetupFountainCollision(root, mesh);
             _generated.Add(root);
         }
 

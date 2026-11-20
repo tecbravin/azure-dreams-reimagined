@@ -150,17 +150,11 @@ namespace AzureDreamsReimagined
             if (IsTrollWeapon(item))
             {
                 if (!IsTroll(_familiarActor)) return;
-                if (withdrawing)
-                {
-                    _storageFeedback = T("Take the weapon into your bag before equipping it.",
-                        "Retire a arma para a bolsa antes de equipá-la.");
-                    return;
-                }
-                if (!source.SetEquipped(_storageRow, FamiliarEquipped, lockCursed: false)) return;
-                PlayRetailSound(RetailSfx.Equip);
+                if (!GiveTrollWeapon(source, _storageRow, _familiarActor, lockCursed: false)) return;
             }
             else
             {
+                if (RefusesLevaFruit(item, _familiarActor)) { _storageFeedback = _message; return; }
                 if (!CanUseInventoryEffect(item, true) ||
                     (item.Kind == ItemKind.Fruit && item.Subtype == 7 && !CanRevertToEgg(_familiarActor))) return;
                 if (!source.ConsumeDungeonItem(_storageRow, item.Kind)) return;

@@ -35,7 +35,8 @@
       "z": 54.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_19_generic_building"
     },
     {
       "x": 16.0,
@@ -50,7 +51,8 @@
       "z": 56.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_1a_generic_building"
     },
     {
       "x": 56.0,
@@ -73,14 +75,16 @@
       "z": 56.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_1b_generic_building"
     },
     {
       "x": 112.0,
       "z": 56.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_1c_generic_building"
     },
     {
       "x": 16.0,
@@ -119,7 +123,8 @@
       "z": 68.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_1d_generic_building"
     },
     {
       "x": 29.0,
@@ -165,7 +170,8 @@
       "z": 98.0,
       "width": 1.0,
       "height": 1.75,
-      "style": "Residence"
+      "style": "Residence",
+      "interior": "Interior_23_generic_house"
     }
   ]
 }

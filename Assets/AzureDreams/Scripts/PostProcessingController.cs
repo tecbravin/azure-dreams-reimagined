@@ -46,6 +46,13 @@ public sealed class PostProcessingController : MonoBehaviour
     [Range(0, 1)] public float ditherStrength = 0.5f;
     public bool crtScanlines;
     [Range(0, 0.6f)] public float scanlineStrength = 0.22f;
+    [Header("PS1 Vertex Wobble")]
+    [Tooltip("Snaps vertex screen positions to a coarse grid, like the PS1's fixed-point transform. Applied globally to every PsxVertexLit/PsxIndexed surface, not just this camera's render.")]
+    public bool psxVertexSnap;
+    [Range(60, 480)] public int vertexSnapResolution = 160;
+    [Tooltip("Drops perspective-correct texturing on PsxVertexLit/PsxIndexed surfaces, warping textures on oblique geometry like the PS1's affine texture mapping.")]
+    public bool psxAffineWarp;
+    [Range(0, 1)] public float affineWarpStrength = 1f;
     [SerializeField] private Shader _retroShader;
 
     [Tooltip("Optional preset, copied once on enable; runtime fields remain independently adjustable.")]
@@ -59,6 +66,8 @@ public sealed class PostProcessingController : MonoBehaviour
     private static readonly int Grade = Shader.PropertyToID("_Grade");
     private static readonly int Balance = Shader.PropertyToID("_Balance");
     private static readonly int Depth = Shader.PropertyToID("_Depth");
+    private static readonly int PsxSnapResolution = Shader.PropertyToID("_PSXVertexSnapResolution");
+    private static readonly int PsxAffineWarp = Shader.PropertyToID("_PSXAffineWarpStrength");
 
     private void OnEnable()
     {
@@ -66,6 +75,16 @@ public sealed class PostProcessingController : MonoBehaviour
         if (_profile) _profile.ApplyTo(this);
         RebuildMaterial();
         RebuildRetroMaterial();
+        ApplyPsxVertexGlobals();
+    }
+
+    // PsxVertexLit.shader and PsxIndexed.shader read these as global shader properties (not
+    // per-material) so every surface using them reacts to a single graphics-menu toggle at once,
+    // instead of needing every material swapped or every renderer tracked individually.
+    public void ApplyPsxVertexGlobals()
+    {
+        Shader.SetGlobalFloat(PsxSnapResolution, psxVertexSnap ? vertexSnapResolution : 0f);
+        Shader.SetGlobalFloat(PsxAffineWarp, psxAffineWarp ? affineWarpStrength : 0f);
     }
 
     internal bool PreserveBlackBackground { get; set; }
@@ -96,6 +115,8 @@ public sealed class PostProcessingController : MonoBehaviour
             colorQuantization = preset.colorQuantization; colorBits = preset.colorBits;
             ditherStrength = preset.ditherStrength;
             crtScanlines = preset.crtScanlines; scanlineStrength = preset.scanlineStrength;
+            psxVertexSnap = preset.psxVertexSnap; vertexSnapResolution = preset.vertexSnapResolution;
+            psxAffineWarp = preset.psxAffineWarp; affineWarpStrength = preset.affineWarpStrength;
             _retroShader = preset._retroShader;
             _profile = preset._profile;
             _effectShader = preset._effectShader;
@@ -105,6 +126,7 @@ public sealed class PostProcessingController : MonoBehaviour
         {
             RebuildMaterial();
             RebuildRetroMaterial();
+            ApplyPsxVertexGlobals();
         }
     }
 
@@ -198,6 +220,9 @@ public sealed class PostProcessingController : MonoBehaviour
         colorBits = 5;
         ditherStrength = 0.5f;
         fxaa = smaa = msaa = depthOfField = chromaticAberration = filmGrain = false;
+        psxVertexSnap = psxAffineWarp = true;
+        vertexSnapResolution = 160;
+        affineWarpStrength = 1f;
     }
 
     public void ToggleAll(bool value)
@@ -219,5 +244,7 @@ public sealed class PostProcessingController : MonoBehaviour
         filmGrain = false; grainIntensity = 0.2f;
         lowResolution = colorQuantization = crtScanlines = false;
         pixelHeight = 240; colorBits = 5; ditherStrength = 0.5f; scanlineStrength = 0.22f;
+        psxVertexSnap = false; vertexSnapResolution = 160;
+        psxAffineWarp = false; affineWarpStrength = 1f;
     }
 }

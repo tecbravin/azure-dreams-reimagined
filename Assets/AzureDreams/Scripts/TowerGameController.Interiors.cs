@@ -33,7 +33,7 @@ namespace AzureDreamsReimagined
         {
             if (_interiorCatalog == null)
             {
-                var data = Resources.Load<TextAsset>("Town/Interiors/catalog");
+                var data = AssetMode.Load<TextAsset>("Town/Interiors/catalog");
                 if (data) _interiorCatalog = JsonUtility.FromJson<InteriorCatalog>(data.text);
             }
             return _interiorCatalog;
@@ -117,7 +117,7 @@ namespace AzureDreamsReimagined
                     // serialized TextAsset reference has been unloaded/staled.
                 }
 
-                var resource = Resources.Load<TextAsset>("Town/Interiors/" + room.interiorId + "/heights");
+                var resource = AssetMode.Load<TextAsset>("Town/Interiors/" + room.interiorId + "/heights");
                 if (resource) return resource.bytes;
 
                 Debug.LogError("Missing interior height map for " + room.interiorId + ". Using a flat fallback to keep the interior playable.");
@@ -150,6 +150,7 @@ namespace AzureDreamsReimagined
                     MonsterShopScene => "MonsterShop.mp3",
                     CasinoRoom or CasinoSlotsRoom => "Casino.mp3",
                     RaceLobby or RaceCourse => RaceCourseMusicCue,
+                    ArcadeMoleRoom or ArcadeBattingRoom => "Playroom.mp3",
                     TheaterRoom => TheaterMusicCue,
                     PoolClosedRoom or PoolOpenRoom => "SwimmingPool.mp3",
                     BowlingInterior => "Playroom.mp3",
@@ -165,10 +166,15 @@ namespace AzureDreamsReimagined
             // square makes the first movement retrigger the exit, so every
             // direction of travel through this link uses its interior-side cell.
             bool enteringHomeHut = InHomeHut && !returningFromHut;
+            Vector3 inside = entry + InteriorDoorInward(room) * 2f;
             Vector3 arrival = returningFromHut && house >= 0 ? HomeHutArrival(house) :
                 enteringHomeHut ? entry + Vector3.forward * 2f :
-                _spawnAboveInteriorExitMarker ? entry + Vector3.back * 2f :
-                room.useArrivalPosition ? room.arrivalPosition : entry;
+                _spawnAboveInteriorExitMarker ? inside :
+                room.useArrivalPosition ? room.arrivalPosition : inside;
+            if (TakeCasinoArrival() is { } casinoArrival) arrival = casinoArrival;
+            // Never start on (or inside the trigger radius of) the exit mat.
+            Vector3 fromExit = arrival - entry; fromExit.y = 0f;
+            if (!(returningFromHut && house >= 0) && fromExit.sqrMagnitude < 2.25f) arrival = inside;
             _playerCell = new Vector2Int(Mathf.RoundToInt(arrival.x), Mathf.RoundToInt(arrival.z));
             _player = SpawnKoh(_playerCell, "Koh");
             _player.transform.position = RetailTownActorPosition(arrival, TownActorFootOffset);
@@ -185,7 +191,7 @@ namespace AzureDreamsReimagined
             var label = GetInteriorCatalog()?.entries;
             var entryLabel = label == null ? null : Array.Find(label, entry => entry.id == room.interiorId);
             string roomName = entryLabel == null ? room.displayName : T(entryLabel.label, entryLabel.labelPtBr);
-            _message = room.interiorId == RhodesHouse || room.interiorId == BarRoom || room.interiorId == RestaurantRoom
+            _message = room.interiorId == RhodesHouse || room.interiorId == BarRoom || room.interiorId == RestaurantRoom || room.interiorId == HushClinic || room.interiorId == CherrlHospital
                 ? ""
                 : roomName + T(". E at the entrance: return. F2: interiors.", ". E na entrada: voltar. F2: interiores.");
             CacheHomeFloorPlan();
@@ -193,7 +199,11 @@ namespace AzureDreamsReimagined
             SetupMonsterShop();
             SetupCasino();
             SetupRacetrack();
+            SetupInteriorDisplayMonsters();
             SetupBowling();
+            SetupArcade();
+            SetupGym();
+            SetupNativeInteriorProps();
             if (room.interiorId == BlacksmithInterior)
             {
                 PlaceBlacksmithVase("Pot_Brown", new Vector3(13.25f, 0f, 9.5f));
@@ -236,8 +246,17 @@ namespace AzureDreamsReimagined
                 var position = RetailTownActorPosition(CellPosition(cell), 0f);
                 if (room.residentOffsets != null && i < room.residentOffsets.Length)
                     position += room.residentOffsets[i];
+                bool templeJorda = placedId == "jorda" && room.interiorId is "Interior_11_temple" or "Interior_12_temple_2";
+                if (templeJorda)
+                {
+                    // The captured altars occupy Z 10-11 / 11-12. Stand in the
+                    // half-tile aisle behind them, rather than in the nave.
+                    position = CellPosition(cell) + Vector3.forward * .5f;
+                    // Yoda's cels extend six pixels below the bank's origin.
+                    position = RetailTownActorPosition(position,6f/RetailTownResidentSpriteView.TownPixelsPerUnit);
+                }
                 bool useAuthoredCell = cell.x >= 0 && cell != _playerCell &&
-                    (seated || TownPositionOpen(position, feetHeight: position.y));
+                    (seated || templeJorda || TownPositionOpen(position, feetHeight: position.y));
                 if (!useAuthoredCell)
                 {
                     cell = FindInteriorResidentCell();
@@ -248,6 +267,7 @@ namespace AzureDreamsReimagined
                 instance.transform.position = position;
                 var npc = instance.GetComponent<NPCController>();
                 npc.npcId = placedId;
+                RetailResidentBanks.Apply(instance, placedId);
                 if (seated && npc.TryGetComponent<TownHumanoidView>(out var humanoid))
                     humanoid.SetSeated(0.5f);
                 if (placedId is "bar_hunter_1" or "bar_hunter_2" or "bar_hunter_3")
@@ -274,6 +294,8 @@ namespace AzureDreamsReimagined
         private void MatchHushVisualToKoh(NPCController hushNpc)
         {
             if (!hushNpc || !_player) return;
+            // The retail bank already has Hush's native size and palette.
+            if (hushNpc.TryGetComponent<RetailTownResidentSpriteView>(out _)) return;
 
             // Do not select an arbitrary descendant renderer here.  Koh's hand
             // equipment is also made of SpriteRenderers, so that selection can
@@ -362,6 +384,9 @@ namespace AzureDreamsReimagined
                 return true;
             }
 
+            if (TryArcadePassage() || TryCasinoPassage()) return true;
+            if (ArcadeBatting) return false;
+            if (_interior.interiorId == CasinoRouletteRoom) return false;
             Vector3 delta = _player.transform.position - (InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(_interior)); delta.y = 0f;
             if (delta.sqrMagnitude > 1.44f) return false;
 
@@ -371,6 +396,11 @@ namespace AzureDreamsReimagined
             if (InHomeHut)
             {
                 StartCoroutine(LoadInterior(CurrentHomeScene()));
+                return true;
+            }
+            if (InRaceCourse)
+            {
+                StartCoroutine(LoadInterior(RaceLobby));
                 return true;
             }
             StartCoroutine(LeaveInterior()); return true;

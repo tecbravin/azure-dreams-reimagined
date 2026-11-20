@@ -179,11 +179,11 @@ namespace AzureDreamsReimagined
         private void DrawDialogueSkipPrompt(float width, float progress)
         {
             progress = Mathf.Clamp01(progress);
-            if (!_kewneSkipIcon) _kewneSkipIcon = Resources.Load<Texture2D>(EntranceResources + "KewneDialogueSkip");
+            if (!_kewneSkipIcon) _kewneSkipIcon = StreamMediaTexture(EntranceResources + "KewneDialogueSkip", FilterMode.Bilinear, TextureWrapMode.Clamp);
 
             string binding = _cancel?.GetBindingDisplayString() ?? "Q";
             string label = T($"Skip [{binding}]", $"Pular [{binding}]");
-            _dialogueSkipStyle ??= new GUIStyle(_messageStyle) { fontSize = 14, wordWrap = false };
+            _dialogueSkipStyle ??= new GUIStyle(_messageStyle) { fontSize = 12, wordWrap = false };
             float labelWidth = _dialogueSkipStyle.CalcSize(new GUIContent(label)).x;
             float rightEdge = width - 50f * (width / Screen.width);
             var labelRect = new Rect(rightEdge - labelWidth - 1f, 31f, labelWidth, 24f);
@@ -199,17 +199,18 @@ namespace AzureDreamsReimagined
             DrawHudText(labelRect, label, _dialogueSkipStyle);
             GUI.color = previousColor;
 
-            const int segments = 48;
-            // Keep the progress arc tight to the pendant's edge; it should not
-            // extend into the gap beside the Skip label.
-            float radius = iconSize * 0.46f;
-            var matrix = GUI.matrix;
+            const int segments = 64;
+            const float thickness = 2.8f;
+            float radius = iconSize * 0.5f + 2f;
             var gold = new Color(1f, 0.76f, 0.26f, opacity);
             for (int i = 0; i < Mathf.FloorToInt(progress * segments); i++)
             {
-                GUIUtility.RotateAroundPivot(i * (360f / segments), center);
-                DrawHudFill(new Rect(center.x - 1.6f, center.y - radius, 3.2f, 2f), gold);
-                GUI.matrix = matrix;
+                // Place the arc directly in the icon's UI coordinates so HUD
+                // scaling cannot move its rotation pivot toward the label.
+                float angle = i * (Mathf.PI * 2f / segments) - Mathf.PI * 0.5f;
+                Vector2 point = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                DrawHudFill(new Rect(point.x - thickness * 0.5f, point.y - thickness * 0.5f,
+                    thickness, thickness), gold);
             }
         }
 
@@ -247,9 +248,8 @@ namespace AzureDreamsReimagined
 
         private void DrawKewneMeetingChoices(Rect choices)
         {
-            int reply = _kewneMeeting == KewneMeeting.Question
-                ? DrawDialogueChoices(choices, _kewneMeetingSelection, T("Yes", "Sim"), T("No", "Não"))
-                : DrawDialogueChoices(choices, -1, T("Continue", "Continuar"));
+            if (_kewneMeeting != KewneMeeting.Question) return;
+            int reply = DrawDialogueChoices(choices, _kewneMeetingSelection, T("Yes", "Sim"), T("No", "Não"));
             if (reply >= 0) AdvanceKewneMeeting(reply);
         }
 

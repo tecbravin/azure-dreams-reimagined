@@ -15,11 +15,21 @@ namespace AzureDreamsReimagined
         private readonly Dictionary<ActorRecord, bool> _speciesAiRolls = new();
         private readonly Dictionary<ActorRecord, (GameObject View, Renderer[] Renderers)> _submergedActors = new();
         private readonly List<(ActorRecord Actor, Vector2Int Cell)> _pendingRocks = new();
-        private readonly HashSet<ActorRecord> _manoevaCopies = new();
+        private readonly Dictionary<ActorRecord, bool> _manoevaDisguised = new(); // true = disfarcado de item, false = de monstro
+        // Ovo que cada Viper esta carregando (comeu do chao, ainda nao foi derrotada) -
+        // ver TryViperGrabEgg. Cai de volta no chao quando a Viper e derrotada (Movement.cs).
+        private readonly Dictionary<ActorRecord, AzureDreams.Core.DungeonItemEntry> _viperCarriedEgg = new();
         private string _speciesActionMessages;
 
         private static bool HasSpeciesCommand(ActorRecord actor) =>
-            actor != null && (IsSpeciesObstacleCaster(actor) || actor.Species == (byte)MonsterSpecies.U_BOAT);
+            actor != null && (IsSpeciesObstacleCaster(actor) || actor.Species == (byte)MonsterSpecies.U_BOAT ||
+                actor.Species == (byte)MonsterSpecies.MANOEVA);
+
+        // Narcolepsia do Naplass e Abduct do Garuda sao involuntarias/hostis - nunca devem
+        // aparecer como comando manual no menu da coleira, por isso ficam fora de
+        // HasSpeciesCommand (que tambem controla essa UI) e tem seu proprio gate aqui.
+        private static bool HasInvoluntarySpeciesAction(ActorRecord actor) =>
+            actor != null && (actor.Species == (byte)MonsterSpecies.NAPLASS || actor.Species == (byte)MonsterSpecies.GARUDA);
 
         private static bool IsSpeciesObstacleCaster(ActorRecord actor) =>
             actor != null && (MonsterSpecies)actor.Species is MonsterSpecies.VOLCANO or MonsterSpecies.GLACIER;
@@ -29,6 +39,7 @@ namespace AzureDreamsReimagined
             MonsterSpecies.U_BOAT => IsSubmerged(actor) ? T("Surface", "Emergir") : T("Dive", "Mergulhar"),
             MonsterSpecies.VOLCANO => T("Create Rock", "Criar pedra"),
             MonsterSpecies.GLACIER => T("Create Ice Wall", "Criar parede de gelo"),
+            MonsterSpecies.MANOEVA => T("Revert Form", "Forma Original"),
             _ => string.Empty
         };
 
@@ -70,9 +81,166 @@ namespace AzureDreamsReimagined
                     var delta = _playerCell - creature.Cell;
                     var direction = new Vector2Int(Math.Sign(delta.x), Math.Sign(delta.y));
                     return TryQueueSpeciesObstacle(actor, creature.View, creature.Cell, direction);
+                case MonsterSpecies.NAPLASS when RollSpeciesAiOnce(actor, 32):
+                    NaplassNarcolepsy(actor, creature.Cell);
+                    return true;
+                case MonsterSpecies.GARUDA when RollSpeciesAiOnce(actor, 16) && TryGarudaAbduct(actor, creature.Cell):
+                    return true;
+                case MonsterSpecies.MANOEVA when ManoevaCanDisguise && !_manoevaDisguised.ContainsKey(actor) &&
+                    RollSpeciesAiOnce(actor, 16) && TryManoevaDisguise(actor, creature.Cell):
+                    return true;
+                case MonsterSpecies.VIPER when !_viperCarriedEgg.ContainsKey(actor) &&
+                    RollSpeciesAiOnce(actor, 8) && TryViperGrabEgg(actor, creature.Cell):
+                    return true;
                 default:
                     return false;
             }
+        }
+
+        // Abduct do Garuda: pega um familiar adjacente (nunca Koh - so os dois "slots" de
+        // familiar existem como alvo possivel, igual ao original, que varre apenas o anel
+        // de aliados e nunca a lista de alvos do jogador) e o leva para um canto aleatorio
+        // do andar, reaproveitando o mesmo teletransporte das armadilhas de warp.
+        private bool TryGarudaAbduct(ActorRecord actor, Vector2Int cell)
+        {
+            ActorRecord target = null;
+            Vector2Int targetCell = default;
+            if (_familiar && !IsSubmerged(_familiarActor) && SpeciesDistance(cell, _familiarCell) == 1)
+            {
+                target = _familiarActor;
+                targetCell = _familiarCell;
+            }
+            else if (_blueCollarAlly?.View && _blueCollarAlly.Actor.Hp > 0 && !IsSubmerged(_blueCollarAlly.Actor) &&
+                     SpeciesDistance(cell, _blueCollarAlly.Cell) == 1)
+            {
+                target = _blueCollarAlly.Actor;
+                targetCell = _blueCollarAlly.Cell;
+            }
+            if (target == null) return false;
+            var name = TowerCombatName(actor);
+            var familiarName = TowerCombatName(target);
+            AddSpeciesMessage(T($"{name} carries {familiarName} away!", $"{name} levou {familiarName} pelos ares!"));
+            WarpTrapActor(targetCell, target);
+            return true;
+        }
+
+        // Manoeva so usa a habilidade de copiar a partir do andar 16 (ou na segunda torre) -
+        // nos andares baixos (5-8) ela nunca aparece, conforme pedido. O limiar exato nao
+        // esta nos dados extraidos, entao fica como escolha de design.
+        private bool ManoevaCanDisguise => _floor >= 16 || InSecondTower;
+
+        // Manoeva mira o alvo na frente dela (monstro ou item no chao, igual ao
+        // check_forward_target do decomp) e se disfarca dele. Enquanto disfarcada ela fica
+        // parada, mas ataca o primeiro alvo que chegar a distancia; atacar ou receber dano
+        // desfaz o disfarce (ver RevertManoevaDisguise).
+        private bool TryManoevaDisguise(ActorRecord actor, Vector2Int cell)
+        {
+            foreach (var step in BellSteps)
+            {
+                var target = cell + step;
+                int enemy = CreatureAt(target);
+                if (enemy >= 0 && _creatures[enemy].Actor != actor &&
+                    _creatures[enemy].Actor.Species != (byte)MonsterSpecies.MANOEVA)
+                {
+                    _manoevaDisguised[actor] = false;
+                    var copiedName = TowerCombatName(_creatures[enemy].Actor);
+                    AddSpeciesMessage(T($"{TowerCombatName(actor)} copies {copiedName}!",
+                        $"{TowerCombatName(actor)} copiou {copiedName}!"));
+                    return true;
+                }
+            }
+            if (_towerItemTraps?.GetItemAt(cell) == null) return false;
+            _manoevaDisguised[actor] = true;
+            AddSpeciesMessage(T($"{TowerCombatName(actor)} disguises as the item!",
+                $"{TowerCombatName(actor)} se disfarcou do item!"));
+            return true;
+        }
+
+        // Atacar ou receber dano devolve a forma original (pedido do usuario). Usado tanto
+        // para monstros selvagens quanto para familiares disfarcados.
+        private bool RevertManoevaDisguise(ActorRecord actor)
+        {
+            if (actor == null || !_manoevaDisguised.Remove(actor)) return false;
+            var name = TowerCombatName(actor);
+            AddSpeciesMessage(T($"{name} reverts to its true form!", $"{name} voltou a forma verdadeira!"));
+            return true;
+        }
+
+        // Viper "come" (carrega) um ovo numa celula adjacente, igual ao decomp
+        // (update_viper_item_grab.c: lunca na direcao do item, checa se e um ovo -
+        // bytes[1]==0x12/ItemKind.Egg - e o remove do chao). O ovo fica guardado em
+        // _viperCarriedEgg em vez de ser destruido: se a Viper for derrotada antes de
+        // voltar a comer outro, o ovo cai de volta no chao (ver TowerGameController.Movement.cs).
+        private bool TryViperGrabEgg(ActorRecord actor, Vector2Int cell)
+        {
+            foreach (var step in BellSteps)
+            {
+                var target = cell + step;
+                var item = _towerItemTraps?.GetItemAt(target);
+                if (item == null || item.Kind != AzureDreams.Core.ItemKind.Egg) continue;
+                _towerItemTraps.TakeItem(target);
+                _viperCarriedEgg[actor] = item;
+                AddSpeciesMessage(T($"{TowerCombatName(actor)} swallows the egg!",
+                    $"{TowerCombatName(actor)} engoliu o ovo!"));
+                return true;
+            }
+            return false;
+        }
+
+        // Manoeva se multiplica quando atingido e sobrevive - habilidade distinta e
+        // paralela a de copiar forma (confirmado pelo usuario; nao achei o nome da
+        // funcao correspondente no decomp nesta leva, entao a chance exata (50%) e a
+        // divisao de HP (pela metade) sao uma reconstrucao razoavel, nao um valor
+        // extraido byte a byte - ajustar se o usuario souber os numeros exatos).
+        // So se aplica a Manoevas selvagens (lista _creatures); uma Manoeva domesticada
+        // (familiar/aliado de colar azul) nao se multiplica.
+        // Retorna o dano ajustado: quando ha divisao, o dano retornado e reduzido para
+        // que o HP final do Manoeva original seja exatamente a metade que ele reteve.
+        private int TryManoevaSplit(ActorRecord target, int damage)
+        {
+            if (damage <= 0 || target == null || target.Species != (byte)MonsterSpecies.MANOEVA ||
+                _creatures.Count >= SpeciesSpawnLimit) return damage;
+            int survivingHp = target.Hp - damage;
+            if (survivingHp <= 1) return damage; // morreu ou ficaria com 1 HP - nao ha o que dividir
+            int cellIndex = _creatures.FindIndex(creature => creature.Actor == target);
+            if (cellIndex < 0) return damage; // Manoeva domesticada (familiar/aliado) - nao se multiplica
+            if (RollSpawnRange(2) != 0) return damage;
+            Vector2Int cell = _creatures[cellIndex].Cell;
+            Vector2Int? openCell = null;
+            foreach (var step in BellSteps)
+            {
+                var candidate = cell + step;
+                if (_walls.Contains(candidate) || CreatureAt(candidate) >= 0 || candidate == _playerCell ||
+                    candidate == _stairCell || (_familiar && candidate == _familiarCell) ||
+                    _towerItemTraps?.GetItemAt(candidate) != null) continue;
+                openCell = candidate;
+                break;
+            }
+            if (openCell == null) return damage; // sem espaco livre ao lado - nao se multiplica
+            int half = Mathf.Max(1, survivingHp / 2);
+            SpawnManagedCreature(openCell.Value, AzureDreams.Core.MonsterSpecies.MANOEVA,
+                levelOverride: target.Level, allowSpawnSleep: false);
+            int cloneIndex = _creatures.Count - 1;
+            var clone = _creatures[cloneIndex];
+            clone.Actor.Hp = StatByte(half);
+            clone.Health = half;
+            _creatures[cloneIndex] = clone;
+            AddSpeciesMessage(T($"{TowerCombatName(target)} splits in two!",
+                $"{TowerCombatName(target)} se multiplicou!"));
+            return target.Hp - half; // dano ajustado para que o HP final seja exatamente 'half'
+        }
+
+        // Narcolepsia do Naplass: 1 chance em 32 por turno de cochilar sozinho,
+        // sem exigir alvo ou linha de visao (igual ao jogo original - ver
+        // start_naplass_status_action.c no decomp). Reaproveita o gate generico
+        // de imunidade a status em Status(), entao qualquer talento de
+        // Sleep-proof que o Naplass venha a ter no futuro continua funcionando.
+        private void NaplassNarcolepsy(ActorRecord actor, Vector2Int cell)
+        {
+            SpawnFx(_fxMagic, CellPosition(cell));
+            var name = TowerCombatName(actor);
+            AddSpeciesMessage(T($"{name} nods off.", $"{name} cochilou."));
+            Status(actor, StatusId.SLEEP, 4);
         }
 
         private void Dive(ActorRecord actor, GameObject view, Vector2Int cell)
@@ -130,7 +298,7 @@ namespace AzureDreamsReimagined
                 if (ice)
                 {
                     CreateIceWall(cell);
-                    SpawnFx(Resources.Load<GameObject>("FX/FX_Water"), CellPosition(cell) + Vector3.up * 0.5f);
+                    SpawnFx(AssetMode.Load<GameObject>("FX/FX_Water"), CellPosition(cell) + Vector3.up * 0.5f);
                     AddSpeciesMessage(T($"{name} created a wall of ice.", $"{name} criou uma parede de gelo."));
                     continue;
                 }
@@ -164,60 +332,6 @@ namespace AzureDreamsReimagined
             }
             _walls.Add(cell);
             _iceBlocks.Add((cell, view, 8));
-        }
-
-        private void QueueManoevaSplit(ActorRecord actor, int damage)
-        {
-            if (damage > 0 && actor.Species == (byte)MonsterSpecies.MANOEVA &&
-                !IsFrog(actor) && !_manoevaCopies.Contains(actor)) _manoevaCloneCandidates.Add(actor);
-        }
-
-        private void ResolveManoevaClones()
-        {
-            foreach (var source in _manoevaCloneCandidates)
-            {
-                if (source.Hp == 0 || IsFrog(source) || _creatures.Count + _thrownEggs.Count >= SpeciesSpawnLimit) continue;
-                int enemy = _creatures.FindIndex(creature => creature.Actor == source && creature.Health > 0);
-                var ally = _thrownEggs.Find(entry => entry.Actor == source && entry.View && entry.Turns > 0);
-                bool red = source == _familiarActor && _familiar && _familiarHealth > 0;
-                if (enemy < 0 && ally == null && !red) continue;
-                if (RollSpawnRange(4) != 0) continue;
-                var origin = enemy >= 0 ? _creatures[enemy].Cell : red ? _familiarCell : ally.Cell;
-                foreach (var step in BellSteps)
-                {
-                    var cell = origin + step;
-                    if (!CanTowerStep(origin, step) || !IsOpenSpeciesTile(cell)) continue;
-                    var species = MonsterSpecies.MANOEVA;
-                    ActorRecord copy;
-                    if (enemy >= 0)
-                    {
-                        SpawnManagedCreature(cell, species, levelOverride: 1, allowSpawnSleep: false);
-                        copy = _creatures[^1].Actor;
-                    }
-                    else
-                    {
-                        copy = CreateTowerEnemy(species, 1, allowSpawnSleep: false);
-                        var view = SpawnActor(HatchedFamiliarPrefab((byte)species), cell, "Manoeva copy",
-                            species: (int)species, palette: FamiliarPalette((byte)species, source));
-                        _thrownEggs.Add(new ThrownEggAlly { Actor = copy, Cell = cell, View = view, Turns = int.MaxValue });
-                    }
-                    copy.BaseHp = StatByte((source.BaseHp + 1) / 2);
-                    copy.MaxHp = StatByte((source.MaxHp + 1) / 2);
-                    copy.Hp = StatByte(Mathf.Clamp((source.Hp + 1) / 2, 1, copy.MaxHp));
-                    if (enemy >= 0)
-                    {
-                        var clone = _creatures[^1];
-                        clone.Health = copy.Hp;
-                        _creatures[^1] = clone;
-                    }
-                    _manoevaCopies.Add(copy);
-                    SpawnFx(_fxMagic, CellPosition(cell));
-                    var name = TowerCombatName(source);
-                    AddSpeciesMessage(T($"{name} split into two.", $"{name} se dividiu em dois."));
-                    break;
-                }
-            }
-            _manoevaCloneCandidates.Clear();
         }
 
         private void RevealStarGlassesTargets()
@@ -312,8 +426,8 @@ namespace AzureDreamsReimagined
             _submergedActors.Clear();
             _speciesAiRolls.Clear();
             _pendingRocks.Clear();
-            _manoevaCopies.Clear();
-            _manoevaCloneCandidates.Clear();
+            _manoevaDisguised.Clear();
+            _viperCarriedEgg.Clear();
             _speciesActionMessages = null;
         }
     }

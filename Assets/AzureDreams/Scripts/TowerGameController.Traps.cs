@@ -10,10 +10,17 @@ namespace AzureDreamsReimagined
         private const sbyte PrisonTrapTurns = 16;
         private Sprite _towerTrapSprite;
         private readonly Dictionary<TowerTrapEffect, Sprite> _trapSprites = new();
+        // Visual 'mola aberta' (go_up2) mostrado so no Reimagined depois que a armadilha de
+        // Go Up e ativada - no Classic nao ha uma segunda imagem, entao ela fica null e o
+        // marcador simplesmente mantem o sprite normal (igual ao comportamento de antes).
+        private Sprite _goUpSprungSprite;
+        private bool _goUpSprungChecked;
         private readonly Dictionary<Vector2Int, (int Original, int Until)> _trapTerrainChanges = new();
         private int _trapReversalUntil;
         private bool _trapGoUp;
         private bool _goUpTransition;
+        private bool _trapGoDown;
+        private bool _goDownTransition;
 
         private System.Collections.IEnumerator PlayGoUpTransition()
         {
@@ -37,6 +44,40 @@ namespace AzureDreamsReimagined
                 _trapAnimationSpeed = TowerAnimationSpeed;
             }
         }
+
+        // Armadilha Go Down: mesma apresentacao (fade para preto) do Go Up, mas descendo um
+        // andar em vez de subir - nao ha elevador/mola envolvido, e so o alcapao abrindo.
+        private System.Collections.IEnumerator PlayGoDownTransition()
+        {
+            _goDownTransition = true;
+            try
+            {
+                const float fadeSeconds = 0.3f;
+                for (float elapsed = 0f; elapsed < fadeSeconds; elapsed += Time.unscaledDeltaTime * 0.7f)
+                {
+                    _fadeToBlack = elapsed / fadeSeconds;
+                    yield return null;
+                }
+                _fadeToBlack = 1f;
+                yield return new WaitForSecondsRealtime(2f);
+                CompleteTrapDescent();
+            }
+            finally
+            {
+                _fadeToBlack = 0f;
+                _goDownTransition = false;
+                _trapAnimationSpeed = TowerAnimationSpeed;
+            }
+        }
+
+        private void CompleteTrapDescent()
+        {
+            _towerRun.JumpToFloor(Mathf.Max(1, _floor - 1));
+            _floor = _towerRun.Floor;
+            BuildTowerFloor();
+            _towerRun.CompleteFloorTransition();
+            _message = T($"You fall through to {TowerFloorLabel(_floor)}.", $"Você cai para o {TowerFloorLabel(_floor)}.");
+        }
         private float _trapAnimationSpeed = TowerAnimationSpeed;
         private const int TerrainTrapTurns = 20;
         private const float TrapMarkerWidth = 1.10f;
@@ -51,10 +92,11 @@ namespace AzureDreamsReimagined
             string resourceName = effect switch
             {
                 TowerTrapEffect.GoUp => "Go_up_trap",
+                TowerTrapEffect.GoDown => "Go_down_trap",
                 TowerTrapEffect.Upheaval => "Upheaval",
                 _ => $"{effect}_trap"
             };
-            var texture = Resources.Load<Texture2D>($"Tower/Traps/{resourceName}");
+            var texture = AssetMode.Load<Texture2D>($"Tower/Traps/{resourceName}");
             if (texture)
             {
                 texture.filterMode = FilterMode.Point;
@@ -67,6 +109,20 @@ namespace AzureDreamsReimagined
                 _towerTrapSprite = Sprite.Create(_towerTrapTexture,
                     new Rect(0, 0, _towerTrapTexture.width, _towerTrapTexture.height), Vector2.one * 0.5f);
             return _towerTrapSprite;
+        }
+
+        private Sprite GoUpSprungSprite()
+        {
+            if (_goUpSprungChecked) return _goUpSprungSprite;
+            _goUpSprungChecked = true;
+            var texture = AssetMode.Load<Texture2D>("Tower/Traps/Go_up_trap_sprung");
+            if (texture)
+            {
+                texture.filterMode = FilterMode.Point;
+                _goUpSprungSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                    Vector2.one * 0.5f, 100f, 0, SpriteMeshType.FullRect);
+            }
+            return _goUpSprungSprite;
         }
         private readonly Dictionary<Vector2Int, TowerTrapState> _demoTraps = new();
         private Vector2Int? _trapRearmCell;
@@ -101,6 +157,43 @@ namespace AzureDreamsReimagined
             var rotation = TrapMarkerRotation();
             foreach (var marker in _trapMarkers.Values)
                 if (marker && marker.activeSelf) marker.transform.rotation = rotation;
+        }
+
+        // Efeitos continuos dos marcadores de armadilha ja revelados: pentagrama pulsando
+        // (Seal e Frog) e a mola do Go Up balancando depois de ativada (go_up2, so Reimagined).
+        private void AnimateTrapMarkerEffects()
+        {
+            if (_trapMarkers.Count == 0) return;
+            foreach (var pair in _trapMarkers)
+            {
+                var marker = pair.Value;
+                if (!marker || !marker.activeSelf) continue;
+                var trap = TrapAt(pair.Key);
+                var markerSprite = marker.GetComponent<SpriteRenderer>();
+                if (trap == null || !markerSprite) continue;
+                float seed = pair.Key.x * 0.7f + pair.Key.y * 0.9f;
+                switch (trap.Effect)
+                {
+                    case TowerTrapEffect.Seal or TowerTrapEffect.Frog:
+                    {
+                        float baseAlpha = trap.IsActive ? 1f : 0.5f;
+                        float pulse = 0.78f + 0.22f * Mathf.Sin(Time.time * 2.2f + seed);
+                        markerSprite.color = new Color(1f, 1f, 1f, baseAlpha * pulse);
+                        break;
+                    }
+                    case TowerTrapEffect.GoUp when !trap.IsActive:
+                    {
+                        var sprung = GoUpSprungSprite();
+                        if (!sprung) break;
+                        if (markerSprite.sprite != sprung) markerSprite.sprite = sprung;
+                        float wobble = Mathf.Sin(Time.time * 3.4f + seed) * 4f;
+                        float breathe = 1f + 0.05f * Mathf.Sin(Time.time * 3.4f + seed);
+                        marker.transform.rotation *= Quaternion.Euler(0f, 0f, wobble);
+                        marker.transform.localScale = Vector3.one * (TrapMarkerWidth / sprung.bounds.size.x) * breathe;
+                        break;
+                    }
+                }
+            }
         }
 
         private void RefreshTrapMarker(Vector2Int cell)
@@ -178,12 +271,21 @@ namespace AzureDreamsReimagined
                     if (actor != _playerActor) Status(actor, StatusId.MAGIC_BIND, 20);
                     break;
                 case TowerTrapEffect.GoUp:
-                    if (actor == _playerActor && _floor < TowerFloorRules.BeldoFloor &&
+                    if (actor == _playerActor && CanAscendFromFloor &&
                         _towerRun?.CurrentState == TowerRunManager.State.InTower)
                     {
                         _trapGoUp = true;
                         _trapAnimationSpeed = TowerAnimationSpeed * 0.7f; // GoUp traps work 30% slower
                     }
+                    else if (actor == _playerActor && InSecondTower && AtSecondTowerTop) ShowNoMoreFloors();
+                    break;
+                case TowerTrapEffect.GoDown:
+                    // Sem restricao extra de andar: a armadilha ja nao e gerada nos andares
+                    // 1, 2, 3 e 40 (TowerItemTrapManager.GeneratedTrapEffect), entao o andar
+                    // de destino (_floor - 1) nunca fica abaixo de 3. JumpToFloor nao tem
+                    // limite inferior, igual ao usado pelo elevador para subir.
+                    if (actor == _playerActor && _towerRun?.CurrentState == TowerRunManager.State.InTower)
+                        _trapGoDown = true;
                     break;
                 case TowerTrapEffect.Reversal:
                     if (actor == _playerActor) _trapReversalUntil = _completedTowerTurns + 21;
@@ -214,6 +316,7 @@ namespace AzureDreamsReimagined
             TowerTrapEffect.Crack => T("Crack", "Fenda"),
             TowerTrapEffect.Frog => T("Frog", "Sapo"),
             TowerTrapEffect.GoUp => T("Go up", "Subida"),
+            TowerTrapEffect.GoDown => T("Go down", "Descida"),
             TowerTrapEffect.Poison => T("Poison", "Veneno"),
             TowerTrapEffect.Prison => T("Prison", "Prisão"),
             TowerTrapEffect.Reversal => T("Reversal", "Inversão"),
@@ -453,7 +556,7 @@ namespace AzureDreamsReimagined
                 GUILayout.BeginArea(new Rect(disarmRect.x + 12f, disarmRect.y + 10f, disarmRect.width - 24f, disarmRect.height - 20f));
                 GUILayout.Label(T("Disarm this trap?", "Desarmar esta armadilha?"));
                 if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) ConfirmTrapDisarm();
-                if (GUILayout.Button(T("No [Esc]", "Não [Esc]"))) _trapDisarmCell = null;
+                if (GUILayout.Button(WithCancelHint("No", "Não"))) _trapDisarmCell = null;
                 GUILayout.EndArea();
                 return;
             }
@@ -463,7 +566,7 @@ namespace AzureDreamsReimagined
             GUILayout.BeginArea(new Rect(rect.x + 12f, rect.y + 10f, rect.width - 24f, rect.height - 20f));
             GUILayout.Label(T("Rearm this trap?", "Reativar esta armadilha?"));
             if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) ConfirmTrapRearm();
-            if (GUILayout.Button(T("No [Esc]", "Não [Esc]"))) _trapRearmCell = null;
+            if (GUILayout.Button(WithCancelHint("No", "Não"))) _trapRearmCell = null;
             GUILayout.EndArea();
         }
     }

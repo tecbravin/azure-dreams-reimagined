@@ -14,34 +14,42 @@ namespace AzureDreamsReimagined
         private const string RaceTicketOdds = "racetrack.ticket_odds";
         private const int RaceTicketPrice = 100;
         private const int RaceTicketLimit = 10;
-        private enum RaceScreen { Closed, Tickets, Silver, Instructions, Loading, Countdown, Racing, Results }
+        private enum RaceScreen { Closed, Tickets, Loading, Countdown, Racing, Results }
+        private const string RaceLastPlace = "racetrack.last_place";
+        private const string RaceBestTime = "racetrack.best_time_ms";
+        private const string RaceRecord = "racetrack.new_record";
 
         private static readonly string[] RaceNames = { "Running Boss", "Okuchi Chuck", "Nenkojo Relina", "Holy Night" };
         private static readonly (int A, int B)[] RacePairs = { (0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3) };
         // Centerline reconstructed from the three loops of the captured course.
         private static readonly Vector2[] RaceRoute =
         {
-            new(45, 26), new(71, 26), new(74, 24), new(76, 21), new(76, 18),
-            new(73, 16), new(55, 16), new(52, 18), new(50, 22), new(50, 32),
+            new(62.5f, 16), new(55, 16), new(52, 18), new(50, 22), new(50, 32),
             new(49, 35), new(46, 37), new(29, 37), new(26, 35), new(25, 32),
             new(25, 23), new(25, 19), new(23, 17), new(21, 16), new(18, 17),
-            new(16, 20), new(16, 23), new(18, 26), new(45, 26)
+            new(16, 20), new(16, 23), new(18, 26), new(45, 26), new(71, 26),
+            new(74, 24), new(76, 21), new(76, 18), new(73, 16), new(62.5f, 16)
         };
-        private static readonly float[] RaceHurdles = { 20f, 62f, 110f, 145f };
+        // The captured hedges cross the route at (63.5, 26) and (16, 22).
+        private static readonly float[] RaceHurdles = { 82.9456f, 133.0512f };
 
         private sealed class NyuelRacer
         {
             public GameObject Mount;
             public MonsterTurnSpriteView Sprite;
+            public ActorLocomotionView Rider;
             public float Distance, Lane, Speed, Pace, Jump, Sprint;
+            public float FinishTime = -1f;
             public int Hurdle;
         }
 
         private readonly NyuelRacer[] _nyuelRacers = new NyuelRacer[4];
         private readonly int[] _raceOdds = new int[6];
         private readonly int[] _racePlaces = new int[4];
+        private readonly int[] _raceFrameFinishers = new int[4];
+        private readonly float[] _raceFrameFractions = new float[4];
         private RaceScreen _raceScreen;
-        private int _racePair, _raceTickets = 1, _raceChoice, _raceFinished, _racePrize;
+        private int _racePair, _raceTickets = 1, _raceFinished, _racePrize;
         private float _raceStartTime, _raceClock, _raceThirdFinished, _raceLength;
         private float[] _raceDistances;
         private bool _raceSpectating;
@@ -56,58 +64,53 @@ namespace AzureDreamsReimagined
             _raceScreen = RaceScreen.Closed;
             _racePair = 0;
             _raceTickets = 1;
+            _message = string.Empty;
             for (int i = 0; i < _raceOdds.Length; i++) _raceOdds[i] = Random.Range(3, 10);
 
             foreach (var npc in _townPeople)
             {
                 if (!npc) continue;
-                bool silver = npc.npcId is "dar" or "silver";
-                bool clerk = npc.npcId == "fur";
-                npc.npcId = silver ? "race_silver" : clerk ? "race_clerk" : "race_gambler";
-                if (silver) ConfigureSilverPresentation(npc);
+                bool silver = npc.npcId == "race_silver";
+                bool clerk = npc.npcId == "race_clerk";
                 if (npc.TryGetComponent<CharacterStats>(out var stats))
                 {
-                    stats.displayName = silver ? "Silver" : clerk ? T("Ticket Clerk", "Bilheteira") : T("Gambler", "Apostador");
+                    stats.displayName = silver ? "Silver" : clerk ? T("Ticket Clerk", "Bilheteria") : npc.npcId == "race_bet" ? "Bet" : T("Gambler", "Apostador");
                     stats.portraitTexture = silver ? StreamPortrait(SilverPortrait) : null;
                 }
-                npc.dialogueLines = new[]
-                {
-                    T("The problem with that last race was not with the monsters! It was the jockey that was shameful!",
-                        "O problema da última corrida não foram os monstros! A culpa foi do jóquei!"),
-                    T("Are you going to be in today's race? If you are, I'm gonna bet on you.",
-                        "Vai correr hoje? Se for, vou apostar em você.")
-                };
+                npc.dialogueLines = System.Array.Empty<string>();
+            }
+            SpawnRacetrackNyuel();
+        }
+
+        private void SpawnRacetrackNyuel()
+        {
+            int species = (int)MonsterSpecies.NYUEL;
+            var prefab = HatchedFamiliarPrefab(species);
+            if (!prefab) return;
+            for (int i = 0; i < RaceNames.Length; i++)
+            {
+                var cell = new Vector2Int(12, 2 + i * 3);
+                var horse = SpawnActor(prefab, cell, RaceNames[i], species: species, groundedIdle: true);
+                ConfigureRacetrackNyuel(horse);
+                horse.transform.position = RetailTownActorPosition(new Vector3(cell.x + 0.5f, 0f, cell.y + 0.5f), TownActorFootOffset);
+                var npc = horse.GetComponent<NPCController>() ?? horse.AddComponent<NPCController>();
+                npc.npcId = "race_nyuel_" + i;
+                npc.GetComponent<CharacterStats>().displayName = RaceNames[i];
+                npc.ConfigureConversation(_townFlow.State);
+                _townPeople.Add(npc);
+                _npcCells.Add(cell);
             }
         }
 
-        private bool TryRacetrackInteraction()
+        private static void ConfigureRacetrackNyuel(GameObject horse)
         {
-            if (!_player) return false;
-            if (InRaceCourse && Vector2.Distance(new Vector2(_player.transform.position.x, _player.transform.position.z),
-                    new Vector2(_interior.entryPosition.x, _interior.entryPosition.z)) < 1.15f)
-            {
-                StartCoroutine(LoadInterior(RaceLobby));
-                return true;
-            }
-            if (!InRaceLobby) return false;
-
-            NPCController nearest = null;
-            float distance = 1.65f;
-            foreach (var npc in _townPeople)
-            {
-                if (!npc || npc.npcId is not ("race_silver" or "race_clerk")) continue;
-                Vector3 delta = npc.transform.position - _player.transform.position;
-                delta.y = 0f;
-                if (delta.magnitude >= distance) continue;
-                nearest = npc;
-                distance = delta.magnitude;
-            }
-            if (!nearest) return false;
-            _raceChoice = 0;
-            _message = string.Empty;
-            _raceScreen = nearest.npcId == "race_silver" ? RaceScreen.Silver : RaceScreen.Tickets;
-            PlayRetailSound(RetailSfx.Confirm);
-            return true;
+            // The community Nyuel export repeats a mounted front pose in every
+            // direction. Use the original directional body cels, without the
+            // embedded rider, so Koh and the jockeys can be drawn independently.
+            var atlas = AssetMode.Load<Texture2D>("Town/Racetrack/NyuelIndexed");
+            var sprite = horse.GetComponentInChildren<MonsterTurnSpriteView>();
+            if (sprite && atlas) sprite.UseRetailAtlas((int)MonsterSpecies.NYUEL, atlas);
+            foreach (var collider in horse.GetComponentsInChildren<Collider>()) collider.enabled = false;
         }
 
         private bool HandleRacetrackInput()
@@ -132,7 +135,6 @@ namespace AzureDreamsReimagined
             if (_cancel?.WasPressedThisFrame() == true)
             {
                 if (_raceScreen == RaceScreen.Results) ReturnFromRace();
-                else if (_raceScreen == RaceScreen.Instructions) _raceScreen = RaceScreen.Silver;
                 else _raceScreen = RaceScreen.Closed;
                 return true;
             }
@@ -147,7 +149,6 @@ namespace AzureDreamsReimagined
                     int quantity = (MenuDirectionPressed(4) ? 1 : 0) - (MenuDirectionPressed(3) ? 1 : 0);
                     _raceTickets = Mathf.Clamp(_raceTickets + quantity, 1, RaceTicketLimit);
                 }
-                if (_raceScreen == RaceScreen.Silver) _raceChoice = (_raceChoice + row + 4) % 4;
             }
             if (_interact?.WasPressedThisFrame() == true) ConfirmRaceMenu();
             return true;
@@ -167,18 +168,17 @@ namespace AzureDreamsReimagined
                     TownSaveVariables.SetInt(RaceTicketOdds, _raceOdds[_racePair]);
                     PersistTownProgress();
                     PlayRetailSound(RetailSfx.Confirm);
+                    _raceScreen = RaceScreen.Closed;
+                    var clerk = FindStoryActor("race_clerk");
+                    if (clerk) StoryTalk(clerk, "Good luck with the race itself too.", "Boa sorte na corrida também.");
                     break;
-                case RaceScreen.Silver:
-                    if (_raceChoice < 2) BeginNyuelRace(_raceChoice == 1);
-                    else _raceScreen = _raceChoice == 2 ? RaceScreen.Instructions : RaceScreen.Closed;
-                    break;
-                case RaceScreen.Instructions: _raceScreen = RaceScreen.Silver; break;
                 case RaceScreen.Results: ReturnFromRace(); break;
             }
         }
 
         private void BeginNyuelRace(bool spectating)
         {
+            if (!InRaceLobby || _raceScreen != RaceScreen.Closed || _changingInterior) return;
             _raceSpectating = spectating;
             _raceScreen = RaceScreen.Loading;
             StartCoroutine(EnterNyuelRace());
@@ -186,8 +186,12 @@ namespace AzureDreamsReimagined
 
         private System.Collections.IEnumerator EnterNyuelRace()
         {
+            var jockeyPrefab = _interior && _interior.residentPrefabs != null
+                ? System.Array.Find(_interior.residentPrefabs, prefab => prefab &&
+                    prefab.TryGetComponent<NPCController>(out var resident) && resident.npcId == "race_bet")
+                : null;
             yield return LoadInterior(RaceCourse);
-            if (!InRaceCourse) { _raceScreen = RaceScreen.Silver; yield break; }
+            if (!InRaceCourse) { _raceScreen = RaceScreen.Closed; yield break; }
 
             _raceDistances = new float[RaceRoute.Length];
             for (int i = 1; i < RaceRoute.Length; i++)
@@ -198,13 +202,20 @@ namespace AzureDreamsReimagined
             _raceClock = 0f;
             _raceThirdFinished = -1f;
 
+            System.Array.Fill(_racePlaces, -1);
             int species = (int)MonsterSpecies.NYUEL;
             var nyuel = HatchedFamiliarPrefab(species);
-            var jockeyPrefab = FindStoryResidentPrefab("monster_shop_hunter") ?? _npcPrefab;
+            if (!nyuel)
+            {
+                _raceScreen = RaceScreen.Closed;
+                _message = T("The Nyuel racing model is unavailable.", "O modelo de corrida do Nyuel está indisponível.");
+                yield break;
+            }
             for (int i = 0; i < _nyuelRacers.Length; i++)
             {
-                var mount = SpawnActor(nyuel, new Vector2Int(45, 26), RaceNames[i], species: species, groundedIdle: true);
-                foreach (var collider in mount.GetComponentsInChildren<Collider>()) collider.enabled = false;
+                var start = new Vector2Int(Mathf.RoundToInt(RaceRoute[0].x), Mathf.RoundToInt(RaceRoute[0].y));
+                var mount = SpawnActor(nyuel, start, RaceNames[i], species: species, groundedIdle: true);
+                ConfigureRacetrackNyuel(mount);
                 _nyuelRacers[i] = new NyuelRacer
                 {
                     Mount = mount,
@@ -215,23 +226,18 @@ namespace AzureDreamsReimagined
                 if ((i != 0 || _raceSpectating) && jockeyPrefab)
                 {
                     var rider = Instantiate(jockeyPrefab, mount.transform);
-                    rider.transform.localPosition = Vector3.up * 0.78f;
+                    rider.transform.localPosition = Vector3.up;
                     rider.transform.localScale *= 0.72f;
                     foreach (var collider in rider.GetComponentsInChildren<Collider>()) collider.enabled = false;
+                    if (rider.TryGetComponent<NPCController>(out var npc)) npc.enabled = false;
+                    if (rider.TryGetComponent<TownHumanoidView>(out var humanoid)) humanoid.SetSeated(0.5f);
+                    _nyuelRacers[i].Rider = rider.GetComponent<ActorLocomotionView>();
                 }
                 PlaceNyuelRacer(i, false);
             }
 
-            foreach (float distance in RaceHurdles)
-            {
-                Vector2 position = RacePoint(distance, out Vector2 direction);
-                Vector3 center = new(position.x, 0f, position.y);
-                center.y = TownTerrainHeight(center) + 0.23f;
-                var hurdle = CreatePrimitive(PrimitiveType.Cube, "Nyuel race hurdle", center,
-                    new Vector3(2.75f, 0.24f, 0.13f), _accentMaterial, false);
-                hurdle.transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.y));
-            }
             _player.SetActive(!_raceSpectating);
+            if (!_raceSpectating) _kohSprite?.PresentDining(true);
             UpdateCameraFollow(snap: true);
             _raceStartTime = Time.unscaledTime + 3f;
             _raceScreen = RaceScreen.Countdown;
@@ -251,18 +257,22 @@ namespace AzureDreamsReimagined
             var racer = _nyuelRacers[index];
             Vector2 center = RacePoint(racer.Distance, out Vector2 direction) + new Vector2(-direction.y, direction.x) * racer.Lane;
             Vector3 position = new(center.x, 0f, center.y);
-            position.y = TownTerrainHeight(position) + Mathf.Sin(Mathf.Clamp01(racer.Jump / 0.7f) * Mathf.PI) * 0.85f;
+            position.y = TownActorFootOffset + RaceCourseElevation(center, direction) +
+                Mathf.Sin(Mathf.Clamp01(racer.Jump / 0.7f) * Mathf.PI) * 1.8f;
             racer.Mount.transform.position = position;
+            racer.Mount.transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.y));
             if (racer.Sprite)
                 racer.Sprite.PresentMovement(new Vector3(direction.x, 0f, direction.y), racer.Distance * 0.37f % 1f, moving);
+            racer.Rider?.Present(new Vector3(direction.x, 0f, direction.y), 0f, false);
             if (index != 0) return;
-            _player.transform.position = position + Vector3.up * (0.75f + TownActorFootOffset);
+            _player.transform.position = position + Vector3.up * 0.75f;
             if (_kohSprite) _kohSprite.SetFacing(direction);
         }
 
         private void TickNyuelRace(float dt)
         {
             _raceClock += dt;
+            int frameFinishers = 0;
             Vector2 input = _move?.ReadValue<Vector2>() ?? Vector2.zero;
             bool accelerate = _runAction?.IsPressed() == true || input.y > 0.5f;
             bool pulse = _runAction?.WasPressedThisFrame() == true;
@@ -284,10 +294,12 @@ namespace AzureDreamsReimagined
                 else
                 {
                     racer.Speed = racer.Pace + Mathf.Sin(_raceClock * 0.8f + i * 3f) * 0.8f;
-                    if (racer.Hurdle < RaceHurdles.Length && RaceHurdles[racer.Hurdle] - racer.Distance < 2f)
-                        racer.Jump = 0.55f;
+                    if (racer.Jump == 0f && racer.Hurdle < RaceHurdles.Length &&
+                        RaceHurdles[racer.Hurdle] - racer.Distance < 2f)
+                        racer.Jump = 0.7f;
                 }
 
+                float previousDistance = racer.Distance;
                 racer.Distance = Mathf.Clamp(racer.Distance + racer.Speed * dt, 0f, _raceLength);
                 if (racer.Hurdle < RaceHurdles.Length && racer.Distance >= RaceHurdles[racer.Hurdle])
                 {
@@ -295,8 +307,22 @@ namespace AzureDreamsReimagined
                     if (racer.Jump <= 0f) racer.Speed *= 0.28f;
                 }
                 PlaceNyuelRacer(i, racer.Distance < _raceLength && Mathf.Abs(racer.Speed) > 0.1f);
-                if (racer.Distance >= _raceLength) _racePlaces[_raceFinished++] = i;
+                if (racer.Distance >= _raceLength)
+                {
+                    float fraction = (_raceLength - previousDistance) / Mathf.Max(0.0001f, racer.Speed * dt);
+                    racer.FinishTime = _raceClock - dt + fraction * dt;
+                    int slot = frameFinishers++;
+                    while (slot > 0 && fraction < _raceFrameFractions[slot - 1])
+                    {
+                        _raceFrameFinishers[slot] = _raceFrameFinishers[slot - 1];
+                        _raceFrameFractions[slot] = _raceFrameFractions[slot - 1];
+                        slot--;
+                    }
+                    _raceFrameFinishers[slot] = i;
+                    _raceFrameFractions[slot] = fraction;
+                }
             }
+            for (int i = 0; i < frameFinishers; i++) _racePlaces[_raceFinished++] = _raceFrameFinishers[i];
             if (_raceFinished == 3 && _raceThirdFinished < 0f) _raceThirdFinished = _raceClock;
             if (_raceFinished == 4 || (_raceThirdFinished >= 0f && _raceClock - _raceThirdFinished > 10f))
                 FinishNyuelRace();
@@ -304,6 +330,19 @@ namespace AzureDreamsReimagined
 
         private void FinishNyuelRace()
         {
+            if (_raceScreen != RaceScreen.Racing) return;
+            for (int i = 0; i < _nyuelRacers.Length; i++)
+                if (System.Array.IndexOf(_racePlaces, i, 0, _raceFinished) < 0)
+                    _racePlaces[_raceFinished++] = i;
+            if (!_raceSpectating)
+            {
+                TownSaveVariables.SetInt(RaceLastPlace, System.Array.IndexOf(_racePlaces, 0) + 1);
+                int time = Mathf.RoundToInt(_nyuelRacers[0].FinishTime * 1000f);
+                int previous = TownSaveVariables.GetInt(RaceBestTime, int.MaxValue);
+                bool record = time > 0 && time < previous;
+                TownSaveVariables.SetBool(RaceRecord, record);
+                if (record) TownSaveVariables.SetInt(RaceBestTime, time);
+            }
             int tickets = BoughtRaceTickets;
             int pairIndex = TownSaveVariables.GetInt(RaceTicketPair, -1);
             if (tickets > 0 && pairIndex >= 0 && pairIndex < RacePairs.Length)
@@ -312,8 +351,8 @@ namespace AzureDreamsReimagined
                 int a = _racePlaces[0], b = _racePlaces[1];
                 if ((a == pair.A && b == pair.B) || (a == pair.B && b == pair.A))
                 {
-                    int prize = tickets * RaceTicketPrice * TownSaveVariables.GetInt(RaceTicketOdds);
-                    _racePrize = Mathf.Min(prize, int.MaxValue - _gold);
+                    long prize = (long)tickets * RaceTicketPrice * TownSaveVariables.GetInt(RaceTicketOdds);
+                    _racePrize = (int)System.Math.Clamp(prize, 0L, (long)int.MaxValue - _gold);
                     _gold += _racePrize;
                 }
             }
@@ -321,6 +360,30 @@ namespace AzureDreamsReimagined
             PersistTownProgress();
             _raceScreen = RaceScreen.Results;
             PlayAreaMusic(RaceCourseMusicCue);
+        }
+
+        private static float RaceCourseElevation(Vector2 position, Vector2 direction)
+        {
+            // Original bridge road vertices rise 0.625 per tile from z=21 to
+            // z=25, stay at y=2.5 through z=29, then descend to z=33. The
+            // east/west straight passes underneath both bridges at floor level.
+            bool onBridge = Mathf.Abs(direction.y) > 0.75f &&
+                (Mathf.Abs(position.x - 25f) < 3f || Mathf.Abs(position.x - 50f) < 3f);
+            if (!onBridge) return 0f;
+            return 2.5f * Mathf.Min(Mathf.InverseLerp(21f, 25f, position.y),
+                1f - Mathf.InverseLerp(29f, 33f, position.y));
+        }
+
+        private void ResetRacetrack(bool preserveTransition = false)
+        {
+            _kohSprite?.PresentDining(false);
+            System.Array.Clear(_nyuelRacers, 0, _nyuelRacers.Length);
+            System.Array.Fill(_racePlaces, -1);
+            _raceDistances = null;
+            _raceFinished = 0;
+            if (preserveTransition) return;
+            _raceScreen = RaceScreen.Closed;
+            _raceSpectating = false;
         }
 
         private void ReturnFromRace()
@@ -366,26 +429,11 @@ namespace AzureDreamsReimagined
             switch (_raceScreen)
             {
                 case RaceScreen.Tickets: DrawRaceTickets(); break;
-                case RaceScreen.Silver:
-                    GUILayout.Label("Silver", _bodyStyle);
-                    // TOWN.BIN 0x4E276A–0x4E28EE.
-                    GUILayout.Label(T($"Hi, {HeroName}.\nLook, isn’t it a beautiful Monster racetrack?\nThank you so much.\nWhat are you going to do today?\nDo you want to get on a horse?",
-                        $"Olá, {HeroName}.\nVeja, que bela pista de corrida de monstros, não acha?\nMuito obrigado.\nO que vai fazer hoje?\nQuer montar um cavalo?"), _messageStyle);
-                    DrawRaceOption(0, T("I’m going to race.", "Vou correr."));
-                    DrawRaceOption(1, T("I'll just watch.", "Só vou assistir."));
-                    DrawRaceOption(2, T("Show me how to ride a horse.", "Ensine-me a montar um cavalo."));
-                    DrawRaceOption(3, T("Not today.", "Hoje não."));
-                    break;
-                case RaceScreen.Instructions:
-                    GUILayout.Label(T("Riding a Nyuel", "Como montar um Nyuel"), _bodyStyle);
-                    string run = _runAction?.GetBindingDisplayString() ?? "Shift";
-                    string hop = _wait?.GetBindingDisplayString() ?? "Space";
-                    GUILayout.Label(T($"Hold {run} to trot and tap it repeatedly to speed up. Move left or right to change lanes, down to back up, and press {hop} to jump the hurdles.",
-                        $"Segure {run} para trotar e aperte várias vezes para acelerar. Use esquerda ou direita para mudar de faixa, para baixo para recuar e {hop} para pular os obstáculos."), _messageStyle);
-                    if (GUILayout.Button(WithInteractHint("Back", "Voltar"))) ConfirmRaceMenu();
-                    break;
                 case RaceScreen.Results:
                     GUILayout.Label(T("Race results", "Resultado da corrida"), _bodyStyle);
+                    if (!_raceSpectating && _nyuelRacers[0].FinishTime > 0f)
+                        GUILayout.Label(T($"Your time: {_nyuelRacers[0].FinishTime:0.000}s",
+                            $"Seu tempo: {_nyuelRacers[0].FinishTime:0.000}s"), _messageStyle);
                     for (int place = 0; place < _raceFinished; place++)
                     {
                         int rider = _racePlaces[place];
@@ -398,13 +446,6 @@ namespace AzureDreamsReimagined
             }
             GUILayout.EndArea();
             return true;
-        }
-
-        private void DrawRaceOption(int index, string text)
-        {
-            if (!GUILayout.Button((_raceChoice == index ? "› " : "") + text)) return;
-            _raceChoice = index;
-            ConfirmRaceMenu();
         }
 
         private void DrawRaceTickets()

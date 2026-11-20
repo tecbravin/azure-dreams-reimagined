@@ -5,7 +5,11 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        private const string SilverPortrait = "Dialogue/Grandpa_variant0_frame0";
+        // Reimagined usa o retrato novo Grandpa_variant1_frame0 (so existe no overlay Reimagined);
+        // Classic mantem o retrato original Grandpa_variant0_frame0.
+        private static string SilverPortrait => AssetMode.IsReimagined
+            ? "Dialogue/Grandpa_variant1_frame0"
+            : "Dialogue/Grandpa_variant0_frame0";
 
         // Use the ordinary NPC interaction, portrait and collision path for story actors.
         private void SpawnStoryResident(string prefabId, string id, string name, Vector2Int cell, Vector3? placedPosition = null)
@@ -40,14 +44,16 @@ namespace AzureDreamsReimagined
             var npc = instance.GetComponent<NPCController>();
             var stats = instance.GetComponent<CharacterStats>();
             npc.npcId = id;
-            if (IsSilverResident(id) && !instance.TryGetComponent<SilverSpriteView>(out _))
-                instance.AddComponent<SilverSpriteView>();
-            if (id == "wookie" && instance.GetComponentInChildren<SpriteRenderer>() is { } sprite)
+            bool retailSprite = RetailResidentBanks.Apply(instance, id);
+            if (!retailSprite && IsSilverResident(id)) ConfigureSilverPresentation(npc);
+            if (!retailSprite && id == "wookie" && instance.GetComponentInChildren<SpriteRenderer>() is { } sprite)
             {
                 // Match Koh's standing height while keeping the sprite anchored at the feet.
+                // No interior framingScale here anymore (see ConfigurePlayerView): Koh himself
+                // no longer shrinks indoors, so wookie shouldn't either - otherwise the two
+                // would go back out of sync with each other inside buildings.
                 const float standingScale = 1.6125f;
-                float framingScale = _interior ? InteriorCameraDistance / _townCameraDistance : 1f;
-                sprite.transform.localScale *= standingScale * framingScale;
+                sprite.transform.localScale *= standingScale;
             }
             npc.ConfigureConversation(_townFlow.State);
             if (stats)
@@ -59,7 +65,7 @@ namespace AzureDreamsReimagined
             // The restored-pool cast has unique swimwear and portrait variants.
             // Apply these only in its interior: the same source prefabs are used
             // unchanged throughout Monsbaiya.
-            if (StoryRoom == PoolOpenRoom && (id is "wookie" or "pool_nico" or "pool_fur" or "pool_selfi" or "pool_patty" or
+            if (!retailSprite && StoryRoom == PoolOpenRoom && (id is "wookie" or "pool_nico" or "pool_fur" or "pool_selfi" or "pool_patty" or
                 "pool_cherrl" or "pool_visitor" or "pool_ghosh" ||
                 (id == "vivian" && TownSaveVariables.GetInt(VivianPoolDateKey) != 1) ||
                 (id == "mia" && MiaStage() > MiaPoolDate)))
@@ -81,7 +87,13 @@ namespace AzureDreamsReimagined
         private static void ConfigureSilverPresentation(NPCController npc)
         {
             if (!npc) return;
-            if (!npc.TryGetComponent<SilverSpriteView>(out _)) npc.gameObject.AddComponent<SilverSpriteView>();
+            if (RetailResidentBanks.Apply(npc.gameObject, npc.npcId)) return;
+            // Silver is the retail "Grandpa" town actor: use its original
+            // front/back/side sprites (the same set as at the racetrack)
+            // instead of the generic helper sprite of the shared prefab.
+            if (npc.TryGetComponent<RacetrackResidentSpriteView>(out _)) return;
+            if (npc.TryGetComponent<SilverSpriteView>(out var legacy)) Destroy(legacy);
+            npc.gameObject.AddComponent<RacetrackResidentSpriteView>();
         }
 
         private GameObject FindStoryResidentPrefab(string id) =>
@@ -95,6 +107,7 @@ namespace AzureDreamsReimagined
 
         private void UpdateOutdoorSelfiMusic()
         {
+            UpdateCheroConcertMusic();
             if (_area != Area.Town || _interior || !_outdoorSelfi || !_player || _prologue != Prologue.Off) return;
             float distance = Vector3.Distance(_player.transform.position, _outdoorSelfi.transform.position);
             if (distance <= 4f && _playingMusicCue == "Town") PlayAreaMusic(SelfiMusicCue);
@@ -121,15 +134,15 @@ namespace AzureDreamsReimagined
             if (nicoStage is NicoFirstDonation or NicoSecondDonation or NicoFountainTalk)
                 SpawnStoryResident("nico", "nico", "Nico", TownResidentPlacementCatalog.GetTownCells("nico")[0]);
             if ((nicoStage == NicoCheroIntroduction && StoryNewDay("nico")) ||
-                nicoStage is NicoGhoshConfrontation or NicoCheroOpinion)
+                nicoStage is NicoGhoshConfrontation or NicoCheroOpinion or StoryComplete)
                 SpawnStoryResident("monster_shop_hunter", "chero", "Chero", TownResidentPlacementCatalog.GetTownCells("chero")[0]);
             if (nicoStage is NicoGhoshConfrontation or NicoCheroOpinion)
                 SpawnNicoFountainCast();
             if (nicoStage == NicoHouseGuard)
                 SpawnStoryResident("ghosh", "nico_door_ghosh", "Ghosh", TownResidentPlacementCatalog.GetTownCells("nico_house_guard")[0]);
-            // The fountain rim is one unit above the town height grid.
+            // Keep Wookie above the captured park furniture without changing his scale.
             Vector3? fountainPerch = _builtTownLots.Exists(project => project.Id == "fountain")
-                ? new Vector3(70.5f, 1f, 78.5f) : null;
+                ? new Vector3(70.5f, Mathf.Max(1f, FountainSurface(new Vector3(70.5f, 0f, 78.5f))), 78.5f) : null;
             SpawnStoryResident("monster_shop_hunter", "wookie", "Wookie",
                 fountainPerch.HasValue ? new Vector2Int(70, 78) : TownResidentPlacementCatalog.GetTownCells("wookie")[0], fountainPerch);
             if (MiaStage() is MiaFollowing or MiaFollowingReady)
@@ -152,6 +165,7 @@ namespace AzureDreamsReimagined
         private bool ShouldSpawnStoryResident(NPCController npc, string room)
         {
             if (npc.npcId == "selfi" && room == RhodesHouse) return false;
+            if (room == RestaurantRoom && npc.npcId != "patty" && PattyAloneInRestaurant) return false;
             if (npc.npcId == "cherrl" && room == CherrlHouse)
                 return StoryStage("cherrl") is < CherrlHerbDelivered or CherrlNurseChoice or >= CherrlHomeRecovery;
             if (npc.npcId != "vivian") return true;
@@ -248,7 +262,7 @@ namespace AzureDreamsReimagined
                     if (StoryStage("patty") >= StoryComplete ||
                         TownRetailScriptFlags.CreatePersistent().IsFlagSet(PattyLoveFlag))
                         SpawnStoryResident("patty", "pool_patty", "Patty", default);
-                    SpawnStoryResident("dar", "pool_visitor", T("Swimmer", "Banhista"), default);
+                    SpawnPoolResidents();
                     if (MiaStage() >= MiaPoolDate) SpawnStoryResident("mia", "mia", "Mia", default);
                     if (StoryStage("vivian") >= StoryComplete) SpawnStoryResident("vivian", "vivian", "Vivian", default);
                     if (StoryStage("cherrl") >= StoryComplete)

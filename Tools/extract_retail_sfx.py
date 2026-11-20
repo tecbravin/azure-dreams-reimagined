@@ -13,6 +13,12 @@ BANKS = {
     7: ("DUNGEON/DUNGEON.BIN", 0x731800, 0x732800),
     8: ("DUNGEON/DUNGEON.BIN", 0x762000, 0x765000),
 }
+# Town scenes carry their own one-program VAB for the 0x7xx selectors (scene
+# effects).  Header offsets in TOWN.BIN; the body follows, sector aligned.
+TOWN_SCENE_BANKS = {
+    "casino": 0x45A000,
+    "theater": 0x4A2800,
+}
 PREDICTORS = ((0, 0), (60, 0), (115, -52), (98, -55), (122, -60))
 RATE = 44100
 
@@ -89,20 +95,33 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--files", type=Path, default=project.parent / "extracted_assets/files")
     parser.add_argument("--output", type=Path, default=project / "Assets/AzureDreams/Resources/Sfx/Retail")
+    parser.add_argument("--scene", choices=sorted(TOWN_SCENE_BANKS),
+                        help="render 0x7xx selectors from this town scene bank (output <Scene><id>.wav)")
     parser.add_argument("commands", nargs="+", type=lambda value: int(value, 16))
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     banks = {}
     for command in args.commands:
         bank = command >> 8
-        filename, header, body = BANKS[bank]
-        if bank not in banks:
-            banks[bank] = (args.files / filename).read_bytes()
-        pcm = render(command, banks[bank], header, body)
-        with wave.open(str(args.output / f"{command:03X}.wav"), "wb") as wav:
+        name = f"{command:03X}"
+        if args.scene:
+            header = TOWN_SCENE_BANKS[args.scene]
+            if "town" not in banks:
+                banks["town"] = (args.files / "TOWN/TOWN.BIN").read_bytes()
+            data = banks["town"]
+            programs = struct.unpack_from("<H", data, header + 0x12)[0]
+            body = (header + 0x820 + programs * 512 + 512 + 0x7FF) & ~0x7FF
+            pcm = render(command, data, header, body)
+            name = args.scene.capitalize() + name
+        else:
+            filename, header, body = BANKS[bank]
+            if bank not in banks:
+                banks[bank] = (args.files / filename).read_bytes()
+            pcm = render(command, banks[bank], header, body)
+        with wave.open(str(args.output / f"{name}.wav"), "wb") as wav:
             wav.setparams((1, 2, RATE, 0, "NONE", "not compressed"))
             wav.writeframes(struct.pack(f"<{len(pcm)}h", *pcm))
-        print(f"{command:03X}  {len(pcm) / RATE:.3f}s  peak {max(map(abs, pcm))}")
+        print(f"{name}  {len(pcm) / RATE:.3f}s  peak {max(map(abs, pcm))}")
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ namespace AzureDreamsReimagined
             }
             if (!effects.EffectSupported)
                 GUILayout.Label(T("The post-processing shader is unavailable.", "O shader de pós-processamento está indisponível."));
-            _graphicsScroll = GUILayout.BeginScrollView(_graphicsScroll);
+            _graphicsScroll = GUILayout.BeginScrollView(_graphicsScroll, false, true);
             effects.enablePostProcessing = GUILayout.Toggle(effects.enablePostProcessing,
                 T("Post-processing", "Pós-processamento"));
             bool previouslyEnabled = GUI.enabled;
@@ -52,6 +52,19 @@ namespace AzureDreamsReimagined
             effects.crtScanlines = GUILayout.Toggle(effects.crtScanlines, T("CRT scanlines", "Linhas CRT"));
             if (effects.crtScanlines)
                 effects.scanlineStrength = GraphicsSlider(T("Intensity", "Intensidade"), effects.scanlineStrength, 0, 0.6f);
+            // These two don't need enablePostProcessing: they're vertex/fragment effects baked
+            // into the scene's own PsxVertexLit/PsxIndexed materials, not a screen-space pass.
+            GUI.enabled = previouslyEnabled && effects.RetroSupported;
+            effects.psxVertexSnap = GUILayout.Toggle(effects.psxVertexSnap,
+                T("PS1 vertex snapping", "Encaixe de vértices PS1"));
+            if (effects.psxVertexSnap)
+                effects.vertexSnapResolution = Mathf.RoundToInt(GraphicsSlider(
+                    T("Snap resolution", "Resolução do encaixe"), effects.vertexSnapResolution, 60, 480));
+            effects.psxAffineWarp = GUILayout.Toggle(effects.psxAffineWarp,
+                T("PS1 affine texture warp", "Deformação de textura afim (PS1)"));
+            if (effects.psxAffineWarp)
+                effects.affineWarpStrength = GraphicsSlider(T("Warp strength", "Força da deformação"),
+                    effects.affineWarpStrength, 0, 1);
 
             GUI.enabled = previouslyEnabled && effects.enablePostProcessing;
             effects.fxaa = GUILayout.Toggle(effects.fxaa, "FXAA");
@@ -82,6 +95,7 @@ namespace AzureDreamsReimagined
             GUI.enabled = previouslyEnabled;
             effects.msaa = GUILayout.Toggle(effects.msaa, "MSAA");
             GUILayout.EndScrollView();
+            effects.ApplyPsxVertexGlobals();
             if (GUILayout.Button(T("Reset to preset", "Restaurar padrão")))
             {
                 PlayRetailSound(RetailSfx.Confirm);

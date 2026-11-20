@@ -1,0 +1,148 @@
+{
+  "entries": [
+    {
+      "room": "Interior_0e_restaurant",
+      "asset": "TableProp",
+      "position": {
+        "x": 19.5,
+        "y": 0.8125032,
+        "z": 10.5
+      },
+      "recordOffset": "0x556234",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_0e_restaurant",
+      "asset": "Bottle",
+      "position": {
+        "x": 18.5,
+        "y": 0.8125032,
+        "z": 10.5
+      },
+      "recordOffset": "0x556248",
+      "callback": 92,
+      "spriteSource": "0x800f8a4c"
+    },
+    {
+      "room": "Interior_10_hospital_2",
+      "asset": "TableProp",
+      "position": {
+        "x": 20.5,
+        "y": 0.8125032000000001,
+        "z": 12.5
+      },
+      "recordOffset": "0x597e00",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_18_cherrl_house",
+      "asset": "TableProp",
+      "position": {
+        "x": 15.5,
+        "y": 0.8125032,
+        "z": 14.5
+      },
+      "recordOffset": "0x648444",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_18_cherrl_house",
+      "asset": "Glass",
+      "position": {
+        "x": 10.5,
+        "y": 0.5416666666666666,
+        "z": 12.5
+      },
+      "recordOffset": "0x6485d4",
+      "callback": 155,
+      "spriteSource": "0x800f8b6c"
+    },
+    {
+      "room": "Interior_19_generic_building",
+      "asset": "Bottle",
+      "position": {
+        "x": 17.5,
+        "y": 0.8125032,
+        "z": 13.5
+      },
+      "recordOffset": "0x64ac50",
+      "callback": 92,
+      "spriteSource": "0x800f8a4c"
+    },
+    {
+      "room": "Interior_1a_generic_building",
+      "asset": "TableProp",
+      "position": {
+        "x": 17.5,
+        "y": 0.8125032,
+        "z": 13.5
+      },
+      "recordOffset": "0x64cae4",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_1b_generic_building",
+      "asset": "TableProp",
+      "position": {
+        "x": 17.5,
+        "y": 0.8125032,
+        "z": 13.5
+      },
+      "recordOffset": "0x64ea90",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_1c_generic_building",
+      "asset": "Bottle",
+      "position": {
+        "x": 17.5,
+        "y": 0.8125032,
+        "z": 13.5
+      },
+      "recordOffset": "0x6508a0",
+      "callback": 92,
+      "spriteSource": "0x800f8a4c"
+    },
+    {
+      "room": "Interior_1d_generic_building",
+      "asset": "TableProp",
+      "position": {
+        "x": 17.5,
+        "y": 0.8125032,
+        "z": 13.5
+      },
+      "recordOffset": "0x6526c0",
+      "callback": 164,
+      "spriteSource": "0x800f8a58"
+    },
+    {
+      "room": "Interior_20_bar",
+      "asset": "Bottle",
+      "position": {
+        "x": 22.5,
+        "y": 0.8125032,
+        "z": 14.5
+      },
+      "recordOffset": "0x692930",
+      "callback": 92,
+      "spriteSource": "0x800f8a4c"
+    },
+    {
+      "room": "Interior_20_bar",
+      "asset": "Glass",
+      "position": {
+        "x": 23.5,
+        "y": 0.7916698666666666,
+        "z": 14.5
+      },
+      "recordOffset": "0x692944",
+      "callback": 155,
+      "spriteSource": "0x800f8b6c"
+    }
+  ]
+}

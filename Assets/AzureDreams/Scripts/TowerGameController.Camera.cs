@@ -8,7 +8,9 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         [Header("Camera framing")]
-        [SerializeField, Min(1f)] private float _towerCameraDistance = 8f;
+        // Was 8; players found the default tower framing too close/zoomed in compared to the
+        // retail game's wider dungeon view. Scroll-zoom still ranges 0.55x-1.8x around this.
+        [SerializeField, Min(1f)] private float _towerCameraDistance = 10f;
         [SerializeField, Min(1f)] private float _townCameraDistance = 9.5f;
 
         private float _cameraZoom = 1f;
@@ -72,7 +74,9 @@ namespace AzureDreamsReimagined
                 if (_backdropFloor == _floor) return;
                 _backdropFloor = _floor;
                 _gameCamera.clearFlags = CameraClearFlags.SolidColor;
-                Color baseColor = _floor <= 3 ? new Color(0.015f, 0.09f, 0.075f) :
+                // The retail backdrop strips fade to black, which is also the clear colour.
+                Color baseColor = UsesRetailFloorMesh ? Color.black :
+                    _floor <= 3 ? new Color(0.015f, 0.09f, 0.075f) :
                     _floor <= 5 ? Color.black :
                     _floor <= 7 ? new Color(0.025f, 0.065f, 0.015f) :
                     _floor <= 9 ? new Color(0.055f, 0.035f, 0.02f) :
@@ -94,12 +98,15 @@ namespace AzureDreamsReimagined
         {
             UpdateTowerBackdropRotation();
             AnimateTowerElevator();
+            AnimateSecondTowerElevator();
             // Update the camera first so the lift uses this frame's screen axes.
             UpdateCameraFollow();
             UpdateMinimapTerrain();
             DiscoverMinimapItems();
             OrientVisibleTrapMarkers();
+            AnimateTrapMarkerEffects();
             UpdateTownKewne();
+            PresentFamiliarEquipment();
             if (_kohSprite) _kohSprite.PresentLift(_heldTownPot || _carriedView || _pickupView || HoldingBowlingBall);
             PresentGroundPickup();
             if (_area == Area.Tower && _carriedView)
@@ -185,7 +192,7 @@ namespace AzureDreamsReimagined
 
         private void UpdateTownKewne()
         {
-            bool hasKewne = _area == Area.Town && !InRaceCourse && _player && _kewnePrefab && _familiarDefinition &&
+            bool hasKewne = _area == Area.Town && !InRaceCourse && _arcadePhase == ArcadePhase.Closed && _player && _kewnePrefab && _familiarDefinition &&
                 ((_kewneDefinition && _familiarDefinition == _kewneDefinition) ||
                  _hatchedSpecies == (int)AzureDreams.Core.MonsterSpecies.KEWNE);
             if (!hasKewne)
@@ -218,6 +225,7 @@ namespace AzureDreamsReimagined
         private void UpdateCameraFollow(bool snap = false)
         {
             if (!_gameCamera || !_player) return;
+            if (FrameArcadeCamera()) return;
 
             var target = _player.transform.position;
             target.y -= TownActorFootOffset + (_area == Area.Town ? _townJumpHeight : 0f);

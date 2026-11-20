@@ -55,11 +55,13 @@ namespace AzureDreamsReimagined
         private bool ShielaConsultation(NPCController npc) => ShielaSequence(npc, () => StoryAsk(npc,
             "Would you like to know your fortune?", "Você quer saber sua sorte?",
             (T("Yes", "Sim"), () => ShielaTopics(npc)),
+            (T("Charge — 200 G", "Carregar — 200 G"), () => ShielaChargeMenu(npc)),
             (T("I won't believe what you say", "Não vou acreditar no que você disser"), () => ShielaSequence(npc, null,
                 "Haw! Don't kid around with me.", "I'm even giving away a prize of a special pendant that makes a person's love come true just by wearing it, to a lucky winner..."))),
             "Welcome to the Fortune Telling Palace.", "I'm Mademoiselle Shiela, known as the mother of Monsbaiya.");
 
         private bool ShielaTopics(NPCController npc) => StoryAsk(npc, "What would you like me to look into today?", "Sobre o que você quer que eu veja hoje?",
+            (T("Charge — 200 G", "Carregar — 200 G"), () => ShielaChargeMenu(npc)),
             (T("On my love life", "Minha vida amorosa"), () => ShielaBegin(npc, LoveQuestions, LoveResults, "Haw! You're still young, naturally this is what you want to know. All right. Relax and answer my questions.")),
             (T("On how to fight", "Como lutar"), () => ShielaBegin(npc, CombatQuestions, CombatResults, "Haw! You're very clear-minded person. It has to do with your work, doesn't it? All right. Relax and answer my questions please.")),
             (T("On how to enjoy life", "Como aproveitar a vida"), () => ShielaBegin(npc, LifeQuestions, LifeResults, "Haw! There's no limit to the number of ways on how. All right. Relax and give me answers to my questions.")));

@@ -71,10 +71,18 @@ namespace AzureDreamsReimagined
             return panel;
         }
 
+        // Tracked so callers that only hold this component (e.g. the tower's inner
+        // door gating via CrossesClosedTowerDoor) can tell whether it is actually open
+        // instead of relying purely on the reference existing - a reference that, if a
+        // caller forgets to clear it after opening, would otherwise keep blocking
+        // movement forever even though the door itself is wide open.
+        public float OpenAmount { get; private set; }
+
         internal void SetOpen(float amount)
         {
+            OpenAmount = Mathf.Clamp01(amount);
             if (!_left || !_right) return;
-            float angle = Mathf.Clamp01(amount) * 90f;
+            float angle = OpenAmount * 90f;
             _left.localRotation = Quaternion.Euler(0f, -angle, 0f);
             _right.localRotation = Quaternion.Euler(0f, angle, 0f);
         }

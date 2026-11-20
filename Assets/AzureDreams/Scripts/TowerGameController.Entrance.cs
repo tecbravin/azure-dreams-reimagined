@@ -33,7 +33,7 @@ namespace AzureDreamsReimagined
                 // Keep the tower's iron gate tied directly to its original
                 // texture/material pair. The generic facade material can be
                 // replaced or loaded without a texture in some town setups.
-                var doorMaterial = Resources.Load<Material>(EntranceResources + "TowerEntranceDoor");
+                var doorMaterial = AssetMode.Load<Material>(EntranceResources + "TowerEntranceDoor");
                 if (doorMaterial)
                 {
                     cached = new Material(doorMaterial);
@@ -41,8 +41,8 @@ namespace AzureDreamsReimagined
                 }
             }
 
-            var texture = Resources.Load<Texture2D>(EntranceResources + resource);
-            var template = Resources.Load<Material>(FacadeDoorResources + "FacadeDoor");
+            var texture = AssetMode.Load<Texture2D>(EntranceResources + resource);
+            var template = AssetMode.Load<Material>(FacadeDoorResources + "FacadeDoor");
             if (!texture || !template) return fallback;
             cached = new Material(template) { mainTexture = texture };
             return cached;
@@ -169,7 +169,13 @@ namespace AzureDreamsReimagined
 
         private bool CrossesClosedTowerDoor(Vector2Int from, Vector2Int step)
         {
-            if (!_innerTowerDoor || !_innerTowerDoor.gameObject.activeInHierarchy) return false;
+            // Two independent safety nets: the reference should be cleared once the
+            // arrival walk-in finishes with the door open, but if some path ever leaves
+            // it dangling, checking the door's own open amount here means an actually-open
+            // door never blocks movement regardless - it only takes one of the two to fail
+            // safe instead of needing both to be right.
+            if (!_innerTowerDoor || !_innerTowerDoor.gameObject.activeInHierarchy ||
+                _innerTowerDoor.OpenAmount >= 0.98f) return false;
             int width = Mathf.Max(1, _towerEntranceWidth);
             return (step == -_towerEntranceInward && IsTowerDoorEdge(from, width)) ||
                 (step == _towerEntranceInward && IsTowerDoorEdge(from + step, width));
@@ -264,11 +270,28 @@ namespace AzureDreamsReimagined
                     _entranceTitleAlpha = Mathf.InverseLerp(0.12f, 0.45f, time) * (1f - Mathf.InverseLerp(1.65f, 2.4f, time));
                     yield return null;
                 }
-                if (!_towerArrivalPlaying || !actor || !door) yield break;
-                door.SetOpen(0f);
-                PresentEntranceWalk(actor, end, forward, duration, false);
-                Animate(_playerAnimation, false);
-                if (_useGeneratedTowerFloors && _towerEntranceWidth == 0) RemoveGenerated(door.gameObject);
+                // Whatever ended the walk-in loop above - it finished normally, the
+                // sequence was cancelled (_towerArrivalPlaying flipped false elsewhere,
+                // e.g. StopTowerEntrance), or actor/door were destroyed mid-animation -
+                // the door must still finish closing and drop out of _innerTowerDoor here.
+                // CrossesClosedTowerDoor keys off that reference alone with no real
+                // open/closed state, so an early "yield break" that skipped straight past
+                // this cleanup used to leave the door dangling half-open and permanently
+                // blocking that tile pair (both for Koh and monsters) for the rest of the
+                // floor. Guard each step individually instead of bailing out of all of them.
+                if (door)
+                {
+                    door.SetOpen(0f);
+                    if (_useGeneratedTowerFloors && _towerEntranceWidth == 0) RemoveGenerated(door.gameObject);
+                }
+                if (actor)
+                {
+                    PresentEntranceWalk(actor, end, forward, duration, false);
+                    Animate(_playerAnimation, false);
+                }
+                // Let the arch go back to being scenery, like every other archway in the
+                // tower, regardless of how this sequence ended.
+                if (door == _innerTowerDoor) _innerTowerDoor = null;
             }
 
             ResetEntranceCamera();
@@ -305,7 +328,7 @@ namespace AzureDreamsReimagined
         {
             if (!_entranceGlow)
             {
-                var texture = Resources.Load<Texture2D>(EntranceResources + "IconGlow");
+                var texture = AssetMode.Load<Texture2D>(EntranceResources + "IconGlow");
                 if (texture) _entranceGlow = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
                     Vector2.one * 0.5f, 64f);
             }
@@ -361,7 +384,7 @@ namespace AzureDreamsReimagined
 
         private void LoadEntranceDoorSound()
         {
-            if (!_entranceDoorSound) _entranceDoorSound = Resources.Load<AudioClip>(EntranceResources + "TowerDoor");
+            if (!_entranceDoorSound) _entranceDoorSound = AssetMode.Load<AudioClip>(EntranceResources + "TowerDoor");
         }
 
         private void DrawTowerEntranceOverlay(float width, float height)
@@ -369,7 +392,7 @@ namespace AzureDreamsReimagined
             var previous = GUI.color;
             if (_entranceTitleAlpha > 0f)
             {
-                if (!_entranceTitle) _entranceTitle = Resources.Load<Texture2D>(EntranceResources + "FloorTitle");
+                if (!_entranceTitle) _entranceTitle = AssetMode.Load<Texture2D>(EntranceResources + "FloorTitle");
                 if (_entranceTitle)
                 {
                     GUI.color = new Color(1f, 1f, 1f, _entranceTitleAlpha);

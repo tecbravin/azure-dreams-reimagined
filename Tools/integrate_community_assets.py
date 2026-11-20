@@ -39,7 +39,7 @@ for f in scenes.rglob('*'):
  rel=f.relative_to(scenes)
  if f.suffix=='.png':dest=BASE/'Textures/Town/CapturedScenes'/rel
  elif f.suffix in ('.obj','.mtl'):dest=BASE/'Models/Town/CapturedScenes'/rel
- elif f.suffix=='.bin':dest=A/'StreamingAssets/Extracted/CapturedScenes'/rel
+ elif f.suffix=='.bin':continue  # raw capture: stays in extracted_assets/azure_dreams_3d_models
  else:dest=BASE/'Data/Town/CapturedScenes'/rel
  if f.suffix=='.mtl':
   prefix=os.path.relpath(BASE/'Textures/Town/CapturedScenes'/rel.parent/'textures',dest.parent).replace('\\','/')+'/'

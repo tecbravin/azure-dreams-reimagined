@@ -157,6 +157,15 @@ namespace AzureDreamsReimagined
                 _generalStoreFeedback = T("You haven't got enough money.", "Você não tem dinheiro suficiente.");
                 return;
             }
+            if (item.Id == "music_box")
+            {
+                if (!_townInventory.HasSpace())
+                {
+                    _generalStoreFeedback = T("There is no room in your inventory.", "Não há espaço no inventário.");
+                    return;
+                }
+                _townInventory.AddDungeonItem(new AzureDreams.Core.DungeonItemEntry(4, 13, 0, 0));
+            }
             if (item.Id.StartsWith("wallpaper_", System.StringComparison.Ordinal))
                 TownSaveVariables.SetString(HomeWallpaperKey, item.Id);
             TownSaveVariables.SetInt(GeneralStorePurchases + "." + item.Id, owned == int.MaxValue ? owned : owned + 1);
@@ -165,6 +174,8 @@ namespace AzureDreamsReimagined
             _generalStoreConfirm = false;
             _generalStoreFeedback = T($"Thank you very much!\n{item.English} will be set up at Koh's house.",
                 $"Muito obrigada!\n{item.Portuguese} será colocado na casa do Koh.");
+            if (item.Id == "music_box")
+                _generalStoreFeedback = T("Music Box added to your inventory.", "Caixa de música adicionada ao inventário.");
             PlayRetailSound(RetailSfx.Confirm);
             TownEventBus.Publish(TownEventBus.EventId.ShopPurchased, item.Id);
             if (item.Id == "music_box" && FindStoryActor("fur") is { } fur && fur)
@@ -225,7 +236,7 @@ namespace AzureDreamsReimagined
                 _generalStoreSelection = first - GeneralStoreRows;
             if (first + GeneralStoreRows < count && GUI.Button(new Rect(218, 350, 110, 26), T("Next", "Próxima")))
                 _generalStoreSelection = first + GeneralStoreRows;
-            if (GUI.Button(new Rect(416, 350, 119, 26), T("Back [Esc]", "Voltar [Esc]"))) BackFromGeneralStore();
+            if (GUI.Button(new Rect(416, 350, 119, 26), WithCancelHint("Back", "Voltar"))) BackFromGeneralStore();
         }
     }
 }

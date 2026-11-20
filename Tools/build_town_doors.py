@@ -93,6 +93,12 @@ interiors = {
     (84, 68): "Interior_13_carpenter",
     (98, 80): "Interior_20_bar",
     (84, 80): "Interior_0e_restaurant",
+    (30, 54): "Interior_19_generic_building",
+    (42, 56): "Interior_1a_generic_building",
+    (98, 56): "Interior_1b_generic_building",
+    (112, 56): "Interior_1c_generic_building",
+    (100, 68): "Interior_1d_generic_building",
+    (112, 98): "Interior_23_generic_house",
 }
 seen, doors = set(), []
 for index in range(len(doorway_faces)):

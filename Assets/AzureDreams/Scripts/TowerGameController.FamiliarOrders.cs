@@ -301,7 +301,7 @@ namespace AzureDreamsReimagined
                     blue ? actor.Hp : _familiarHealth, actor.MaxHp, actor.CurrentAttack, actor.CurrentDefense);
             DrawInventoryText(new Rect(stats.x + 10f, stats.yMax + 6f, stats.width - 20f, 23f),
                 _familiarOrderPicker == FamiliarOrderPicker.None
-                    ? T("PgUp/PgDn: character", "PgUp/PgDn: personagem")
+                    ? InventoryCharacterHint
                     : T("E: confirm   Esc: back", "E: confirmar   Esc: voltar"), _messageStyle);
 
             var orders = OrdersFor(actor);
@@ -548,13 +548,17 @@ namespace AzureDreamsReimagined
             return true;
         }
 
+        // Tries every known spell (up to three, including ones learned from balls) in slot order.
         private bool TryFamiliarSupportMagic(ActorRecord actor, GameObject view, Vector2Int from)
         {
             if (!CanCastMagic(actor)) return false;
-            var profile = UnitProfile(actor.Species);
-            int spell = actor.U8(8);
-            if (spell == 0) spell = profile?.nativeSpellId ?? 0;
-            if (spell == 0) spell = profile?.hiddenSpellId ?? 0;
+            foreach (var known in FamiliarSpellList(actor))
+                if (TryFamiliarSupportSpell(actor, view, from, known.Spell)) return true;
+            return false;
+        }
+
+        private bool TryFamiliarSupportSpell(ActorRecord actor, GameObject view, Vector2Int from, int spell)
+        {
             int cost = NativeSpellCost(actor, spell);
             if (cost == 0 || actor.MpRaw < cost && !_mpProtection.ContainsKey(actor)) return false;
             int family = SpellFamily(spell);
@@ -599,7 +603,7 @@ namespace AzureDreamsReimagined
                 QueueMonsterSpriteAction(view, direction, casting: true);
                 int element = UnitElement(actor);
                 QueueSpellCue(spell, element, from, cell);
-                int level = actor.U8(8) == spell ? Mathf.Max(1, actor.U8(9)) : actor.Level;
+                int level = FamiliarSpellLevel(actor, spell);
                 _spellImpactAction += () => ResolveCrystalBall(spell, element, actor, target, from, cell, direction, from, level);
                 return true;
             }

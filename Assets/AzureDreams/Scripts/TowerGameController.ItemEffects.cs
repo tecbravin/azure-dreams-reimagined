@@ -11,7 +11,6 @@ namespace AzureDreamsReimagined
         private readonly Dictionary<ActorRecord, int> _doubleMpCost = new();
         private readonly List<ActorRecord> _pendingPoison = new();
         private readonly HashSet<ActorRecord> _revertedActors = new();
-        private readonly HashSet<ActorRecord> _manoevaCloneCandidates = new();
         private int _reflectionTurns;
         private int _holyBellTurns;
         private static readonly Vector2Int[] BellSteps =
@@ -56,7 +55,7 @@ namespace AzureDreamsReimagined
             return item.Kind switch
             {
                 ItemKind.Herb => item.Subtype is >= 1 and <= 15 and not 8,
-                ItemKind.Fruit => (IsPitaFruit(item) && giving) || (_area == Area.Tower && (item.Subtype switch
+                ItemKind.Fruit => (giving && (IsPitaFruit(item) || item.Subtype == 4)) || (_area == Area.Tower && (item.Subtype switch
                 {
                     3 or 5 or 6 or 8 or 10 => true,
                     4 => giving && (!IsTroll(_familiarActor) ||
@@ -97,7 +96,7 @@ namespace AzureDreamsReimagined
             item != null && item.Kind == ItemKind.Glasses && item.Subtype == 1;
 
         private static bool IsUnidentifiedItem(DungeonItemEntry item) =>
-            Inventory.IsUnrevealedEquipment(item) ||
+            Inventory.IsUnrevealedEquipment(item) || SecondTowerItems.IsUnknown(item) ||
             (item.Kind == MonsterEgg.Kind && !MonsterEgg.IdentifiedInTower(item));
 
         private static bool IsWhiteSand(DungeonItemEntry item) =>
@@ -174,7 +173,10 @@ namespace AzureDreamsReimagined
                 PlayRetailSound(RetailSfx.Spell);
                 ApplyScroll(item, target);
             }
-            else if (item.Kind == ItemKind.Bell)
+            // Dragon (e qualquer especie com likesMetal>0) come o sino em vez de toca-lo
+            // quando ele e dado/jogado para ela - mesma mecanica de comer espada/escudo/moeda.
+            else if (item.Kind == ItemKind.Bell &&
+                !(target != _playerActor && (UnitProfile(target.Species)?.likesMetal ?? 0) > 0))
             {
                 PlayRetailSound(RetailSfx.Spell);
                 ApplyBell(item.Subtype);
@@ -198,6 +200,12 @@ namespace AzureDreamsReimagined
             }
             else if (item.Kind == ItemKind.Ball) CastCrystalBall(item, target);
             else if (item.Kind == ItemKind.Crystal) ApplyCrystal(item.Subtype);
+            else if (IsMetalItem(item))
+            {
+                if (!thrown) PlayRetailSound(target == _playerActor ? RetailSfx.Eat : RetailSfx.FeedFamiliar);
+                ApplyMetal(target);
+            }
+            SecondTowerItems.Learn(item);
             string used = T("Used ", "Usou ") + InventoryItemName(item) + ".";
             if (changedGenus != 0)
             {
@@ -384,6 +392,17 @@ namespace AzureDreamsReimagined
 
         private const sbyte BlindnessTurns = 20;
 
+        // Alguns familiares passam uma de suas proprias imunidades a status para Koh
+        // enquanto estao fora da bolsa e o acompanhando ativamente - ex: o talento
+        // Sleep-proof do Dreamin (33554432) tambem protege Koh contra sono enquanto
+        // Dreamin e o familiar ativo, imitando o traco "resistencia emprestada" do
+        // jogo original. Deliberadamente restrito a este unico ponto (o teste de
+        // "o status X e resistido?"), e nao a HasTalent em geral, para nao vazar
+        // talentos de atributo do familiar (Quick, HP Increased, etc.) para Koh.
+        private bool HasActiveFamiliarImmunity(ActorRecord actor, int immunity) =>
+            immunity != 0 && actor == _playerActor && _familiarDefinition && !_familiarInBag &&
+            _familiarActor != null && HasTalent(_familiarActor, immunity);
+
         private void Status(ActorRecord actor, sbyte status, sbyte turns)
         {
             if (turns != 0)
@@ -400,7 +419,7 @@ namespace AzureDreamsReimagined
                     StatusId.BRAINWASH => 0x00100000,
                     _ => 0
                 };
-                if (!HasTalent(actor, immunity))
+                if (!HasTalent(actor, immunity) && !HasActiveFamiliarImmunity(actor, immunity))
                     ActorStatusEffects.SetOrClear(actor, status, status == StatusId.BLIND ? BlindnessTurns : turns);
                 return;
             }
@@ -462,6 +481,31 @@ namespace AzureDreamsReimagined
                 case 13: Status(actor, StatusId.SLEEP, 8); break;
                 case 14: Status(actor, StatusId.BLIND, 0); break;
             }
+            // Nyuel recupera todo o MP comendo qualquer erva, nao so Pita Fruit.
+            if ((MonsterSpecies)actor.Species == MonsterSpecies.NYUEL) actor.CurrentMp = actor.MaxMp;
+        }
+
+        // Espadas e todos os escudos exceto Wood(1)/Leather(2)/Mirror(3)/Diamond(7) contam
+        // como "metal" para fins de alimentacao (ex: Dragon), assim como moedas (cobre/prata/
+        // ouro) e todos os sinos (Holy/Malicious/Familiar). Ids conforme o catalogo em
+        // Resources/Town/Retail/inventory_text.json.
+        private static readonly HashSet<int> NonMetalShieldIds = new() { 1, 2, 3, 7 };
+
+        private static bool IsMetalItem(DungeonItemEntry item) =>
+            item.Kind == ItemKind.Sword || (item.Kind == ItemKind.Shield && !NonMetalShieldIds.Contains(item.Subtype)) ||
+            item.Kind == ItemKind.Coin || item.Kind == ItemKind.Bell;
+
+        // Alimentar um monstro com metal (espada/escudo) recupera MP de acordo com o quanto
+        // a especie "gosta" de metal (likesMetal no unit_progression.json) - mesma mecanica
+        // de likesPitas/likesBigPitas usada para Pita Fruit. O Dragon e a unica especie com
+        // likesMetal alto nos dados atuais; qualquer outra especie simplesmente nao reage
+        // (likesMetal padrao = 0), igual ao "dislike" do jogo original.
+        private void ApplyMetal(ActorRecord actor)
+        {
+            if (actor == _playerActor) return;
+            int recovery = UnitProfile(actor.Species)?.likesMetal ?? 0;
+            if (recovery <= 0) return;
+            actor.CurrentMp = Mathf.Min(actor.MaxMp, actor.CurrentMp + recovery);
         }
 
         private void ApplyFruit(DungeonItemEntry item, ActorRecord actor)
@@ -524,7 +568,7 @@ namespace AzureDreamsReimagined
         private bool TryFindEggDrop(ActorRecord actor, out Vector2Int drop)
         {
             drop = default;
-            if (actor == null || _manoevaCopies.Contains(actor) ||
+            if (actor == null ||
                 FindEggSpecies(actor.Species) == null || FruitTargetCell(actor) is not { } cell) return false;
             return TryFindDiscardCell(cell, out drop);
         }
@@ -604,8 +648,8 @@ namespace AzureDreamsReimagined
         private DungeonItemEntry CombatGear(ActorRecord actor, bool shield)
         {
             if (actor == _playerActor) return _runInventory?.EquippedItem(PlayerEquipped, shield);
-            if (actor == _familiarActor) return _runInventory?.EquippedItem(FamiliarEquipped, shield);
-            if (actor == _blueCollarAlly?.Actor) return _runInventory?.EquippedItem(BlueFamiliarEquipped, shield);
+            if (actor == _familiarActor) return (shield ? actor.Shield : actor.Weapon) ?? CarriedInventory?.EquippedItem(FamiliarEquipped, shield);
+            if (actor == _blueCollarAlly?.Actor) return (shield ? actor.Shield : actor.Weapon) ?? CarriedInventory?.EquippedItem(BlueFamiliarEquipped, shield);
             return shield ? actor.Shield : actor.Weapon;
         }
 
@@ -776,7 +820,6 @@ namespace AzureDreamsReimagined
                 if (Combat.HasStatus(target, StatusId.SLEEP)) target.Flags1C |= ActorFlag.ASLEEP;
                 if (Combat.HasStatus(target, StatusId.PARALYSIS)) target.Flags1C |= ActorFlag.PARALYZED;
                 if (Combat.HasStatus(target, StatusId.BLIND)) target.Flags1C |= ActorFlag.BLIND;
-                if (HasTalent(actor, AtrociousTalent)) actor.Flags1C |= ActorFlag.ANGRY;
                 byte weaponAccuracy = PhysicalWeaponAccuracy(actor, weapon, attackerCell, targetCell);
                 actor.HitBaseline = Combat.HasStatus(actor, StatusId.BLIND)
                     ? StatByte(weaponAccuracy - 32)
@@ -799,6 +842,8 @@ namespace AzureDreamsReimagined
                         IsSword(weapon, SeraphimSword) || IsSword(weapon, SeraphimKeepsake) ? 20 :
                         HasHolySwordProtection(actor) ? 10 : 0;
                     if (HasHolySwordProtection(target)) critAdjustment -= 20;
+                    // Atrocious talent (Killer): flat +10% crit chance, independent of weapon.
+                    if (HasTalent(actor, AtrociousTalent)) critAdjustment += 10;
 
                     // The fruit adds half the base critical rate. Gear adds percentage points.
                     int adjustment = critAdjustment * 256 + (Combat.HasStatus(actor, StatusId.ANGER) ? baseCritOutcomes * 100 : 0);
@@ -814,7 +859,8 @@ namespace AzureDreamsReimagined
                 damage = ScaleElevationDamage(damage, TowerTileHeight(attackerCell), TowerTileHeight(targetCell));
                 damage = ApplyElementalShield(damage, attackElements, shield);
                 if (shield?.Subtype == LiveShield) ApplyLiveShield(target, actor, damage);
-                if (!IsSword(weapon, VitalSword)) QueueManoevaSplit(target, damage);
+                if (!IsSword(weapon, VitalSword) && damage > 0) RevertManoevaDisguise(target);
+                if (damage > 0) damage = TryManoevaSplit(target, damage);
                 return damage;
             }
             finally
@@ -929,7 +975,8 @@ namespace AzureDreamsReimagined
                 int damage = -Combat.ResolveSpellDamage(caster, target, power, spellLevel,
                     element, UnitElement(target) | GearElement(shield), 0);
                 damage = ApplyElementalShield(damage, element, shield);
-                if (caster != null) QueueManoevaSplit(target, damage);
+                if (caster != null && damage > 0) RevertManoevaDisguise(target);
+                if (damage > 0) damage = TryManoevaSplit(target, damage);
                 return damage;
             }
             finally
@@ -1079,6 +1126,12 @@ namespace AzureDreamsReimagined
 
         private void ApplyScroll(DungeonItemEntry item, ActorRecord actor)
         {
+            // Efeito visual generico de magia no local de quem usou o pergaminho - antes nao
+            // havia nenhum feedback visual aqui (so o som RetailSfx.Spell tocado pelo chamador).
+            Vector2Int scrollCell = actor == _playerActor ? _playerCell : actor == _familiarActor ? _familiarCell :
+                actor == _blueCollarAlly?.Actor ? _blueCollarAlly.Cell :
+                _creatures.Find(creature => creature.Actor == actor).Cell;
+            SpawnFx(_fxMagic, CellPosition(scrollCell));
             switch (item.Subtype)
             {
                 case 1: CreateSacredTile(actor == _familiarActor ? _familiarCell : _playerCell); break;
@@ -1339,13 +1392,14 @@ namespace AzureDreamsReimagined
                 var view = SpawnActor(HatchedFamiliarPrefab(item.Subtype), landing, data.name + " (thrown egg)",
                     species: item.Subtype, palette: FamiliarPalette(item.Subtype));
                 var actor = new ActorRecord { Species = item.Subtype };
-                if (!TryGetLevelStats(item.Subtype, _floor, out var stats))
-                    stats = new LevelStats { level = _floor, hp = data.hp, mp = data.mp, atk = data.attack, def = data.defense };
+                int hatchLevel = Mathf.Clamp(EffectiveTowerFloor, 1, 99);
+                if (!TryGetLevelStats(item.Subtype, hatchLevel, out var stats))
+                    stats = new LevelStats { level = hatchLevel, hp = data.hp, mp = data.mp, atk = data.attack, def = data.defense };
                 ApplyFreshStats(actor, stats);
                 _thrownEggs.Add(new ThrownEggAlly { View = view, Cell = landing, Actor = actor });
                 SpawnFx(_fxMagic, CellPosition(landing));
                 PlayRetailSound(RetailSfx.Summon);
-                _message = $"{data.name} " + T("hatched at level ", "nasceu no nÃ­vel ") + _floor + ".";
+                _message = $"{data.name} " + T("hatched at level ", "nasceu no nível ") + hatchLevel + ".";
             }
             else if (target != null && item.Kind == ItemKind.Crystal && item.Subtype == 3 &&
                 _creatures.Exists(creature => creature.Actor == target))
@@ -1354,6 +1408,9 @@ namespace AzureDreamsReimagined
                 ApplySeed(item.Subtype, target);
             else if (target != null && item.Kind == ItemKind.Scroll)
             {
+                // Pergaminho arremessado nao tinha nenhum feedback visual/sonoro de magia.
+                PlayRetailSound(RetailSfx.Spell);
+                SpawnFx(_fxMagic, CellPosition(impact));
                 if (item.Subtype == 1) CreateSacredTile(impact);
                 else if (item.Subtype == 2) Status(target, StatusId.CONFUSION, 10);
             }

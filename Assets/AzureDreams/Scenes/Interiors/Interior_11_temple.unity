@@ -125,7 +125,7 @@ MonoBehaviour:
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 1cb287197f0e437ab46fa4c3e19fcb87, type: 3}
   residentCells:
-  - {x: 17, y: 13}
+  - {x: 17, y: 9}
   furnitureFootprints:
   - serializedVersion: 2
     x: 8.984375

@@ -36,8 +36,34 @@ namespace AzureDreamsReimagined
         private Vector2 _weedyDescriptionScroll;
         private GUIStyle _weedyDescriptionStyle;
 
+        // Reimagined addition: with the level 3 house (CurrentHomeRank 2) Weedy hands Koh one random
+        // fruit the first time they talk after each tower run. EnterTower clears the key.
+        internal const string WeedyFruitGivenKey = "home.weedy_fruit_given";
+        private static readonly int[] WeedyFruitIds = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        private bool WeedyFruitGift(NPCController npc)
+        {
+            if (CurrentHomeRank < 2 || TownSaveVariables.GetBool(WeedyFruitGivenKey)) return false;
+            if (_townInventory.TotalItems + FamiliarInventoryCount >= Inventory.SlotCapacity)
+                return StoryTalk(npc, "Yup! I found a fruit for you, but your hands are full! Make some room, okay?",
+                    "Isso! Achei uma fruta pra você, mas suas mãos estão cheias! Abra espaço, tá?", WeedyPortrait);
+            int id = WeedyFruitIds[UnityEngine.Random.Range(0, WeedyFruitIds.Length)];
+            var fruit = ItemSystem.CreateFloorItem((byte)id, ItemSystem.Kind.Fruit, (sbyte)(id <= 2 ? 40 : 0));
+            _townInventory.AddDungeonItem(fruit);
+            TownSaveVariables.SetBool(WeedyFruitGivenKey, true);
+            PersistTownProgress();
+            var entry = _townInventory.DungeonItems[_townInventory.DungeonItems.Count - 1];
+            string name = InventoryItemName(entry);
+            return StoryTalk(npc, "Yup! Yup! I picked this in the garden. It’s for you, {name}!",
+                "Isso! Isso! Colhi isto no jardim. É pra você, {name}!", WeedyPortrait,
+                () => StoryTalk(npc, $"(Received {name}!)", $"(Você recebeu {name}!)", WeedyPortrait,
+                    () => WeedyBookOffer(npc)));
+        }
+
         // TOWN.BIN 0x3E677C–0x3E6852.
-        private bool WeedyStory(NPCController npc)
+        private bool WeedyStory(NPCController npc) => WeedyFruitGift(npc) || WeedyBookOffer(npc);
+
+        private bool WeedyBookOffer(NPCController npc)
         {
             return StoryAsk(npc, "Do you want to read my Monster Book?", "Quer ler meu Livro dos Monstros?",
                 WeedyBookOfferPortrait,
@@ -368,6 +394,12 @@ namespace AzureDreamsReimagined
                         OpenHomeStorage(fromWreath: true);
                     },
                     ("Oh, you're going to transfer items in and out of it, right?", "Ah, você vai guardar ou retirar itens, certo?"))),
+                (T("Sell Items", "Vender Itens"), () =>
+                {
+                    _wreathServiceSpeaker = npc;
+                    _wreathItemSale = true;
+                    SetBarryShopPage(BarryShopPage.Sell);
+                }),
                 (T("SAVE DATA", "Salvar jogo"), () =>
                 {
                     _wreathServiceSpeaker = npc;
@@ -405,7 +437,7 @@ namespace AzureDreamsReimagined
         {
             if (_weedyBook == null)
             {
-                var asset = Resources.Load<TextAsset>("Town/WeedyBook/pages");
+                var asset = AssetMode.Load<TextAsset>("Town/WeedyBook/pages");
                 if (asset) _weedyBook = JsonUtility.FromJson<MonsterBook>(asset.text);
             }
             if (_weedyBook?.pages == null || _weedyBook.pages.Length == 0)

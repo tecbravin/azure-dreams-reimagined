@@ -12,25 +12,17 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private const string SelfiMusicCue = "SelfiTheme.mp3";
-        // These cues are supplied by Redesigned assets/music.  Keeping this
-        // mapping at the playback boundary lets all existing location and
-        // event rules continue to use their original cue names.
-        // The redesigned M4A files contain Opus-in-MP4.  FMOD cannot decode
-        // that container, so the matching Vorbis files below are generated
-        // from the same source tracks for every runtime, including WebGL.
-        private static readonly HashSet<string> RedesignedOggMusicCues = new()
-        {
-            "AngelSong", "ArmShop", "SelfiTheme", "BeldoDuel", "Casino", "CherrlTheme",
-            "DanceAtPub", "EntranceOfComedians", "ExitComedians", "GhoshTheme", "HeroFinale",
-            "KohHouseTheme", "MiaTheme", "MonsterRaceCourse", "MonsterRacing", "Playroom",
-            "SwimmingPool", "Temple1", "Theatre", "Tower1", "Tower2", "Tower3", "Tower4",
-            "Tower5", "Tower6", "Tower7", "Tower8", "TowerFinale", "VeiledGenuine", "VivianTheme"
-        };
-        private static readonly HashSet<string> RedesignedMp3MusicCues = new() { "NicoTheme", "Town" };
+        // Classic plays Media/Music/<cue>.ogg, rendered from the disc's own KDT sequences and VAB
+        // instruments (Tools/adsnd).  Reimagined prefers Media/Reimagined/Music/<cue>.ogg|.mp3 (see
+        // AssetMode).  Location and event rules keep using their original cue names; a ".mp3" suffix on
+        // a cue is historical and only selects the file stem.
+        // Redesigned tracks are shipped as Vorbis/MP3: FMOD cannot decode the Opus-in-MP4 sources.
+        private static readonly string[] MusicExtensions = { ".ogg", ".mp3" };
         private AudioSource _backgroundMusic;
         private AudioSource _levelUpMusic;
         private bool _levelUpMusicActive;
         private string _playingMusicCue;
+        private bool _playingMusicLoop = true;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] private static extern void AzureBgmPlay(string url, float volume, int loop);
@@ -42,20 +34,27 @@ namespace AzureDreamsReimagined
         private UnityWebRequest _musicRequest;
 #endif
 
-        private static string TowerMusicCue(int floor)
+        private string TowerMusicCue(int floor)
         {
+            // Second tower: setup_dungeon_floor_encounters picks the music group with rng & 7 on every floor.
+            if (floor >= SecondTowerFirstFloor) return SecondTowerMusicCue;
             if (floor >= TowerFloorRules.BeldoFloor) return "VeiledGenuine.mp3";
             // Retail selects the normal music bank using integer division by five.
             return $"Tower{Mathf.Clamp(floor / 5, 0, 7) + 1}";
         }
 
-        private static string MusicFileName(string cue)
+        /// <summary>Music file, relative to StreamingAssets/Media, for the current asset mode.</summary>
+        internal static string MusicFileName(string cue)
         {
-            string baseCue = cue.EndsWith(".mp3", System.StringComparison.Ordinal)
-                ? cue[..^4] : cue;
-            if (RedesignedOggMusicCues.Contains(baseCue)) return baseCue + ".redesigned.ogg";
-            if (RedesignedMp3MusicCues.Contains(baseCue)) return baseCue + ".mp3";
-            return cue.EndsWith(".mp3", System.StringComparison.Ordinal) ? cue : cue + ".ogg";
+            bool mp3 = cue.EndsWith(".mp3", System.StringComparison.Ordinal);
+            string baseCue = mp3 ? cue[..^4] : cue;
+            if (AssetMode.IsReimagined)
+                foreach (string extension in MusicExtensions)
+                {
+                    string redesigned = "Music/" + baseCue + extension;
+                    if (AssetMode.HasMediaOverlay(redesigned)) return AssetMode.OverlayFolder + "/" + redesigned;
+                }
+            return "Music/" + baseCue + ".ogg";
         }
 
         private static AudioType MusicAudioType(string file) =>
@@ -67,8 +66,9 @@ namespace AzureDreamsReimagined
             if (_playingMusicCue == cue) return;
             StopLevelUpMusic(resumeBackground: false);
             _playingMusicCue = cue;
+            _playingMusicLoop = loop;
             string file = MusicFileName(cue);
-            string url = StreamedMediaUrl($"Music/{file}");
+            string url = StreamedMediaUrl(file);
 #if UNITY_WEBGL && !UNITY_EDITOR
             AzureBgmPlay(url, DefaultMusicVolume * _bgmVolume, loop ? 1 : 0);
 #else
@@ -165,7 +165,7 @@ namespace AzureDreamsReimagined
         private void PrepareLevelUpMusic()
         {
             if (_levelUpMusic) return;
-            var clip = Resources.Load<AudioClip>("Music/LevelUp");
+            var clip = AssetMode.Load<AudioClip>("Music/LevelUp");
             if (!clip) return;
             _levelUpMusic = gameObject.AddComponent<AudioSource>();
             _levelUpMusic.playOnAwake = false;
