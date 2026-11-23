@@ -11,6 +11,7 @@ Shader "AzureDreams/ActorSpriteDepth"
   [PerRendererData] _EnableExternalAlpha ("Enable external alpha",Float)=0
   _ColorKey ("Use original Koh color key",Float)=0
   [PerRendererData] _ActorDepthAnchor ("Depth anchor",Vector)=(0,0,0,1)
+  [PerRendererData] _ActorDepthNormal ("Facade depth normal",Vector)=(0,0,0,0)
  }
  SubShader
  {
@@ -25,6 +26,7 @@ Shader "AzureDreams/ActorSpriteDepth"
    #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
    #include "UnitySprites.cginc"
    float4 _ActorDepthAnchor;
+   float4 _ActorDepthNormal;
    float _ColorKey;
    v2f vert(appdata_t input)
    {
@@ -35,7 +37,22 @@ Shader "AzureDreams/ActorSpriteDepth"
     // upright body represented by that silhouette, instead of a flat card.
     float3 anchorView=mul(UNITY_MATRIX_V,float4(_ActorDepthAnchor.xyz,1)).xyz;
     float slope=UNITY_MATRIX_V[2].y/max(.25,abs(UNITY_MATRIX_V[1].y));
-    if(unity_OrthoParams.w>.5)
+    if(dot(_ActorDepthNormal.xyz,_ActorDepthNormal.xyz)>.5)
+    {
+        float3 normalView=mul((float3x3)UNITY_MATRIX_V,_ActorDepthNormal.xyz);
+        float plane=dot(normalView,anchorView);
+        if(unity_OrthoParams.w>.5)
+        {
+            if(abs(normalView.z)>.001)
+                view.z=(plane-dot(normalView.xy,view.xy))/normalView.z;
+        }
+        else
+        {
+            float denominator=dot(normalView,view.xyz/view.z);
+            if(abs(denominator)>.001) view.z=plane/denominator;
+        }
+    }
+    else if(unity_OrthoParams.w>.5)
         view.z=anchorView.z+(view.y-anchorView.y)*slope;
     else
     {

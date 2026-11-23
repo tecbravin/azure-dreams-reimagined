@@ -110,7 +110,8 @@ namespace AzureDreamsReimagined
 
         /// <summary>
         /// Return to town. Computes reward (full loot if survived, half if not),
-        /// persists town progress, and transfers run inventory back to town.
+        /// persists town progress, and transfers run inventory back only on survival.
+        /// Familiars are owned separately by the controller and are retained on defeat.
         /// Returns the computed reward amount.
         /// </summary>
         public int ReturnToTown(bool survived)
@@ -130,9 +131,10 @@ namespace AzureDreamsReimagined
                 Gold += reward;
             }
             TownLevel = 1 + Gold / 50;
-            if (RunInventory != null && TownInventory != null)
+            if (survived && RunInventory != null && TownInventory != null)
                 RunInventory.TransferTo(TownInventory);
             RunInventory = null;
+            if (!survived) Potions = 0;
 
             int potions = Potions;
 

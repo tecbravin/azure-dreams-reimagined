@@ -26,6 +26,79 @@ namespace AzureDreamsReimagined
         private FamiliarOrderPicker _familiarOrderPicker;
         private FamiliarAi _familiarAiCursor;
         private Vector2Int _formationCursor;
+        private static readonly Vector2Int[] FormationDirections =
+        {
+            Vector2Int.up, new(1, 1), Vector2Int.right, new(1, -1),
+            Vector2Int.down, new(-1, -1), Vector2Int.left, new(-1, 1)
+        };
+        private const string RedFormationKey = "familiar.formation.red";
+        private const string BlueFormationKey = "familiar.formation.blue";
+
+        private int CollarFormationDirection(bool blue)
+        {
+            int red = TownSaveVariables.GetInt(RedFormationKey, 6) & 7;
+            int second = TownSaveVariables.GetInt(BlueFormationKey, 2) & 7;
+            return blue ? (second == red ? (red + 1) & 7 : second) : red;
+        }
+
+        private Vector2Int CollarFormationOffset(ActorRecord actor) =>
+            FormationDirections[CollarFormationDirection(actor == _blueCollarAlly?.Actor)];
+
+        private int KohFormationFacing => Mathf.Max(0, System.Array.IndexOf(FormationDirections, _towerFacing));
+
+        private Vector2Int FamiliarFormationTargetOffset(ActorRecord actor) =>
+            FormationDirections[(CollarFormationDirection(actor == _blueCollarAlly?.Actor) + KohFormationFacing) & 7];
+
+        private Vector2Int FindArrivalFamiliarCell(bool blue, Vector2Int? occupied = null)
+        {
+            var preferred = _playerCell + FormationDirections[(CollarFormationDirection(blue) + KohFormationFacing) & 7];
+            Vector2Int? reserveBlue = !blue && HasBlueCollar && _blueCollarFamiliar is { Defeated: false } reserve && reserve.Actor.Hp > 0
+                ? _playerCell + FormationDirections[(CollarFormationDirection(true) + KohFormationFacing) & 7] : null;
+            var queue = new Queue<Vector2Int>();
+            var seen = new HashSet<Vector2Int> { _playerCell };
+            queue.Enqueue(_playerCell);
+            Vector2Int? best = null;
+            int bestDistance = int.MaxValue;
+            while (queue.Count > 0)
+            {
+                var cell = queue.Dequeue();
+                if (cell != _playerCell && cell != _stairCell && cell != occupied && cell != reserveBlue &&
+                    TrapAt(cell)?.IsActive != true)
+                {
+                    int distance = (cell - preferred).sqrMagnitude;
+                    if (distance < bestDistance) { best = cell; bestDistance = distance; }
+                    if (distance == 0) return cell;
+                }
+                foreach (var step in FormationDirections)
+                {
+                    var next = cell + step;
+                    if (!seen.Contains(next) && CanTowerStep(cell, step))
+                    { seen.Add(next); queue.Enqueue(next); }
+                }
+            }
+            // Only reserve the other collar's ideal cell while another free cell exists.
+            if (!best.HasValue && reserveBlue.HasValue)
+                return FindArrivalFamiliarCell(true, occupied);
+            return best ?? throw new System.InvalidOperationException("No reachable free familiar arrival cell.");
+        }
+
+        private bool FormationPositionAvailable(ActorRecord actor, Vector2Int screen)
+        {
+            int world = System.Array.IndexOf(FormationDirections, FormationWorldOffset(screen));
+            if (world < 0) return false;
+            bool blue = actor == _blueCollarAlly?.Actor;
+            return ((world - KohFormationFacing) & 7) != CollarFormationDirection(!blue);
+        }
+
+        private void OpenFamiliarFormation(ActorRecord actor)
+        {
+            if (IsFamiliarLost(actor)) return;
+            _familiarOrderPicker = FamiliarOrderPicker.Formation;
+            _formationCursor = Vector2Int.left;
+            foreach (var option in FormationDirections)
+                if (FormationWorldOffset(option) == FamiliarFormationTargetOffset(actor)) _formationCursor = option;
+            PlayRetailSound(RetailSfx.Confirm);
+        }
         private Vector3 _blueFamiliarFrom;
         private BagFamiliar _fusionFirst, _fusionSecond;
         private bool _fusionPendingSecond;
@@ -40,8 +113,12 @@ namespace AzureDreamsReimagined
 
         private FamiliarOrders OrdersFor(ActorRecord actor)
         {
-            if (_familiarOrders.TryGetValue(actor, out var orders)) return orders;
-            orders = new FamiliarOrders { Offset = actor == _blueCollarAlly?.Actor ? Vector2Int.right : Vector2Int.left };
+            if (_familiarOrders.TryGetValue(actor, out var orders))
+            {
+                orders.Offset = CollarFormationOffset(actor);
+                return orders;
+            }
+            orders = new FamiliarOrders { Offset = CollarFormationOffset(actor) };
             _familiarOrders.Add(actor, orders);
             return orders;
         }
@@ -221,14 +298,8 @@ namespace AzureDreamsReimagined
                 _familiarOrderPicker = FamiliarOrderPicker.Ai;
                 return;
             }
-            _familiarOrderPicker = FamiliarOrderPicker.Formation;
-            _formationCursor = Vector2Int.left;
-            for (int y = -1; y <= 1; y++)
-                for (int x = -1; x <= 1; x++)
-                {
-                    var option = new Vector2Int(x, y);
-                    if (FormationWorldOffset(option) == orders.Offset) _formationCursor = option;
-                }
+            var actor = InventoryCollarActor(_inventoryActorSlot == 2 ? 2 : 1);
+            if (actor != null) OpenFamiliarFormation(actor);
         }
 
         private void SetFamiliarAi(ActorRecord actor, FamiliarAi ai)
@@ -242,7 +313,12 @@ namespace AzureDreamsReimagined
 
         private void SetFamiliarFormation(ActorRecord actor, Vector2Int offset)
         {
-            OrdersFor(actor).Offset = FormationWorldOffset(offset);
+            if (IsFamiliarLost(actor) || !FormationPositionAvailable(actor, offset)) return;
+            int world = System.Array.IndexOf(FormationDirections, FormationWorldOffset(offset));
+            bool blue = actor == _blueCollarAlly?.Actor;
+            TownSaveVariables.SetInt(blue ? BlueFormationKey : RedFormationKey, (world - KohFormationFacing) & 7);
+            OrdersFor(actor).Offset = CollarFormationOffset(actor);
+            PlayRetailSound(RetailSfx.Confirm);
             _familiarOrderPicker = FamiliarOrderPicker.None;
         }
 
@@ -273,7 +349,12 @@ namespace AzureDreamsReimagined
                     var delta = new Vector2Int(horizontal, -vertical);
                     var next = _formationCursor + delta;
                     if (next == Vector2Int.zero) next += delta;
-                    if (Mathf.Abs(next.x) <= 1 && Mathf.Abs(next.y) <= 1) _formationCursor = next;
+                    if (Mathf.Abs(next.x) <= 1 && Mathf.Abs(next.y) <= 1 && next != Vector2Int.zero &&
+                        FormationPositionAvailable(actor, next) && next != _formationCursor)
+                    {
+                        _formationCursor = next;
+                        PlayRetailSound(RetailSfx.Cursor);
+                    }
                     if (confirm && _formationCursor != Vector2Int.zero) SetFamiliarFormation(actor, _formationCursor);
                     break;
                 case FamiliarOrderPicker.Ai:
@@ -302,7 +383,7 @@ namespace AzureDreamsReimagined
             DrawInventoryText(new Rect(stats.x + 10f, stats.yMax + 6f, stats.width - 20f, 23f),
                 _familiarOrderPicker == FamiliarOrderPicker.None
                     ? InventoryCharacterHint
-                    : T("E: confirm   Esc: back", "E: confirmar   Esc: voltar"), _messageStyle);
+                    : WithInteractHint("Confirm", "Confirmar") + "   " + WithCancelHint("Back", "Voltar"), _messageStyle);
 
             var orders = OrdersFor(actor);
             if (_familiarOrderPicker == FamiliarOrderPicker.Fusion)
@@ -343,7 +424,7 @@ namespace AzureDreamsReimagined
             if (_familiarOrderPicker == FamiliarOrderPicker.Formation)
             {
                 DrawInventoryText(new Rect(panel.x + 10f, panel.y + 7f, panel.width - 20f, 23f),
-                    T("Change position", "Mudar posicionamento"), _bodyStyle);
+                    T("Position", "Posição"), _bodyStyle);
                 for (int y = 1; y >= -1; y--)
                     for (int x = -1; x <= 1; x++)
                     {
@@ -354,8 +435,22 @@ namespace AzureDreamsReimagined
                             DrawDialogueFrame(tile);
                             DrawInventoryText(new Rect(tile.x + 4f, tile.y, tile.width - 8f, tile.height), "Koh", _bodyStyle);
                         }
-                        else if (DrawInventoryButton(tile, offset == _formationCursor ? "●" : "·", offset == _formationCursor))
-                            SetFamiliarFormation(actor, offset);
+                        else
+                        {
+                            bool available = FormationPositionAvailable(actor, offset);
+                            bool enabled = GUI.enabled;
+                            GUI.enabled = enabled && available && !IsFamiliarLost(actor);
+                            bool clicked = DrawInventoryButton(tile, "", offset == _formationCursor);
+                            GUI.enabled = enabled;
+                            if (Event.current.type == EventType.Repaint && (!available || offset == _formationCursor))
+                            {
+                                int slot = (available ? blue : !blue) ? BlueCollarIconSlot : RedCollarIconSlot;
+                                var icon = SuppliedItemSprite(GroundIconNames[slot]);
+                                if (!icon) icon = RetailGroundItemSprite(slot);
+                                if (icon) DrawItemSprite(new Rect(tile.center.x - 12f, tile.center.y - 12f, 24f, 24f), icon);
+                            }
+                            if (clicked) SetFamiliarFormation(actor, offset);
+                        }
                     }
                 return;
             }
@@ -388,7 +483,7 @@ namespace AzureDreamsReimagined
             {
                 string label = i switch
                 {
-                    0 => T("Change position", "Mudar posicionamento"),
+                    0 => T("Position", "Posição"),
                     1 => T("Change AI", "Mudar IA"),
                     _ => T("Fusion", "Fusão")
                 };
@@ -404,6 +499,27 @@ namespace AzureDreamsReimagined
         }
 
         private (Vector2Int Step, int Attack) PlanFamiliarTurn(ActorRecord actor, GameObject view, Vector2Int from,
+            Vector2Int kohDestination, Vector2Int? reserved, Vector2Int? otherDestination, bool executeFamiliarCommands)
+        {
+            // Plan against Koh's completed step, including distance, support targets and
+            // spell origins. Restore the snapshot before resolving movement conflicts.
+            var previousCell = _playerCell;
+            int previousX = _playerActor.TileX, previousY = _playerActor.TileY;
+            try
+            {
+                _playerCell = kohDestination;
+                SetActorCell(_playerActor, kohDestination);
+                return PlanFamiliarAfterKoh(actor, view, from, kohDestination, reserved, otherDestination, executeFamiliarCommands);
+            }
+            finally
+            {
+                _playerCell = previousCell;
+                _playerActor.TileX = (sbyte)previousX;
+                _playerActor.TileY = (sbyte)previousY;
+            }
+        }
+
+        private (Vector2Int Step, int Attack) PlanFamiliarAfterKoh(ActorRecord actor, GameObject view, Vector2Int from,
             Vector2Int kohDestination, Vector2Int? reserved, Vector2Int? otherDestination, bool executeFamiliarCommands)
         {
             if (IsSubmerged(actor) && (MonsterExhausted(actor) || IsFrog(actor)))
@@ -471,7 +587,7 @@ namespace AzureDreamsReimagined
                     if (approach != Vector2Int.zero) return (approach, -1);
                 }
             }
-            return (FindFamiliarOrderStep(actor, from, kohDestination + orders.Offset,
+            return (FindFamiliarOrderStep(actor, from, kohDestination + FamiliarFormationTargetOffset(actor),
                 kohDestination, reserved, otherDestination, false), -1);
         }
 
@@ -515,7 +631,7 @@ namespace AzureDreamsReimagined
                         fallback = first;
                     }
                 }
-                foreach (var step in BellSteps)
+                foreach (var step in FormationDirections)
                 {
                     var next = cell + step;
                     if (_familiarVisited.Contains(next) || !CanTowerStep(cell, step) ||

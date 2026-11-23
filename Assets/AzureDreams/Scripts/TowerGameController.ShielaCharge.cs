@@ -7,9 +7,11 @@ namespace AzureDreamsReimagined
     public sealed partial class TowerGameController
     {
         private const int ShielaBallChargePrice = 200;
+        private bool _shielaChargeOpen;
 
         private void ShielaChargeMenu(NPCController npc)
         {
+            _shielaChargeOpen = true;
             var choices = new List<(string Label, Action Apply)>();
             var items = _townInventory.DungeonItems;
             for (int i=0;i<items.Count;i++)
@@ -30,9 +32,11 @@ namespace AzureDreamsReimagined
 
         private void ShielaConfirmCharge(NPCController npc,int index,DungeonItemEntry ball)
         {
+            _shielaChargeOpen = true;
             StoryAsk(npc,$"Add one charge to {InventoryItemName(ball)} for 200 G?",$"Adicionar uma carga a {InventoryItemName(ball)} por 200 G?",
                 (T("Charge — 200 G","Carregar — 200 G"),()=>
                 {
+                    _shielaChargeOpen = true;
                     if (!TryShielaChargeBall(index,ball))
                     {
                         StoryTalk(npc,_gold<ShielaBallChargePrice ? "You don't have enough gold." : "That ball can no longer be charged.",

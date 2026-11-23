@@ -115,6 +115,7 @@ namespace AzureDreamsReimagined
             };
 
         private bool CanGiveToFamiliar(DungeonItemEntry item) =>
+            (_area==Area.Town && _bagFamiliars.Exists(f=>GiveRecipientAvailable(f.Actor) && (!IsTrollWeapon(item)||IsTroll(f.Actor)))) ||
             (_area == Area.Town && _familiarDefinition && item != null &&
                 (item.Kind != ItemKind.Ball || TeachesFamiliar(item)) && (!IsTrollWeapon(item) || IsTroll(_familiarActor))) ||
             _familiar != null ||
@@ -213,6 +214,8 @@ namespace AzureDreamsReimagined
 
         private void ResetInventoryCommands()
         {
+            _giveRecipientAction=null;
+            _giveRecipients.Clear();
             _pendingItemCommand = null;
             _fusionPreview = null;
             _itemTargetSource = null;
@@ -285,6 +288,11 @@ namespace AzureDreamsReimagined
                 return;
             }
             bool giving = command == ItemCommand.Give;
+            if(giving)
+            {
+                OpenGiveRecipientPicker(item,actor=>GiveItemToRecipient(inventory,index,item,actor,Remove,RefreshInventoryCommands));
+                return;
+            }
             if (giving && IsTrollWeapon(item))
             {
                 bool redTroll = (_familiar || (!inTower && _familiarDefinition)) && IsTroll(_familiarActor);

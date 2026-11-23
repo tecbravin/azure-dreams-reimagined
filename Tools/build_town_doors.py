@@ -99,6 +99,7 @@ interiors = {
     (112, 56): "Interior_1c_generic_building",
     (100, 68): "Interior_1d_generic_building",
     (112, 98): "Interior_23_generic_house",
+    (112, 38): "Interior_0d_pool_quest_not_done",
 }
 seen, doors = set(), []
 for index in range(len(doorway_faces)):
@@ -123,7 +124,11 @@ for index in range(len(doorway_faces)):
         door["interior"] = interiors[center]
     doors.append(door)
 
-assert len(doors) == 22
+# The pool has a rounded, bespoke facade rather than the 22-vertex
+# residential recess used by the automatic leaf detector above.
+doors.append(dict(x=112.0, z=38.0, width=1.0, height=1.75,
+                  style="Residence", interior="Interior_0d_pool_quest_not_done"))
+assert len(doors) == 23
 assert sum("interior" in door for door in doors) == len(interiors)
 catalog = output / "placements.json"
 catalog.write_text(json.dumps({"doors": doors}, indent=2) + "\n", encoding="utf-8")

@@ -45,7 +45,12 @@ namespace AzureDreamsReimagined
         {
             if (!wearer) return;
             var attire = wearer.GetComponent<PoolAttireView>();
-            if (attire) Destroy(attire);
+            if (attire)
+            {
+                if (attire._visual) attire._visual.gameObject.SetActive(false);
+                if (attire._waterVisual) attire._waterVisual.gameObject.SetActive(false);
+                Destroy(attire);
+            }
         }
 
         /// <summary>Shows the waterline only while the wearer is actually in the pool.</summary>

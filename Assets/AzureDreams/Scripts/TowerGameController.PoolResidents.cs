@@ -72,6 +72,7 @@ namespace AzureDreamsReimagined
                 {
                     TownSaveVariables.SetBool(VivianPoolHecklersSeenKey, true);
                     PersistTownProgress();
+                    StartCoroutine(PlayPoolHecklerDeparture());
                 }))))))))));
         }
 

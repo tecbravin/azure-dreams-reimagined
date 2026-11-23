@@ -70,6 +70,7 @@ namespace AzureDreamsReimagined
         private const int MaxVisibleMessages = 4;
         private readonly List<string> _messageStack = new List<string>();
         private int _messageScroll;
+        private int _messageRevision;
         private int _messageLineScroll = int.MaxValue;
         private float _messageStackActivity;
         private int _combatMessageLines;
@@ -84,10 +85,12 @@ namespace AzureDreamsReimagined
             {
                 if (string.IsNullOrEmpty(value))
                 {
+                    _messageRevision++;
                     _messageStack.Clear();
                     _messageScroll = 0;
                     return;
                 }
+                _messageRevision++;
                 _messageStack.Add(value);
                 _messageStackActivity = Time.unscaledTime;
                 _messageScroll = _messageStack.Count - 1;
@@ -122,6 +125,7 @@ namespace AzureDreamsReimagined
 
         private Texture2D FindDialoguePortrait(string speaker)
         {
+            if (speaker == "Fon") return FonDialoguePortrait(_storyPortraitStarted);
             if (speaker == "Selfi") return StreamPortrait(SelfiPortrait(0));
             if (speaker == "Patty") return StreamPortrait(PattyPortrait(0));
             if (speaker is "Mia" or "Miya") return StreamPortrait(MiaPortrait(0));
@@ -296,6 +300,7 @@ namespace AzureDreamsReimagined
 
         private void OnDisable()
         {
+            Shader.SetGlobalVector("_KohWallFadeTarget", Vector4.zero);
             ResetArcade(restorePlayer: true);
             ResetRacetrack();
             ResetRestaurantMeal();
@@ -485,7 +490,7 @@ namespace AzureDreamsReimagined
             }
             if (HandleTitleInput() || HandlePrologueInput() || _changingInterior || _wakeUpVisitorArriving || _wakeUpVisitorLeaving || _kewneSkipTransition || _goUpTransition || _goDownTransition || _kohCollapsePlaying) return;
             if (_player) _unsavedPlaySeconds += Time.unscaledDeltaTime;
-            if (TickHomeBath(Time.unscaledDeltaTime) || _restaurantMealAnimating) return;
+            if (TickHomeBath(Time.unscaledDeltaTime) || _restaurantMealAnimating || _poolSceneAnimating || _cherrlWalkAnimating || _cherrlWindowAnimating || _nicoFountainAnimating) return;
             if (HandleBeldoVision() || HandleBeldoEncounter()) return;
             if (_elevatorAscending)
             {
@@ -498,7 +503,7 @@ namespace AzureDreamsReimagined
                 UpdateMinimap();
                 return;
             }
-            if (_townDoorOpening || _towerArrivalPlaying || _pullingFamiliarFromBag || _pickupView || _fusionPlaying) return;
+            if (_townDoorOpening || _towerArrivalPlaying || _pullingFamiliarFromBag || _pickupView || _fusionPlaying || _familiarEvolutionsPlaying > 0) return;
             if (TickLevelUpCelebration(Time.unscaledDeltaTime)) return;
             if (_debugItemPickerOpen) { HandleDebugItemPickerInput(); return; }
             if (_debugQuestPickerOpen) { HandleDebugQuestPickerInput(); return; }
@@ -515,17 +520,32 @@ namespace AzureDreamsReimagined
                 PersistTownProgress();
                 _message = T($"+{amount}G (test). Money: {_gold}G.", $"+{amount}G (teste). Dinheiro: {_gold}G.");
             }
-            if (HandleItemTargetPicker()) return;
+            if (HandleGiveRecipientPicker() || HandleItemTargetPicker()) return;
             if (HandleHomeStorageInput() || HandleCheckpointInput() || HandleGroundItemPrompt() || HandleTrapRearmInput() || HandleTutorialInput() || HandleVisitorEvent()) return;
+            if (HandleRestoredPoolEvents()) return;
+            if (HandleNicoCheroArrival()) return;
             if (HandleOctopusDumplingStallInput() || HandleTownStory() || HandleCarpenterInput() || HandleGeneralStoreInput() || HandleBarryShopInput() || HandleMonsterShopInput() || HandleWeedyBookInput() || HandleKohHomeInput() || HandleInteriorInput()) return;
             if (HandleKewneMeeting() || TryStartKewneMeeting()) return;
+            if (_area == Area.Tower && Keyboard.current?.numpad1Key.wasPressedThisFrame == true &&
+                !_inventoryOpen && _inventoryMenu == InventoryMenu.Closed &&
+                _towerRun?.CurrentState == TowerRunManager.State.InTower && _floor < int.MaxValue)
+            {
+                // Debug ascent skips the elevator animation, but keeps normal floor setup.
+                // In particular, floor 2 must go to 3 rather than the sealed second tower.
+                _ascendToSecondTower = false;
+                StopEggWarming();
+                CompleteElevatorAscent();
+                return;
+            }
             bool runHeld = _runAction != null && _runAction.IsPressed();
             bool passTurns = _area == Area.Tower && runHeld && _liftAction != null && _liftAction.IsPressed();
             bool wasBusy = _turnBusy;
             bool wasQuickStep = _quickTowerStep;
+            bool wasRunningStep = _towerRunningStep;
             TickTurnPresentation(TowerAnimationDelta * (passTurns && _mapView != MapView.Full && !ThrowInFlight && !_spellPresentationStarted && _spellCues.Count == 0 ? 4f : 1f));
             UpdateMinimap();
             if (LevelUpCelebrationBlocksTurn) return;
+            if (!wasBusy && HandleEggWarming()) return;
             if (_mapView == MapView.Full && !wasBusy)
             {
                 if (!TryPassStatusBlockedTurn()) MoveInTower(ReadMovementDirection());
@@ -534,17 +554,18 @@ namespace AzureDreamsReimagined
             if (wasBusy)
             {
                 // Chain held movement only. Attacks and menu commands still wait for a fresh frame.
-                if (wasQuickStep && !_turnBusy && !MonsterDenPlaying && !passTurns && _area == Area.Tower && !_pickupView &&
+                if ((wasQuickStep || wasRunningStep) && !_turnBusy && !MonsterDenPlaying && !passTurns && _area == Area.Tower && !_pickupView &&
                     !KohSkipsAction && !_groundItemPrompt.HasValue && _checkpointMenu == CheckpointMenu.Closed &&
                     !_inventoryOpen && _inventoryMenu == InventoryMenu.Closed && _faceAction?.IsPressed() != true && _interact?.IsPressed() != true &&
                     _interact?.WasReleasedThisFrame() != true &&
-                    !_creatures.Exists(creature => Distance(creature.Cell, _playerCell) <= CombatMovementRadius))
+                    ((runHeld && TowerRoomsClearForRunning(_playerCell, _playerCell)) ||
+                     !_creatures.Exists(creature => Distance(creature.Cell, _playerCell) <= CombatMovementRadius)))
                     MoveInTower(ReadMovementDirection());
                 return;
             }
             if (TryPassStatusBlockedTurn()) return;
             if (HandleTowerInventory()) return;
-            if (passTurns || (_area == Area.Tower && _skipAction?.WasPressedThisFrame() == true))
+            if (passTurns || (_area == Area.Tower && _skipAction?.IsPressed() == true))
             {
                 _towerInteractPending = false;
                 ResetTowerPushHold();
@@ -552,6 +573,7 @@ namespace AzureDreamsReimagined
                 return;
             }
             if (TryOpenDebugQuestPicker() || TryOpenDebugItemPicker()) return;
+            if (_area==Area.Town && Keyboard.current?.tKey.wasPressedThisFrame==true && SummonAuraBike()) return;
             ReadCameraControls();
             Vector2 direction = ReadMovementDirection();
             if (_area == Area.Tower && HandleTowerInteractInput(direction, runHeld)) return;
@@ -597,7 +619,7 @@ namespace AzureDreamsReimagined
             { TryTowerAction(Vector2Int.zero); return; }
             if (_area == Area.Town)
             {
-                MoveInTown(direction, Time.deltaTime, runHeld || _autorun);
+                MoveInTown(direction, Time.deltaTime, _autorun ? !runHeld : runHeld);
                 if (direction != Vector2.zero && _townJumpHeight <= TownGroundTolerance) TryExitInterior();
                 return;
             }
@@ -667,9 +689,8 @@ namespace AzureDreamsReimagined
                 FaceTowerDirection(direction);
                 return;
             }
-            Vector2Int step = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
-                ? new Vector2Int(direction.x > 0f ? 1 : -1, 0)
-                : new Vector2Int(0, direction.y > 0f ? 1 : -1);
+            Vector2 normalized = direction.normalized;
+            Vector2Int step = new(Mathf.RoundToInt(normalized.x), Mathf.RoundToInt(normalized.y));
             TryTowerFace(step);
             if (CreatureAt(_playerCell + step) >= 0)
             {
@@ -830,7 +851,7 @@ namespace AzureDreamsReimagined
             _starterJoinedThisRun = metAtGate;
             if (metAtGate)
             {
-                var kewne = new BagFamiliar { Definition = _kewneDefinition, Actor = new AzureDreams.Core.ActorRecord() };
+                var kewne = new BagFamiliar { Definition = _kewneDefinition, Actor = new AzureDreams.Core.ActorRecord(), Nickname = _kewneNameDraft };
                 _bagFamiliars.Add(kewne);
                 ActivateBagFamiliar(kewne);
                 _familiarInBag = _kewneSkipTransition;
@@ -880,6 +901,11 @@ namespace AzureDreamsReimagined
 
         private void BuildTowerFloor()
         {
+            // Every floor transition starts a fresh log, including elevator and trap travel.
+            _message = string.Empty;
+            _messageLineScroll = int.MaxValue;
+            _combatMessageLines = 0;
+            _messageStackActivity = 0f;
             // The second tower (floors 41+) does not count towards the main tower's record.
             if (_floor <= TowerFloorRules.BeldoFloor && _floor > TownSaveVariables.GetInt(TownReputation.HighestFloorKey))
                 TownSaveVariables.SetInt(TownReputation.HighestFloorKey, _floor);
@@ -898,15 +924,6 @@ namespace AzureDreamsReimagined
             _playerCell = new Vector2Int(1, 1);
             _player = SpawnKoh(_playerCell, "Player - editable prefab");
 
-            // Bring the traveling familiar into the tower as a companion.
-            if (_familiarDefinition != null && !_familiarDefeated && !_familiarInBag)
-            {
-                _familiarCell = new Vector2Int(2, 1);
-                _familiar = SpawnFamiliar();
-                _familiarHealth = _floor == 1 ? FamiliarMaxHealth : Mathf.Min(_familiarHealth, FamiliarMaxHealth);
-                _familiarActor.Hp = StatByte(_familiarHealth);
-            }
-
             _random = new System.Random(173 + _floor * 997);
             for (int x = 2; x <= 9; x++)
             {
@@ -923,6 +940,15 @@ namespace AzureDreamsReimagined
             _playerCell = new Vector2Int(1, 1);
             _player.transform.position = CellPosition(_playerCell);
             _stairCell = new Vector2Int(10, 10);
+            // Bring the traveling familiar into the tower as a companion.
+            if (_familiarDefinition != null && !_familiarDefeated && !_familiarInBag)
+            {
+                _familiarCell = FindArrivalFamiliarCell(false);
+                _familiar = SpawnFamiliar();
+                _familiarHealth = _floor == 1 ? FamiliarMaxHealth : Mathf.Min(_familiarHealth, FamiliarMaxHealth);
+                _familiarActor.Hp = StatByte(_familiarHealth);
+            }
+
             CreateTowerElevator();
 
             _creatures.Clear();
@@ -1069,7 +1095,7 @@ namespace AzureDreamsReimagined
                 if (CreateTownAsset("Fence_Section", "Town Fence", new Vector3(cell.x, 0f, cell.y), rotation))
                     return;
             }
-            CreatePrimitive(PrimitiveType.Cube, "Stone Wall", new Vector3(cell.x, 0.55f, cell.y), new Vector3(1f, 1.1f, 1f), _wallMaterial, true);
+            CreatePrimitive(PrimitiveType.Cube, "Stone Wall", new Vector3(cell.x, 0.55f, cell.y), new Vector3(1f, 1.1f, 1f), WallVisibilityMaterial(_wallMaterial), true);
         }
 
         private GameObject CreateMarker(Vector2Int cell, string objectName, Material material, PrimitiveType shape, float scale,
@@ -1097,12 +1123,11 @@ namespace AzureDreamsReimagined
             // Koh and familiar prefabs may acquire locomotion only after Spawn.
             // Attach depth correction to the actor path itself, not just NPCs
             // or prefabs which happen to serialize ActorLocomotionView.
-            if (_area == Area.Town)
-            {
-                if (!actor.TryGetComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>(out var depth))
-                    depth=actor.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
-                depth.SetInterior(_interior);
-            }
+            // Tower units use the same upright depth plane as town residents:
+            // the head must not intersect scenery which is behind the feet.
+            if (!actor.TryGetComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>(out var depth))
+                depth=actor.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
+            depth.SetInterior(_area == Area.Town ? _interior : null);
             // Primitive fallbacks need the locomotion view to move their mesh off the root.
             if (!prefab) ConfigureLocomotion(actor);
             var feet = Vector3.down * TownActorFootOffset;
@@ -1162,8 +1187,12 @@ namespace AzureDreamsReimagined
             instance.transform.position = CellPosition(cell);
             instance.transform.SetParent(transform, true);
             instance.name = objectName;
-            if (_area == Area.Town && (instance.GetComponent<NPCController>() || instance.GetComponent<ActorLocomotionView>()))
-                instance.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>().SetInterior(_interior);
+            if (instance.GetComponent<NPCController>() || instance.GetComponent<ActorLocomotionView>())
+            {
+                if (!instance.TryGetComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>(out var depth))
+                    depth = instance.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
+                depth.SetInterior(_area == Area.Town ? _interior : null);
+            }
             if (instance.TryGetComponent<NPCController>(out var resident) &&
                 !RetailResidentBanks.Apply(instance, resident.npcId))
                 OriginalTownSpriteView.Apply(instance, resident.npcId);
@@ -1272,6 +1301,11 @@ namespace AzureDreamsReimagined
 
         private void ClearGenerated()
         {
+            ResetCherrlWalk();
+            ResetHomeSlide();
+            _familiarEvolutionVersion++;
+            _familiarEvolutionsPlaying = 0;
+            _damageNumbers.Clear();
             ResetArcade();
             ResetRestaurantMeal();
             EndHomeBath();
@@ -1316,6 +1350,15 @@ namespace AzureDreamsReimagined
             _turnsUntilReinforcement = 0;
             _townHeights = null;
             ClearTownInteractionReferences();
+            _nicoFountainAnimating = false;
+            _nicoFountainSceneVersion++;
+            _nicoGhoshLeaving = false;
+            _nicoGhoshMusic = false;
+            _nicoFountainGhoshGuest = null;
+            _cherrlDroppedToy = null;
+            _cherrlWindowAnimating = false;
+            if (_cherrlToySprite) Destroy(_cherrlToySprite);
+            _cherrlToySprite = null;
             CancelTurn();
             _townBuildings.Clear();
             _townFacadeDoors.Clear();
@@ -1330,6 +1373,9 @@ namespace AzureDreamsReimagined
             foreach (var mesh in _ownedManagedFloorMeshes)
                 if (mesh) Destroy(mesh);
             _ownedManagedFloorMeshes.Clear();
+            foreach (var material in _wallVisibilityMaterials.Values)
+                if (material) Destroy(material);
+            _wallVisibilityMaterials.Clear();
             _towerCutawayMesh = null;
             _towerWallVertices = null;
             _towerCutawayFaces.Clear();
@@ -1337,12 +1383,13 @@ namespace AzureDreamsReimagined
             _cameraFollowPlayer = null;
             _creatures.Clear();
             _familiar = null;
-            _warmingEggIndex = -1;
+            StopEggWarming();
             _walls.Clear();
             _npcCells.Clear();
             _towerItemTraps = null;
             _itemMarkers.Clear();
             _trapMarkers.Clear();
+            _sprungGoUpTraps.Clear();
             _demoTraps.Clear();
             _trapTerrainChanges.Clear();
             _trapReversalUntil = 0;
@@ -1369,6 +1416,7 @@ namespace AzureDreamsReimagined
             GUI.skin = _windowSkin;
             try
             {
+                DrawDamageNumbers();
                 DrawGameGui(previousMatrix);
             }
             finally
@@ -1387,7 +1435,7 @@ namespace AzureDreamsReimagined
                 // This overload uses its explicit tint instead of GUI.color.  Keep the
                 // transition genuinely black (including Koh's collapse) rather than
                 // drawing a translucent white screen.
-                GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0f, Color.black, 0f, 0f);
+                GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0f, new Color(0f, 0f, 0f, _fadeToBlack), 0f, 0f);
                 GUI.color = Color.white;
                 if (_fadeToBlack <= 0f) _fadeToBlack = 0f;
             }
@@ -1399,6 +1447,7 @@ namespace AzureDreamsReimagined
                     // were overflowing fixed-height row Rects sized for the old font
                     // (e.g. the Inventory list), causing visible top-of-glyph clipping.
                     fontSize = 15,
+                    padding = new RectOffset(0, 0, 0, 0),
                     fontStyle = FontStyle.Bold,
                     alignment = TextAnchor.MiddleLeft,
                     richText = true,
@@ -1484,7 +1533,7 @@ namespace AzureDreamsReimagined
             }
             if (_area == Area.Tower)
                 DrawRetailTowerHud(width);
-            else if (!_activeTownNpc)
+            else
             {
                 DrawTownMoneyHud(width);
             }
@@ -1526,6 +1575,7 @@ namespace AzureDreamsReimagined
             DrawTrapRearm(width, height);
             DrawGroundItemPrompt(width, height);
 
+            DrawGiveRecipientPicker(width,height);
             GUI.matrix = previousMatrix;
             if (!_inventoryOpen) DrawMinimap();
         }
@@ -1554,13 +1604,13 @@ namespace AzureDreamsReimagined
                 IsShowingVisitorDialogue) && _dialogueLine != null;
             bool storyChoices = _storySpeaker && _storyChoices is { Length: > 0 };
             bool visitorChoices = _visitorStage is VisitorStage.Choice or VisitorStage.Challenge;
-            int choiceRows = visitorChoices ? 2 : KewneMeetingSpeaking ? (_kewneMeeting == KewneMeeting.Question ? 2 : 1) : 0;
+            int choiceRows = visitorChoices ? 2 : KewneMeetingSpeaking ? (KewneMeetingHasChoices ? 2 : 1) : 0;
             float maxHeight = height * 0.65f;
             // A story prompt with a single "Continue"/"Continuar" option has nothing to
             // actually choose - it is just acknowledging a line - so it gets the small
             // lifted-page-corner icon in DrawContinuePrompt instead of a full-width choice
             // button bar, matching how the original handled a plain "press to advance" cue.
-            bool kewneContinue = KewneMeetingSpeaking && _kewneMeeting != KewneMeeting.Question;
+            bool kewneContinue = KewneMeetingSpeaking && !KewneMeetingHasChoices;
             bool singleContinueChoice = kewneContinue || (storyChoices && _storyChoices.Length == 1 &&
                 _storyChoices[0].Label == T("Continue", "Continuar"));
             float choicesHeight = singleContinueChoice
@@ -1568,13 +1618,13 @@ namespace AzureDreamsReimagined
                 : storyChoices
                     ? Mathf.Min(MeasureStoryChoices(textWidth), Mathf.Min(VisibleStoryChoices * DialogueChoiceRowHeight, maxHeight * 0.72f))
                     : choiceRows * DialogueChoiceRowHeight;
-            float reservedHeight = padding * 2f + (choicesHeight > 0f ? choiceGap + choicesHeight : 0f);
+            float reservedHeight = padding * 2f + WindowDesignSystem.Footer + (choicesHeight > 0f ? choiceGap + choicesHeight : 0f);
 
             if (speaking)
             {
                 // Suppress the inline "›" advance cue for the single-Continue case too -
                 // DrawContinuePrompt below draws its own icon, so showing both would be redundant.
-                string fullLine = (choicesHeight > 0f || singleContinueChoice) ? _dialogueLine : _dialogueLine + "  ›";
+                string fullLine = _dialogueLine;
                 float fullHeight = Mathf.Max(logLineHeight, _dialogueTextStyle.CalcHeight(new GUIContent(fullLine), textWidth) + 2f);
                 float textHeight = Mathf.Min(fullHeight, Mathf.Max(1f, maxHeight - reservedHeight));
                 float panelHeight = Mathf.Max(height * 0.23f, textHeight + reservedHeight);
@@ -1590,13 +1640,22 @@ namespace AzureDreamsReimagined
 
                 if (singleContinueChoice)
                 {
-                    DrawContinuePrompt(panel, kewneContinue ? () => AdvanceKewneMeeting(_kewneMeetingSelection) : null);
+                    DrawContinuePrompt(panel, kewneContinue ? () => AdvanceKewneMeeting(_kewneMeetingSelection) : null,
+                        WindowDesignSystem.ShowContinuation(kewneContinue || _storyChoices[0].Apply != null, count == _dialogueLine.Length));
                     return;
                 }
-                var choices = new Rect(textRect.x, panel.yMax - padding - choicesHeight, textWidth, choicesHeight);
+                var choices = new Rect(textRect.x, panel.yMax - padding - WindowDesignSystem.Footer - choicesHeight, textWidth, choicesHeight);
+                // GUI choices execute immediately and can close/replace the dialogue
+                // (the pool changing room clears _dialogueLine). Finish reading this
+                // page's state before invoking any of those callbacks.
+                bool hasNext = (_activeTownNpc && _activeTownNpc.HasDialogueContinuation) ||
+                    (IsShowingVisitorDialogue && _visitorLine + 1 < CurrentVisitorScript.Length);
+                bool showContinuation = WindowDesignSystem.ShowContinuation(hasNext, count == fullLine.Length, storyChoices || visitorChoices);
                 if (storyChoices) DrawStoryChoices(choices);
                 else if (visitorChoices) DrawVisitorChoices(choices);
                 else if (KewneMeetingSpeaking) DrawKewneMeetingChoices(choices);
+                if (showContinuation)
+                    DrawWindowPageCorner(panel);
                 return;
             }
 
@@ -1629,15 +1688,16 @@ namespace AzureDreamsReimagined
             var scopedPortrait = portrait ? portrait : storyPortrait;
             var displayedPortrait = scopedPortrait ? scopedPortrait : _dialoguePortrait ? _dialoguePortrait :
                 FindDialoguePortrait(_dialogueSpeaker);
+            if (_storyPortraitPath == FonPortrait || _dialogueSpeaker == "Fon")
+                displayedPortrait = FonDialoguePortrait(_storyPortraitStarted);
+            if (_storySpeaker && _storySpeaker.npcId == "chero" || _dialogueSpeaker == "Chero")
+                displayedPortrait = CheroDialoguePortrait();
             DrawDialoguePortrait(displayedPortrait, box, offset: GhoshDialoguePortraitOffset(scopedPortrait));
             if (!portrait) DrawWeedyBookBlink(storyPortrait, box);
             if (!portrait && _storyPortraitPath == JordaPortrait)
                 DrawJordaBlink(storyPortrait, box, _storyPortraitStarted);
             if (string.IsNullOrEmpty(_dialogueSpeaker)) return;
-            var name = new Rect(box.x, box.y - 28f, 153f, 27f);
-            DrawDialogueFrame(name);
-            DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height),
-                _dialogueSpeaker, _messageStyle, dialogue: true);
+            DrawSpeakerWindow(box, _dialogueSpeaker);
         }
 
         private void DrawDialogueText(Rect viewport, string line, string fullLine)
@@ -1664,22 +1724,16 @@ namespace AzureDreamsReimagined
             return second != null && DrawInventoryButton(row, second, selected == 1) ? 1 : -1;
         }
 
-        private Texture2D _pageCornerIcon;
+        private static Texture2D _pageCornerIcon;
 
         // Original PSX dialogue boxes cue "press to continue" with a small icon instead
         // of a full choice button when there is nothing to actually pick. Reimagined's
         // single-option "Continue"/"Continuar" story prompts had no equivalent - they drew
         // a full-width button bar - so this recreates that cue as a small animated icon
         // resembling a book page corner being lifted, tucked into the panel's bottom-right.
-        private void DrawContinuePrompt(Rect panel, System.Action advance = null)
+        private void DrawContinuePrompt(Rect panel, System.Action advance = null, bool showMarker = true)
         {
-            if (_pageCornerIcon == null) _pageCornerIcon = BuildPageCornerIcon();
-            const float iconSize = 20f;
-            const float margin = 10f;
-            float bob = Mathf.Sin(Time.unscaledTime * 3.2f) * 2f; // gentle lift/settle motion
-            var icon = new Rect(panel.xMax - margin - iconSize, panel.yMax - margin - iconSize + bob, iconSize, iconSize);
-            if (Event.current.type == EventType.Repaint)
-                GUI.DrawTexture(icon, _pageCornerIcon, ScaleMode.ScaleToFit, true);
+            if (showMarker) DrawWindowPageCorner(panel);
             // Clicking anywhere on the box also advances, same as the interact button
             // (handled separately in HandleTownStory for keyboard/controller) - the icon
             // is just the visual cue, not the only way to continue.
@@ -1734,7 +1788,7 @@ namespace AzureDreamsReimagined
         private static void BeginHudMenu(Rect rect)
         {
             DrawDialogueFrame(rect);
-            GUILayout.BeginArea(new Rect(rect.x + 12f, rect.y + 10f, rect.width - 24f, rect.height - 20f));
+            GUILayout.BeginArea(WindowDesignSystem.Content(rect, footer: true));
         }
 
         private static void DrawFlatHudPanel(Rect rect)
@@ -1746,7 +1800,7 @@ namespace AzureDreamsReimagined
             DrawHudFill(new Rect(rect.x, rect.y + 2f, 2f, rect.height - 4f), gold);
             DrawHudFill(new Rect(rect.xMax - 2f, rect.y + 2f, 2f, rect.height - 4f), gold);
             DrawHudFill(new Rect(rect.x + 2f, rect.y + 2f, rect.width - 4f, rect.height - 4f),
-                new Color(0.015f, 0.025f, 0.14f, 0.81f));
+                WindowDesignSystem.Background);
         }
 
         private static void DrawHudFill(Rect rect, Color color)
@@ -1763,25 +1817,68 @@ namespace AzureDreamsReimagined
 
         private void InitialiseWindowSkin(GUISkin original)
         {
+            _windowFont = Resources.Load<Font>(WindowDesignSystem.FontResource) ?? _windowFont;
             _windowSkin = Instantiate(original);
             _windowSkin.hideFlags = HideFlags.HideAndDontSave;
             if (_windowFont) _windowSkin.font = _windowFont;
             foreach (var style in new[] { _windowSkin.label, _windowSkin.button, _windowSkin.box,
                 _windowSkin.toggle, _windowSkin.textField, _windowSkin.textArea, _windowSkin.window })
             {
-                if (_windowFont) style.font = _windowFont;
-                style.normal.textColor = style.hover.textColor = style.active.textColor = style.focused.textColor = Color.white;
-                style.onNormal.textColor = style.onHover.textColor = style.onActive.textColor = style.onFocused.textColor = Color.white;
+                WindowDesignSystem.ApplyText(style, _windowFont);
+                style.padding = new RectOffset(8, 8, 5, 5);
+                style.margin = new RectOffset(0, 0, 4, 4);
             }
         }
 
+        private sealed class TowerLogWrapCache
+        {
+            internal readonly List<string> Lines = new();
+            internal GUIStyle Style;
+            internal Font Font;
+            internal FontStyle FontStyle;
+            internal bool RichText;
+            internal int FontSize, Revision = -1, Processed, LastUse;
+            internal float Width;
+        }
+        // Two widths are used: the full log panel and its scrollbar inset.
+        private readonly TowerLogWrapCache[] _towerLogWrapCaches = { new(), new() };
+        private int _towerLogWrapCacheUse;
+
         private List<string> WrapTowerLogLines(List<string> messages, float maxWidth, GUIStyle style)
         {
-            var lines = new List<string>();
+            if (!ReferenceEquals(messages, _messageStack)) return BuildTowerLogLines(messages, maxWidth, style);
+            TowerLogWrapCache cache = null;
+            foreach (var entry in _towerLogWrapCaches)
+                if (ReferenceEquals(entry.Style, style) && entry.Font == style.font && entry.FontSize == style.fontSize &&
+                    entry.FontStyle == style.fontStyle && entry.RichText == style.richText && entry.Width == maxWidth)
+                { cache = entry; break; }
+            if (cache == null)
+            {
+                cache = _towerLogWrapCaches[0].LastUse <= _towerLogWrapCaches[1].LastUse
+                    ? _towerLogWrapCaches[0] : _towerLogWrapCaches[1];
+                cache.Lines.Clear(); cache.Processed = 0; cache.Revision = _messageRevision - messages.Count;
+                cache.Style = style; cache.Font = style.font; cache.FontSize = style.fontSize;
+                cache.FontStyle = style.fontStyle; cache.RichText = style.richText; cache.Width = maxWidth;
+            }
+            cache.LastUse = ++_towerLogWrapCacheUse;
+            if (cache.Revision == _messageRevision) return cache.Lines;
+            // Append only new messages. Clearing/replacing the log invalidates its
+            // revision independently of the count, so old floor text cannot survive.
+            if (_messageRevision - cache.Revision != messages.Count - cache.Processed)
+            { cache.Lines.Clear(); cache.Processed = 0; }
+            BuildTowerLogLines(messages, maxWidth, style, cache.Lines, cache.Processed);
+            cache.Processed = messages.Count; cache.Revision = _messageRevision;
+            return cache.Lines;
+        }
+
+        private List<string> BuildTowerLogLines(List<string> messages, float maxWidth, GUIStyle style, List<string> lines = null, int firstMessage = 0)
+        {
+            lines ??= new List<string>();
             if (messages == null || messages.Count == 0) return lines;
 
-            foreach (string message in messages)
+            for (int messageIndex = firstMessage; messageIndex < messages.Count; messageIndex++)
             {
+                string message = messages[messageIndex];
                 string[] paragraphs = (message ?? string.Empty).Split('\n');
                 foreach (string paragraph in paragraphs)
                 {
@@ -1832,6 +1929,7 @@ namespace AzureDreamsReimagined
 
         private void DrawHudText(Rect rect, string value, GUIStyle style, bool dialogue = false)
         {
+            if (!style.wordWrap) style = InventoryFittedStyle(rect, value, style);
             Color previousColor = GUI.contentColor;
             GUI.contentColor = Color.black;
             GUI.Label(new Rect(rect.x + 1f, rect.y + (dialogue ? 1f : 2f), rect.width, rect.height), value, style);

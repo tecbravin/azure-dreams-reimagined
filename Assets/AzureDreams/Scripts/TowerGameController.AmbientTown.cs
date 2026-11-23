@@ -16,8 +16,25 @@ namespace AzureDreamsReimagined
         {
             switch (room)
             {
+                case RhodesHouse:
+                    if(!FindStoryActor("rhodes_butler"))
+                    {
+                        SpawnStoryResident("dar","rhodes_butler",T("Butler","Mordomo"),default);
+                        var butler=FindStoryActor("rhodes_butler");
+                        if(butler){butler.dialogueLines=System.Array.Empty<string>();butler.transform.rotation=Quaternion.LookRotation(Vector3.forward);}
+                    }
+                    break;
+                case LibraryRoom:
+                    foreach(var resident in new[]{("library_keeper",T("Librarian","Bibliotecário")),("library_reader_woman",T("Reader","Leitora")),("library_reader_man",T("Reader","Leitor"))})
+                    {
+                        if(FindStoryActor(resident.Item1)) continue;
+                        SpawnStoryResident("dar",resident.Item1,resident.Item2,default);
+                        var person=FindStoryActor(resident.Item1);
+                        if(person){person.dialogueLines=System.Array.Empty<string>();person.transform.rotation=Quaternion.LookRotation(Vector3.back);}
+                    }
+                    break;
                 case BarRoom:
-                    SpawnRetailResident("bar_barten", "Barten", "Town/Residents/Barten");
+                    if (!OkamiBarClosed) SpawnRetailResident("bar_barten", "Barten", "Town/Residents/Barten");
                     break;
                 case GymRoom:
                     SpawnGymResidents();
@@ -42,10 +59,34 @@ namespace AzureDreamsReimagined
 
         private bool TryAmbientInteriorDialogue(NPCController npc)
         {
+            if(npc.npcId=="rhodes_butler" && StoryRoom==RhodesHouse)
+            {
+                const string met="dialogue.rhodes_butler.met";
+                bool repeat=TownSaveVariables.GetBool(met);
+                // Original speaker 0x50, TOWN.BIN 0x6D0009 / 0x6D0084.
+                return StoryTalk(npc,
+                    repeat ? "Hello Mr. {name}.\nMaster Ghosh and Miss Selfi are\nout again today." : "Hello Mr. {name}.\nMaster Ghosh and Miss Selfi are\npresently out.",
+                    repeat ? "Olá, senhor {name}.\nO senhor Ghosh e a senhorita Selfi\nestão fora novamente hoje." : "Olá, senhor {name}.\nO senhor Ghosh e a senhorita Selfi\nestão fora no momento.",
+                    ()=>{TownSaveVariables.SetBool(met,true);PersistTownProgress();});
+            }
             if (ArcadeResidentDialogue(npc)) return true;
             if (InRaceLobby && RacetrackResidentDialogue(npc)) return true;
             if (GymResidentDialogue(npc)) return true;
             if (CasinoResidentDialogue(npc)) return true;
+            if(StoryRoom==LibraryRoom)
+            {
+                // Authored ambience until the retail library speaker scripts
+                // are mapped; do not pass these off as extracted game dialogue.
+                if(npc.npcId=="library_keeper") return StoryTalk(npc,
+                    "Welcome to the library. You can learn about the tower and its monsters here. Please keep your voice down.",
+                    "Bem-vindo à biblioteca. Aqui você pode aprender sobre a torre e seus monstros. Por favor, fale baixo.");
+                if(npc.npcId=="library_reader_woman") return StoryTalk(npc,
+                    "I'm reading about the monsters in the tower. There is still so much to learn.",
+                    "Estou lendo sobre os monstros da torre. Ainda há tanto para aprender.");
+                if(npc.npcId=="library_reader_man") return StoryTalk(npc,
+                    "It's good to have a quiet place to read in Monsbaiya.",
+                    "É bom ter um lugar tranquilo para ler em Monsbaiya.");
+            }
             int floor = TownReputation.Read().HighestFloor;
             return npc.npcId switch
             {
@@ -239,7 +280,8 @@ namespace AzureDreamsReimagined
         // TOWN.BIN 0x6A7DCE–0x6A7F35. Quest conversations take priority.
         private bool OkamiAmbientGreeting(NPCController npc)
         {
-            if (StoryStage("vivian") >= StoryComplete)
+            if (StoryStage("vivian") == 2) return VivianStory(npc);
+            if (StoryStage("vivian") >= StoryComplete && !TownSaveVariables.GetBool(OkamiReopenedThanksKey))
                 return StoryTalk(npc, "Welcome, {name}.", "Bem-vindo, {name}.");
             return StoryAsk(npc, "Welcome, {name}.\nLooking cute, as always.", "Bem-vindo, {name}.\nBonitinho como sempre.",
                 (T("Would you cut that out.", "Dá pra parar com isso."), () =>
@@ -288,7 +330,7 @@ namespace AzureDreamsReimagined
             const string met = "dialogue.aunt.house_met";
             if (TownSaveVariables.GetBool(met))
                 return floor >= 5
-                    ? TownDialogueSequence(npc, AuntPortrait, null,
+                    ? TownDialogueSequence(npc, AuntPortrait, () => AuntMemories(npc),
                         ($"Oh, wait a minute, {{name}}. I heard you’ve already made it to level {floor} at the tower.",
                             $"Ah, espere um pouco, {{name}}. Ouvi dizer que você já chegou ao andar {floor} da torre."),
                         ("You’re making adults look bad. I knew, though, that this kid was going to be something else.",
@@ -297,7 +339,7 @@ namespace AzureDreamsReimagined
                             "As coisas lá em casa também parecem estar melhorando. Está tudo indo bem, não é, {name}?"),
                         ("Keep out of trouble, and good luck.", "Não se meta em encrenca e boa sorte."))
                     : StoryTalk(npc, "If there’s anything you need to know, ask the treasure hunters at the bar.\nI’m sure they’ll be helpful.",
-                        "Se tiver alguma dúvida, pergunte aos caçadores de tesouros no bar.\nTenho certeza de que vão ajudar.", AuntPortrait);
+                        "Se tiver alguma dúvida, pergunte aos caçadores de tesouros no bar.\nTenho certeza de que vão ajudar.", AuntPortrait, () => AuntMemories(npc));
 
             void Finish()
             {
@@ -305,6 +347,7 @@ namespace AzureDreamsReimagined
                 {
                     TownSaveVariables.SetBool(met, true);
                     PersistTownProgress();
+                    AuntMemories(npc);
                 });
             }
 
@@ -323,6 +366,17 @@ namespace AzureDreamsReimagined
                 ("You’ve already reached that age?\nHey, you’ve grown big.", "Já chegou a essa idade?\nNossa, como cresceu."),
                 ("I wish Guy could see you like this.", "Queria que o Guy pudesse ver você assim."));
         }
+
+        private bool AuntMemories(NPCController npc) => StoryTalk(npc,
+            "I lived in the west as a child, but these days I wouldn't live anywhere else. Monsbaya's true treasure is its people.",
+            "Eu morava no oeste quando criança, mas hoje em dia não moraria em nenhum outro lugar. O verdadeiro tesouro de Monsbaya são as pessoas daqui.",
+            AuntPortrait, () => StoryAsk(npc,
+                "This town brings back so many good memories. I have photos of everyone. Would you like to see them?",
+                "Essa cidade me traz tantas memórias boas, eu tenho fotos de todo mundo, Gostaria de ver?", AuntPortrait,
+                (T("Of course", "Claro"), OpenAuntGallery),
+                (T("Maybe later", "Talvez mais Tarde"), null)));
+
+        private void OpenAuntGallery() => OpenTownCollection(TitlePage.Gallery);
 
         // TOWN.BIN 0x569006–0x5696B6.
         private bool RestaurantAmbientDialogue(NPCController npc) => npc.npcId switch

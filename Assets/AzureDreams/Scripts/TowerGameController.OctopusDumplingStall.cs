@@ -65,6 +65,14 @@ namespace AzureDreamsReimagined
                 sign.AddComponent<CameraFacingSprite>();
             }
 
+            var vendor=new GameObject("Shin - original animated vendor");
+            vendor.transform.SetParent(root.transform,false);
+            vendor.transform.localPosition=new Vector3(0f,0f,.68f);
+            vendor.transform.rotation=Quaternion.LookRotation(Vector3.back);
+            RetailResidentBanks.Apply(vendor,"shin");
+            vendor.AddComponent<ActorLocomotionView>();
+            vendor.AddComponent<ActorSpriteDepth>();
+
             var interaction = root.AddComponent<TownObject>();
             interaction.objectId = OctopusDumplingStandId;
             interaction.message = T("Shin's Octopus Dumplings: 100G.", "Bolinhos de polvo do Shin: 100G.");
@@ -153,7 +161,6 @@ namespace AzureDreamsReimagined
             if (!_octopusDumplingStallOpen) return;
             DrawHudPanel(new Rect(85, 120, 470, 235));
             GUI.Label(new Rect(103, 136, 320, 24), T("Shin's Octopus Dumplings", "Bolinhos de polvo do Shin"));
-            GUI.Label(new Rect(429, 136, 110, 24), _gold + "G");
             if (_octopusDumplingConfirm)
             {
                 GUI.Label(new Rect(103, 180, 432, 46), _octopusDumplingFeedback ??

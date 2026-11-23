@@ -16,7 +16,8 @@ namespace AzureDreamsReimagined
                 if (row == 0) return T("Unequip", "Desequipar");
                 row--;
             }
-            return row == 0 ? T("Command", "Comandar") : row == 1 ? T("Change AI", "Mudar IA") : T("Fuse", "Fundir");
+            return row == 0 ? T("Command", "Comandar") : row == 1 ? T("Change AI", "Mudar IA") :
+                row == 2 ? T("Fuse", "Fundir") : T("Position", "Posição");
         }
 
         private void UnequipActiveTroll(ActorRecord actor)

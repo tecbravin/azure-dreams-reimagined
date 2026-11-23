@@ -1,0 +1,28 @@
+{
+    "name": "Unity.Pipeline.Editor",
+    "rootNamespace": "Unity.Pipeline.Editor",
+    "references": [
+        "Unity.Pipeline",
+        "Unity.Pipeline.Attributes",
+        "Unity.Pipeline.IlInterpreter",
+        "Unity.Nuget.Newtonsoft-Json",
+        "Unity.Pipeline.ScenePreview"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.multiplayer.playmode",
+            "expression": "",
+            "define": "MPPM_AVAILABLE"
+        }
+    ],
+    "noEngineReferences": false
+}

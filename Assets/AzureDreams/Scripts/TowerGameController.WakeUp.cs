@@ -38,6 +38,8 @@ namespace AzureDreamsReimagined
         };
 
         private static readonly WakeUpVisitorDefinition WreathWakeUpVisitor = new("wreath", null, null, WreathPortrait);
+        private static readonly WakeUpVisitorDefinition WeedyWakeUpVisitor = new("weedy", null, null, WeedyPortrait);
+        private const string FamilyWakeCursorKey = StoryPrefix + "home.family_wake_cursor";
 
         // Mattress centers from the three captured bedroom meshes.
         private static readonly Vector2Int[] WakeUpBeds = { new(10, 12), new(10, 12), new(10, 14) };
@@ -162,6 +164,11 @@ namespace AzureDreamsReimagined
                 else entry = 0;
             }
 
+            // Family mornings fill the no-guest slot; keep the seven romance routes' selection intact.
+            bool familyVisit = entry == 0 && !nicoThanks && !nicoConfession;
+            int familyCursor = TownSaveVariables.GetInt(FamilyWakeCursorKey);
+            bool motherStoryMorning = reputation.IsFlagSet(WreathBeldoVisionSeenFlag) || TownSaveVariables.GetBool(BeldoClearedKey);
+            if (familyVisit && !motherStoryMorning && (familyCursor & 1) != 0) visitor = WeedyWakeUpVisitor;
             var npc = _townPeople.Find(candidate => candidate && candidate.npcId == visitor.Id);
             _wakeUpVisitorIsResident = npc;
             if (!npc)
@@ -174,6 +181,7 @@ namespace AzureDreamsReimagined
                 npc = Spawn(prefab, cell, "Wake-up visitor").GetComponent<NPCController>();
             }
             _wakeUpVisitor = npc;
+            if (familyVisit) TownSaveVariables.SetInt(FamilyWakeCursorKey, familyCursor == int.MaxValue ? 0 : familyCursor + 1);
             _wakeUpResidentPosition = npc.transform.position;
             _wakeUpResidentRotation = npc.transform.rotation;
             _wakeUpReturnMessage = returnMessage;
@@ -234,6 +242,8 @@ namespace AzureDreamsReimagined
                 CherrlWakeUpStory(npc);
             else if (npc.npcId == "wreath")
                 WreathWakeUpStory(npc, survived);
+            else if (npc.npcId == "weedy")
+                WeedyWakeUpStory(npc);
             else StoryTalk(npc, english, portuguese, portraitPath);
         }
 
@@ -275,9 +285,9 @@ namespace AzureDreamsReimagined
                     var direction = point - npc.transform.position;
                     direction.y = 0f;
                     if (direction.sqrMagnitude > 0.0001f) npc.transform.rotation = Quaternion.LookRotation(direction);
-                    cycle += Time.unscaledDeltaTime * 7f;
+                    cycle += Time.unscaledDeltaTime * 15.75f;
                     locomotion?.Present(direction, cycle, true);
-                    npc.transform.position = Vector3.MoveTowards(npc.transform.position, point, 2.25f * Time.unscaledDeltaTime);
+                    npc.transform.position = Vector3.MoveTowards(npc.transform.position, point, 5.0625f * Time.unscaledDeltaTime);
                     yield return null;
                 }
                 if (!npc) yield break;

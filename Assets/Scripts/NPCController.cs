@@ -52,6 +52,7 @@ namespace AzureDreamsReimagined
         private TownGameState _conversationState;
         private bool _conversationLastLine;
         public bool IsTalking { get; private set; }
+        public bool HasDialogueContinuation => IsTalking && !_conversationLastLine;
 
         internal bool BlocksTownMovement(Vector3 position, float radius)
         {

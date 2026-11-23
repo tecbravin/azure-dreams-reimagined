@@ -172,6 +172,14 @@
       "height": 1.75,
       "style": "Residence",
       "interior": "Interior_23_generic_house"
+    },
+    {
+      "x": 112.0,
+      "z": 38.0,
+      "width": 1.0,
+      "height": 1.75,
+      "style": "Residence",
+      "interior": "Interior_0d_pool_quest_not_done"
     }
   ]
 }

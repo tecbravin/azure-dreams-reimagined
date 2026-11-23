@@ -1,0 +1,179 @@
+{
+ "cellSize": 96,
+ "columns": 8,
+ "frameCount": 48,
+ "pivotX": 0.5,
+ "pivotY": 0.125,
+ "ticksPerSecond": 30,
+ "clips": [
+  {
+   "key": "idle",
+   "directions": [
+    {
+     "frames": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "ticks": [
+      4,
+      10,
+      4,
+      10
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      4,
+      5,
+      6,
+      7
+     ],
+     "ticks": [
+      4,
+      10,
+      4,
+      10
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      8,
+      9,
+      10,
+      11
+     ],
+     "ticks": [
+      4,
+      10,
+      4,
+      10
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      12,
+      13,
+      14,
+      15
+     ],
+     "ticks": [
+      4,
+      10,
+      4,
+      10
+     ],
+     "loop": true
+    }
+   ]
+  },
+  {
+   "key": "walk",
+   "directions": [
+    {
+     "frames": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+     ],
+     "ticks": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+     ],
+     "ticks": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+     ],
+     "ticks": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    {
+     "frames": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+     ],
+     "ticks": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    }
+   ]
+  }
+ ],
+ "source": {
+  "resource": 50,
+  "bankOffset": "0x177d800",
+  "idle": 33,
+  "walk": 18
+ },
+ "groundingPixels": 4.0
+}

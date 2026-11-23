@@ -1,0 +1,88 @@
+{
+  "speakerId": 17,
+  "speakerTable": "0x8006B1EC",
+  "variantTable": "0x8006b0c8",
+  "variants": [
+    {
+      "variant": 0,
+      "animation": "0x80074050",
+      "resource": {
+        "descriptor": "0x80080ef8",
+        "lba": 11213,
+        "sectors": 3,
+        "townOffset": "0xfe4000"
+      },
+      "frames": [
+        {
+          "file": "Beldo_variant0_frame0.png",
+          "ticks": 2,
+          "chain": "0x80074004",
+          "width": 88,
+          "height": 128,
+          "anchor": [
+            44,
+            128
+          ]
+        }
+      ],
+      "control": {
+        "kind": 0,
+        "pointer": "0x80074050"
+      }
+    },
+    {
+      "variant": 1,
+      "animation": "0x80074060",
+      "resource": {
+        "descriptor": "0x80080ef8",
+        "lba": 11213,
+        "sectors": 3,
+        "townOffset": "0xfe4000"
+      },
+      "frames": [
+        {
+          "file": "Beldo_variant1_frame0.png",
+          "ticks": 2,
+          "chain": "0x80074028",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            68,
+            128
+          ]
+        }
+      ],
+      "control": {
+        "kind": 0,
+        "pointer": "0x80074060"
+      }
+    },
+    {
+      "variant": 2,
+      "animation": "0x80074040",
+      "resource": {
+        "descriptor": "0x80080ef8",
+        "lba": 11213,
+        "sectors": 3,
+        "townOffset": "0xfe4000"
+      },
+      "frames": [
+        {
+          "file": "Beldo_variant2_frame0.png",
+          "ticks": 2,
+          "chain": "0x80074010",
+          "width": 96,
+          "height": 128,
+          "anchor": [
+            52,
+            128
+          ]
+        }
+      ],
+      "control": {
+        "kind": 0,
+        "pointer": "0x80074040"
+      }
+    }
+  ]
+}

@@ -437,7 +437,7 @@ namespace AzureDreamsReimagined
             {
                 var panel = new Rect(width * 0.5f - 205f, height * 0.5f - 93f, 410f, 186f);
                 DrawDialogueFrame(panel);
-                GUILayout.BeginArea(new Rect(panel.x + 12f, panel.y + 10f, panel.width - 24f, panel.height - 20f));
+                GUILayout.BeginArea(WindowDesignSystem.Content(panel, footer: true));
                 GUILayout.Label(T("Bowling Center", "Salão de boliche"), _bodyStyle);
                 if (_bowlingPhase == BowlingPhase.Menu)
                 {

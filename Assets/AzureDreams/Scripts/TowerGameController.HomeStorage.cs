@@ -144,26 +144,15 @@ namespace AzureDreamsReimagined
             var source = StorageSide(withdrawing);
             var rows = StorageRows(withdrawing);
             var item = _storageRow < rows.Count ? rows[_storageRow] : null;
-            if (item == null || !_familiarDefinition || !IsGiveableToFamiliar(item) ||
-                item.Kind == ItemKind.Ball) return;
-            string name = StorageItemName(item);
-            if (IsTrollWeapon(item))
-            {
-                if (!IsTroll(_familiarActor)) return;
-                if (!GiveTrollWeapon(source, _storageRow, _familiarActor, lockCursed: false)) return;
-            }
-            else
-            {
-                if (RefusesLevaFruit(item, _familiarActor)) { _storageFeedback = _message; return; }
-                if (!CanUseInventoryEffect(item, true) ||
-                    (item.Kind == ItemKind.Fruit && item.Subtype == 7 && !CanRevertToEgg(_familiarActor))) return;
-                if (!source.ConsumeDungeonItem(_storageRow, item.Kind)) return;
-                ApplyInventoryEffect(item, _familiarActor);
-            }
-            _storageFeedback = T($"You gave {name} to your familiar.", $"Deu {name} ao familiar.");
-            RefreshHomeStorageRows();
-            _storageRow = Mathf.Clamp(_storageRow, 0, Mathf.Max(0, StorageCount(withdrawing) - 1));
-            PersistTownProgress();
+            if(item==null || !IsGiveableToFamiliar(item) || item.Kind==ItemKind.Ball) return;
+            int index=_storageRow;
+            OpenGiveRecipientPicker(item,actor=>GiveItemToRecipient(source,index,item,actor,
+                ()=>source.ConsumeDungeonItem(index,item.Kind),()=>
+                {
+                    _storageFeedback=T("Item given to familiar.","Item entregue ao familiar.");
+                    RefreshHomeStorageRows();
+                    _storageRow=Mathf.Clamp(_storageRow,0,Mathf.Max(0,StorageCount(withdrawing)-1));
+                }));
         }
 
         private void DrawHomeStorage(float width, float height)

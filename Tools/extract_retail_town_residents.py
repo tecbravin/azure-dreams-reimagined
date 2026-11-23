@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse, json, re, shutil, struct, sys, uuid
 from pathlib import Path
 from PIL import Image, ImageOps
+from repair_resident_grounding import repair_bank
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -82,23 +83,24 @@ class Town:
             ents.append((ticks, ptr))
         return None
 
-    def clip(self, a):
+    def clip(self, a, preserve_eight=False):
         if not self.valid(a): return None
         dirs = []
-        for i in range(5):
+        for i in range(9):
             p = self.u32(a + 4 * i)
             if p == 0: break
             s = self.sequence(p) if self.valid(p) else None
             if s is None or any(self.chain(c) is None for _, c in s["entries"]): return None
             dirs.append(p)
-        return dirs or None
+        if len(dirs)==8: return dirs if preserve_eight else [dirs[i] for i in (0,2,4,6)]
+        return dirs if len(dirs) in (1,4) else None
 
-    def clips(self, s16, s20):
+    def clips(self, s16, s20, preserve_eight=False):
         out = []
         for base, n in ((s16, 2), (s20, 40)):
             for i in range(n):
                 if base == s16 and base + 4 * i >= s20: break
-                d = self.clip(self.u32(base + 4 * i))
+                d = self.clip(self.u32(base + 4 * i), preserve_eight)
                 if d is None: break
                 out.append(d)
         return out
@@ -147,6 +149,11 @@ def main():
     ap.add_argument("--disc", type=Path, default=ROOT / "Azure Dreams.bin")
     ap.add_argument("--output", type=Path, default=ROOT / "extracted_assets/reimagined_pipeline/TownResidents/Retail")
     ap.add_argument("--install", action="store_true")
+    ap.add_argument("--only",type=int,help="Extract only this native person slot")
+    ap.add_argument("--initializer", type=lambda value: int(value, 0), help="Select a scene-specific person initializer")
+    ap.add_argument("--bank-name", help="Name a scene-specific bank without replacing the default")
+    ap.add_argument("--heroines", action="store_true", help="Extract the seven adult heroine banks only")
+    ap.add_argument("--pool-heroines", action="store_true", help="Extract the seven heroine swimsuit banks only")
     a = ap.parse_args()
     town_bytes, _ = DiscImage(a.disc).read_file("TOWN/TOWN.BIN")
     if sha256(town_bytes) != EXPECTED_TOWN_SHA: raise ValueError("TOWN.BIN is not the authenticated NTSC-U file")
@@ -158,10 +165,16 @@ def main():
     parse_package(town_bytes[POOL_PACKAGE_OFFSET:POOL_PACKAGE_OFFSET + 0x40000], pool_dir)
     best = {}
     for r in town.registrations():
-        pool = r["file_offset"] >= POOL_FIRST_INITIALIZER
-        if r["slot"] in EXCLUDE: continue
+        if a.initializer is not None and r["file_offset"] != a.initializer: continue
+        pool = r["file_offset"] >= POOL_FIRST_INITIALIZER and r["slot"] != 37
+        if a.only is not None and (pool or r["slot"]!=a.only): continue
+        if a.pool_heroines:
+            if not pool or r["slot"] not in {7,8,9,10,11,12,13}: continue
+        elif a.heroines:
+            if pool or r["slot"] not in {7,8,9,10,11,12,13}: continue
+        elif r["slot"] in EXCLUDE: continue
         if pool and r["file_offset"] >= 0x51FA8: continue  # 0x51FA8 registers Chero outside the pool set
-        clips = town.clips(r["s16"], r["s20"])
+        clips = town.clips(r["s16"], r["s20"], preserve_eight=r["slot"] in (4, 6) and not pool)
         if not clips: continue
         key = ("pool", r["slot"]) if pool else r["slot"]
         n = len({c for d in clips for p in d for _, c in town.sequence(p)["entries"]})
@@ -190,21 +203,24 @@ def main():
         jc = []
         for key, dirs in zip(keys, clips):
             ds = []
-            for d in (dirs * 4)[:4]:
+            # Ghosh retains all eight native views, including the rear diagonals.
+            for d in (dirs if len(dirs) == 8 else (dirs * 4)[:4]):
                 s = town.sequence(d)
                 ds.append(dict(frames=[ids[c] for _, c in s["entries"]], ticks=[t for t, _ in s["entries"]], loop=s["loop"]))
             jc.append(dict(key=key, directions=ds))
-        name = ("pool_" if pool else "") + names.get(slot, f"slot{slot}")
+        name = a.bank_name or (("pool_" if pool else "") + names.get(slot, f"slot{slot}"))
         atlas.save(a.output / f"{name}.png")
         (a.output / f"{name}.json").write_text(json.dumps(dict(cellSize=cell, columns=8, frameCount=len(ptrs), pivotX=ox / cell,
             pivotY=(cell - oy) / cell, ticksPerSecond=60, clips=jc, source=dict(slot=slot, act_symbol=f"F_act_{name}",
             initializer_file_offset=hex(r["file_offset"]), tables=[hex(r["s16"]), hex(r["s20"])], clut_offset=r["clut_offset"],
             packages=list(combo))), indent=1), encoding="utf-8")
+        repair_bank(a.output / f"{name}.json")
         print(f"{slot:3d} {name:10s} {len(ptrs):3d} frames  clut+{r['clut_offset']}")
     if a.install:
         dest = HERE.parent / "Assets/AzureDreams/Resources/Town/Residents/Retail"; dest.mkdir(parents=True, exist_ok=True)
         src_meta = HERE.parent / "Assets/AzureDreams/Resources/Town/Residents"
         for f in a.output.glob("*.*"):
+            if a.bank_name and f.stem != a.bank_name: continue
             if f.suffix not in (".png", ".json"): continue
             shutil.copyfile(f, dest / f.name)
             meta = dest / (f.name + ".meta")

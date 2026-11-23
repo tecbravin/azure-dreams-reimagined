@@ -200,14 +200,19 @@ namespace AzureDreamsReimagined
                     RecordMiaGlassesPickup(e.Source);
                     return;
                 }
+                if (e.ObjectId == CherrlToyObjectId)
+                {
+                    ReturnCherrlToy(e.Source);
+                    return;
+                }
+                if (e.ObjectId == PoolSlideObjectId)
+                {
+                    BeginPoolSlide();
+                    return;
+                }
                 if (e.ObjectId == OctopusDumplingStandId)
                 {
                     OpenOctopusDumplingStall();
-                    return;
-                }
-                if (e.ObjectId == PoolChangingRoomObjectId)
-                {
-                    OpenPoolChangingRoom();
                     return;
                 }
                 _message = e.Message;
@@ -432,9 +437,11 @@ namespace AzureDreamsReimagined
                     delta.y = 0f;
                     bool acrossCounter = (npc.npcId == "barry" && AtBlacksmithCounter) ||
                         (npc.npcId == "fur" && InGeneralStore) ||
+                        (npc.npcId == "shiela" && InFortuneHouse) ||
                         (InRaceLobby && npc.npcId == "race_clerk") ||
                         (InArcade && npc.npcId == "arcade_attendant") ||
                         (npc.npcId == "patty" && StoryRoom == RestaurantRoom) ||
+                        (npc.npcId == "jorda" && StoryRoom is "Interior_11_temple" or "Interior_12_temple_2") ||
                         (StoryRoom == BarRoom && (npc.npcId is "okami" or "bar_barten")) ||
                         (npc.npcId == "tonka" && _interior && _interior.interiorId == "Interior_13_carpenter");
                     float reach = acrossCounter ? 3f : IsSeatedInteriorResident(StoryRoom, npc.npcId) ? 2f : 1.4f;
@@ -453,6 +460,7 @@ namespace AzureDreamsReimagined
                     speaker.transform.rotation = Quaternion.LookRotation(facing);
                     speaker.GetComponent<ActorLocomotionView>()?.Present(facing, 0f, false);
                 }
+                if (TryHeldHeroineGift(speaker)) return true;
                 if (speaker.npcId == "master" && TalkToMaster(speaker)) return true;
                 if (TryMonsterShopHunterDialogue(speaker)) return true;
                 if (speaker.npcId == "barry" && _interior && _interior.interiorId == BlacksmithInterior)

@@ -985,9 +985,9 @@
       "id": 16,
       "en": "Rusty Sword",
       "ptBr": "Espada enferrujada",
-      "descriptionEn": "A rusty sword. ATK 2.",
-      "descriptionPtBr": "Uma espada enferrujada. ATQ 2.",
-      "gear": 2,
+      "descriptionEn": "A rusty sword. ATK 1. Has a 10% chance to deal no damage.",
+      "descriptionPtBr": "Uma espada enferrujada. ATQ 1. Tem 10% de chance de não causar dano.",
+      "gear": 1,
       "icon": "sword"
     },
     {

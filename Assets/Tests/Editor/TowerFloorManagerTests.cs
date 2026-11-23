@@ -13,6 +13,35 @@ namespace AzureDreams.Reimagined.EditorTests
         [SetUp]
         public void SetUp() => _m = new TowerFloorManager();
 
+        [Test]
+        public void EveryArchOrientationUsesThePassageFloorInsteadOfTheLintel()
+        {
+            var floor = new RetailTowerFloor();
+            typeof(RetailTowerFloor).GetProperty(nameof(RetailTowerFloor.Geometry))!
+                .SetValue(floor, RetailTowerGeometry.Load("geometry_29"));
+            for (int kind = 79; kind <= 98; kind++)
+                foreach (short elevation in new short[] { -64, 0, 64 })
+                {
+                    floor.Kind[65] = (ushort)kind;
+                    floor.Value[65] = elevation;
+                    Assert.IsTrue(floor.IsWalkable(1, 1), $"Arch {kind} must remain traversable");
+                    Assert.AreEqual(elevation, floor.GroundHeight(1, 1), $"Arch {kind} selected its lintel");
+                }
+        }
+
+        [Test]
+        public void TutorialUsesRenderedSurfacesForMovementHeights()
+        {
+            typeof(TowerFloorManager).GetMethod("GenerateTutorial",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .Invoke(_m, new object[] { Resources.Load<TextAsset>("Town/Retail/tutorial_floor").bytes,
+                    new Vector2Int(31, 57), new Vector2Int(31, 17) });
+            Assert.IsNotNull(_m.Retail);
+            foreach (var cell in _m.OpenCells)
+                Assert.AreEqual(_m.Retail.GroundHeight(cell.x, cell.y), _m.GroundHeight(cell.x, cell.y));
+            Assert.IsTrue(_m.HasReachableExit);
+        }
+
         [TearDown]
         public void TearDown() => _m = null;
 

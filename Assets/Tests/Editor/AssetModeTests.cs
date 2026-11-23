@@ -80,6 +80,19 @@ namespace AzureDreams.Reimagined.EditorTests
         }
 
         [Test]
+        public void HeroinePortraits_ResolveAliasesAndKeepMissingBlinkInSameArtStyle()
+        {
+            AssetMode.SetMediaOverlay("Portraits/Dialogue/Nico_variant0_frame0.png\t*\nPortraits/Dialogue/NicoRetail_variant1_frame0.png\nPortraits/Dialogue/Nico_variant1_frame0.png\t*\n");
+            AssetMode.Select(ArtStyle.Reimagined, save: false);
+            Assert.That(AssetMode.ResolveMedia("Portraits/Dialogue/NicoRetail_variant0_frame0.png"), Is.EqualTo("Reimagined/Portraits/Dialogue/Nico_variant0_frame0.png"));
+            Assert.That(AssetMode.ResolveMedia("Portraits/Dialogue/NicoRetail_variant0_frame2.png"), Is.EqualTo("Reimagined/Portraits/Dialogue/Nico_variant0_frame0.png"));
+            Assert.That(AssetMode.ResolveMedia("Portraits/Dialogue/NicoRetail_variant1_frame0.png"), Is.EqualTo("Reimagined/Portraits/Dialogue/NicoRetail_variant1_frame0.png"));
+            Assert.That(AssetMode.ResolveMedia("Portraits/Dialogue/PattyRetail_variant0_frame0.png"), Is.EqualTo("Portraits/Dialogue/PattyRetail_variant0_frame0.png"));
+            AssetMode.Select(ArtStyle.Classic, save: false);
+            Assert.That(AssetMode.ResolveMedia("Portraits/Dialogue/NicoRetail_variant0_frame2.png"), Is.EqualTo("Portraits/Dialogue/NicoRetail_variant0_frame2.png"));
+        }
+
+        [Test]
         public void Load_PrefersReimaginedOverlayAndFallsBackToOriginal()
         {
             AssetMode.Select(ArtStyle.Classic, save: false);

@@ -151,14 +151,17 @@ namespace AzureDreamsReimagined
             foreach (var authoredPlacement in doors)
             {
                 var placement = authoredPlacement;
-                var upgradedHome = placement.interior == "KohHome" ? BuiltKohHome() : null;
+                var upgradedFacade = placement.interior == "KohHome" ? BuiltKohHome() :
+                    placement.interior == "Interior_0f_hospital" ? _builtTownLots.Find(project => project.Id == "hospital") : null;
                 // Construction replaces static town geometry, but the opening door
-                // is a separate actor. Move it to stamp 28's entrance instead of
-                // discarding it with the old level-one facade.
-                if (upgradedHome != null && upgradedHome.Id == "home_1")
+                // is a separate actor. Keep it at the upgraded facade's opening
+                // and route the clinic to its renovated interior.
+                if (upgradedFacade != null)
                 {
-                    placement.x = upgradedHome.Entrance.x;
-                    placement.z = upgradedHome.Entrance.y;
+                    placement.x = upgradedFacade.Entrance.x;
+                    placement.z = upgradedFacade.Entrance.y;
+                    placement.interior = upgradedFacade.Interior;
+                    if (upgradedFacade.Id == "home_2") placement.height = 1.5f;
                 }
                 else if (IsBuiltLot(new Vector2(placement.x, placement.z))) continue;
                 if (!textures.TryGetValue(placement.style, out var texture))
@@ -175,6 +178,8 @@ namespace AzureDreamsReimagined
                 _townFacadeDoors.Add(door);
                 if (!string.IsNullOrEmpty(placement.interior))
                     _facadeInteriors.Add(door, placement.interior);
+                // Unlocking Cherrl's house permits interaction; it does not leave
+                // the door physically open whenever the town is rebuilt.
             }
         }
 
@@ -224,13 +229,17 @@ namespace AzureDreamsReimagined
 
         private bool RetailTownGroundOpen(Vector3 position, float radius)
         {
+            if (TryCasinoRampHeight(position,out _,out _)) return true;
+            if (!float.IsNegativeInfinity(HomeRoofGround(position))) return true;
+            if (InFortuneHouse) return FortuneGround(position) > -0.75f && !FortuneBlocks(position, radius);
             if (FountainWalkwayOpen(position, radius)) return true;
             // The captured height grid contains water beneath all three bridges.
             // A bridge deck is a valid walking surface even when that grid cell
             // is underwater; its own triangle bounds keep Koh on the walkway.
             if (!_interior && TownBridgeTop(position) > float.NegativeInfinity) return true;
             float height = RetailTownGround(position);
-            float maxGroundHeight = _interior && _interior.interiorId == FortuneHouseInterior ? 2f : 0.65f;
+            float maxGroundHeight = _interior && _interior.interiorId == FortuneHouseInterior ? 2f :
+                _interior && (_interior.interiorId==PoolOpenRoom || _interior.interiorId==PoolClosedRoom) ? 1.01f : .65f;
             if (height < -0.75f || height > maxGroundHeight) return false;
             if (_interior) return true;
             // The same radius used for props also keeps Koh's sides clear of
@@ -270,6 +279,13 @@ namespace AzureDreamsReimagined
 
         private float RetailTownGround(Vector3 position)
         {
+            if (TryCasinoRampHeight(position,out float casinoRamp,out _)) return casinoRamp;
+            float homeRoof = HomeRoofGround(position);
+            if (!float.IsNegativeInfinity(homeRoof)) return homeRoof;
+            // The native height grid marks the changing-room roof as solid; its blue-door recess is deck-height.
+            if (InRestoredPool && Mathf.Abs(position.x - PoolChangingRoomPosition.x) <= 0.45f &&
+                position.z >= 13f && position.z <= 15f) return 1f;
+            if (InFortuneHouse) return FortuneGround(position);
             float fountainGround = FountainSurface(position, 1.01f);
             if (!float.IsNegativeInfinity(fountainGround)) return fountainGround;
             int x = Mathf.RoundToInt(position.x);

@@ -22,16 +22,9 @@ namespace AzureDreamsReimagined
             "Interior_01_koh_house_1", "Interior_02_koh_house_2", "Interior_03_koh_house_3"
         };
         // Walkable cells next to features visible in the supplied capture views.
-        // Captured door tile in the original coordinate frame.  It is mapped
-        // with the rest of House 1 to the black doorway rather than the floor
-        // tile in front of it.
-        private static readonly Vector2Int InitialHouseDoor = new(12, 13);
-        private static readonly Vector2Int[] BathPoints = { new(20, 11), new(34, 13), new(54, 14) };
-        // House 1 is laid out left-to-right: Koh's bedroom, the living room
-        // (where Wreath and Weedy stand), then the bath.  The old coordinate
-        // pointed to the bedroom wall, which made the bath passage disagree
-        // with the original room geometry.
-        private static readonly Vector2Int[] BathDoors = { new(20, 10), new(17, 10), new(20, 10) };
+        // Centre of the actual blue exit mat: page 149 UV (64..96, 64..96).
+        // Keep half-cell precision and mirror it with House 1's geometry.
+        private static readonly Vector3 InitialHouseDoor = new(19.5f, 0f, 14.5f);
         // Level 1's Monster Hut passage is the brown mat on the left; the
         // exterior return uses the black doorway tile captured at (12, 13).
         // The old entry duplicated that exact door coordinate, so the hut
@@ -138,7 +131,17 @@ namespace AzureDreamsReimagined
             return closest && ToggleHouseDoor(closest);
         }
 
-        private bool ToggleHouseDoor(TownHouseDoor door) => door && door.Toggle();
+        private bool ToggleHouseDoor(TownHouseDoor door)
+        {
+            if (!door) return false;
+            if (_facadeInteriors.TryGetValue(door, out var interior) && interior == CherrlHouse)
+            {
+                if (CherrlHouseUnlocked) door.OpenImmediately();
+                else _message = T("The door is locked.", "A porta está trancada.");
+                return true;
+            }
+            return door.Toggle();
+        }
 
         internal static int CurrentHomeRank =>
             Mathf.Clamp(TownSaveVariables.GetInt(HomeRankKey), 0, HomeScenes.Length - 1);
@@ -147,8 +150,22 @@ namespace AzureDreamsReimagined
 
         private void CheckTownEntranceCrossing(Vector3 before, Vector3 after)
         {
+            if (TryEnterPoolChangingRoom(before, after)) return;
             if (_interior || _changingInterior || _heldTownPot || _carriedItem != null ||
                 _townJumpHeight > TownGroundTolerance || _townJumpVelocity != 0f) return;
+
+            // The pool is entered at its building doorway, not through Wookie's dialogue.
+            // Trigger in front of the door leaf so its closed collision cannot prevent entry.
+            foreach (var (door, interior) in _facadeInteriors)
+            {
+                if (!door || interior is not (PoolClosedRoom or PoolOpenRoom) ||
+                    !ApproachingPoolDoor(door.Threshold, before, after)) continue;
+                var outside = door.Threshold + Vector3.forward * 1.5f;
+                outside.y = TownTerrainHeight(outside) + TownActorFootOffset;
+                StartCoroutine(LoadInterior(PoolRestored ? PoolOpenRoom : PoolClosedRoom,
+                    outside, spawnAboveExitMarker: true));
+                return;
+            }
 
             if (_homeEntranceDoor && _homeEntranceDoor.IsPassable && NearHomeCell(HomeDoorCell, 0.52f))
             {
@@ -158,17 +175,17 @@ namespace AzureDreamsReimagined
 
             // The captured façades face +Z. Enter only when walking into the recess.
             if (after.z >= before.z) return;
-            var mansion = BuiltKohHome();
-            if (mansion != null)
+            foreach (var project in _builtTownLots)
             {
+                if (project.Interior == null) continue;
                 // Trigger just outside the solid façade, within the doorway opening.
-                float thresholdZ = mansion.Entrance.y + TownActorRadius + 0.10f;
+                float thresholdZ = project.Entrance.y + TownActorRadius + 0.10f;
                 if (before.z > thresholdZ && after.z <= thresholdZ)
                 {
                     float crossing = (thresholdZ - before.z) / (after.z - before.z);
-                    if (Mathf.Abs(Mathf.Lerp(before.x, after.x, crossing) - mansion.Entrance.x) <= 0.30f)
+                    if (Mathf.Abs(Mathf.Lerp(before.x, after.x, crossing) - project.Entrance.x) <= 0.30f)
                     {
-                        EnterConstruction(mansion);
+                        EnterConstruction(project);
                         return;
                     }
                 }
@@ -176,8 +193,7 @@ namespace AzureDreamsReimagined
             foreach (var (door, interior) in _facadeInteriors)
             {
                 if (!door || !door.IsPassable) continue;
-                if (interior == CherrlHouse && StoryStage("cherrl") == CherrlFirstMeeting &&
-                    !TownSaveVariables.GetBool(CherrlInvitedInsideKey)) continue;
+                if (interior == CherrlHouse && !CherrlHouseUnlocked) continue;
                 var threshold = door.Threshold;
                 float entranceZ = threshold.z + 0.10f;
                 if (before.z <= entranceZ || after.z > entranceZ) continue;
@@ -191,6 +207,10 @@ namespace AzureDreamsReimagined
             }
         }
 
+        private static bool ApproachingPoolDoor(Vector3 threshold, Vector3 before, Vector3 after) =>
+            after.z < before.z && Mathf.Abs(after.x - threshold.x) <= 0.55f &&
+            after.z >= threshold.z - 0.15f && after.z <= threshold.z + 0.85f;
+
         private void PlaceHomeMarker(string label, Vector3 position, Material material)
         {
             position = UsingRetailTown ? RetailTownActorPosition(position, 0.035f) : new Vector3(position.x, 0.035f, position.z);
@@ -200,7 +220,7 @@ namespace AzureDreamsReimagined
         private Vector3 HomeEntry(TownInteriorScene room)
         {
             int index = Array.IndexOf(HomeScenes, room.interiorId);
-            if (index == 0) return CellPosition(HomeLayoutCell(index, InitialHouseDoor));
+            if (index == 0) return HomeLayoutPoint(index, InitialHouseDoor);
             int hut = Array.IndexOf(HutScenes, room.interiorId);
             return hut > 0 ? CellPosition(HutDoor) : RetailInteriorDoor(room);
         }
@@ -266,7 +286,7 @@ namespace AzureDreamsReimagined
             int index = HouseIndex;
             if (index >= 0)
             {
-                PlaceHomeMarker("Bath passage", CellPosition(HomeLayoutCell(index, BathDoors[index])), _accentMaterial);
+                PlaceHomeMarker("Bath passage", BathDoorPosition(index), _accentMaterial);
                 PlaceHomeMarker("Monster hut passage", HomeHutMarker(index), _accentMaterial);
                 ApplyPurchasedHomeItems();
                 SetupHomeBathScene(index);
@@ -313,14 +333,9 @@ namespace AzureDreamsReimagined
 
             if (TryHomeStorageShelf()) return true;
             int house = HouseIndex;
-            if (house >= 0 && NearHomeCell(HomeLayoutCell(house, BathDoors[house]), 0.9f))
+            if (house >= 0 && NearHomePoint(BathDoorPosition(house), 1.2f))
             {
                 BeginHomeBath(house);
-                return true;
-            }
-            if (house >= 0 && NearHomeCell(HomeLayoutCell(house, BathPoints[house]), 0.75f))
-            {
-                MoveThroughBathPassage(HomeLayoutCell(house, BathDoors[house]));
                 return true;
             }
             if (house >= 0 && NearHomeCell(HomeLayoutCell(house, Beds[house]), 1.4f))

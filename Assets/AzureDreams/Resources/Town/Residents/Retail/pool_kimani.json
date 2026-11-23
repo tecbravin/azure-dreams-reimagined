@@ -1040,5 +1040,6 @@
    6,
    "pool_swimsuits"
   ]
- }
+ },
+ "groundingPixels": 4.0
 }

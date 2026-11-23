@@ -115,9 +115,9 @@ MonoBehaviour:
   residentPrefabs:
   - {fileID: 5151358256163527516, guid: 8d8d06f5de4b44eeb5e308aadb71fd94, type: 3}
   residentCells:
-  - {x: 13, y: 11}
+  - {x: 13, y: 10}
   residentOffsets:
-  - {x: 0, y: 0.78, z: 0}
+  - {x: 0, y: 0, z: 0.5}
   furnitureSurfaces:
   - footprint:
       serializedVersion: 2

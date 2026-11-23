@@ -106,12 +106,6 @@ namespace AzureDreamsReimagined
                 var toLine = new Vector3(1f, 0f, 0f);
                 kim.transform.rotation = Quaternion.LookRotation(toLine, Vector3.up);
             }
-            var woman = FindStoryActor("gym_woman");
-            if (woman && woman.GetComponentInChildren<SpriteRenderer>(true) is { } body)
-            {
-                var scale = body.transform.localScale;
-                body.transform.localScale = new Vector3(scale.x * 1.35f, scale.y, scale.z);
-            }
             // Only Barry's upper body was captured; he works out on a bench
             // that hides his legs.
             var barry = FindStoryActor("gym_barry");

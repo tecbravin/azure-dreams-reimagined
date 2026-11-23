@@ -142,14 +142,16 @@ def build_streaming_actions(species):
 def build(species):
     lookup = palette_lookup(species)
     palette_colors = list(lookup)
+    extracted = {
+        action: [source_frames(species, first_animation + direction) for direction in range(5)]
+        for action, first_animation in ACTION_GROUPS
+    }
     atlas = Image.new("RGBA", (21 * CELL, 5 * CELL))
     for direction in range(5):
         # The extracted sequences are grouped in five camera-facing directions.
         for group, start, count in ((0, 0, 2), (1, 2, 5), (2, 7, 5), (3, 12, 6), (4, 18, 2)):
-            animation = group * 5 + direction
-            files = sorted(SOURCE.glob(f"monster_{species:02x}_animation_{animation:02d}_frame_*.png"))
-            if not files:
-                files = sorted(SOURCE.glob(f"monster_{species:02x}_animation_{direction:02d}_frame_*.png"))
+            action = ("idle", "walk", "attack", "magic", "sleep")[group]
+            files = action_sequence(action, direction, extracted)
             if not files:
                 continue
             for column in range(count):
@@ -158,9 +160,7 @@ def build(species):
                 atlas.alpha_composite(pose, (start * CELL + column * CELL + (CELL-pose.width)//2,
                                              direction * CELL + CELL-pose.height))
         # Reserve the final column for the damage reaction used by the tower renderer.
-        hit_files = sorted(SOURCE.glob(f"monster_{species:02x}_animation_{25+direction:02d}_frame_*.png"))
-        if not hit_files:
-            hit_files = sorted(SOURCE.glob(f"monster_{species:02x}_animation_{direction:02d}_frame_*.png"))
+        hit_files = action_sequence("hit", direction, extracted)
         if hit_files:
             pose = indexed(Image.open(hit_files[0]).convert("RGBA"), lookup, palette_colors)
             atlas.alpha_composite(pose, (20 * CELL + (CELL-pose.width)//2,

@@ -181,6 +181,7 @@ namespace AzureDreamsReimagined
 
         private void SetupRouletteRoom()
         {
+            BuildCasinoRampCollider();
             BuildRouletteWheel();
             var labels = new[] { "x6", "x3", "x2" };
             for (int pad = 0; pad < 3; pad++)
@@ -194,11 +195,58 @@ namespace AzureDreamsReimagined
             UpdateBetStacks();
         }
 
+        private MeshCollider[] _rouletteColliders = System.Array.Empty<MeshCollider>();
+
         private void BuildRouletteWheel()
         {
             _wheel = CreateNativeMinigameObject("RouletteWheel", "Roulette wheel — retail mesh 0x2D");
             _wheel.transform.position = CasinoFloor(WheelCenter, 0f);
+            foreach(var filter in _wheel.GetComponentsInChildren<MeshFilter>())
+            {
+                if (!filter.sharedMesh) continue;
+                // Retail rendering uses inward-facing triangles. Physics rays
+                // from Koh's feet need the top faces to point upward instead.
+                var collisionMesh = Instantiate(filter.sharedMesh);
+                collisionMesh.name = "Roulette collision";
+                var triangles = collisionMesh.triangles;
+                for (int i = 0; i < triangles.Length; i += 3)
+                    (triangles[i + 1], triangles[i + 2]) = (triangles[i + 2], triangles[i + 1]);
+                collisionMesh.triangles = triangles;
+                collisionMesh.RecalculateNormals();
+                _constructionGeometry.Add(collisionMesh);
+                filter.gameObject.AddComponent<MeshCollider>().sharedMesh = collisionMesh;
+            }
+            _rouletteColliders = _wheel.GetComponentsInChildren<MeshCollider>();
             _wheelAngle = 0; _wheelSpeed = 0; _wheelPhase = 0;
+        }
+
+        private float RouletteObstacleTop(Vector3 position, float radius)
+        {
+            if (!AtCasinoRoulette || !_wheel || !_wheel.activeInHierarchy) return float.NegativeInfinity;
+            var delta = position - _wheel.transform.position;
+            delta.y = 0f;
+            if (delta.sqrMagnitude > (WheelRadius + radius) * (WheelRadius + radius))
+                return float.NegativeInfinity;
+            float top = float.NegativeInfinity;
+            foreach (var collider in _rouletteColliders)
+            {
+                if (!collider || !collider.enabled) continue;
+                var bounds = collider.bounds;
+                // Sample the feet and their perimeter, allowing landing on the native
+                // wheel mesh while preserving collision against its raised sides.
+                for (int sample = 0; sample < 5; sample++)
+                {
+                    var point = position;
+                    if (sample == 1) point.x += radius;
+                    if (sample == 2) point.x -= radius;
+                    if (sample == 3) point.z += radius;
+                    if (sample == 4) point.z -= radius;
+                    point.y = bounds.max.y + .5f;
+                    if (collider.Raycast(new Ray(point, Vector3.down), out var hit, bounds.size.y + 1f))
+                        top = Mathf.Max(top, hit.point.y);
+                }
+            }
+            return top;
         }
 
         // ============================================================= residents
@@ -223,6 +271,11 @@ namespace AzureDreamsReimagined
                     continue;
                 }
                 person.npcId = role.id;
+                if(role.id is "slot_attendant" or "roulette_attendant")
+                {
+                    var position=person.transform.position+Vector3.forward*.75f;
+                    person.transform.position=RetailTownActorPosition(position,0f);
+                }
                 person.dialogueLines = System.Array.Empty<string>();
                 if (person.TryGetComponent<CharacterStats>(out var stats))
                 {

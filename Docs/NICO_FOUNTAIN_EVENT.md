@@ -1,0 +1,11 @@
+# Nico's fountain scenes
+
+Nico's collection stays available during the two donation stages, including repeat conversations on the same day. The original options are 0, 1, 100 and 1,000 G. Positive donations debit Koh's gold and add `2 * donation + 1` to the collection (Koh plus Ghosh's competing contribution). Reaching 3,000 schedules construction while Koh is away. Insufficient funds reopen the amount choice without charging gold. Zero uses the existing refusal response.
+
+Ghosh's donation and completed-fountain appearances now wait for `PlayStoryWalk` before opening his dialogue. His theme starts with the dialogue, remains through the exchange, and returns to Town after his departure walk. Cancellation also dismisses the temporary guest. Selfi's proximity music does not override this exchange. The street approach offsets and travel duration are presentation choices; the existing dialogue text and donation rules cite TOWN.BIN 0x2CFB8A and 0x2D220D.
+
+Chero retains the original progression after Nico's culture conversations. At the introduction stage on a new day, approaching the square starts his entrance walk and travelling-cellist introduction. A saved arrival marker prevents replaying the entrance, while ordinary interaction can resume the dialogue. The subsequent Ghosh confrontation uses the same arrival sequencing and restores the town music when Ghosh leaves. Chero's original `serohiki` bank remains in use.
+
+Validation: runtime compiled; isolated Unity probe exercised gold debit, matched collection amount, menu options, insufficient/zero cases, Ghosh's arrival/departure ordering and music state, and Chero's walk-before-introduction. Full in-game path and audio playback remain visual/auditory checks.
+
+Follow-up repair: outdoor donation routing accepts both `nico` and `nico_fountain`. Waiting-stage saves without a built/pending fountain can contribute again if unfunded; already funded saves restore the pending construction flag. Invalid donation amounts are rejected. Ghosh departure is guarded against duplicate starts, collision cells refresh after his arrival, and a scene version prevents a completed walk from opening stale dialogue after a scene change. Chero's proximity music updater runs only outside Ghosh's theme override.

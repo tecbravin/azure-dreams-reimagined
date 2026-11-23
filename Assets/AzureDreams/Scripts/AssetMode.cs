@@ -104,8 +104,35 @@ namespace AzureDreamsReimagined
         {
             if (string.IsNullOrEmpty(relativePath)) return relativePath;
             string path = Normalize(relativePath);
-            if (IsReimagined) return HasMediaOverlay(path) ? OverlayFolder + "/" + path : path;
+            if (IsReimagined)
+            {
+                string portrait = ResolveHeroinePortraitOverlay(path);
+                if (portrait != null) return OverlayFolder + "/" + portrait;
+                return HasMediaOverlay(path) ? OverlayFolder + "/" + path : path;
+            }
             return IsReimaginedOnlyMedia(path) ? null : path;
+        }
+
+        private static string ResolveHeroinePortraitOverlay(string path)
+        {
+            const string folder = "Portraits/Dialogue/";
+            if (!path.StartsWith(folder, StringComparison.Ordinal)) return null;
+            string file = path[folder.Length..];
+            int marker = file.IndexOf("Retail_variant", StringComparison.Ordinal);
+            if (marker < 0) return null;
+            string speaker = file[..marker];
+            if (speaker is not ("Nico" or "Selfi" or "Patty" or "Miya" or "Vivian" or "Cherrl" or "Fur")) return null;
+            if (HasMediaOverlay(path)) return path;
+            string alias = folder + file.Replace("Retail_variant", "_variant");
+            if (HasMediaOverlay(alias)) return alias;
+            // A supplied still illustration must not flash back to PSX artwork on
+            // a missing blink cel. Classic continues to use every original cel.
+            int frame = path.LastIndexOf("_frame", StringComparison.Ordinal);
+            if (frame < 0) return null;
+            string open = path[..frame] + "_frame0.png";
+            if (HasMediaOverlay(open)) return open;
+            open = alias[..alias.LastIndexOf("_frame", StringComparison.Ordinal)] + "_frame0.png";
+            return HasMediaOverlay(open) ? open : null;
         }
 
         /// <summary>Replaces the overlay index (used by tests and by the editor after regenerating it).</summary>

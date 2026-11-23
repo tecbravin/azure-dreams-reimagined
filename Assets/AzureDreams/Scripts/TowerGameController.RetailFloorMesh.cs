@@ -24,12 +24,7 @@ namespace AzureDreamsReimagined
         private int _retailBackdropTicks;
         private float _retailBackdropClock;
         private int _retailBackdropSpeed = 2;
-        private GameObject _retailBackdropFloorCap;
-        // Same wrapped-scroll-to-turn mapping TowerGameController.FloorMesh.cs uses for the
-        // generated-floor backdrop (create_wrapped_texture_scroll(2) -> one full wall turn).
-        private const float RetailBackdropRotationDegreesPerSecond =
-            360f * RetailBackdropScrollPixelsPerFrame * RetailFrameRate /
-            TowerBackdropScrollWrapPixels * TowerBackdropSpeedScale;
+        private int _retailBackdropMode;
         private int _retailWaterOffset;
         private float _retailWaterClock;
 
@@ -286,16 +281,20 @@ namespace AzureDreamsReimagined
         }
 
         // ---------------------------------------------------------------- backdrop
-        private void BuildRetailBackdrop(RetailTowerFloor retail)
+        private void BuildRetailBackdrop(RetailTowerFloor retail) =>
+            BuildRetailBackdrop(retail.BackdropPackage, retail.BackdropSpeed);
+
+        private bool BuildRetailBackdrop(int package, int speed)
         {
-            var texture = AssetMode.Load<Texture2D>($"Tower/Retail/backdrop_{retail.BackdropPackage:00}");
+            var texture = AssetMode.Load<Texture2D>($"Tower/Retail/backdrop_{package:00}");
             var shader = RetailShader("RetailTowerBackdrop");
-            if (!texture || !shader) return;
+            if (!texture || !shader) return false;
             texture.filterMode = FilterMode.Point;
             texture.wrapMode = TextureWrapMode.Clamp;
             if (_retailBackdropMaterial) Destroy(_retailBackdropMaterial);
             _retailBackdropMaterial = new Material(shader) { name = "Retail tower backdrop", mainTexture = texture };
-            _retailBackdropSpeed = retail.BackdropSpeed;
+            _retailBackdropSpeed = speed;
+            _retailBackdropMode = InSecondTower ? 2 : 0;
             _retailBackdropTicks = 0;
             _retailBackdropClock = 0f;
             _retailBackdropMesh = new Mesh { name = "Retail tower backdrop" };
@@ -310,65 +309,23 @@ namespace AzureDreamsReimagined
             _generated.Add(backdrop);
             _towerBackdrop = backdrop.transform;
             RebuildRetailBackdrop();
-            BuildRetailBackdropFloorCap();
-        }
-
-        // The 14 depth strips only cover a band around camera height (project_depth_strips_and_quads
-        // scrolls that band vertically; it was never meant to reach all the way down). Looking past the
-        // lowest strip showed the SolidColor clear colour -- a flat black void under the floor, instead
-        // of the tower feeling fully enclosed. Retail's own strips fade to black at depth (see
-        // UpdateTowerCameraBackdrop's comment), so a plain black disc well below everything closes the
-        // gap invisibly, the same way BuildTowerBackdrop's bowl closes it for generated floors.
-        private void BuildRetailBackdropFloorCap()
-        {
-            if (_retailBackdropFloorCap) Destroy(_retailBackdropFloorCap);
-            if (!_towerBackdrop) return;
-            var shader = Shader.Find("Unlit/Color");
-            if (!shader) return;
-            // Stays centred under the camera (UpdateRetailBackdrop re-centres _towerBackdrop's XZ
-            // every frame), so it only needs to outreach the far clip plane's radius, with headroom.
-            float capRadius = (_gameCamera ? _gameCamera.farClipPlane : 100f) * 1.5f;
-            const float capY = -15f;
-            const int segments = 24;
-            var vertices = new List<Vector3> { Vector3.zero };
-            for (int i = 0; i <= segments; i++)
-            {
-                float angle = i * Mathf.PI * 2f / segments;
-                vertices.Add(new Vector3(Mathf.Cos(angle) * capRadius, 0f, Mathf.Sin(angle) * capRadius));
-            }
-            var indices = new List<int>();
-            for (int i = 1; i <= segments; i++)
-            {
-                indices.Add(0); indices.Add(i); indices.Add(i + 1);
-            }
-            var mesh = new Mesh { name = "Retail tower floor cap" };
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(indices, 0);
-            mesh.RecalculateBounds();
-            _ownedManagedFloorMeshes.Add(mesh);
-            var cap = new GameObject("Retail tower floor cap");
-            cap.transform.SetParent(_towerBackdrop, false);
-            cap.transform.localPosition = new Vector3(0f, capY, 0f);
-            cap.AddComponent<MeshFilter>().sharedMesh = mesh;
-            var renderer = cap.AddComponent<MeshRenderer>();
-            renderer.sharedMaterial = new Material(shader) { name = "Retail tower floor cap", color = Color.black };
-            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            _generated.Add(cap);
-            _retailBackdropFloorCap = cap;
+            return true;
         }
 
         /// <summary>
         /// project_depth_strips_and_quads: 14 strips of 0xE00 units on a radius 6*4096 cylinder, two 32 px quads per
         /// 0x80 angle step; texture columns alternate per step, rows per strip; strips darken with depth.
-        /// The cylinder is scaled into the camera range, preserving its angular size.
+        /// Native radius/height are preserved; the background shader bypasses the world far clip.
         /// </summary>
         private void RebuildRetailBackdrop()
         {
             if (!_retailBackdropMesh) return;
-            float far = _gameCamera ? _gameCamera.farClipPlane : 100f;
-            float scale = Mathf.Min(1f, far * 0.8f / (RetailBackdropRadius * RetailUnit)) * RetailUnit;
-            int phase = (short)(0x4000 + _retailBackdropTicks * _retailBackdropSpeed);
-            bool shadeOffset = phase >= 0xE00;
+            const float scale = RetailUnit;
+            // +0x06 is angular phase, +0x08 is vertical phase. Normal modes
+            // update only the angle; mode 2 scrolls vertically by 0x40 per tick.
+            int verticalPhase = _retailBackdropMode == 2 ? (_retailBackdropTicks % 112) * 0x40 : 0;
+            int phase = verticalPhase;
+            bool shadeOffset = verticalPhase >= 0xE00;
             var vertices = new List<Vector3>(RetailBackdropSegments * 2 * RetailBackdropStrips * 4);
             var uvs = new List<Vector2>(vertices.Capacity);
             var colors = new List<Color32>(vertices.Capacity);
@@ -378,11 +335,14 @@ namespace AzureDreamsReimagined
             {
                 int top = (short)(phase - 0x6200 + RetailStripHeight * (strip + 1));
                 int bottom = (short)(phase - 0x5400 + RetailStripHeight * (strip + 1));
-                int depth = (short)top % 3584 / 256 + (shadeOffset ? 16 : 0);
+                int shadeHeight = (short)(verticalPhase - 0x6200 + RetailStripHeight * (strip + 1));
+                int depth = shadeHeight % RetailStripHeight / 256 + (shadeOffset ? 16 : 0);
                 int shadeTop = Mathf.Clamp(0xE0 - (depth + (strip << 4)), 0, 0x80);
                 int shadeBottom = Mathf.Clamp(0xE0 - (depth + (strip << 4)) - 0x10, 0, 0x80);
                 byte topByte = (byte)Mathf.Min(255, shadeTop * 2), bottomByte = (byte)Mathf.Min(255, shadeBottom * 2);
-                float yTop = -top * scale, yBottom = -bottom * scale;
+                // The object's +0x4000 height is a transform, not part of the
+                // signed 16-bit strip coordinates (adding before casting wraps).
+                float yTop = -(top + 0x4000) * scale, yBottom = -(bottom + 0x4000) * scale;
                 float v0 = (strip & 1) * 64, v1 = v0 + 64;
                 for (int segment = 0; segment < RetailBackdropSegments; segment++)
                 {
@@ -418,25 +378,27 @@ namespace AzureDreamsReimagined
             _retailBackdropMesh.bounds = new Bounds(Vector3.zero, Vector3.one * radius * 4f);
         }
 
-        // advance_object_phase_counters: the backdrop phase advances 2 (4 on floor 40) units per 30 Hz frame.
+        // Native angular units are 1/4096 turn. Only the low byte is read by
+        // process_circular_segments, matching the texture's two-segment repeat.
         private void UpdateRetailBackdrop()
         {
             if (!_towerBackdrop || !_retailBackdropMesh) return;
-            if (_gameCamera)
-            {
-                var position = _gameCamera.transform.position;
-                _towerBackdrop.position = new Vector3(position.x, 0f, position.z);
-            }
-            // The ring itself never turned -- only its texture scrolled vertically (above). Faster
-            // floors (Beldo's arena) scroll BackdropSpeed 4 instead of 2, so scale the spin the same way.
-            float rotationSpeed = RetailBackdropRotationDegreesPerSecond * (_retailBackdropSpeed / 2f);
-            _towerBackdrop.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.Self);
-            _retailBackdropClock += Time.deltaTime * RetailFrameRate;
-            if (_retailBackdropClock < 1f) return;
+            AdvanceRetailBackdrop(Time.deltaTime);
+        }
+
+        private void AdvanceRetailBackdrop(float deltaTime)
+        {
+            _retailBackdropClock += Mathf.Max(0f, deltaTime) * RetailFrameRate;
             int ticks = Mathf.FloorToInt(_retailBackdropClock);
+            if (ticks == 0) return;
             _retailBackdropClock -= ticks;
-            _retailBackdropTicks += ticks;
-            RebuildRetailBackdrop();
+            _retailBackdropTicks = (_retailBackdropTicks + ticks) % (128 * 112);
+            // Keep the native world origin. Following the camera removed retail parallax.
+            _towerBackdrop.localPosition = Vector3.zero;
+            float angle = _retailBackdropMode == 2 ? 0f :
+                ((_retailBackdropTicks * _retailBackdropSpeed) & 0xFF) * (360f / 4096f);
+            _towerBackdrop.localRotation = Quaternion.Euler(0f, angle, 0f);
+            if (_retailBackdropMode == 2) RebuildRetailBackdrop();
         }
     }
 }

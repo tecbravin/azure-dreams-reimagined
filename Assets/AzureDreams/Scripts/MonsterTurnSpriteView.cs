@@ -109,7 +109,7 @@ namespace AzureDreamsReimagined
 
         private const int CycloneSpecies = 29;
         private const int NoiseSpecies = 23;
-        private static bool KeepsAuthoredAtlas(int species) => species is CycloneSpecies or NoiseSpecies;
+        private static bool KeepsAuthoredAtlas(int species) => species is CycloneSpecies or NoiseSpecies or 34;
 
         private static int SpeciesFromName(string name)
         {
@@ -188,9 +188,11 @@ namespace AzureDreamsReimagined
         {
             // Do not overwrite Cyclone's extracted retail action atlas. It is
             // deliberately separate from the partial community frame export.
-            if (KeepsAuthoredAtlas(species) && _atlas && _atlas.width == 16 * CellSize && _atlas.height == Rows * CellSize)
+            if (KeepsAuthoredAtlas(species) && _atlas &&
+                ((_atlas.width == 16 * CellSize && _atlas.height == Rows * CellSize) ||
+                 (species == 34 && _atlas.width == 20 * IndexedCellSize && _atlas.height == Rows * IndexedCellSize)))
             {
-                _indexedSpecies = 0;
+                _indexedSpecies = species == 34 ? species : 0;
                 _usingCommunityAtlas = false;
                 return;
             }
@@ -432,6 +434,8 @@ namespace AzureDreamsReimagined
             if (camera) angle -= camera.transform.eulerAngles.y;
             int octant = Mathf.RoundToInt(angle / 45f) & 7;
             int row = Mathf.Abs(4 - octant);
+            // Weadog stores its complete retail banks back-to-front.
+            if (!_usingCommunityAtlas && _indexedSpecies == 34) row = 4 - row;
             _renderer.flipX = octant is >= 1 and <= 3;
             float sleepTime = AnimationTime - _sleepStartedAt;
             if ((_exhausted || _paralyzed) && !_tinted)

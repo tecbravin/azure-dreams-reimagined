@@ -8,16 +8,25 @@ namespace AzureDreamsReimagined.Rendering
     public sealed class ActorSpriteDepth : MonoBehaviour
     {
         private static readonly int Anchor=Shader.PropertyToID("_ActorDepthAnchor");
+        private static readonly int DepthNormal=Shader.PropertyToID("_ActorDepthNormal");
         private static readonly Dictionary<Material,Material> Materials=new();
         private readonly List<SpriteRenderer> _sprites=new();
         private MaterialPropertyBlock _properties;
         private TownInteriorScene _interior;
+        private Vector3 _facadeNormal;
+        private bool _seated;
+        private Vector3 _seatDepthOffset;
+        internal void SetSeated(bool seated,Vector3 depthOffset) { _seated=seated;_seatDepthOffset=depthOffset; }
         internal void SetInterior(TownInteriorScene interior) => _interior=interior;
+        // Window actors belong to the facade plane, even while their artwork
+        // faces the camera. Ordinary actors keep their usual upright depth.
+        internal void SetFacadeNormal(Vector3 normal) => _facadeNormal=normal.normalized;
 
         private Vector3 FurnitureDepthAnchor(Vector3 anchor)
         {
+            if(!_interior) return anchor;
             var camera=Camera.main;
-            if(!_interior || !camera) return anchor;
+            if(!camera) return anchor;
             var forward=camera.transform.forward;forward.y=0f;
             if(forward.sqrMagnitude<.001f) return anchor;
             forward.Normalize();
@@ -71,7 +80,7 @@ namespace AzureDreamsReimagined.Rendering
             foreach(var part in _sprites)
                 if(part && part.enabled && part.sprite)
                     anchor.y=Mathf.Min(anchor.y,part.transform.position.y);
-            anchor=FurnitureDepthAnchor(anchor);
+            anchor=_seated ? transform.position+_seatDepthOffset : FurnitureDepthAnchor(anchor);
             foreach(var sprite in _sprites)
             {
                 if(!sprite || !sprite.enabled || !sprite.sprite) continue;
@@ -94,6 +103,7 @@ namespace AzureDreamsReimagined.Rendering
                 }
                 sprite.GetPropertyBlock(_properties);
                 _properties.SetVector(Anchor,anchor);
+                _properties.SetVector(DepthNormal,_facadeNormal);
                 sprite.SetPropertyBlock(_properties);
             }
         }

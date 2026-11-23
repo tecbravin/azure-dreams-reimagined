@@ -21,6 +21,26 @@ namespace AzureDreamsReimagined
         // Gym Kims and casino residents use their scene-specific minigame banks instead.
         private static readonly Dictionary<string, string> Banks = new()
         {
+            ["center_nada"] = "narder",
+            ["center_hear"] = "kiku",
+            ["center_jacof"] = "nouhuko",
+            ["center_pop"] = "oyaji",
+            ["center_uncle"] = "der",
+            ["center_aunt"] = "obasan",
+            ["center_aunt_2"] = "ran",
+            ["library_keeper"] = "gigi",
+            ["library_reader_woman"] = "narder",
+            ["library_reader_man"] = "nouhuko",
+            ["rhodes_butler"] = "slot80",
+            ["shin"] = "sinn",
+            ["nico"] = "niko",
+            ["selfi"] = "selfy_equipped",
+            ["patty"] = "paty",
+            ["vivian"] = "vivian",
+            ["mia"] = "mia",
+            ["cherrl"] = "cheril",
+            ["nadia"] = "nerdia",
+            ["fur"] = "far",
             ["hal"] = "hal",
             ["hush"] = "hush",
             ["silver"] = "silver",
@@ -39,12 +59,15 @@ namespace AzureDreamsReimagined
             ["construction_pen"] = "pen",
             ["wookie"] = "wata",
             // Gym (speaker table TOWN.BIN 0x47159C: speaker id = person slot).
-            ["gym_woman"] = "obasan",
+            ["gym_woman"] = "narder",
             ["gym_developer"] = "ayasii",
             ["gym_legs"] = "oyaji",
             ["gym_hunter"] = "hunter1",
             // Monster shop keeper (table 0x601750: mamonoya + hunters 1-3).
             ["master"] = "mamonoya",
+            ["monster_shop_hunter_1"] = "hunter1",
+            ["monster_shop_hunter_2"] = "hunter2",
+            ["monster_shop_hunter_3"] = "hunter3",
             ["bar_hunter_1"] = "hunter1",
             ["bar_hunter_2"] = "hunter2",
             ["bar_hunter_3"] = "hunter3",
@@ -62,6 +85,11 @@ namespace AzureDreamsReimagined
             ["chero"] = "serohiki",
             // Restored pool (TOWN.BIN overlay 0x51E000; swimsuit bodies from package 0x8B8000).
             ["pool_ghosh"] = "pool_gosh",
+            ["pool_nico"] = "pool_niko",
+            ["pool_selfi"] = "pool_selfy",
+            ["pool_patty"] = "pool_paty",
+            ["pool_fur"] = "pool_far",
+            ["pool_cherrl"] = "pool_cheril",
             ["pool_swimmer_a"] = "pool_slot83",
             ["pool_swimmer_b"] = "pool_slot84",
             ["pool_girl"] = "pool_kiku",
@@ -102,14 +130,26 @@ namespace AzureDreamsReimagined
         {
             if (!instance) return false;
             string bank = BankFor(npcId);
+            if (npcId == "cherrl" && TownSaveVariables.GetInt("town.story.cherrl.stage") == 0)
+                bank = TownSaveVariables.GetBool("town.story.cherrl.toyThrown") &&
+                    !TownSaveVariables.GetBool("town.story.cherrl.toyReturned") ? "cheril_window" : "cheril_bed";
             if (bank == null) return false;
-            if (instance.TryGetComponent<RetailTownResidentSpriteView>(out _)) return true;
+            return ApplyBank(instance, bank);
+        }
+
+        internal static bool ApplyBank(GameObject instance, string bank)
+        {
+            if (!instance || string.IsNullOrEmpty(bank)) return false;
             var atlas = AssetMode.Load<Texture2D>(Folder + bank);
             var data = AssetMode.Load<TextAsset>(Folder + bank);
             if (!atlas || !data) return false;
+            var retail = instance.GetComponent<RetailTownResidentSpriteView>();
+            if (retail && retail.UsesAtlas(atlas)) return true;
             atlas.filterMode = FilterMode.Point;
 
             // Remove every competing presentation before the retail view creates its child.
+            foreach(var view in instance.GetComponentsInChildren<MonsterTurnSpriteView>(true)) view.enabled=false;
+            foreach (var view in instance.GetComponentsInChildren<NicoSpriteView>(true)) { view.enabled=false; Object.Destroy(view); }
             foreach (var view in instance.GetComponentsInChildren<OriginalTownSpriteView>(true)) Object.Destroy(view);
             foreach (var view in instance.GetComponentsInChildren<RacetrackResidentSpriteView>(true)) Object.Destroy(view);
             foreach (var view in instance.GetComponentsInChildren<SilverSpriteView>(true)) Object.Destroy(view);
@@ -118,7 +158,7 @@ namespace AzureDreamsReimagined
             foreach (var view in instance.GetComponentsInChildren<WeedyIdleAnimation>(true)) Object.Destroy(view);
             foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true)) renderer.enabled = false;
 
-            var retail = instance.AddComponent<RetailTownResidentSpriteView>();
+            if (!retail) retail = instance.AddComponent<RetailTownResidentSpriteView>();
             retail.Configure(atlas, data);
             if (instance.TryGetComponent<ActorLocomotionView>(out var locomotion))
                 locomotion.UseRetailTownSprite(retail);

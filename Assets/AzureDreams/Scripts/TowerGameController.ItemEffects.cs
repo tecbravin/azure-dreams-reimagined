@@ -49,8 +49,9 @@ namespace AzureDreamsReimagined
         }
         private readonly List<ThrownEggAlly> _thrownEggs = new();
 
-        private bool CanUseInventoryEffect(DungeonItemEntry item, bool giving)
+        private bool CanUseInventoryEffect(DungeonItemEntry item, bool giving, ActorRecord recipient=null)
         {
+            var effectActor=recipient ?? _familiarActor;
             if (IsOctopusDumplings(item)) return _area == Area.Tower && !giving;
             return item.Kind switch
             {
@@ -58,9 +59,9 @@ namespace AzureDreamsReimagined
                 ItemKind.Fruit => (giving && (IsPitaFruit(item) || item.Subtype == 4)) || (_area == Area.Tower && (item.Subtype switch
                 {
                     3 or 5 or 6 or 8 or 10 => true,
-                    4 => giving && (!IsTroll(_familiarActor) ||
-                        (CombatGear(_familiarActor, false) == null && CombatGear(_familiarActor, true) == null)),
-                    7 => giving && CanRevertToEgg(_familiarActor),
+                    4 => giving && (!IsTroll(effectActor) ||
+                        (CombatGear(effectActor, false) == null && CombatGear(effectActor, true) == null)),
+                    7 => giving && CanRevertToEgg(effectActor),
                     9 => _familiar || _blueCollarAlly != null,
                     _ => false
                 })),
@@ -77,7 +78,7 @@ namespace AzureDreamsReimagined
                 ItemKind.Glasses => !giving && (IsTruthGlasses(item) || (_area == Area.Tower && item.Subtype == 2)),
                 ItemKind.Bell => _area == Area.Tower && !giving && item.Subtype is >= 1 and <= 3,
                 ItemKind.Loupe => _area == Area.Tower && item.Subtype is >= 1 and <= 5,
-                ItemKind.Ball => _area == Area.Tower && CanCastMagic(giving ? _familiarActor : _playerActor) && item.Param > 0 &&
+                ItemKind.Ball => _area == Area.Tower && CanCastMagic(giving ? effectActor : _playerActor) && item.Param > 0 &&
                     item.Subtype > 0 && item.Subtype < BallSpellIds.Length,
                 ItemKind.Crystal => _area == Area.Tower && !giving && item.Subtype is >= 1 and <= 3 &&
                     (item.Subtype != 1 || TryFindHatchCell(out _)),
@@ -805,6 +806,7 @@ namespace AzureDreamsReimagined
         {
             if (BlocksDamage(target)) return 0;
             var weapon = CombatGear(actor, false);
+            if (IsSword(weapon, RustySwordSubtype) && RollCombatItemEffect(10)) return 0;
             bool trollSword = IsTroll(actor) && IsTrollWeapon(weapon) && weapon.Subtype == 13;
             var shield = trollSword ? null : ActiveCombatShield(target);
             byte oldDefense = target.CurrentDefense;

@@ -30,15 +30,6 @@ namespace AzureDreamsReimagined
 
         private GUIStyle InventoryEmphasisStyle(GUIStyle source) => InventoryFitStyle(source,(source.fontSize>0 ? source.fontSize : 13)+4,false);
 
-        private void DrawInventoryNextPage(Rect items)
-        {
-            if (!_pageCornerIcon) _pageCornerIcon=BuildPageCornerIcon();
-            var icon=new Rect(items.xMax-30f,items.yMax-28f,22f,22f);
-            if (Event.current.type==EventType.Repaint) GUI.DrawTexture(icon,_pageCornerIcon,ScaleMode.ScaleToFit,true);
-            if (_itemCommandIndex<0 && GUI.Button(icon,new GUIContent(string.Empty,T("Next item page","Próxima página de itens")),GUIStyle.none))
-                SelectInventoryPage((_inventoryPage+1)%OccupiedInventoryPageCount);
-        }
-
         private GUIStyle InventoryFitStyle(GUIStyle source,int size,bool wrap)
         {
             var key=(source,size,wrap);

@@ -25,8 +25,11 @@ namespace AzureDreamsReimagined
                 var root = new GameObject("Original interior prop — " + entry.asset);
                 root.transform.SetParent(transform, false);
                 root.transform.position = _interior.MapLayoutPosition(entry.position);
+                // Native props use a 128-pixel canvas at 48 pixels per tile.
+                // HD replacements retain that canvas layout, not its pixel count.
+                float pixelsPerUnit = 48f * texture.width / 128f;
                 var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
-                    new Vector2(.5f, .375f), 48f, 0, SpriteMeshType.FullRect);
+                    new Vector2(.5f, .375f), pixelsPerUnit, 0, SpriteMeshType.FullRect);
                 root.AddComponent<SpriteRenderer>().sprite = sprite;
                 root.AddComponent<CameraFacingSprite>();
                 _constructionGeometry.Add(sprite);

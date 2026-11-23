@@ -228,6 +228,14 @@ MonoBehaviour:
     y: 10
     width: 1
     height: 1
+  furnitureSurfaces:
+  - footprint:
+      serializedVersion: 2
+      x: 9
+      y: 11
+      width: 2
+      height: 2
+    top: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

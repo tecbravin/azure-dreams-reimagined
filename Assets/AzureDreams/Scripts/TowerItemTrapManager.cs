@@ -88,7 +88,7 @@ namespace AzureDreamsReimagined
         private readonly Dictionary<Vector2Int, TowerTrapState> _traps = new();
         private readonly Dictionary<Vector2Int, int> _cellToSlot = new Dictionary<Vector2Int, int>();
         private readonly Dictionary<Vector2Int, CoreDungeon.TileType> _trapTerrain = new Dictionary<Vector2Int, CoreDungeon.TileType>();
-        private static readonly byte[] ProceduralSwords = { 2, 3, 4, 16 };
+        private static readonly byte[] ProceduralSwords = { 2, 3, 4, TowerGameController.RustySwordSubtype };
         private static readonly byte[] ProceduralShields = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 
         private CoreDungeon _trackedDungeon;
@@ -336,6 +336,16 @@ namespace AzureDreamsReimagined
         {
             EnsureFloor();
             return _cellToSlot.TryGetValue(cell, out int slot) ? _floor.Dungeon.FloorItems[slot] : null;
+        }
+
+        internal bool HasEggInArea(RectInt area)
+        {
+            EnsureFloor();
+            if (_floor.Dungeon == null) return false;
+            foreach (var entry in _cellToSlot)
+                if (area.Contains(entry.Key) && _floor.Dungeon.FloorItems[entry.Value]?.Kind == AzureDreams.Core.ItemKind.Egg)
+                    return true;
+            return false;
         }
 
         internal CoreItem TakeItem(Vector2Int cell, bool countPickup = false)

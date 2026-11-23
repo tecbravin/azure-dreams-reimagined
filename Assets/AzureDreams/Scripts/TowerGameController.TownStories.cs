@@ -143,7 +143,8 @@ namespace AzureDreamsReimagined
         private static bool StoryNewDay(string name) => StoryDay > TownSaveVariables.GetInt(StoryPrefix + name + ".day", -1);
         private static bool StoryBuilding(string name) => TownSaveVariables.GetBool(ConstructionKey + name);
         private string StoryRoom => _interior ? _interior.interiorId : string.Empty;
-        private static bool PoolRestored => TownRetailScriptFlags.CreatePersistent().IsFlagSet(PoolQuestCompleteFlag);
+        private static bool PoolRestored => TownRetailScriptFlags.CreatePersistent().IsFlagSet(PoolQuestCompleteFlag) ||
+            TownRetailScriptFlags.CreatePersistent().IsFlagSet(PoolOpenFlag);
 
         private void AdvanceTownStory(string name, int stage)
         {
@@ -218,6 +219,7 @@ namespace AzureDreamsReimagined
         private Texture2D StoryDialoguePortrait()
         {
             if (!_storySpeaker || string.IsNullOrEmpty(_storyPortraitPath)) return null;
+            if (_storyPortraitPath == FonPortrait) return FonDialoguePortrait(_storyPortraitStarted);
             if (_storyPortraitPath == WeedyBookOfferPortrait) return WeedyBookDialoguePortrait();
             if (_storyPortraitPath == JordaPortrait) return JordaDialoguePortrait(_storyPortraitStarted);
             if (_storyPortraitPath is GhoshIrritatedPortrait or GhoshSwimsuitPortrait)
@@ -317,11 +319,14 @@ namespace AzureDreamsReimagined
 
         private void CloseStoryPrompt(bool finishWakeUpVisit = true)
         {
+            _shielaChargeOpen = false;
+            bool closingChangingRoom = _storySpeaker && _storySpeaker == _poolChangingRoomSpeaker;
             _storySpeaker = null;
             _storyChoices = null;
             _storyPortraitPath = null;
             _storyPortraitFrameDurations = null;
             _message = string.Empty;
+            if (closingChangingRoom) ReleasePoolChangingRoomInput();
             if (finishWakeUpVisit)
             {
                 FinishRestaurantMeal();
@@ -416,6 +421,8 @@ namespace AzureDreamsReimagined
             if (TryConstructionStory(npc) || PoolService(npc)) return true;
             return npc.npcId switch
             {
+                "center_nada" or "center_hear" or "center_jacof" or "center_pop" or
+                    "center_uncle" or "center_aunt" or "center_aunt_2" => FountainResidentTalk(npc),
                 "nico" or "nico_dad" or "chero" or "nico_fountain" or "nico_ghosh" or "nico_door_ghosh" or
                     "nico_library" or "nico_theater" => NicoStory(npc),
                 "wreath" when HouseIndex >= 0 => WreathStory(npc),
@@ -423,6 +430,7 @@ namespace AzureDreamsReimagined
                 "ghosh" when StoryRoom == RhodesHouse => GhoshHouseTalk(npc),
                 "isaac" => IsaacStory(npc),
                 "cherrl" or "hush" => CherrlStory(npc),
+                "nadia" when StoryRoom == CherrlHouse => NadiaStory(npc),
                 "vivian" or "okami" => VivianStory(npc),
                 "patty" => PattyStory(npc),
                 "mia" => MiaStory(npc),
@@ -548,7 +556,8 @@ namespace AzureDreamsReimagined
             if (flags.IsFlagSet(WindmillQuestCompleteFlag))
                 return StoryTalk(npc, "The windmills are working again. Thank you, {name}!",
                     "Os moinhos voltaram a funcionar. Obrigado, {name}!");
-            if (TownSaveVariables.GetInt(TownReputation.HighestFloorKey) < IsaacQuestFloor)
+            if (!flags.IsFlagSet(IsaacAcceptedFlag) &&
+                TownSaveVariables.GetInt(TownReputation.HighestFloorKey) < IsaacQuestFloor)
                 return StoryTalk(npc, "I look after the windmills here.", "Eu cuido dos moinhos daqui.");
 
             if (!flags.IsFlagSet(IsaacAcceptedFlag))
@@ -570,8 +579,8 @@ namespace AzureDreamsReimagined
             }
 
             if (FindStoryItem(QuestItemKind, GurusOilPotId) < 0)
-                return StoryTalk(npc, "Guru's oil pot is on the 15th floor of the Tower.",
-                    "O Pote de Óleo do Guru está no 15º andar da Torre.");
+                return StoryTalk(npc, "I heard there was another pot on the 15th floor of the Tower. Could you get it for me?",
+                    "Ouvi dizer que há outro pote no 15º andar da Torre. Você pode buscá-lo para mim?");
 
             return StoryAsk(npc, "Is that Guru's oil pot? May I have it?",
                 "Esse é o Pote de Óleo do Guru? Pode me entregar?",
@@ -814,11 +823,12 @@ namespace AzureDreamsReimagined
                         PersistTownProgress();
                     });
 
-            if (doctor && stage == CherrlWalkRequest && StoryRoom == CherrlHospital)
-                return TownTalkSequence(npc, () => AdvanceTownStory(route, CherrlHerbAvailable),
-                    new TownStoryLine("Don't worry, it's nothing serious.\nEverything will be okay.", "Não se preocupe, não é grave.\nVai ficar tudo bem."),
-                    new TownStoryLine("I really can't do more than I've already done. It's a shame.",
-                        "Eu realmente não consigo fazer mais do que já fiz. É uma pena."));
+            if (stage == CherrlHerbAvailable && !TownSaveVariables.GetBool(CherrlWalkCompletedKey) &&
+                !TownSaveVariables.GetBool(CherrlHealingQuestCompleted))
+            { AdvanceTownStory(route,CherrlWalkRequest); stage=CherrlWalkRequest; }
+
+            if (doctor && stage == CherrlWalkRequest && StoryRoom == CherrlHospital && TownSaveVariables.GetBool(CherrlWalkCompletedKey))
+                return CherrlWalkAssessment(npc);
 
             if (doctor && StoryRoom == CherrlHospital &&
                 stage == CherrlHospitalAbsence && StoryNewDay(route))
@@ -875,6 +885,9 @@ namespace AzureDreamsReimagined
                 return CherrlMotherVisit(npc);
             if (stage == CherrlWalkRequest && StoryRoom == CherrlHouse && StoryBuilding("hospital"))
                 return CherrlWalkInvitation(npc);
+            if (stage == CherrlHerbAvailable && StoryRoom == CherrlHouse &&
+                TownSaveVariables.GetBool(CherrlWalkCompletedKey) && !TownSaveVariables.GetBool(CherrlWalkApologyKey))
+                return CherrlWalkApology(npc);
             if (stage == CherrlHerbAvailable && StoryRoom == CherrlHouse)
                 return CherrlTalkSequence(npc, () => CherrlRestConversation(npc, null),
                     new CherrlStoryLine(0, "Thank you.", "Obrigada."),
@@ -909,7 +922,7 @@ namespace AzureDreamsReimagined
                 return CherrlCompletedHomeConversation(npc);
             if (stage == StoryComplete && StoryRoom == CherrlHospital)
                 return CherrlNurseSmallTalk(npc);
-            if (stage == StoryComplete && StoryRoom.Length == 0 && !TownSaveVariables.GetBool(CherrlOutdoorWalkKey))
+            if (stage == CherrlWalkRequest && StoryRoom.Length == 0 && _cherrlWalkActive)
                 return CherrlOutdoorWalk(npc);
             if (StoryRoom == CherrlHouse && stage < CherrlHerbDelivered)
                 return CherrlRestConversation(npc, null);
@@ -922,6 +935,7 @@ namespace AzureDreamsReimagined
 
         private bool CherrlFirstMeetingAtWindow(NPCController cherrl)
         {
+            if (BeginCherrlWindowMeeting(cherrl)) return true;
             // TOWN.BIN 0x2DB025–0x2DB45E.
             void InviteForTea() => CherrlAsk(cherrl, 0, "I would like you to have a tea in return for getting my Chappy back.",
                 "Queria oferecer um chá por ter trazido o meu Chappy de volta.",
@@ -941,9 +955,6 @@ namespace AzureDreamsReimagined
             if (TownSaveVariables.GetBool(CherrlWindowMeetingKey))
                 return CherrlTalk(cherrl, 0, "Oh, it's you!", "Ah, é você!", InviteForTea);
             return CherrlTalkSequence(cherrl, InviteForTea,
-                new CherrlStoryLine(0, "What..?\nAhhh!!!!!", "O quê...?\nAhhh!!!!!"),
-                new CherrlStoryLine(0, "Oh my god...\nI was so surprised, I threw my precious Chappy.",
-                    "Meu Deus...\nLevei um susto tão grande que joguei o meu querido Chappy."),
                 new CherrlStoryLine(0, "Oh, Chappy!\nYou picked him up for me, didn't you?", "Ah, Chappy!\nFoi você que pegou ele para mim, né?"),
                 new CherrlStoryLine(0, "Someone was peeking through the window. I was so surprised that I... my Chappy... Oh, my stuffed toy.\nI threw him up.",
                     "Alguém estava espiando pela janela. Levei um susto tão grande que eu... O meu Chappy... Ah, o meu bichinho de pelúcia.\nAcabei jogando ele."),
@@ -973,7 +984,7 @@ namespace AzureDreamsReimagined
             void ThankKoh() => CherrlTalkSequence(cherrl, NadiaThanks,
                 new CherrlStoryLine(0, "Oh, I haven't thanked you yet!\nThank you very much.\nI mean it, really.",
                     "Ah, ainda nem agradeci!\nMuito obrigada.\nDe verdade."),
-                new CherrlStoryLine(0, "Phew...\nI was so happy, I think I've exhausted myself.", "Ufa...\nFiquei tão feliz que acho que cansei."));
+                new CherrlStoryLine(2, "Phew...\nI was so happy, I think I've exhausted myself.", "Ufa...\nFiquei tão feliz que acho que cansei."));
 
             CherrlTalkSequence(cherrl, () => CherrlAsk(cherrl, 0, "This doll is Chuppie, and I'm Cherrl.",
                     "O nome deste bichinho é Chuppie, e eu sou a Cherrl.",
@@ -1036,7 +1047,7 @@ namespace AzureDreamsReimagined
         private bool CherrlRestConversation(NPCController cherrl, Action next)
         {
             void SayGoodbye() => CherrlTalk(cherrl, 0, "Okay.\nSee you again, {name}.", "Está bem.\nAté a próxima, {name}.", next);
-            return CherrlAsk(cherrl, 0, "Phew...\nI think I'm getting tired.", "Ufa...\nAcho que estou ficando cansada.",
+            return CherrlAsk(cherrl, 2, "Phew...\nI think I'm getting tired.", "Ufa...\nAcho que estou ficando cansada.",
                 (T("Get some sleep.", "Descanse um pouco."), SayGoodbye),
                 (T("All right, see you later.", "Tudo bem, até mais."), SayGoodbye));
         }
@@ -1044,10 +1055,23 @@ namespace AzureDreamsReimagined
         private bool NadiaAsk(NPCController cherrl, string english, string portuguese,
             params (string Label, Action Apply)[] choices)
         {
-            StoryAsk(cherrl, english, portuguese, choices);
+            StoryAsk(FindStoryActor("nadia") ?? cherrl, english, portuguese, choices);
             _dialogueSpeaker = "Nadia";
             _dialoguePortrait = null;
             return true;
+        }
+
+        private bool NadiaStory(NPCController nadia)
+        {
+            var cherrl = FindStoryActor("cherrl");
+            if (cherrl && StoryStage("cherrl") == CherrlMotherRequest && StoryNewDay("cherrl"))
+                return CherrlMotherVisit(cherrl);
+            // Native mother actor/speaker 0x1A (F_act_nerdia = 88).
+            if (TownSaveVariables.GetBool(CherrlWalkCompletedKey) && StoryStage("cherrl") == CherrlHerbAvailable)
+                return NadiaAsk(nadia, "It is not unusual for Cherrl to faint.\nDo not feel guilty about it.",
+                    "A Cherrl desmaia às vezes.\nNão se sinta culpado.", (T("Continue", "Continuar"), null));
+            return NadiaAsk(nadia, "If time permits,\nplease, make yourself at home.",
+                "Se tiver tempo,\nfique à vontade.", (T("Continue", "Continuar"), null));
         }
 
         private bool CherrlMotherVisit(NPCController cherrl)
@@ -1105,19 +1129,6 @@ namespace AzureDreamsReimagined
                         (T("No, I can't allow that.", "Não posso deixar."), () => CherrlTalk(cherrl, 0,
                             "Yeah, I guess you're right.\nJust a fragment of my imagination.\n... don't worry about it.",
                             "É, acho que tem razão.\nFoi só coisa da minha imaginação.\n... não se preocupe."))));
-
-        private void CherrlWalkToHospital(NPCController cherrl)
-        {
-            CherrlTalkSequence(cherrl, () => CherrlRestConversation(cherrl, () => NadiaAsk(cherrl,
-                    "It is not unusual for Cherrl to faint.\nDo not feel guilty about it.",
-                    "A Cherrl desmaia às vezes.\nNão se sinta culpado.",
-                    (T("Continue", "Continuar"), () => StartCoroutine(LoadInterior(CherrlHospital))))),
-                new CherrlStoryLine(0, "... don't worry about it.", "... não se preocupe."),
-                new CherrlStoryLine(0, "I'm really sorry, {name}.\nI'm always causing trouble for you.",
-                    "Sinto muito, {name}.\nEstou sempre dando trabalho para você."),
-                new CherrlStoryLine(0, "But I'm still very happy.\n... even if it was for a short while, my dream did come true.",
-                    "Mas estou muito feliz.\n... mesmo que tenha sido por pouco tempo, meu sonho se realizou."));
-        }
 
         private void DeliverCherrlHerbWithReply(NPCController hush, int herb, bool anonymous)
         {
@@ -1285,41 +1296,6 @@ namespace AzureDreamsReimagined
                 (T("Brother and sister?", "Irmão e irmã?"), () => CherrlTalk(cherrl, 2, "Yes, probably.", "É, provavelmente.", () => CherrlOutdoorGhosh(cherrl))));
         }
 
-        private void CherrlOutdoorGhosh(NPCController cherrl)
-        {
-            void Finish()
-            {
-                TownSaveVariables.SetBool(CherrlOutdoorWalkKey, true);
-                PersistTownProgress();
-                if (cherrl) cherrl.gameObject.SetActive(false);
-            }
-            if (!FindStoryActor("cherrl_walk_ghosh"))
-            {
-                Vector3 besideCherrl = cherrl.transform.position + Vector3.right * 2f;
-                SpawnStoryResident("ghosh", "cherrl_walk_ghosh", "Ghosh",
-                    new Vector2Int(Mathf.RoundToInt(besideCherrl.x), Mathf.RoundToInt(besideCherrl.z)));
-            }
-            var ghosh = FindStoryActor("cherrl_walk_ghosh");
-            if (!ghosh)
-            {
-                Finish();
-                return;
-            }
-            GhoshSequence(ghosh, () => CherrlTalkSequence(cherrl, () =>
-                    GhoshTalk(ghosh, "I didn't do anything!", "Eu não fiz nada!", () =>
-                    {
-                        StartCoroutine(PlayGhoshDeparture(ghosh, Vector3.right));
-                        Finish();
-                    }),
-                new CherrlStoryLine(1, "{name} is not an airhead.\n{name}'s no airhead.", "O {name} não é um cabeça de vento.\nNão é, não."),
-                new CherrlStoryLine(1, "{name} is, {name} is ...", "O {name} é... O {name} é...")),
-                ("Hey {name}.\nWho's that cute girl beside you?", "Ei, {name}.\nQuem é essa garota bonita do seu lado?"),
-                ("Miss,\nif you stand too close to him, you might catch his airhead disease.",
-                    "Senhorita,\nse ficar tão perto dele, corre o risco de pegar essa doença de cabeça de vento."),
-                ("I don't know where you're going, but I will escort you to your destination.",
-                    "Não sei aonde você vai, mas faço questão de acompanhá-la."));
-        }
-
         private void CherrlWakeUpStory(NPCController cherrl)
         {
             // TOWN.BIN 0x417E98–0x418531. The first line selects the nurse portrait (7).
@@ -1356,7 +1332,8 @@ namespace AzureDreamsReimagined
 
         private bool DeliverCherrlHerb(int index, bool anonymous)
         {
-            if ((uint)index >= (uint)_townInventory.DungeonItems.Count ||
+            if (StoryStage("cherrl") != CherrlHerbAvailable || !TownSaveVariables.GetBool(CherrlWalkCompletedKey) ||
+                (uint)index >= (uint)_townInventory.DungeonItems.Count ||
                 !TowerItemTrapManager.IsCherrlHealingHerb(_townInventory.DungeonItems[index]) ||
                 !_townInventory.ConsumeDungeonItem(index, ItemSystem.Kind.Herb)) return false;
             TownSaveVariables.SetBool(CherrlHealingQuestCompleted, true);
@@ -1669,10 +1646,11 @@ namespace AzureDreamsReimagined
                         {
                             if (!_townInventory.ConsumeDungeonItem(cape, QuestItemKind)) return;
                             TownRetailScriptFlags.CreatePersistent().SetBit(TavernQuestCompleteFlag);
-                            StoryTalk(npc, "This means he was... killed at the tower. Sob.",
-                                "Isso significa que ele foi... morto na torre. Snif.", () =>
-                                    StoryTalk(npc, "Why did you have to bring this to me!",
-                                        "Por que você teve que trazer isto para mim!", () => AdvanceTownStory(route, 2)));
+                            TownSaveVariables.SetInt(OkamiBarPhaseKey,(int)OkamiBarPhase.Silent);
+                            TownSaveVariables.SetBool(OkamiSadTalkKey,false);
+                            TownSaveVariables.SetBool(OkamiReopenedThanksKey,false);
+                            AdvanceTownStory(route, 2);
+                            StoryTalk(npc, "...", "...");
                         }), (T("Later", "Depois"), null));
                 if (stage < 2)
                 {
@@ -1686,8 +1664,11 @@ namespace AzureDreamsReimagined
                         ("You’d think he’d walk right through that door any minute now...,", "Até parece que ele vai entrar por aquela porta a qualquer momento...,"),
                         ("... and tell me he’s home.", "... e me dizer que chegou."));
                 }
-                if (stage == 2 && StoryNewDay(route))
-                    return VivianClosedBarConversation(npc);
+                if (stage == 2)
+                    return OkamiBarClosed ? VivianClosedBarConversation(npc) : StoryTalk(npc,"...","...");
+                if (TownSaveVariables.HasValue(OkamiBarPhaseKey) &&
+                    CurrentOkamiBarPhase == OkamiBarPhase.Reopened && !TownSaveVariables.GetBool(OkamiReopenedThanksKey))
+                    return OkamiReopeningThanks(npc);
                 return false;
             }
             if (stage == 3 && StoryRoom == BarRoom && StoryNewDay(route))
@@ -1734,12 +1715,11 @@ namespace AzureDreamsReimagined
 
         private bool VivianClosedBarConversation(NPCController okami)
         {
+            if (TownSaveVariables.GetBool(OkamiSadTalkKey)) return OkamiClosedLastLine(okami);
             return StoryAsk(okami, "Zzzzz...... I'm closing the bar down, get out of here.",
                 "Zzzzz...... Vou fechar o bar. Cai fora daqui.",
                 (T("Give me some booze!", "Me dê uma bebida!"), () => VivianDrinkConversation(okami)),
-                (T("Lift your head when talking.", "Levante a cabeça quando falar."), () => StoryTalk(okami,
-                    "Does that make you lonely...? Well whose fault was that!", "Isso faz você se sentir sozinho...? Bem, de quem será a culpa!",
-                    OpenVivianBar)));
+                (T("Lift your head when talking.", "Levante a cabeça quando falar."), () => OkamiSadConversation(okami)));
         }
 
         private void VivianDrinkConversation(NPCController okami)
@@ -1767,9 +1747,12 @@ namespace AzureDreamsReimagined
 
         private void OpenVivianBar()
         {
-            AdvanceTownStory("vivian", 3);
-            if (StoryRoom == BarRoom && !FindStoryActor("vivian"))
-                SpawnStoryResident("vivian", "vivian", "Vivian", default);
+            // Conversation completion does not reopen the building. The next
+            // completed tower trip advances the cast and Vivian's introduction.
+            TownSaveVariables.SetBool(OkamiSadTalkKey,true);
+            PersistTownProgress();
+            var okami=FindStoryActor("okami");
+            if (okami) OkamiClosedLastLine(okami);
         }
 
         private bool VivianFirstMeeting(NPCController vivian)
@@ -2365,11 +2348,10 @@ namespace AzureDreamsReimagined
                     ("Sorry to keep you waiting!", "Desculpe fazer você esperar!"),
                     ("A pool is really needed in the city of Monsbaiya.", "Monsbaiya precisava mesmo de uma piscina."),
                     ("Otherwise everyone would become mummies.", "Senão todo mundo ia virar múmia."));
-                if (!vivian.TryGetComponent<PoolAttireView>(out _))
+                if (!WearingPoolSprite(vivian))
                     return VivianTalk(vivian, 0, "Wait for me at the pool side.", "Espere por mim na beira da piscina.", () =>
                     {
-                        ApplyPoolPresentation(vivian);
-                        AtPoolside();
+                        ChangePoolOutfit(vivian, AtPoolside);
                     });
                 AtPoolside();
                 return true;
@@ -2395,7 +2377,7 @@ namespace AzureDreamsReimagined
         private void VivianFinishPoolDate(NPCController vivian)
         {
             // TOWN.BIN 0x533AF5–0x533CCC.
-            void SayGoodbye() => VivianSequence(vivian, 5, () => SetVivianPoolVisit(3),
+            void SayGoodbye() => VivianSequence(vivian, 5, () => FinishVivianPoolTrip(vivian),
                 ("I was satisfied just watching you swim, {name}.", "Só de ver você nadar já fiquei feliz, {name}."),
                 ("See you, {name}.  Thanks for being with me today.", "Até mais, {name}. Obrigada por passar o dia comigo."));
 
@@ -2410,6 +2392,12 @@ namespace AzureDreamsReimagined
         private void SetVivianPoolVisit(int visit)
         {
             TownSaveVariables.SetInt(VivianPoolDateKey, visit);
+            if (visit >= 3)
+            {
+                var flags = TownRetailScriptFlags.CreatePersistent();
+                flags.ClearBit(VivianPoolEventFlag);
+                flags.SetBit(VivianPoolPresentFlag);
+            }
             PersistTownProgress();
         }
 

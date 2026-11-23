@@ -1,6 +1,7 @@
 """Extract the constructed lots from the fully developed Monsbaiya capture."""
 
 from collections import defaultdict
+import argparse
 import math
 from pathlib import Path
 import shutil
@@ -14,24 +15,28 @@ OUTPUT = PROJECT / "Assets/AzureDreams/Resources/Town/Retail/Construction"
 # World-space lot boundaries shared with TowerGameController.Construction.cs.
 LOTS = {
     "circuit": (7, 23, 25, 44),
-    "theater": (26, 28, 38, 40),
-    "alley": (42, 29, 54, 41),
+    "casino": (26, 28, 38, 40),
+    "theater": (42, 29, 54, 41),
     "temple": (64, 27, 84, 44),
-    "library": (90, 30, 102, 41),
+    "gym": (90, 30, 102, 41),
     # "home_1" (Koh's house level 2) is built from the retail tiles by build_koh_house_lots.py;
     # the captures only show levels 1 and 3.
     "home": (48, 44, 63, 58),
     "hospital": (8, 62, 23, 72),
     "fountain": (55, 64, 73, 80),
-    "arcade": (104, 62, 119, 73),
-    "gym": (25, 88, 38, 98),
-    "casino": (91, 88, 102, 98),
+    "library": (104, 62, 119, 73),
+    "arcade": (25, 88, 38, 98),
+    "alley": (91, 88, 102, 98),
 }
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--only", nargs="+", choices=sorted(LOTS), help="Rebuild only these lots, preserving the others")
+    args = parser.parse_args()
+    selected = {k: v for k, v in LOTS.items() if not args.only or k in args.only}
     vertices, uv = [], []
-    meshes = {name: defaultdict(list) for name in LOTS}
+    meshes = {name: defaultdict(list) for name in selected}
     with (CAPTURE / "catalog.obj").open() as obj:
         material = ""
         for line in obj:
@@ -51,7 +56,7 @@ def main():
                 points = [vertices[i] for i, _ in refs]
                 x = sum(p[0] for p in points) / len(points)
                 z = sum(p[2] for p in points) / len(points)
-                for name, (x0, z0, x1, z1) in LOTS.items():
+                for name, (x0, z0, x1, z1) in selected.items():
                     if x0 <= x < x1 and z0 <= z < z1:
                         # No intermediate town capture was supplied. The
                         # developed capture has a main house and a later side

@@ -77,18 +77,18 @@ namespace AzureDreamsReimagined
             }
             _nicoFountainGhoshGuest = ghosh;
 
+            BeginNicoGhoshArrival(ghosh, () =>
             GhoshSequence(ghosh, () => NicoTalk(nico, NicoCollecting, $"He donated {amount} G.", $"Ele doou {amount} G.", () =>
                     GhoshTalk(ghosh, $"Well then, I shall donate {amount + 1} G.", $"Então vou doar {amount + 1} G.", () =>
                         NicoTalk(nico, NicoCollecting, "Wow, Thank you.", "Nossa, obrigada.", () =>
                             GhoshTalk(ghosh, "Well, will you excuse me, Lady?", "Bem, com licença, milady.", () =>
                             {
-                                DismissNicoFountainGhosh();
-                                done();
+                                FinishNicoGhoshVisit(done);
                             })))),
                 ("Nico Southey. Here I am, I, Ghosh Rode have come to you.",
                     "Nico Southey. Aqui estou eu, Ghosh Rode, para vê-la."),
                 ("By the way, did this dummy make a donation for the fountain?",
-                    "Aliás, esse bobo fez alguma doação para a fonte?"));
+                    "Aliás, esse bobo fez alguma doação para a fonte?")));
         }
 
         // TOWN.BIN 0x2D220D–0x2D24EF.
@@ -105,8 +105,7 @@ namespace AzureDreamsReimagined
 
             void Finish()
             {
-                DismissNicoFountainGhosh();
-                AdvanceTownStory("nico", NicoAfterSelfiEgg);
+                FinishNicoGhoshVisit(() => AdvanceTownStory("nico", NicoAfterSelfiEgg));
             }
 
             void Invite() => GhoshTalk(ghosh, "Nico,let’s talk about culture and love.",
@@ -114,6 +113,7 @@ namespace AzureDreamsReimagined
                     NicoTalk(nico, NicoFlustered, "Alright.", "Está bem.", () =>
                         GhoshTalk(ghosh, "Aha ha ha ha ha. Ahem.", "Ah, ha, ha, ha, ha. Aham.", Finish)));
 
+            BeginNicoGhoshArrival(ghosh, () =>
             GhoshTalk(ghosh, "Magnificent, Nico. A beautiful place like this really suits you.",
                 "Magnífico, Nico. Um lugar bonito assim combina mesmo com você.", () =>
                     NicoTalk(nico, NicoFlustered, "Heh heh heh.", "He, he, he.", () =>
@@ -124,17 +124,12 @@ namespace AzureDreamsReimagined
                                     "Um bárbaro jamais entenderia a elegância.", Invite)),
                             (T("We make a good couple.", "Nós formamos um belo casal."), () =>
                                 NicoTalk(nico, NicoWorried, "Who’s the couple you’re talking about, {name}?",
-                                    "De que casal você está falando, {name}?", Invite)))));
+                                    "De que casal você está falando, {name}?", Invite))))));
         }
 
         private void DismissNicoFountainGhosh()
         {
-            var ghosh = _nicoFountainGhoshGuest;
-            _nicoFountainGhoshGuest = null;
-            if (!ghosh) return;
-            _townPeople.Remove(ghosh);
-            RemoveGenerated(ghosh.gameObject);
-            RefreshTownNpcCells();
+            if (_nicoFountainGhoshGuest) FinishNicoGhoshVisit(null);
         }
 
         // TOWN.BIN 0x534D13–0x53555F, first and later visits to the reopened pool.

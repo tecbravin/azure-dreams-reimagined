@@ -65,10 +65,7 @@ namespace AzureDreamsReimagined
         private void RestoreBlueCollarSummon()
         {
             if (!HasBlueCollar || _blueCollarFamiliar == null || _blueCollarFamiliar.Actor.Hp == 0) return;
-            var preferred = _playerCell + Vector2Int.left;
-            var cell = UsesManagedTowerLayout
-                ? FindManagedActorCell(preferred, _playerCell, _stairCell, _familiar ? _familiarCell : _playerCell)
-                : FindOpenCell(preferred, _playerCell, _stairCell, _familiar ? _familiarCell : _playerCell);
+            var cell = FindArrivalFamiliarCell(true, _familiar ? _familiarCell : null);
             SpawnBlueCollarFamiliar(_blueCollarFamiliar, cell, animateSummon: false);
         }
 

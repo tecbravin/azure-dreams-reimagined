@@ -60,7 +60,11 @@ namespace AzureDreamsReimagined
             if (_inventoryMenu == InventoryMenu.Closed) return false;
             if (_cancel?.WasPressedThisFrame() == true)
             {
-                if (_familiarOrderPicker != FamiliarOrderPicker.None) _familiarOrderPicker = FamiliarOrderPicker.None;
+                if (_familiarOrderPicker != FamiliarOrderPicker.None)
+                {
+                    PlayRetailSound(RetailSfx.Cancel);
+                    _familiarOrderPicker = FamiliarOrderPicker.None;
+                }
                 else BackInventoryMenu();
                 return true;
             }
@@ -68,10 +72,10 @@ namespace AzureDreamsReimagined
             // The root menu has no horizontal selection. Match the original-style
             // character cycling here without taking left/right away from item tabs
             // or the familiar direction picker.
-            if (characterDelta == 0 && _inventoryMenu == InventoryMenu.Main)
+            if (characterDelta == 0 && _inventoryMenu == InventoryMenu.Main && _familiarOrderPicker == FamiliarOrderPicker.None)
                 characterDelta = MenuDirectionPressed(3) ? -1 :
                     MenuDirectionPressed(4) ? 1 : 0;
-            if (_inventoryMenu != InventoryMenu.Direction && characterDelta != 0)
+            if (_inventoryMenu != InventoryMenu.Direction && _familiarOrderPicker == FamiliarOrderPicker.None && characterDelta != 0)
             {
                 CycleInventoryActor(characterDelta);
                 _inventoryMenuRow = 0;
@@ -104,7 +108,8 @@ namespace AzureDreamsReimagined
             }
             if (RootFamiliar is { } selected && _familiarOrderPicker != FamiliarOrderPicker.None)
             {
-                HandleFamiliarOrders(selected, 0, vertical, _interact?.WasPressedThisFrame() == true);
+                int horizontal = MenuDirectionPressed(3) ? -1 : MenuDirectionPressed(4) ? 1 : 0;
+                HandleFamiliarOrders(selected, horizontal, vertical, _interact?.WasPressedThisFrame() == true);
                 return true;
             }
             int count = InventoryMenuRowCount();
@@ -147,7 +152,7 @@ namespace AzureDreamsReimagined
 
         private int InventoryMenuRowCount() => _inventoryMenu switch
         {
-            InventoryMenu.Main => TrollCanUnequip(RootFamiliar) ? 4 : 3,
+            InventoryMenu.Main => RootFamiliar != null ? (TrollCanUnequip(RootFamiliar) ? 5 : 4) : 3,
             InventoryMenu.Commands => InventoryCollarActor(_commandCollar)?.Species == (byte)MonsterSpecies.U_BOAT
                 ? 7 : HasSpeciesCommand(InventoryCollarActor(_commandCollar)) ? 6 : 5,
             InventoryMenu.Familiar => _area == Area.Tower && (_familiar || _blueCollarAlly?.View) ? 4 : 2,
@@ -177,7 +182,9 @@ namespace AzureDreamsReimagined
                         _familiarAiCursor = OrdersFor(selected).Ai;
                         _familiarOrderPicker = FamiliarOrderPicker.Ai;
                     }
-                    else if (HasBlueCollar && _familiar && _blueCollarAlly?.View &&
+                    else if (row == 3)
+                        OpenFamiliarFormation(selected);
+                    else if (row == 2 && HasBlueCollar && _familiar && _blueCollarAlly?.View &&
                         !IsFamiliarLost(_familiarActor) && !IsFamiliarLost(_blueCollarAlly.Actor))
                     {
                         _fusionFirst = FindBagFamiliar(_familiarActor);
@@ -266,6 +273,7 @@ namespace AzureDreamsReimagined
             var actor = InventoryCollarActor(_commandCollar);
             if (_turnBusy || actor == null || IsFamiliarLost(actor) || (_commandCollar == 1 && !_familiar)) return;
             var from = _commandCollar == 1 ? _familiarCell : _blueCollarAlly.Cell;
+            if (_selectedManualOrder == ManualOrder.Assist && FamiliarMixSpell(actor) == 0) return;
             if (ManualOrderNeedsDirection(actor, _selectedManualOrder) && !InsideMap(from + _commandDirection)) return;
             if (_selectedManualOrder == ManualOrder.Species &&
                 (!HasSpeciesCommand(actor) || (IsSpeciesObstacleCaster(actor) &&
@@ -303,6 +311,7 @@ namespace AzureDreamsReimagined
             }
             int count = InventoryMenuRowCount();
             var panel = new Rect(18f, height * 0.25f, 185f, count == 0 ? 62f : 16f + count * 30f);
+            if (_familiarOrderPicker == FamiliarOrderPicker.Formation) panel.height = Mathf.Max(panel.height, 190f);
             DrawDialogueFrame(panel);
             float statusWidth = Mathf.Min(228f, width - panel.xMax - 36f);
             if (statusWidth >= 140f)
@@ -354,6 +363,8 @@ namespace AzureDreamsReimagined
                 }
                 else if (_inventoryMenu == InventoryMenu.Main && row == 1)
                     GUI.enabled = enabled && _area == Area.Tower && (_familiar || _blueCollarAlly?.View);
+                if (_inventoryMenu == InventoryMenu.Commands && (ManualOrder)row == ManualOrder.Assist)
+                    GUI.enabled = enabled && FamiliarMixSpell(InventoryCollarActor(_commandCollar)) != 0;
                 bool clicked = DrawInventoryButton(button, label, row == _inventoryMenuRow);
                 GUI.enabled = enabled;
                 if (clicked) { SelectInventoryMenuRow(row); break; }
@@ -442,16 +453,17 @@ namespace AzureDreamsReimagined
                 return wait;
             }
             if (!CanCastMagic(actor)) return wait;
+            if (order == ManualOrder.Assist)
+            {
+                int mixSpell = FamiliarMixSpell(actor);
+                if (mixSpell != 0) TryManualMixMagic(actor, view, from, kohDestination, mixSpell);
+                return wait;
+            }
             var profile = UnitProfile(actor.Species);
             int spell = actor.U8(8);
             if (spell == 0) spell = profile?.nativeSpellId ?? 0;
             if (spell == 0) spell = profile?.hiddenSpellId ?? 0;
             if (spell == 0) return wait;
-            if (order == ManualOrder.Assist)
-            {
-                TryManualMixMagic(actor, view, from, kohDestination, spell);
-                return wait;
-            }
 
             int cost = NativeSpellCost(actor, spell);
             if (actor.MpRaw < cost && !_mpProtection.ContainsKey(actor) || !SpendMonsterMp(actor, cost)) return wait;

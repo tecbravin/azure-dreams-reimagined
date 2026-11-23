@@ -174,7 +174,8 @@ namespace AzureDreamsReimagined
         private TowerEventNpc SpawnVisitor(GameObject prefab, Vector2Int cell, string character)
         {
             var view = Spawn(prefab, cell, "Floor 2 - " + character);
-            var sprite = view.GetComponentInChildren<MonsterTurnSpriteView>();
+            bool retail=character=="Ghosh" && RetailResidentBanks.Apply(view,"ghosh");
+            var sprite = retail ? null : view.GetComponentInChildren<MonsterTurnSpriteView>();
             view.transform.position = new Vector3(cell.x, TowerGroundY(cell) + (sprite ? 0.55f : 0f), cell.y);
             return view.AddComponent<TowerEventNpc>();
         }

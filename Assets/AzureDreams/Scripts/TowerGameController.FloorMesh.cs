@@ -34,6 +34,20 @@ namespace AzureDreamsReimagined
         private readonly List<Mesh> _ownedManagedFloorMeshes = new List<Mesh>();
 
         private GameObject _managedFloorMesh, _managedWallMesh;
+        private readonly Dictionary<Material, Material> _wallVisibilityMaterials = new();
+        private Material WallVisibilityMaterial(Material source)
+        {
+            if (!source) return source;
+            if (_wallVisibilityMaterials.TryGetValue(source, out var existing) && existing) return existing;
+            var shader = AssetMode.Load<Shader>("Shaders/KohForegroundWall");
+            if (!shader) return source;
+            var material = new Material(shader) { name = source.name + " (foreground fade)", mainTexture = source.mainTexture };
+            material.mainTextureScale = source.mainTextureScale;
+            material.mainTextureOffset = source.mainTextureOffset;
+            if (source.HasProperty("_Color")) material.color = source.color;
+            _wallVisibilityMaterials[source] = material;
+            return material;
+        }
         private const float TowerWallHeight = 2.2f;
         private const float CutawayWallHeight = 0.16f;
         private const int TowerBackdropTextureSize = 128;
@@ -292,7 +306,7 @@ namespace AzureDreamsReimagined
             _managedFloorMesh = CreateManagedMesh("Generated Tower Floor Mesh", floorVertices, floorIndices, floorUvs,
                 retail ? retailTiles : _groundMaterial, true);
             _managedWallMesh = CreateManagedMesh("Generated Tower Wall Mesh", wallVertices, wallIndices, wallUvs,
-                retail ? retailTiles : _wallMaterial, false);
+                WallVisibilityMaterial(retail ? retailTiles : _wallMaterial), false);
             _towerWallVertices = wallVertices;
             _towerCutawayMesh = _managedWallMesh.GetComponent<MeshFilter>().sharedMesh;
             _towerCutawayMesh.MarkDynamic();
@@ -301,6 +315,9 @@ namespace AzureDreamsReimagined
 
         private void BuildTowerBackdrop(Material material)
         {
+            // Tutorial/legacy geometry uses the same retail background as its floor.
+            int package = _floor <= 2 ? 2 : _floor == TowerFloorRules.BeldoFloor ? 1 : RetailTowerFloor.FloorVariant(_floor) + 3;
+            if (BuildRetailBackdrop(package, _floor == TowerFloorRules.BeldoFloor ? 4 : 2)) return;
             var openCells = _towerFloorLayout?.OpenCells;
             if (!material || openCells == null || openCells.Count == 0) return;
 
@@ -402,7 +419,7 @@ namespace AzureDreamsReimagined
         private void UpdateTowerBackdropRotation()
         {
             if (!_towerBackdrop || _area != Area.Tower) return;
-            if (UsesRetailFloorMesh && _retailBackdropMesh)
+            if (_retailBackdropMesh)
             {
                 UpdateRetailBackdrop();
                 UpdateRetailWater();

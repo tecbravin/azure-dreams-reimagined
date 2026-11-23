@@ -40,6 +40,43 @@ namespace AzureDreamsReimagined
         private ActorDefinition _parkedFamiliarDefinition;
         private int _parkedFamiliarSpecies;
         private int _warmingEggIndex = -1;
+        private Vector2Int? _warmingGroundEgg;
+        private bool _warmingStepPending;
+        private GameObject _warmingEggView;
+        private bool IsWarmingEgg => _warmingEggIndex >= 0 || _warmingGroundEgg.HasValue;
+
+        private void BeginEggWarming(int index, Vector2Int? ground = null)
+        {
+            _warmingEggIndex = index;
+            _warmingGroundEgg = ground;
+            _warmingStepPending = false;
+            _inventoryOpen = false;
+            _groundItemPrompt = null;
+            if (!ground.HasValue && _runInventory != null && index >= 0 && index < _runInventory.DungeonItems.Count)
+                _warmingEggView = CreateEggView(_playerCell, _runInventory.DungeonItems[index],
+                    _player ? _player.transform.position.y - 0.53f : 0.02f);
+            _kohSprite?.PresentWarming(true);
+        }
+
+        private void StopEggWarming()
+        {
+            _warmingEggIndex = -1;
+            _warmingGroundEgg = null;
+            _warmingStepPending = false;
+            if (_warmingEggView) RemoveGenerated(_warmingEggView);
+            _warmingEggView = null;
+            _kohSprite?.PresentWarming(false);
+        }
+
+        private bool HandleEggWarming()
+        {
+            if (!IsWarmingEgg) return false;
+            if (_area != Area.Tower) { StopEggWarming(); return false; }
+            if (_cancel?.WasPressedThisFrame() == true) StopEggWarming();
+            else if (_interact?.WasPressedThisFrame() == true)
+                ScheduleInventoryAction(() => _warmingStepPending = true);
+            return true;
+        }
         private ActorDefinition PersistentFamiliar => _parkedFamiliarActor != null ? _parkedFamiliarDefinition : _familiarDefinition;
         private int PersistentEggSpecies => _parkedFamiliarActor != null ? _parkedFamiliarSpecies : _hatchedSpecies;
 
@@ -172,18 +209,25 @@ namespace AzureDreamsReimagined
                 return;
             }
             int index = SelectedRawIndex;
-            ScheduleInventoryAction(() => _warmingEggIndex = index);
+            BeginEggWarming(index);
         }
 
         private void CompleteEggWarming()
         {
+            if (!_warmingStepPending) return;
+            _warmingStepPending = false;
+            if (_warmingGroundEgg.HasValue)
+            {
+                UseGroundItem(_warmingGroundEgg.Value);
+                return;
+            }
             int index = _warmingEggIndex;
-            _warmingEggIndex = -1;
             if (index < 0 || _runInventory == null) return;
             var items = _runInventory.DungeonItems;
             if (index >= items.Count || items[index].Kind != MonsterEgg.Kind) return;
             var egg = MonsterEgg.Warm(items[index], 1 + RollSpawnRange(4));
             _runInventory.ReplaceDungeonItem(index, MonsterEgg.Kind, egg);
+            if (_warmingEggView && _warmingEggView.TryGetComponent<MonsterEgg>(out var view)) view.Bind(egg);
             HatchWarmedEgg(egg, () => _runInventory.ConsumeDungeonItem(index, MonsterEgg.Kind));
         }
 
@@ -194,29 +238,36 @@ namespace AzureDreamsReimagined
             if (heat < 100) return;
             if (FindEggSpecies(egg.Subtype) == null)
             { _message = T("This egg's species cannot hatch here.", "O ovo desta espécie não pode chocar aqui."); return; }
-            if (!TryFindHatchCell(out var cell))
+            bool redAvailable = !_familiar;
+            bool blueAvailable = !redAvailable && HasBlueCollar && !_blueCollarAlly?.View;
+            Vector2Int cell = default;
+            if ((redAvailable || blueAvailable) && !TryFindHatchCell(out cell))
             { _message = T("The egg is ready. Warm it again with an empty tile beside Koh.", "O ovo está pronto. Aqueça-o de novo com um espaço livre ao lado de Koh."); return; }
-            if (!CanRemoveFamiliarEquipment()) return;
-
-            if (_parkedFamiliarActor == null)
-            {
-                _parkedFamiliarActor = _familiarActor;
-                _parkedFamiliarDefinition = _familiarDefinition;
-                _parkedFamiliarSpecies = _hatchedSpecies;
-                ExposeParkedFamiliar();
-            }
-            EquipHatchedFamiliar(egg.Subtype, _floor);
-            _runInventory?.ClearEquipped(FamiliarEquipped);
-            _towerHatchedNickname = "";
-            _familiarInBag = _familiarDefeated = false;
+            var definition = EggFamiliarDefinition(egg.Subtype);
+            var data = FindEggSpecies(egg.Subtype);
+            var actor = new ActorRecord { Species = egg.Subtype };
+            if (!TryGetLevelStats(egg.Subtype, _floor, out var stats))
+                stats = new LevelStats { level = _floor, hp = data.hp, mp = data.mp, atk = data.attack, def = data.defense };
+            ApplyFreshStats(actor, stats);
+            // Tower hatchlings belong only to this expedition. This flag also follows
+            // collar/bag swaps and checkpoints, blocks hut returns, and expires in town.
+            var hatchling = new BagFamiliar { Definition = definition, Actor = actor, Species = egg.Subtype,
+                Temporary = true };
+            _bagFamiliars.Add(hatchling);
             consumeEgg();
-            if (_familiar) { _familiar.SetActive(false); RemoveGenerated(_familiar); }
-            _familiarCell = cell;
-            _familiar = SpawnFamiliar();
-            _familiarLocomotion = ConfigureLocomotion(_familiar);
-            _familiarAnimation = _familiar.GetComponentInChildren<AzureDreamsReimagined.Rendering.PsxSpriteRenderer>();
-            Animate(_familiarAnimation, false);
-            _message = T($"{_familiarDefinition.DisplayName} hatched at level {_floor}! It will stay until you leave the tower.", $"{_familiarDefinition.DisplayName} nasceu no nível {_floor}! Vai acompanhar você até a saída da torre.");
+            StopEggWarming();
+            if (redAvailable)
+            {
+                ActivateBagFamiliar(hatchling);
+                _familiarInBag = _familiarDefeated = false;
+                _familiarCell = cell;
+                _familiar = SpawnFamiliar();
+                _familiarLocomotion = ConfigureLocomotion(_familiar);
+                _familiarAnimation = _familiar.GetComponentInChildren<AzureDreamsReimagined.Rendering.PsxSpriteRenderer>();
+                Animate(_familiarAnimation, false);
+            }
+            else if (blueAvailable) SpawnBlueCollarFamiliar(hatchling, cell, animateSummon: true);
+            _message = T($"{definition.DisplayName} hatched at level {_floor}!", $"{definition.DisplayName} nasceu no nível {_floor}!");
         }
 
         private bool TryFindHatchCell(out Vector2Int cell)

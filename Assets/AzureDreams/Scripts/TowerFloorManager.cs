@@ -279,9 +279,11 @@ namespace AzureDreamsReimagined
 
         internal void GenerateTutorial(byte[] terrain, Vector2Int entrance, Vector2Int exit)
         {
-            LoadFixedTerrain(terrain, 1, 173, entrance, exit);
-            // The tutorial terrain is retail layout 9; draw it with its retail tileset.
-            Retail = RetailTowerFloor.CreateFixed(9, false);
+            // Use the same surfaces for the tutorial's actors, movement and mesh.
+            // Raw cell values omit raised floor faces contained in the tileset.
+            var retail = RetailTowerFloor.CreateFixed(9, false);
+            if (retail != null) BuildFromRetail(retail, 1, 173, entrance, exit);
+            else LoadFixedTerrain(terrain, 1, 173, entrance, exit);
         }
 
         private void LoadFixedTerrain(byte[] terrain, int floor, int seed, Vector2Int entrance, Vector2Int exit)

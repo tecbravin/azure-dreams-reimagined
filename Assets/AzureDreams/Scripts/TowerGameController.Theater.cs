@@ -22,7 +22,7 @@ namespace AzureDreamsReimagined
         private const string ComedyMusicCue = "EntranceOfComedians.mp3";
         private const string ComedyExitMusicCue = "ExitComedians.mp3";
         private bool _theaterOnStage;
-        private bool _theaterAnswerReady, _comedyFinished;
+        private bool _theaterAnswerReady;
 
         // Comedy staging state.
         private ComedyBeat _comedyBeat;
@@ -171,8 +171,13 @@ namespace AzureDreamsReimagined
             _theaterHost = host;
             _theaterPerformer = performer;
             _theaterHome = performer.transform.position;
+            _theaterPerformerRotation = performer.transform.rotation;
             _theaterStage = StoryRoom == BarRoom ? _theaterHome :
                 RetailTownActorPosition(new Vector3(25f, 0.5f, 24f), 0f);
+            // Captured theater mesh: stage X19..33/Z9..19 at Y1;
+            // Z23..26 are the audience tiers, not the stage.
+            if (act == TheaterAct.Comedy && StoryRoom == TheaterRoom)
+                _theaterStage = new Vector3(26f, 1f, 17f);
             _theaterPlayerHome = _player.transform.position;
             _theaterPlayerFacing = _townFacing;
             _theaterOnStage = true;
@@ -183,12 +188,16 @@ namespace AzureDreamsReimagined
             if (act == TheaterAct.Comedy)
             {
                 _comedyKohBase = _theaterStage + new Vector3(-0.85f, TownActorFootOffset, 0f);
-                _comedyFonBase = _theaterStage;
+                _comedyFonBase = _theaterStage + Vector3.right * .85f;
+                performer.transform.position = _comedyFonBase;
                 _comedyKohScale = _player.transform.localScale;
                 _player.transform.position = _comedyKohBase;
-                _townFacing = Vector2.down;
+                _townFacing = Vector2.up;
                 if (_kohSprite) _kohSprite.SetFacing(_townFacing);
+                performer.transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                UpdateTownKewne();
                 CaptureComedyAudience();
+                SetupComedyLights();
                 SetComedyBeat(ComedyBeat.Curtain, 1.4f);
                 // Show start: scene selector 0x700 (applause) as the curtain opens.
                 PlayTheaterSound("Theater700");
@@ -198,7 +207,6 @@ namespace AzureDreamsReimagined
             _comedyLine = _comedyMistakes = 0;
             _comedyNextAt = _theaterStarted + 1f;
             _theaterAnswerReady = false;
-            _comedyFinished = false;
             _message = string.Empty;
             if (act != TheaterAct.Comedy) PlayRetailSound(RetailSfx.Confirm);
         }
@@ -211,13 +219,61 @@ namespace AzureDreamsReimagined
         }
 
         private readonly System.Collections.Generic.List<(Transform View, Vector3 Base)> _comedyAudience = new();
+        private readonly System.Collections.Generic.List<(NPCController Npc, Vector3 Position, Quaternion Rotation, bool Enabled)> _comedyAudienceHomes = new();
+        private readonly System.Collections.Generic.List<NPCController> _comedyAudienceExtras = new();
+        private readonly System.Collections.Generic.List<GameObject> _comedyLights = new();
+        private Quaternion _theaterPerformerRotation;
 
         private void CaptureComedyAudience()
         {
             _comedyAudience.Clear();
+            if (StoryRoom == TheaterRoom)
+            {
+                string[] banks = { "narder", "oyaji", "obasan", "hunter1", "nouhuko", "hunter2" };
+                for (int i = 0; i < banks.Length; i++)
+                {
+                    string id = "comedy_guest_" + i;
+                    SpawnStoryResident("monster_shop_hunter", id, T("Spectator", "Espectador"), default);
+                    var guest = FindStoryActor(id);
+                    if (!guest) continue;
+                    RetailResidentBanks.ApplyBank(guest.gameObject, banks[i]);
+                    _comedyAudienceExtras.Add(guest);
+                }
+            }
             foreach (var person in _townPeople)
                 if (person && person != _theaterPerformer && person.npcId != "vivian" && person.gameObject.activeInHierarchy)
+                {
+                    _comedyAudienceHomes.Add((person, person.transform.position, person.transform.rotation, person.enabled));
+                    if (StoryRoom == TheaterRoom)
+                    {
+                        int seat = _comedyAudience.Count;
+                        int row = seat / 4;
+                        person.transform.position = new Vector3(21.8f + seat % 4 * 2.8f, .5f + row * .5f, 23.45f + row);
+                        person.transform.rotation = Quaternion.LookRotation(Vector3.back);
+                        person.enabled = false;
+                    }
                     _comedyAudience.Add((person.transform, person.transform.position));
+                }
+            RefreshTownNpcCells();
+        }
+
+        private void SetupComedyLights()
+        {
+            foreach (var target in new[] { _comedyKohBase, _comedyFonBase })
+            {
+                var fixture = new GameObject("Comedy stage spotlight");
+                fixture.transform.SetParent(transform, false);
+                fixture.transform.position = target + new Vector3(0f, 5f, 2f);
+                fixture.transform.LookAt(target + Vector3.up * .6f);
+                var light = fixture.AddComponent<Light>();
+                light.type = LightType.Spot;
+                light.range = 10f;
+                light.spotAngle = 38f;
+                light.intensity = 2.5f;
+                light.color = new Color(1f, .95f, .8f);
+                light.shadows = LightShadows.None;
+                _comedyLights.Add(fixture);
+            }
         }
 
         private void SetComedyBeat(ComedyBeat beat, float length, string speaker = null, string text = null)
@@ -380,7 +436,6 @@ namespace AzureDreamsReimagined
                     if (_comedyMistakes >= 3)
                     {
                         // Three bonks: Koh faints and the curtain falls.
-                        _comedyFinished = true;
                         PlayTheaterSound("Theater702", 0.6f);
                         _theaterAct = TheaterAct.Results;
                         SetComedyBeat(ComedyBeat.CurtainClose, 1.6f);
@@ -396,7 +451,6 @@ namespace AzureDreamsReimagined
                     break;
                 case ComedyBeat.Bow:
                     if (!beatDone) break;
-                    _comedyFinished = true;
                     _theaterAct = TheaterAct.Results;
                     SetComedyBeat(ComedyBeat.CurtainClose, 1.6f, FonName, _comedyText);
                     break;
@@ -515,6 +569,8 @@ namespace AzureDreamsReimagined
             if (_theaterPerformer)
             {
                 _theaterPerformer.transform.position = _theaterHome;
+                if (_theaterAct is TheaterAct.Comedy or TheaterAct.Results)
+                    _theaterPerformer.transform.rotation = _theaterPerformerRotation;
                 _theaterPerformer.GetComponent<ActorLocomotionView>()?.Present(Vector3.zero, 0f, false);
             }
             if (_theaterOnStage && _player)
@@ -528,6 +584,20 @@ namespace AzureDreamsReimagined
             foreach (var (view, basePoint) in _comedyAudience)
                 if (view) view.position = basePoint;
             _comedyAudience.Clear();
+            foreach (var home in _comedyAudienceHomes)
+                if (home.Npc)
+                {
+                    home.Npc.transform.SetPositionAndRotation(home.Position, home.Rotation);
+                    home.Npc.enabled = home.Enabled;
+                }
+            _comedyAudienceHomes.Clear();
+            foreach (var guest in _comedyAudienceExtras)
+                if (guest) { _townPeople.Remove(guest); RemoveGenerated(guest.gameObject); }
+            _comedyAudienceExtras.Clear();
+            foreach (var light in _comedyLights)
+                if (light) { light.SetActive(false); Destroy(light); }
+            _comedyLights.Clear();
+            RefreshTownNpcCells();
             _theaterOnStage = false;
             _afterTheaterDance = null;
             if (_playingMusicCue is VivianDanceMusicCue or ComedyMusicCue or ComedyExitMusicCue)
@@ -693,31 +763,32 @@ namespace AzureDreamsReimagined
                 text = _comedyMistakes < 3 ? T("Thank you very much, we love you!", "Muito obrigado, adoramos vocês!")
                     : T("Three bonks! The show is over.", "Três pancadas! Fim do espetáculo.");
             }
-            var box = new Rect(width * 0.13f, height - 124f, width * 0.74f, 108f);
+            var box = new Rect(width * 0.13f, height - 156f, width * 0.74f, 140f);
             if (!string.IsNullOrEmpty(text))
             {
                 DrawDialogueFrame(box, dialoguePole: true);
-                if (!string.IsNullOrEmpty(speaker))
-                    DrawHudText(new Rect(box.x + 12f, box.y + 4f, box.width - 24f, 20f), speaker, _bodyStyle, dialogue: true);
-                DrawHudText(new Rect(box.x + 12f, box.y + 24f, box.width - 24f, 52f), text, _messageStyle, dialogue: true);
+                bool kohThanks = (_comedyBeat == ComedyBeat.Bow ||
+                    _theaterAct == TheaterAct.Results && !closing && _comedyMistakes < 3);
+                if (kohThanks && AssetMode.IsReimagined)
+                    DrawDialoguePortrait(StreamImage("Reimagined/Portraits/Dialogue/Koh_variant0_frame0.png"), box);
+                DrawSpeakerWindow(box, speaker);
+                DrawDialogueText(new Rect(box.x + 12f, box.y + 8f, box.width - 24f, 52f), text, text);
             }
             DrawHudText(new Rect(width - 190f, 12f, 178f, 22f),
                 T($"Bonks: {_comedyMistakes}/3", $"Pancadas: {_comedyMistakes}/3"), _bodyStyle);
             if (_theaterAnswerReady && _comedyBeat == ComedyBeat.FonLine)
             {
                 float timeLeft = Mathf.Clamp01(1f - (Time.unscaledTime - _comedyBeatStarted) / _comedyBeatLength);
-                DrawHudFill(new Rect(box.x + 12f, box.yMax - 42f, (box.width - 24f) * timeLeft, 3f),
+                DrawHudFill(new Rect(box.x + 12f, box.yMax - 68f, (box.width - 24f) * timeLeft, 3f),
                     new Color(0.9f, 0.67f, 0.25f));
                 float button = (box.width - 32f) * 0.5f;
-                if (GUI.Button(new Rect(box.x + 12f, box.yMax - 34f, button, 25f), "× " + WithInteractHint("Agree", "Concordar")))
+                if (GUI.Button(new Rect(box.x + 12f, box.yMax - 60f, button, 25f), "× " + WithInteractHint("Agree", "Concordar")))
                     AnswerComedyLine(true, true);
-                if (GUI.Button(new Rect(box.xMax - button - 12f, box.yMax - 34f, button, 25f),
+                if (GUI.Button(new Rect(box.xMax - button - 12f, box.yMax - 60f, button, 25f),
                     "○ " + T("Talk back", "Retrucar") + $" [{_cancel?.GetBindingDisplayString() ?? "Esc"}]"))
                     AnswerComedyLine(true, false);
             }
-            if (_theaterAct == TheaterAct.Results && !closing &&
-                GUI.Button(new Rect(box.xMax - 135f, box.yMax - 34f, 123f, 25f), T("Continue", "Continuar")))
-                FinishComedyDialogue();
+            if (_theaterAct == TheaterAct.Results && !closing) DrawContinuePrompt(box, FinishComedyDialogue);
             return true;
         }
     }

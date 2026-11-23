@@ -7,6 +7,17 @@ namespace AzureDreamsReimagined
         private Texture2D _hudGoldIcon, _hudGearIcon;
         private ArtStyle? _hudIconStyle;
 
+        private bool ShowMoneyHud => _area == Area.Town &&
+            (_constructionOpen || (InCarpenterShop &&
+                ((_storySpeaker && _storySpeaker.npcId == "tonka") ||
+                 (_activeTownNpc && _activeTownNpc.npcId == "tonka"))) ||
+             _barryPage is BarryShopPage.Buy or BarryShopPage.Sell or BarryShopPage.Temper ||
+             _generalStorePage is GeneralStorePage.Buy or GeneralStorePage.Purchased ||
+             _monsterShopPage is MonsterShopPage.Buy or MonsterShopPage.ConfirmBuy or
+                 MonsterShopPage.Sell or MonsterShopPage.Confirm or
+                 MonsterShopPage.InfusionFamiliar or MonsterShopPage.InfusionSpell ||
+             _octopusDumplingStallOpen || (_shielaChargeOpen && _storySpeaker && _storySpeaker.npcId == "shiela"));
+
         private void LoadCornerHudIcons()
         {
             if (!_hudGearIcon) _hudGearIcon = Resources.Load<Texture2D>("UI/Hud/gear");
@@ -19,6 +30,7 @@ namespace AzureDreamsReimagined
 
         private void DrawTownMoneyHud(float width)
         {
+            if (!ShowMoneyHud) return;
             LoadCornerHudIcons();
             const float moneyWidth=159f*.6f;
             var plaque = new Rect(width-16f-moneyWidth,24f,moneyWidth,34f);

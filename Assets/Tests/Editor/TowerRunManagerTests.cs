@@ -187,6 +187,24 @@ namespace AzureDreams.Reimagined.EditorTests
         }
 
         [Test]
+        public void ReturnToTown_Defeat_LosesCarriedItemsButKeepsFamiliar()
+        {
+            var item = ScriptableObject.CreateInstance<ItemDefinition>();
+            try
+            {
+                _town.AddItem(item, 2);
+                _m.BeginRun(1, 1, _town, 20, 0, 1, "Kewne", 2);
+                _m.RunInventory.AddDungeonItem(new AzureDreams.Core.DungeonItemEntry(0, 1, 0, 0));
+                _m.ReturnToTown(false);
+                Assert.AreEqual(0, _town.TotalItems);
+                Assert.IsNull(_m.RunInventory);
+                Assert.AreEqual(0, _m.Potions);
+                Assert.AreEqual("Kewne", _m.FamiliarName);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(item); }
+        }
+
+        [Test]
         public void ReturnToTown_UpdatesTownLevel()
         {
             _m.BeginRun(1, 1, _town, 20, 90, 1, "", 0);

@@ -7,8 +7,7 @@ namespace AzureDreamsReimagined
     /// Individual tower commands. The shared turn clock remains in Movement;
     /// floor/spawn/run ownership belongs to the manager layer.
     /// Front-tile attacks (including empty swings) follow begin_front_tile_attack.c.
-    /// Facing/front-tile selection supports eight directions. Movement is still
-    /// cardinal; configured demo damage and scheduling are not retail behavior.
+    /// Facing, front-tile selection and movement support eight directions; configured demo damage and scheduling are not retail behavior.
     /// Original terrain-height and party-target checks remain separate obligations.
     /// </summary>
     public sealed partial class TowerGameController
@@ -30,8 +29,7 @@ namespace AzureDreamsReimagined
         private bool KohIsParalyzed => Combat.HasStatus(_playerActor, StatusId.PARALYSIS);
         private bool KohIsConfused => Combat.HasStatus(_playerActor, StatusId.CONFUSION) && !HasHolySwordProtection(_playerActor);
 
-        // begin_front_tile_attack indexes eight dir_step entries. Movement
-        // remains cardinal until the shared resolver and side probes are ported.
+        // Facing and movement share the eight adjacent tile directions.
         private static bool IsTowerAttackDirection(Vector2Int direction) =>
             direction.x >= -1 && direction.x <= 1 && direction.y >= -1 && direction.y <= 1 &&
             direction != Vector2Int.zero;

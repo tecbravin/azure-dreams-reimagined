@@ -23,6 +23,27 @@ namespace AzureDreamsReimagined
         private bool _turnBusy;
         private float _turnElapsed;
         private bool _quickTowerStep;
+        private bool _towerRunningStep;
+        private bool TowerRoomsClearForRunning(Vector2Int from, Vector2Int destination)
+        {
+            int sourceRoom = BellRoomAt(from), destinationRoom = BellRoomAt(destination);
+            foreach (var creature in _creatures)
+            {
+                if (creature.Health <= 0) continue;
+                // Unknown room data must not allow running through a fight.
+                if (_towerFloorLayout?.Dungeon == null) return false;
+                int enemyRoom = BellRoomAt(creature.Cell);
+                if ((sourceRoom >= 0 && enemyRoom == sourceRoom) ||
+                    (destinationRoom >= 0 && enemyRoom == destinationRoom)) return false;
+            }
+            return true;
+        }
+        private bool _familiarActsAfterKoh;
+        private float FamiliarPresentationProgress(float elapsed, float duration) =>
+            Mathf.Clamp01((elapsed - (_familiarActsAfterKoh ? duration : 0f)) / Mathf.Max(.02f, duration));
+        private bool IsPartyFamiliarView(Component view) => view &&
+            ((_familiar && view.transform.IsChildOf(_familiar.transform)) ||
+             (_blueCollarAlly?.View && view.transform.IsChildOf(_blueCollarAlly.View.transform)));
         private const int CombatMovementRadius = 5;
         private Vector3 _playerFrom, _familiarFrom;
         private int _pendingPlayerDamage;
@@ -33,15 +54,19 @@ namespace AzureDreamsReimagined
         private readonly TowerDamageLedger _creatureDamage = new TowerDamageLedger();
         private readonly List<(CoreActor Attacker, int TargetIndex, int Damage, byte Wand)> _creatureHits = new();
         private readonly Dictionary<CoreActor, (CoreActor Actor, byte Wand)> _finishingBlows = new();
-        private readonly List<(CoreActor target, string line, bool needsActiveFamiliar, bool isAttack, CoreActor source, int element)> _turnDamageMessages = new();
-        private readonly List<Vector3> _creatureFroms = new List<Vector3>();
+        private readonly List<(CoreActor target, string line, bool needsActiveFamiliar, bool isAttack, CoreActor source, int element, int damage)> _turnDamageMessages = new();
+        private readonly Dictionary<CoreActor, Vector3> _creatureFroms = new();
         private PsxSpriteRenderer _playerAnimation, _familiarAnimation;
         private bool _townWasMoving;
         private bool _townWasRunningOnGround;
         private float _townWalkCycle;
         private const float TownGravity = 18f;
         private const float TownJumpHeight = 1.8f;
-        private void BeginTownJump() => _townJumpVelocity=Mathf.Sqrt(2f*TownGravity*TownJumpHeight);
+        private void BeginTownJump()
+        {
+            _townJumpVelocity = Mathf.Sqrt(2f * TownGravity * TownJumpHeight);
+            PlayRetailSound(RetailSfx.Jump);
+        }
         private const float TownAirAccelerationRate = 3f;
         private const float TownActorRadius = 0.30f;
         private const float TownActorFootOffset = 0.55f;
@@ -87,6 +112,8 @@ namespace AzureDreamsReimagined
         {
             if (_area != Area.Town || !_player || deltaTime <= 0f || float.IsNaN(deltaTime)) return;
             if (_townFlow && _townFlow.State.Current != TownGameState.State.TownIdle) return;
+            if (TickHomeSlide(input, deltaTime)) return;
+            if (TickCasinoRampSlide(input, deltaTime)) return;
             if (MoveAuraBike(input, deltaTime)) return;
             if (input.sqrMagnitude > 0.0001f)
             {
@@ -191,6 +218,14 @@ namespace AzureDreamsReimagined
 
         private bool TownPlayerPositionOpen(Vector3 destination, Vector3 origin, float feetHeight)
         {
+            // Solid below the wooden incline, but incremental steps along its
+            // actual top are traversable without jumping.
+            if (TryCasinoRampHeight(destination,out float casinoRamp,out _) && casinoRamp>feetHeight+.4f) return false;
+            float homeGround = HomeRoofGround(destination), homeOrigin = HomeRoofGround(origin);
+            if (!float.IsNegativeInfinity(homeGround) && homeGround > feetHeight + .4f) return false;
+            if (!float.IsNegativeInfinity(homeOrigin) && homeOrigin > .4f && float.IsNegativeInfinity(homeGround)) return false;
+            if (InFortuneHouse && FortuneGround(destination) > feetHeight + (FortuneStair(destination) ? 1.01f : .51f))
+                return false;
             if (UsingRetailTown && TownBridgeTop(destination) > Mathf.Max(feetHeight, TownBridgeTop(origin)) + 0.81f)
                 return false;
             return TownPositionOpen(destination, feetHeight);
@@ -200,6 +235,8 @@ namespace AzureDreamsReimagined
         {
             float top = Mathf.Max(FountainObstacleTop(position, radius), Mathf.Max(TownItemTop(position, radius, ignored), Mathf.Max(TownPotTop(position, radius, ignored),
                 Mathf.Max(TownWallTop(position, radius), TownRoundObstacleTop(position, radius)))));
+            top = Mathf.Max(top, RouletteObstacleTop(position, radius));
+            if (InFortuneHouse) return Mathf.Max(top, FortuneFurnitureTop(position, radius));
             return _interior ? Mathf.Max(top, _interior.FurnitureTop(position, radius)) : top;
         }
 
@@ -234,7 +271,7 @@ namespace AzureDreamsReimagined
             foreach (var door in _townFacadeDoors)
                 if (door && door.BlocksFacade(position, radius)) return false;
             foreach (var rectangle in _townBuildings)
-                if (position.x > rectangle.xMin - radius && position.x < rectangle.xMax + radius &&
+                if (float.IsNegativeInfinity(HomeRoofGround(position)) && position.x > rectangle.xMin - radius && position.x < rectangle.xMax + radius &&
                     position.z > rectangle.yMin - radius && position.z < rectangle.yMax + radius) return false;
             return TownObstacleTop(position, radius, ignored) <= feetHeight + TownGroundTolerance;
         }
@@ -263,15 +300,16 @@ namespace AzureDreamsReimagined
             _monsterSpriteActions.Add(view);
         }
 
-        private void PresentKewneActions(float progress)
+        private void PresentKewneActions(float progress, float familiarProgress = -1f)
         {
             foreach (var (view, direction, targetHeight) in _kewneActions)
             {
                 if (!view) continue;
-                if (targetHeight.HasValue) view.PresentAttack(direction, progress, targetHeight.Value);
-                else view.PresentCast(direction, progress);
+                float actionProgress = familiarProgress >= 0f && IsPartyFamiliarView(view) ? familiarProgress : progress;
+                if (targetHeight.HasValue) view.PresentAttack(direction, actionProgress, targetHeight.Value);
+                else view.PresentCast(direction, actionProgress);
             }
-            if (progress >= 1f) _kewneActions.Clear();
+            if (progress >= 1f && (familiarProgress < 0f || familiarProgress >= 1f)) _kewneActions.Clear();
         }
 
         private bool CommitTowerTurn(Vector2Int step, CoreActor pushedActor, Vector2Int pushStep,
@@ -279,7 +317,7 @@ namespace AzureDreamsReimagined
         {
             if (_area != Area.Tower || _turnBusy || LevelUpCelebrationBlocksTurn ||
                 _towerArrivalPlaying || _elevatorAscending || MonsterDenPlaying ||
-                !_player || Mathf.Abs(step.x) + Mathf.Abs(step.y) > 1)
+                !_player || step.x < -1 || step.x > 1 || step.y < -1 || step.y > 1)
                 return false;
             bool executeFamiliarCommands = !KohSkipsAction;
             if (!executeFamiliarCommands)
@@ -289,7 +327,7 @@ namespace AzureDreamsReimagined
             }
             else if (step != Vector2Int.zero && pushedActor == null && KohIsConfused)
             {
-                var direction = RollTowerDirection(allowDiagonals: false);
+                var direction = RollTowerDirection(allowDiagonals: true);
                 TryTowerFace(direction);
                 step = CanTowerStep(_playerCell, direction) ? direction : Vector2Int.zero;
             }
@@ -332,6 +370,7 @@ namespace AzureDreamsReimagined
             _finishingBlows.Clear();
             _turnDamageMessages.Clear();
             _speciesActionMessages = null;
+            _pendingEnemyThefts.Clear();
             Vector2Int? reservedPushCell = yieldingDestination ??
                 (pushedActor == null ? (Vector2Int?)null : _playerCell + pushStep * 2);
             _pushedEggAlly = pushedActor == null ? null : _thrownEggs.Find(ally => ally.Actor == pushedActor);
@@ -388,7 +427,27 @@ namespace AzureDreamsReimagined
                 bool blind = Combat.HasStatus(cs.Actor, StatusId.BLIND);
                 bool fleeing = _holyBellTurns > 0;
                 bool canAct = !skipsAction && !IsFrog(cs.Actor) && !fleeing && !confused && !blind;
-                if ((HasSpeciesCommand(cs.Actor) || HasInvoluntarySpeciesAction(cs.Actor)) && TryEnemySpeciesAction(cs, canAct,
+                bool carryingStolenItem = _enemyStolenItems.ContainsKey(cs.Actor);
+                if (canAct && !carryingStolenItem && TryViperEggAction(cs, kohActedCell, summonCell ?? reservedPushCell, out var eggStep))
+                {
+                    AddIntent(cs.Actor, eggStep, CoreTurns.PriorityMonster);
+                    continue;
+                }
+                if (carryingStolenItem && !skipsAction && !IsFrog(cs.Actor) && !fleeing)
+                {
+                    var escape = StolenItemEscapeStep(cs.Cell, kohActedCell, summonCell);
+                    if (escape != Vector2Int.zero)
+                    {
+                        AddIntent(cs.Actor, escape, CoreTurns.PriorityMonster);
+                        continue;
+                    }
+                }
+                if (TryQueuePicketTheft(cs, kohActedCell, canAct))
+                {
+                    AddIntent(cs.Actor, Vector2Int.zero, CoreTurns.PriorityMonster);
+                    continue;
+                }
+                if (!carryingStolenItem && (HasSpeciesCommand(cs.Actor) || HasInvoluntarySpeciesAction(cs.Actor)) && TryEnemySpeciesAction(cs, canAct,
                     canAct && FamiliarHasSight(cs.Cell, kohActedCell)))
                 {
                     AddIntent(cs.Actor, Vector2Int.zero, CoreTurns.PriorityMonster);
@@ -402,16 +461,16 @@ namespace AzureDreamsReimagined
                 // ou diagonal) e com linha de visao livre - ver select_creature_action_and_target.c,
                 // case MONSTER_TROLL, no decomp (ele usa a mesma resolucao de ataque normal, so
                 // que a distancia maior, por isso entra aqui e nao no sistema generico de magias).
-                bool trollRangedAttack = canAttack && !confused && !blind &&
+                bool trollRangedAttack = canAttack && !carryingStolenItem && !confused && !blind &&
                     cs.Actor.Species == (byte)MonsterSpecies.TROLL &&
                     Distance(cs.Cell, targetCell) is > 1 and <= 10 &&
                     (targetCell.x == cs.Cell.x || targetCell.y == cs.Cell.y ||
                      Mathf.Abs(targetCell.x - cs.Cell.x) == Mathf.Abs(targetCell.y - cs.Cell.y)) &&
                     FamiliarHasSight(cs.Cell, targetCell, clearShot: true) && RollSpawnRange(4) == 0;
                 bool attack = canAttack && (Distance(cs.Cell, targetCell) == 1 || trollRangedAttack);
-                var (spellPower, spellStatus, spellId) = canAttack && !confused && !blind && !attack
+                var (spellPower, spellStatus, spellId) = canAttack && !carryingStolenItem && !confused && !blind && !attack
                     ? PrepareMonsterSpell(cs.Actor, cs.Cell, targetCell) : default;
-                if (attack && !confused && !blind)
+                if (attack && !carryingStolenItem && !confused && !blind)
                 {
                     // Mandara (confusao), Zu/Cyclone (paralisia) e Blume (lavagem cerebral)
                     // aplicam seu efeito no ataque corpo a corpo EM VEZ de dano normal, igual ao
@@ -575,11 +634,16 @@ namespace AzureDreamsReimagined
             _familiarFrom = _familiar ? _familiar.transform.position : Vector3.zero;
             _creatureFroms.Clear();
             foreach (var cs in _creatures)
-                _creatureFroms.Add(cs.View ? cs.View.transform.position : Vector3.zero);
+                _creatureFroms[cs.Actor] = cs.View ? cs.View.transform.position : CellPosition(cs.Cell);
             bool quietStep = (!executeFamiliarCommands || _pendingFamiliarCommands.Count == 0) &&
                 !wait && !pushing && !_carriedView && !InTowerTutorial && _floor != 2 &&
                 !_creatures.Exists(creature => Distance(creature.Cell, _playerCell) <= CombatMovementRadius ||
                     Distance(creature.Cell, destination) <= CombatMovementRadius);
+            Vector2Int runFrom = _playerCell;
+            bool runStep = _runAction?.IsPressed() == true && !wait && !pushing && !_carriedView &&
+                (!executeFamiliarCommands || _pendingFamiliarCommands.Count == 0) &&
+                TowerRoomsClearForRunning(runFrom, destination);
+            bool delayFamiliarCommand = ShouldDelayFamiliarTurn(executeFamiliarCommands, pushedActor, familiarCasting);
             CoreTurns.ResolveTurn(_turnIntents, _turnGrid);
             ApplyFastMovement(pushedActor, summonCell, pushing, executeFamiliarCommands);
             if (executeFamiliarCommands) _pendingFamiliarCommands.Clear();
@@ -588,6 +652,7 @@ namespace AzureDreamsReimagined
                     intent.Action == CoreAction.Move && _doubleMpCost.ContainsKey(intent.Actor))
                     SpendMonsterMp(intent.Actor, 256);
             _playerCell = new Vector2Int(_playerActor.TileX, _playerActor.TileY);
+            if (HopsBetweenTowerBlocks(_playerFrom, _playerCell)) PlayRetailSound(RetailSfx.Jump);
             _quickTowerStep = quietStep && _playerCell == destination;
             if (_pushedEggAlly != null)
                 _pushedEggAlly.Cell = new Vector2Int(pushedActor.TileX, pushedActor.TileY);
@@ -600,13 +665,15 @@ namespace AzureDreamsReimagined
                 _creatures[ci] = cs;
             }
             if (_familiar) _familiarCell = new Vector2Int(_familiarActor.TileX, _familiarActor.TileY);
+            _familiarActsAfterKoh = delayFamiliarCommand;
             _turnElapsed = 0f;
             _turnBusy = true;
             Animate(_playerAnimation, _playerFrom != CellPosition(_playerCell));
             for (int ci = 0; ci < _creatures.Count; ci++)
-                Animate(_creatures[ci].Animation, _creatureFroms[ci] != CellPosition(_creatures[ci].Cell));
+                Animate(_creatures[ci].Animation, CreatureTurnOrigin(_creatures[ci]) != CellPosition(_creatures[ci].Cell));
             Animate(_familiarAnimation, _familiar && _familiarFrom != CellPosition(_familiarCell));
-            if (_quickTowerStep) PresentTurnLocomotion(0f);
+            _towerRunningStep = runStep && _playerCell == destination && TowerRoomsClearForRunning(runFrom, destination);
+            if (_quickTowerStep || _towerRunningStep) PresentTurnLocomotion(0f);
             return true;
         }
 
@@ -662,7 +729,8 @@ namespace AzureDreamsReimagined
                 from += step;
                 if (from != target && BellCellOccupied(from)) return default;
             }
-            return RollSpawnRange(4) == 0 ? (power, status, spell) : default;
+            // Reduce the previous 25% cast chance by 15%: 25% * 0.85 = 21.25%.
+            return RollSpawnRange(400) < 85 ? (power, status, spell) : default;
         }
 
         private int FindFamiliarBowGunTarget(CoreActor actor, Vector2Int origin)
@@ -736,8 +804,26 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private bool CanTowerStep(Vector2Int from, Vector2Int step) =>
-            HasTowerPassage(from, step) && CanClimbTowerHeight(from, from + step);
+        private bool CanTowerStep(Vector2Int from, Vector2Int step)
+        {
+            if (!HasTowerPassage(from, step) || !CanClimbTowerHeight(from, from + step)) return false;
+            if (step.x == 0 || step.y == 0) return true;
+            var horizontal = new Vector2Int(step.x, 0);
+            var vertical = new Vector2Int(0, step.y);
+            // Side cells are clearance checks, not destinations. Height changes,
+            // residents and empty terrain beside a diagonal do not block its landing.
+            return !IsDiagonalSideWall(from + horizontal) && !IsDiagonalSideWall(from + vertical) &&
+                !CrossesClosedTowerDoor(from, horizontal) && !CrossesClosedTowerDoor(from, vertical) &&
+                !CrossesClosedTowerDoor(from + horizontal, vertical) && !CrossesClosedTowerDoor(from + vertical, horizontal);
+        }
+
+        private bool IsDiagonalSideWall(Vector2Int cell)
+        {
+            if (!InsideMap(cell)) return true;
+            return UsesManagedTowerLayout && _towerFloorLayout?.Dungeon != null
+                ? _towerFloorLayout.Dungeon.Grid[cell.y, cell.x] == CoreDungeon.TileType.Wall
+                : _walls.Contains(cell);
+        }
 
         private bool CanClimbTowerHeight(Vector2Int from, Vector2Int destination) =>
             TowerTileHeight(destination) - TowerTileHeight(from) <= TowerFloorManager.TerrainBlockHeight;
@@ -802,7 +888,7 @@ namespace AzureDreamsReimagined
 
         private Vector2Int RandomTowerStep(Vector2Int from, bool avoidSacredTiles = false)
         {
-            var step = RollTowerDirection(allowDiagonals: false);
+            var step = RollTowerDirection(allowDiagonals: true);
             return CanTowerStep(from, step) && (!avoidSacredTiles || !IsSacredTile(from + step)) ? step : Vector2Int.zero;
         }
 
@@ -820,8 +906,21 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>All views share this one clock; no actor runs its own turn coroutine.</summary>
+        private bool ShouldDelayFamiliarTurn(bool executeCommands, CoreActor pushedActor, bool familiarCasting) =>
+            executeCommands && !familiarCasting && !_kohMixingThisTurn &&
+            ((_familiar && pushedActor != _familiarActor && _pendingFamiliarCommands.ContainsKey(_familiarActor)) ||
+             (_blueCollarAlly?.View && _blueCollarAlly.Actor != pushedActor &&
+              _pendingFamiliarCommands.ContainsKey(_blueCollarAlly.Actor)));
+
         private bool HopsBetweenTowerBlocks(Vector3 from, Vector2Int cell) =>
             EnteredTowerCell(from, cell) && Mathf.Abs(CellPosition(cell).y - from.y) > 0.01f;
+
+        // A hit can spawn a Manoeva after the movement snapshot was captured.
+        // New actors remain on their spawn tile; existing actors retain their own origin
+        // even if another creature is removed or the list is reordered.
+        private Vector3 CreatureTurnOrigin(CreatureState creature) =>
+            _creatureFroms.TryGetValue(creature.Actor, out var origin)
+                ? origin : CellPosition(creature.Cell);
 
         private Vector3 TowerStepPosition(Vector3 from, Vector2Int cell, float progress)
         {
@@ -840,11 +939,11 @@ namespace AzureDreamsReimagined
                 return;
             }
             _turnElapsed += deltaTime;
-            float duration = _quickTowerStep ? _turnDuration * 0.65f : _turnDuration;
+            float duration = _towerRunningStep ? _turnDuration * 0.5f : _quickTowerStep ? _turnDuration * 0.65f : _turnDuration;
             bool hopsBetweenBlocks = HopsBetweenTowerBlocks(_playerFrom, _playerCell);
             for (int ci = 0; ci < _creatures.Count; ci++)
                 if (_creatures[ci].View)
-                    hopsBetweenBlocks |= HopsBetweenTowerBlocks(_creatureFroms[ci], _creatures[ci].Cell);
+                    hopsBetweenBlocks |= HopsBetweenTowerBlocks(CreatureTurnOrigin(_creatures[ci]), _creatures[ci].Cell);
             if (_familiar) hopsBetweenBlocks |= HopsBetweenTowerBlocks(_familiarFrom, _familiarCell);
             if (_blueCollarAlly?.View)
                 hopsBetweenBlocks |= HopsBetweenTowerBlocks(_blueFamiliarFrom, _blueCollarAlly.Cell);
@@ -852,21 +951,22 @@ namespace AzureDreamsReimagined
                 hopsBetweenBlocks |= HopsBetweenTowerBlocks(_pushedEggFrom, _pushedEggAlly.Cell);
             if (hopsBetweenBlocks) duration = Mathf.Max(duration, 0.22f);
             float t = Mathf.Clamp01(_turnElapsed / Mathf.Max(0.02f, duration));
+            float familiarT = FamiliarPresentationProgress(_turnElapsed, duration);
             if (_player)
             {
                 _player.transform.position = TowerStepPosition(_playerFrom, _playerCell, t);
             }
             for (int ci = 0; ci < _creatures.Count; ci++)
-                if (_creatures[ci].View) _creatures[ci].View.transform.position = TowerStepPosition(_creatureFroms[ci], _creatures[ci].Cell, t);
-            if (_familiar) _familiar.transform.position = TowerStepPosition(_familiarFrom, _familiarCell, t);
+                if (_creatures[ci].View) _creatures[ci].View.transform.position = TowerStepPosition(CreatureTurnOrigin(_creatures[ci]), _creatures[ci].Cell, t);
+            if (_familiar) _familiar.transform.position = TowerStepPosition(_familiarFrom, _familiarCell, _familiarActsAfterKoh && _turnIntents.Exists(intent => intent.Actor == _familiarActor && intent.Priority == CoreTurns.PriorityPlayer) ? t : familiarT);
             if (_blueCollarAlly?.View)
-                _blueCollarAlly.View.transform.position = TowerStepPosition(_blueFamiliarFrom, _blueCollarAlly.Cell, t);
+                _blueCollarAlly.View.transform.position = TowerStepPosition(_blueFamiliarFrom, _blueCollarAlly.Cell, _blueCollarAlly == _pushedEggAlly ? t : familiarT);
             if (_pushedEggAlly?.View && _pushedEggAlly != _blueCollarAlly)
                 _pushedEggAlly.View.transform.position = TowerStepPosition(_pushedEggFrom, _pushedEggAlly.Cell, t);
-            PresentTurnLocomotion(t);
+            PresentTurnLocomotion(t, familiarT);
             foreach (var view in _monsterSpriteActions)
-                if (view) view.PresentAction(t);
-            PresentKewneActions(t);
+                if (view) view.PresentAction(IsPartyFamiliarView(view) ? familiarT : t);
+            PresentKewneActions(t, familiarT);
             if (_kohAttacking && _kohSprite) _kohSprite.PresentAttack(_towerFacing, t);
             if (_towerPushing && _kohSprite)
                 _kohSprite.PresentPush(_towerPushDirection, t < 1f ? HeldPushPose : 0f);
@@ -879,7 +979,7 @@ namespace AzureDreamsReimagined
                 ? Mathf.Clamp01(_turnElapsed / ThrowFlightDuration(_releaseFrom, _releaseTo))
                 : t;
             PresentCarry(releaseProgress);
-            if (t < 1f || releaseProgress < 1f) return;
+            if (t < 1f || familiarT < 1f || releaseProgress < 1f) return;
             _messageBeforeSpellResolution = _message;
             if (_doubleMpCost.ContainsKey(_playerActor)) SpendMonsterMp(_playerActor, 256);
             TickItemStatuses(_playerActor);
@@ -923,6 +1023,7 @@ namespace AzureDreamsReimagined
                 else AdjustItemHealth(_playerActor, _pendingUseItem.Value);
             }
             _pendingUseItem = null;
+            ResolveEnemyThefts();
             if (!_testInvulnerable && _pendingPlayerDamage > 0)
             {
                 _health -= _pendingPlayerDamage;
@@ -981,7 +1082,7 @@ namespace AzureDreamsReimagined
             for (int i = 0; i < _creatures.Count; i++)
             {
                 var creature = _creatures[i];
-                if (creature.Health <= 0 || !EnteredTowerCell(_creatureFroms[i], creature.Cell)) continue;
+                if (creature.Health <= 0 || !EnteredTowerCell(CreatureTurnOrigin(creature), creature.Cell)) continue;
                 TriggerTrapFor(creature.Cell, creature.Actor, enemy: true);
                 creature.Actor.Hp = StatByte(_creatures[i].Health);
             }
@@ -1012,12 +1113,9 @@ namespace AzureDreamsReimagined
                         MonsterDefeatPresenter.UsesAlternateCue(creature.Actor.Species) ? RetailSfx.MonsterDefeatAlt :
                         RetailSfx.MonsterDefeat);
                     if (creature.CarriesWaterMedal) DropWaterMedal(creature.Cell);
+                    DropEnemyStolenItem(creature.Actor, creature.Cell);
                     // Viper carregando um ovo (TryViperGrabEgg): cai de volta no chao ao ser derrotada.
-                    if (_viperCarriedEgg.TryGetValue(creature.Actor, out var carriedEgg))
-                    {
-                        DropTowerReward(creature.Cell, carriedEgg);
-                        _viperCarriedEgg.Remove(creature.Actor);
-                    }
+                    DropViperCarriedEgg(creature.Actor, creature.Cell);
                     _finishingBlows.TryGetValue(creature.Actor, out var finisher);
                     string defeat = DescribeDefeatAndGrantExperience(creature.Actor, finisher.Actor);
                     defeats = JoinTowerMessages(defeats, defeat);
@@ -1142,7 +1240,7 @@ namespace AzureDreamsReimagined
             _turnDamageMessages.Add((target, T($"{source} hit {name} for {DamageLogSpan(damage)} damage.",
                 $"{source} atingiu {name} e causou {DamageLogSpan(damage)} de dano."), needsActiveFamiliar, true, attacker,
                 element ?? (GearElement(CombatGear(attacker, false)) is var weaponElement && weaponElement != 0
-                    ? weaponElement : UnitElement(attacker))));
+                    ? weaponElement : UnitElement(attacker)), damage));
         }
 
         private void RecordTowerHazard(CoreActor target, int damage, string sourceEn, string sourcePt)
@@ -1150,7 +1248,7 @@ namespace AzureDreamsReimagined
             if (damage <= 0) return;
             string name = TowerCombatName(target);
             _turnDamageMessages.Add((target, T($"{name} took {DamageLogSpan(damage)} damage from {sourceEn}.",
-                $"{name} sofreu {DamageLogSpan(damage)} de dano por {sourcePt}."), false, false, null, 0));
+                $"{name} sofreu {DamageLogSpan(damage)} de dano por {sourcePt}."), false, false, null, 0, damage));
         }
 
         private void ResolveMonsterWakeUps()
@@ -1170,14 +1268,14 @@ namespace AzureDreamsReimagined
                 if (hit.target == _playerActor && _testInvulnerable) continue;
                 if (hit.needsActiveFamiliar && !_familiar) continue;
                 if (hit.isAttack) PlayRetailSound(RetailSfx.Hit);
-                PresentTowerHit(hit.target, hit.source, hit.element);
+                PresentTowerHit(hit.target, hit.source, hit.element, hit.damage);
                 report = JoinTowerMessages(report, hit.line);
             }
             _turnDamageMessages.Clear();
             return report;
         }
 
-        private void PresentTowerHit(CoreActor target, CoreActor source, int element)
+        private void PresentTowerHit(CoreActor target, CoreActor source, int element, int damage)
         {
             GameObject view;
             if (target == _playerActor) view = _player;
@@ -1189,6 +1287,7 @@ namespace AzureDreamsReimagined
             }
             if (!view || IsSubmerged(target)) return;
 
+            ShowDamageNumber(view, damage);
             var away = source == null ? Vector3.zero :
                 new Vector3(target.TileX - source.TileX, 0f, target.TileY - source.TileY);
             if (!view.TryGetComponent<ActorLocomotionView>(out var locomotion))
@@ -1290,6 +1389,8 @@ namespace AzureDreamsReimagined
             _kohAttacking = false;
             _turnBusy = false; _turnElapsed = 0f;
             _quickTowerStep = false;
+            _towerRunningStep = false;
+            _familiarActsAfterKoh = false;
             ClearSpellPresentation();
             _messageBeforeSpellResolution = null;
             _pendingUseItem = null;
@@ -1353,27 +1454,30 @@ namespace AzureDreamsReimagined
             return view;
         }
 
-        private void PresentTurnLocomotion(float progress)
+        private void PresentTurnLocomotion(float progress, float familiarProgress = -1f)
         {
+            if (familiarProgress < 0f) familiarProgress = progress;
             Vector3 playerDelta = CellPosition(_playerCell) - _playerFrom;
             Vector3 familiarDelta = CellPosition(_familiarCell) - _familiarFrom;
             bool playerMoving = progress < 1f && playerDelta.sqrMagnitude > 0.000001f;
-            if (_playerLocomotion) _playerLocomotion.Present(playerDelta, progress, playerMoving);
+            if (_playerLocomotion) _playerLocomotion.Present(playerDelta, progress, playerMoving, _towerRunningStep);
             if (_player && _frogViews.TryGetValue(_player, out var form) && form.Sprite)
                 form.Sprite.PresentMovement(playerDelta, progress, playerMoving);
             for (int ci = 0; ci < _creatures.Count; ci++)
             {
-                Vector3 creatureDelta = CellPosition(_creatures[ci].Cell) - _creatureFroms[ci];
+                Vector3 creatureDelta = CellPosition(_creatures[ci].Cell) - CreatureTurnOrigin(_creatures[ci]);
                 if (_creatures[ci].Locomotion) _creatures[ci].Locomotion.Present(creatureDelta, progress, progress < 1f && creatureDelta.sqrMagnitude > 0.000001f);
             }
-            if (_familiarLocomotion) _familiarLocomotion.Present(familiarDelta, progress, progress < 1f && familiarDelta.sqrMagnitude > 0.000001f);
+            float redProgress = _turnIntents.Exists(intent => intent.Actor == _familiarActor && intent.Priority == CoreTurns.PriorityPlayer) ? progress : familiarProgress;
+            if (_familiarLocomotion) _familiarLocomotion.Present(familiarDelta, redProgress, redProgress > 0f && redProgress < 1f && familiarDelta.sqrMagnitude > 0.000001f);
             if (_blueCollarAlly?.View)
             {
                 Vector3 delta = CellPosition(_blueCollarAlly.Cell) - _blueFamiliarFrom;
                 var step = Vector2Int.RoundToInt(new Vector2(delta.x, delta.z));
-                bool moving = progress < 1f && step != Vector2Int.zero;
+                float blueProgress = _blueCollarAlly == _pushedEggAlly ? progress : familiarProgress;
+                bool moving = blueProgress > 0f && blueProgress < 1f && step != Vector2Int.zero;
                 var view = _blueCollarAlly.View;
-                view.GetComponent<ActorLocomotionView>()?.Present(delta, progress, moving);
+                view.GetComponent<ActorLocomotionView>()?.Present(delta, blueProgress, moving);
                 if (moving && view.TryGetComponent<KewneSpriteView>(out var kewne)) kewne.Face(step);
             }
         }

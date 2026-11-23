@@ -22,7 +22,7 @@ namespace AzureDreamsReimagined
             internal readonly Rect RawBounds;
             // True for the five interchangeable 16x14 construction slots
             // (FlexibleConstructionLots in TowerGameController.Construction.cs).
-            // Those slots are a shared generic parcel that can host library,
+            // Those slots are a shared generic parcel that can host arcade,
             // alley, gym, theater or casino; each building's hand-tuned
             // BuildingProject.Bounds is intentionally smaller than the full
             // parcel (sidewalk/margin around the structure), so checking that
@@ -53,14 +53,14 @@ namespace AzureDreamsReimagined
             { "temple",  new Lot(2,  64, 28, 18, 14) },
             { "fountain",new Lot(16, 56, 64, 16, 16) },
             { "circuit", new Lot(1,   8, 24, 16, 18) },
-            { "arcade",  new Lot(18,106, 62, 12, 8) },
+            { "library", new Lot(18,106, 62, 12, 8) },
             // The five interchangeable flexible-construction-slot buildings:
             // their lot is a shared generic parcel, not a dedicated footprint.
-            { "library", new Lot(7,  88, 28, 16, 14, flexibleParcel: true) },
-            { "alley",   new Lot(5,  40, 28, 16, 14, flexibleParcel: true) },
-            { "gym",     new Lot(28, 24, 86, 16, 14, flexibleParcel: true) },
-            { "theater", new Lot(4,  24, 28, 16, 14, flexibleParcel: true) },
-            { "casino",  new Lot(31, 88, 86, 16, 14, flexibleParcel: true) }
+            { "gym",     new Lot(7,  88, 28, 16, 14, flexibleParcel: true) },
+            { "theater", new Lot(5,  40, 28, 16, 14, flexibleParcel: true) },
+            { "arcade",  new Lot(28, 24, 86, 16, 14, flexibleParcel: true) },
+            { "casino",  new Lot(4,  24, 28, 16, 14, flexibleParcel: true) },
+            { "alley",   new Lot(31, 88, 86, 16, 14, flexibleParcel: true) }
         };
 
         internal static bool TryGet(string objectId, out Lot lot) => Lots.TryGetValue(objectId, out lot);

@@ -217,7 +217,7 @@ namespace AzureDreamsReimagined
             // The first meal is prepared privately while Koppe is away.
             AdvanceTownStory("patty", PattySecondMeal);
             PattyTalk(npc, 0, "I'm almost done, can you wait at the table?",
-                "Já está quase pronto, pode esperar à mesa?", () => BeginRestaurantMeal(npc,
+                "Já está quase pronto, pode esperar à mesa?", () => BeginRestaurantMeal(npc, dish,
                     () => ShowRestaurantDishDescription(npc, dish, () => PattyFirstMealAfter(npc))));
         }
 
@@ -368,7 +368,7 @@ namespace AzureDreamsReimagined
                     () => ShowRestaurantDishDescription(npc, index, () => PattyRegularMealAtTable(npc, index, meal.Gold)))
             };
             PattyTalk(npc, portrait, meal.DescriptionEnglish, meal.DescriptionPortuguese,
-                () => BeginRestaurantMeal(npc, afterServe));
+                () => BeginRestaurantMeal(npc, index, afterServe));
         }
 
         // TOWN.BIN 0x56CEBD–0x56D092.
@@ -378,6 +378,37 @@ namespace AzureDreamsReimagined
                 !TownSaveVariables.GetBool(PattyGhoshCheapMealSeen) ? FindPattyGhosh() : null;
             if (!ghosh) { PattyBill(npc, due); return; }
 
+            StartCoroutine(PlayPattyCheapMealGhoshEntrance(npc,ghosh,due));
+        }
+
+        private System.Collections.IEnumerator PlayPattyCheapMealGhoshEntrance(NPCController patty,NPCController ghosh,int due)
+        {
+            if(_restaurantMealAnimating) yield break;
+            _restaurantMealAnimating=true;
+            bool arrived=false;
+            try
+            {
+                if(!ghosh || !_interior || StoryRoom!=RestaurantRoom) yield break;
+                // Enter from the actual exit mat, then take the central aisle
+                // between the two tables instead of appearing at a random cell.
+                var entry=HomeEntry(_interior);
+                ghosh.transform.position=RetailTownActorPosition(entry,0f);
+                var aisle=RetailTownActorPosition(new Vector3(18f,0f,entry.z-1f),0f);
+                var stop=RetailTownActorPosition(new Vector3(18f,0f,12.6f),0f);
+                yield return PlayStoryWalk(ghosh,aisle,Mathf.Max(.25f,Vector3.Distance(ghosh.transform.position,aisle)/3f));
+                if(!ghosh || StoryRoom!=RestaurantRoom) yield break;
+                yield return PlayStoryWalk(ghosh,stop,Mathf.Max(.25f,Vector3.Distance(aisle,stop)/3f));
+                if(!ghosh || !patty || !_player || StoryRoom!=RestaurantRoom) yield break;
+                var facing=_player.transform.position-ghosh.transform.position;facing.y=0f;
+                if(facing.sqrMagnitude>.001f) ghosh.transform.rotation=Quaternion.LookRotation(facing);
+                arrived=true;
+            }
+            finally { _restaurantMealAnimating=false; }
+            if(arrived) PattyCheapMealGhoshDialogue(patty,ghosh,due);
+        }
+
+        private void PattyCheapMealGhoshDialogue(NPCController npc,NPCController ghosh,int due)
+        {
             TownSaveVariables.SetBool(PattyGhoshCheapMealSeen, true);
             PersistTownProgress();
             StoryAsk(ghosh, "Can humans eat that?", "Isso é comida para gente?", GhoshPortrait,
@@ -794,7 +825,7 @@ namespace AzureDreamsReimagined
             if (StoryRoom == PoolOpenRoom)
             {
                 if (stage == MiaPoolDate) return MiaPoolConversation(npc);
-                if (stage > MiaPoolDate)
+                if (stage > MiaPoolDate || TownRetailScriptFlags.CreatePersistent().IsFlagSet(MiaPoolPresentFlag))
                 {
                     MiaSequence(npc, 6, null, // TOWN.BIN 0x5366BF
                         ("Ever since you brought me here, I'm now able to come here alone.",
@@ -987,11 +1018,10 @@ namespace AzureDreamsReimagined
         {
             // TOWN.BIN 0x536A0A–0x536E39. The adjacent compliments at
             // 0x5360B5 belong to the Vivian scene (actor 0x0C).
-            if (mia.TryGetComponent<PoolAttireView>(out _)) return MiaSwimsuitQuestion(mia);
+            if (WearingPoolSprite(mia)) return MiaSwimsuitQuestion(mia);
             return MiaTalk(mia, 2, "Um, I'm going to go and get changed.", "Hum, vou me trocar.", () =>
             {
-                ApplyPoolPresentation(mia);
-                MiaSwimsuitQuestion(mia);
+                ChangePoolOutfit(mia, () => MiaSwimsuitQuestion(mia));
             });
         }
 
@@ -1005,7 +1035,7 @@ namespace AzureDreamsReimagined
 
         private void MiaPoolAfterCompliment(NPCController mia)
         {
-            PoolSequence(mia, PoolMiaPortrait, () => MiaPoolGhoshConversation(mia),
+            PoolSequence(mia, PoolMiaPortrait, () => MiaPoolGhoshEntrance(mia),
                 ("I'm so happy.\nIt's the first time ever.", "Estou tão feliz.\nÉ a primeira vez."),
                 ("Or, should I say, I've always disliked any man saying those kinds of things to me, but with you it's different, {name}.",
                     "Quer dizer, sempre detestei ouvir esse tipo de coisa de um homem. Mas com você é diferente, {name}."),
@@ -1024,7 +1054,7 @@ namespace AzureDreamsReimagined
             {
                 PoolTalk(mia, PoolMiaPortrait, "This was supposed to be a wonderful moment with you, {name}. But now I'm feeling terrible.",
                     "Este deveria ser um momento maravilhoso com você, {name}. Mas agora estou me sentindo péssima.",
-                    () => AdvanceTownStory("mia", MiaLibraryFollowUpOne));
+                    () => FinishMiaPoolDate(mia));
                 return;
             }
 
@@ -1037,7 +1067,7 @@ namespace AzureDreamsReimagined
                         PoolTalk(mia, PoolMiaPortrait, "No, I met you at the library!", "Não, eu encontrei você na biblioteca!", () =>
                             GhoshSequence(ghosh, () =>
                                 MiaSequence(mia, 6, () =>
-                                    MiaTalk(mia, 6, "Good-bye.", "Até logo.", () => AdvanceTownStory("mia", MiaLibraryFollowUpOne)),
+                                    MiaTalk(mia, 6, "Good-bye.", "Até logo.", () => FinishMiaPoolDate(mia)),
                                     ("This was supposed to be a wonderful moment with you, {name}. But now I'm feeling terrible.",
                                         "Este deveria ser um momento maravilhoso com você, {name}. Mas agora estou me sentindo péssima."),
                                     ("I'm going home. Could you come with me again please?", "Vou para casa. Você poderia vir comigo de novo, por favor?")),

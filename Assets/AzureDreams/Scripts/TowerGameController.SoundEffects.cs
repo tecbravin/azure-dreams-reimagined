@@ -18,7 +18,8 @@ namespace AzureDreamsReimagined
             Cancel = 0x515,
             CoinBounce = 0x501,
             CasinoBounce = 0x508,
-            CasinoJump = 0x50A,
+            Jump = 0x50A,
+            CasinoJump = Jump,
             SlotReelStop = 0x522,
             CasinoOpen = 0x523,
             SlotSpin = 0x524,
@@ -56,7 +57,7 @@ namespace AzureDreamsReimagined
         {
             foreach (var sound in new[] { RetailSfx.Cursor, RetailSfx.Confirm, RetailSfx.Cancel, RetailSfx.TitleStart, RetailSfx.TitleOptions,
                          RetailSfx.Hit, RetailSfx.WeaponSwing, RetailSfx.MonsterAttack, RetailSfx.Spell,
-                         RetailSfx.Pickup, RetailSfx.CoinPickup, RetailSfx.Equip, RetailSfx.Eat, RetailSfx.MonsterDefeat })
+                         RetailSfx.Pickup, RetailSfx.CoinPickup, RetailSfx.Equip, RetailSfx.Eat, RetailSfx.MonsterDefeat, RetailSfx.Jump })
             {
                 var clip = AssetMode.Load<AudioClip>($"Sfx/Retail/{(int)sound:X3}");
                 if (!clip) continue;

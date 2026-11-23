@@ -42,7 +42,7 @@ namespace AzureDreamsReimagined
         private bool UsesManagedTowerLayout => _useGeneratedTowerFloors || _floor is 2 or BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor or 31 or TowerFloorRules.BeldoFloor;
         private int ActiveMapSize => _area == Area.Tower && UsesManagedTowerLayout ? CoreDungeon.GridSize : MapSize;
         private int TowerTileHeight(Vector2Int cell) => _area == Area.Tower && UsesManagedTowerLayout &&
-            !InTowerTutorial && _towerFloorLayout != null ? _towerFloorLayout.GroundHeight(cell.x, cell.y) : 0;
+            _towerFloorLayout != null ? _towerFloorLayout.GroundHeight(cell.x, cell.y) : 0;
         private float TowerGroundY(Vector2Int cell) => TowerTileHeight(cell) / 64f;
 
         public void ConfigureGeneratedTowerFloors(bool enabled)
@@ -121,7 +121,7 @@ namespace AzureDreamsReimagined
             _player = SpawnKoh(_playerCell, "Player - generated floor");
             if (_familiarDefinition && !_familiarDefeated && !_familiarInBag)
             {
-                _familiarCell = FindManagedActorCell(_playerCell + Vector2Int.right, _playerCell, _stairCell);
+                _familiarCell = FindArrivalFamiliarCell(false);
                 _familiar = SpawnFamiliar(showSummoningEffect: _floor != 1 || !_starterJoinedThisRun);
                 _familiarHealth = _floor == 1 ? FamiliarMaxHealth : Mathf.Min(_familiarHealth, FamiliarMaxHealth);
                 _familiarActor.Hp = StatByte(_familiarHealth);

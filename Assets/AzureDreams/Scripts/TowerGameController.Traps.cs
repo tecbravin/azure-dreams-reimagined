@@ -27,6 +27,7 @@ namespace AzureDreamsReimagined
             _goUpTransition = true;
             try
             {
+                yield return new WaitForSecondsRealtime(.32f / (TowerAnimationSpeed * .7f));
                 const float fadeSeconds = 0.3f;
                 for (float elapsed = 0f; elapsed < fadeSeconds; elapsed += Time.unscaledDeltaTime * 0.7f)
                 {
@@ -149,14 +150,32 @@ namespace AzureDreamsReimagined
         }
 
         private Quaternion TrapMarkerRotation() =>
-            Quaternion.Euler(90f, _gameCamera ? _gameCamera.transform.eulerAngles.y : 0f, 0f);
+            // The artwork already contains perspective and raised mechanisms.
+            // Tilting it slightly above the floor preserves that volume instead
+            // of projecting it a second time as a flat floor decal.
+            Quaternion.Euler(55f, _gameCamera ? _gameCamera.transform.eulerAngles.y : 0f, 0f);
 
         private void OrientVisibleTrapMarkers()
         {
             if (_trapMarkers.Count == 0) return;
             var rotation = TrapMarkerRotation();
             foreach (var marker in _trapMarkers.Values)
-                if (marker && marker.activeSelf) marker.transform.rotation = rotation;
+                if (marker && marker.activeSelf)
+                {
+                    marker.transform.rotation = rotation;
+                    GroundTrapMarker(marker);
+                }
+        }
+
+        private void GroundTrapMarker(GameObject marker)
+        {
+            var visual = marker.GetComponent<SpriteRenderer>();
+            if (!visual || !visual.sprite) return;
+            var position = marker.transform.position;
+            var cell = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
+            float halfHeight = visual.sprite.bounds.extents.y * marker.transform.localScale.y;
+            position.y = TowerGroundY(cell) + .025f + halfHeight * Mathf.Abs(marker.transform.up.y);
+            marker.transform.position = position;
         }
 
         // Efeitos continuos dos marcadores de armadilha ja revelados: pentagrama pulsando
@@ -181,15 +200,13 @@ namespace AzureDreamsReimagined
                         markerSprite.color = new Color(1f, 1f, 1f, baseAlpha * pulse);
                         break;
                     }
-                    case TowerTrapEffect.GoUp when !trap.IsActive:
+                    case TowerTrapEffect.GoUp when !trap.IsActive && _sprungGoUpTraps.Contains(pair.Key):
                     {
                         var sprung = GoUpSprungSprite();
                         if (!sprung) break;
                         if (markerSprite.sprite != sprung) markerSprite.sprite = sprung;
-                        float wobble = Mathf.Sin(Time.time * 3.4f + seed) * 4f;
-                        float breathe = 1f + 0.05f * Mathf.Sin(Time.time * 3.4f + seed);
-                        marker.transform.rotation *= Quaternion.Euler(0f, 0f, wobble);
-                        marker.transform.localScale = Vector3.one * (TrapMarkerWidth / sprung.bounds.size.x) * breathe;
+                        marker.transform.localScale = Vector3.one * (TrapMarkerWidth / sprung.bounds.size.x);
+                        GroundTrapMarker(marker);
                         break;
                     }
                 }
@@ -202,7 +219,17 @@ namespace AzureDreamsReimagined
             var trap = TrapAt(cell);
             marker.SetActive(trap?.IsRevealed == true);
             if (trap?.IsRevealed == true)
-                marker.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, trap.IsActive ? 0.5f : 1f);
+            {
+                var renderer = marker.GetComponent<SpriteRenderer>();
+                if (trap.IsActive)
+                {
+                    _sprungGoUpTraps.Remove(cell);
+                    renderer.sprite = TrapSprite(trap.Effect);
+                    if (renderer.sprite) marker.transform.localScale = Vector3.one * (TrapMarkerWidth / renderer.sprite.bounds.size.x);
+                }
+                renderer.color = new Color(1f, 1f, 1f, trap.IsActive ? 0.5f : 1f);
+                GroundTrapMarker(marker);
+            }
         }
 
         private void RevealTowerTraps(bool rearm = false)
@@ -271,6 +298,8 @@ namespace AzureDreamsReimagined
                     if (actor != _playerActor) Status(actor, StatusId.MAGIC_BIND, 20);
                     break;
                 case TowerTrapEffect.GoUp:
+                    _sprungGoUpTraps.Add(cell);
+                    StartCoroutine(PresentGoUpSpring(cell));
                     if (actor == _playerActor && CanAscendFromFloor &&
                         _towerRun?.CurrentState == TowerRunManager.State.InTower)
                     {
@@ -290,7 +319,7 @@ namespace AzureDreamsReimagined
                 case TowerTrapEffect.Reversal:
                     if (actor == _playerActor) _trapReversalUntil = _completedTowerTurns + 21;
                     break;
-                case TowerTrapEffect.Bump: WakeMonstersInTrapRoom(cell); break;
+                case TowerTrapEffect.Bump: WakeUnitsOnFloor(); break;
                 case TowerTrapEffect.Crack: ChangeTrapTerrain(cell, -TowerFloorManager.TerrainBlockHeight); break;
                 case TowerTrapEffect.Upheaval: ChangeTrapTerrain(cell, TowerFloorManager.TerrainBlockHeight); break;
                 case TowerTrapEffect.Warp: WarpTrapActor(cell, actor); break;
@@ -361,6 +390,7 @@ namespace AzureDreamsReimagined
 
         private void ExplodeTrap(Vector2Int center)
         {
+            StartCoroutine(PresentBlastTrap(center));
             foreach (var offset in TrapCross)
             {
                 var cell = center + offset;
@@ -379,16 +409,28 @@ namespace AzureDreamsReimagined
                 if (enemy >= 0) DamageFromTrap(_creatures[enemy].Actor, 10, "a Bomb trap", "uma armadilha de bomba");
                 foreach (var ally in _thrownEggs)
                     if (ally.View && ally.Cell == cell) DamageFromTrap(ally.Actor, 10, "a Bomb trap", "uma armadilha de bomba");
-                SpawnFx(_fxAttack, CellPosition(cell), TrapAnimationSpeed);
             }
         }
 
-        private void WakeMonstersInTrapRoom(Vector2Int cell)
+        private void WakeUnitsOnFloor()
         {
-            int room = BellRoomAt(cell);
-            foreach (var creature in _creatures)
-                if (room >= 0 ? BellRoomAt(creature.Cell) == room : creature.Cell == cell)
-                    Status(creature.Actor, StatusId.SLEEP, 0);
+            Wake(_playerActor, _player);
+            if (_familiar || _carriedFamiliar) Wake(_familiarActor, _familiar ? _familiar : _carriedView);
+            foreach (var creature in _creatures) Wake(creature.Actor, creature.View);
+            foreach (var ally in _thrownEggs) Wake(ally.Actor, ally.View);
+            if (_blueCollarAlly != null) Wake(_blueCollarAlly.Actor, _blueCollarAlly.View);
+            if (_carriedMonster.Actor != null) Wake(_carriedMonster.Actor, _carriedView);
+
+            void Wake(ActorRecord actor, GameObject view)
+            {
+                if (actor == null) return;
+                Status(actor, StatusId.SLEEP, 0);
+                if (!view) return;
+                if (actor == _playerActor && _kohSprite) _kohSprite.PresentSleep(false);
+                bool exhausted = MonsterExhausted(actor), paralyzed = Combat.HasStatus(actor, StatusId.PARALYSIS);
+                view.GetComponentInChildren<MonsterTurnSpriteView>()?.PresentStatus(false, exhausted, paralyzed);
+                view.GetComponent<KewneSpriteView>()?.PresentStatus(false, exhausted, paralyzed);
+            }
         }
 
         private void ChangeTrapTerrain(Vector2Int center, int heightDelta)
@@ -551,9 +593,9 @@ namespace AzureDreamsReimagined
         {
             if (_trapDisarmCell.HasValue)
             {
-                var disarmRect = new Rect(width * 0.5f - 145f, height * 0.5f - 55f, 290f, 110f);
+                var disarmRect = new Rect(width * 0.5f - 145f, height * 0.5f - 90f, 290f, 180f);
                 DrawDialogueFrame(disarmRect);
-                GUILayout.BeginArea(new Rect(disarmRect.x + 12f, disarmRect.y + 10f, disarmRect.width - 24f, disarmRect.height - 20f));
+                GUILayout.BeginArea(WindowDesignSystem.Content(disarmRect, footer: true));
                 GUILayout.Label(T("Disarm this trap?", "Desarmar esta armadilha?"));
                 if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) ConfirmTrapDisarm();
                 if (GUILayout.Button(WithCancelHint("No", "Não"))) _trapDisarmCell = null;
@@ -561,9 +603,9 @@ namespace AzureDreamsReimagined
                 return;
             }
             if (!_trapRearmCell.HasValue) return;
-            var rect = new Rect(width * 0.5f - 145f, height * 0.5f - 55f, 290f, 110f);
+            var rect = new Rect(width * 0.5f - 145f, height * 0.5f - 90f, 290f, 180f);
             DrawDialogueFrame(rect);
-            GUILayout.BeginArea(new Rect(rect.x + 12f, rect.y + 10f, rect.width - 24f, rect.height - 20f));
+            GUILayout.BeginArea(WindowDesignSystem.Content(rect, footer: true));
             GUILayout.Label(T("Rearm this trap?", "Reativar esta armadilha?"));
             if (GUILayout.Button(WithInteractHint("Yes", "Sim"))) ConfirmTrapRearm();
             if (GUILayout.Button(WithCancelHint("No", "Não"))) _trapRearmCell = null;

@@ -283,11 +283,29 @@ namespace AzureDreamsReimagined
             else StartCoroutine(LoadCheckpoint(checkpoint));
         }
 
+        private bool _townCollectionOpen;
+        private void OpenTownCollection(TitlePage page)
+        {
+            _townCollectionOpen = true;
+            _titleImageScroll = Vector2.zero;
+            if (page == TitlePage.Gallery) _galleryTab = 0;
+            if (page == TitlePage.Manual) { _manualPage = 1; _manualZoom = false; }
+            _titlePage = page;
+        }
+
+        private void OpenJordaManual() => OpenTownCollection(TitlePage.Manual);
+
         private void BackFromTitlePage()
         {
             if (_titlePage == TitlePage.Main) return;
             PlayRetailSound(RetailSfx.Cancel);
             _titleImageScroll = Vector2.zero;
+            if (_townCollectionOpen)
+            {
+                _townCollectionOpen = false;
+                _titlePage = TitlePage.Closed;
+                return;
+            }
             _titlePage = _titlePage == TitlePage.Manual ? TitlePage.Options : TitlePage.Main;
         }
 
@@ -370,7 +388,7 @@ namespace AzureDreamsReimagined
                     WithCancelHint("Back", "Voltar"))) BackFromTitlePage();
                 return;
             }
-            GUILayout.BeginArea(new Rect(panel.x + 12f, panel.y + 9f, panel.width - 24f, panel.height - 18f));
+            GUILayout.BeginArea(WindowDesignSystem.Content(panel, footer: true));
             switch (_titlePage)
             {
                 case TitlePage.Options:
@@ -460,7 +478,7 @@ namespace AzureDreamsReimagined
             bool manual = _titlePage == TitlePage.Manual;
             var panel = new Rect(12f, 10f, width - 24f, height - 20f);
             DrawHudPanel(panel);
-            GUILayout.BeginArea(new Rect(panel.x + 10f, panel.y + 8f, panel.width - 20f, panel.height - 16f));
+            GUILayout.BeginArea(WindowDesignSystem.Content(panel, footer: true));
             GUILayout.BeginHorizontal();
             GUILayout.Label(manual ? T("Game Manual (English)", "Manual do jogo (em inglês)") : T("Portrait Gallery", "Galeria de retratos"), _bodyStyle);
             if (GUILayout.Button(WithCancelHint("Back", "Voltar"), GUILayout.Width(104f))) BackFromTitlePage();
@@ -477,7 +495,7 @@ namespace AzureDreamsReimagined
                 if (_titlePage == TitlePage.Manual)
                 {
                     var page = StreamImage($"Manual/Page-{_manualPage:00}.jpg");
-                    DrawTitleImage(page, panel.width - 34f, panel.height - 80f, _manualZoom ? 1.8f : 1f);
+                    DrawManualPage(page);
                 }
             }
             else
@@ -498,6 +516,30 @@ namespace AzureDreamsReimagined
                 DrawTitleImage(image, panel.width - 34f, panel.height - (tab == 3 ? 103f : 80f), 1f, tab < 2);
             }
             GUILayout.EndArea();
+        }
+
+        private static Rect FitManualPage(Rect viewport, Vector2 imageSize)
+        {
+            float scale = Mathf.Min(viewport.width / Mathf.Max(1f,imageSize.x), viewport.height / Mathf.Max(1f,imageSize.y));
+            Vector2 size=imageSize*Mathf.Max(0f,scale);
+            return new Rect(viewport.center-size*.5f,size);
+        }
+
+        private void DrawManualPage(Texture2D image)
+        {
+            // Use the space left by the actual header/control rows, not a guessed
+            // height that can extend beyond the window when the font changes.
+            var viewport=GUILayoutUtility.GetRect(GUIContent.none,GUIStyle.none,GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
+            viewport=new Rect(viewport.x+8f,viewport.y+8f,Mathf.Max(1f,viewport.width-16f),Mathf.Max(1f,viewport.height-16f));
+            if(!image) return;
+            var fitted=FitManualPage(viewport,new Vector2(image.width,image.height));
+            if(!_manualZoom) { GUI.DrawTexture(fitted,image,ScaleMode.ScaleToFit); return; }
+            Vector2 enlarged=fitted.size*1.8f;
+            // Leave room for both scrollbars; every edge remains reachable in zoom.
+            var content=new Rect(0f,0f,Mathf.Max(viewport.width-20f,enlarged.x),Mathf.Max(viewport.height-20f,enlarged.y));
+            _titleImageScroll=GUI.BeginScrollView(viewport,_titleImageScroll,content);
+            GUI.DrawTexture(new Rect(content.center-enlarged*.5f,enlarged),image,ScaleMode.ScaleToFit);
+            GUI.EndScrollView();
         }
 
         private void DrawTitleImage(Texture2D image, float width, float height, float zoom, bool scrollTall = false)

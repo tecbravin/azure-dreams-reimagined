@@ -1,5 +1,6 @@
 """Recover Koh's directional weapon and shield sprites from the NTSC disc."""
 import struct
+import json
 
 from PIL import Image, ImageOps
 
@@ -60,9 +61,42 @@ def main():
                 atlas.alpha_composite(tile, (column * CELL + 32 + x, row * CELL + 53 + part['y']))
             row += 1
 
+    # Follow the exact weapon part in every body pose. Compact 32px cells keep
+    # this animation atlas smaller than storing 900 mostly empty 64px cells.
+    def sequence(group):
+        offset, = struct.unpack_from('<I', bank, metadata['animation_table_offset'] + 4 * group)
+        result = []
+        while True:
+            ticks, kind, pointer = struct.unpack_from('<HHI', bank, offset)
+            if kind != 2 or ticks == 0:
+                return result
+            result.append(chains[pointer])
+            offset += 8
+
+    motion = Image.new('RGBA', (20 * 32, 9 * 5 * 32))
+    offsets = []
+    for subtype in range(1, 10):
+        page = read_equipment(disc, executable, 0x800711C0, subtype)
+        for direction in range(5):
+            poses = [sequence(174 + direction)[0], *sequence(direction), *sequence(5 + direction),
+                     *[sequence(128 + direction * 10 + phase)[0] for phase in range(3)]]
+            assert len(poses) == 20
+            for pose, parts in enumerate(poses):
+                part = next(part for part in parts if part['clut_raw'] == 0x7A40)
+                tile = equipment_tile(page, part)
+                assert tile.width <= 32 and tile.height <= 32 and tile.getbbox()
+                x = -part['x'] - tile.width if part['flags'] & 1 else part['x']
+                # Center of the 32px cell relative to Koh's retail feet origin.
+                offsets.append(dict(x=x + 16, y=-part['y'] - 16))
+                row = (subtype - 1) * 5 + direction
+                motion.alpha_composite(tile, (pose * 32, row * 32))
+    folder = workspace / 'Azure Dreams Reimagined/Assets/AzureDreams/Resources/Tower'
+    motion.save(folder / 'KohWandEquipment.png')
+    (folder / 'KohWandEquipment.json').write_text(json.dumps(dict(offsets=offsets)) + '\n')
+
     target = workspace / 'Azure Dreams Reimagined/Assets/AzureDreams/Resources/Tower/KohEquipment.png'
     atlas.save(target)
-    print(f'Exported {row} equipment sets with five original views each.')
+    print('Exported 32 equipment sets and 900 original wand motion frames.')
 
 
 if __name__ == '__main__':

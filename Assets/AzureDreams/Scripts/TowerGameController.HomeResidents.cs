@@ -30,6 +30,7 @@ namespace AzureDreamsReimagined
         private const int WreathBeldoVisionSeenFlag = 0x1389; // F_veldil_dungeon_deatta
         private enum WreathHomecoming { Unscheduled, Pending, Seen }
         private NPCController _wreathServiceSpeaker;
+        private NPCController _weedyDialogueSpeaker;
         private MonsterBook _weedyBook;
         private bool _weedyReading;
         private int _weedyPage;
@@ -74,9 +75,30 @@ namespace AzureDreamsReimagined
         private void WeedyHomeReply(string english, string portuguese, Action next = null)
         {
             var weedy = FindStoryActor("weedy");
-            if (weedy && weedy.gameObject.activeInHierarchy)
-                StoryTalk(weedy, english, portuguese, WeedyPortrait, next);
+            if (!weedy || !weedy.gameObject.activeInHierarchy)
+            {
+                // Replies also occur during other visitors' scenes. Never drop a line
+                // (or its continuation) because the resident is absent from that room.
+                if (!_weedyDialogueSpeaker)
+                {
+                    var root = new GameObject("Weedy dialogue speaker");
+                    root.transform.SetParent(transform, false);
+                    var stats = root.AddComponent<CharacterStats>();
+                    stats.characterId = "weedy";
+                    stats.displayName = "Weedy";
+                    _weedyDialogueSpeaker = root.AddComponent<NPCController>();
+                    _weedyDialogueSpeaker.npcId = "weedy";
+                    _generated.Add(root);
+                }
+                weedy = _weedyDialogueSpeaker;
+            }
+            StoryTalk(weedy, english, portuguese, WeedyPortrait, next);
         }
+
+        private void WeedyWakeUpStory(NPCController npc) =>
+            // TOWN.BIN 0x41C47A–0x41C4E3: the broken-up wake-up call and name token.
+            StoryTalk(npc, "Get up! Yup! Up! Pp! p! !", "Levanta! Isso! Vanta! Ta! a! !", WeedyPortrait,
+                () => StoryTalk(npc, "{name}! Yup!", "{name}! Isso!", WeedyPortrait));
 
         private int WeedyBookBlinkFrame()
         {
@@ -323,7 +345,7 @@ namespace AzureDreamsReimagined
                     ("Tell me if you plan to go somewhere.", "Avise se estiver pensando em sair."));
                 return;
             }
-            if (StoryDay == 1)
+            if (TownSaveVariables.GetBool(BeldoClearedKey))
             {
                 // TOWN.BIN 0x415871–0x415A44.
                 WreathSequence(npc, () => WeedyHomeReply("It’s always the same.", "É sempre a mesma coisa."),

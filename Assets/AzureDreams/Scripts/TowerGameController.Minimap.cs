@@ -194,6 +194,17 @@ namespace AzureDreamsReimagined
             _mapHeldSeconds = _mapExpansion = _mapBlackout = 0f;
         }
 
+        private bool IsElevatorKnownOnMinimap()
+        {
+            if (!_elevatorPlatform) return false;
+            if (_seeElevator) return true;
+            int size = ActiveMapSize;
+            if (_mapPixels == null || _stairCell.x < 0 || _stairCell.y < 0 ||
+                _stairCell.x >= size || _stairCell.y >= size) return false;
+            int index = _stairCell.y * size + _stairCell.x;
+            return index < _mapPixels.Length && _mapPixels[index].a != 0;
+        }
+
         private void DrawMinimap()
         {
             if (_area != Area.Tower || KohIsBlind || !_mapTexture || Event.current.type != EventType.Repaint) return;
@@ -227,11 +238,11 @@ namespace AzureDreamsReimagined
             DrawVisibleMapItems(map, opacity);
             foreach (var cell in _trapMarkers.Keys)
                 if (TrapAt(cell) is { IsRevealedOnMinimap: true } trap)
-                    DrawMinimapMarker(map, cell, new Color(1f, 0.9f, 0.15f, opacity * (trap.IsActive ? 0.5f : 1f)));
+                    DrawMinimapMarker(map, cell, new Color(0.7f, 0.25f, 1f, opacity * (trap.IsActive ? 0.5f : 1f)));
             if (_seeMonsters)
                 foreach (var enemy in _creatures) DrawMinimapMarker(map, enemy.Cell, new Color(0.9f, 0.2f, 0.7f, opacity));
-            if (_seeElevator && _elevatorPlatform)
-                DrawMinimapMarker(map, _stairCell, new Color(1f, 0.63f, 0.19f, opacity));
+            if (IsElevatorKnownOnMinimap())
+                DrawMinimapMarker(map, _stairCell, new Color(1f, 0.9f, 0.15f, opacity));
             DrawMinimapMarker(map, _playerCell, new Color(1f, 0.18f, 0.16f, opacity));
             GUI.matrix = previousMatrix;
             GUI.color = previousColor;

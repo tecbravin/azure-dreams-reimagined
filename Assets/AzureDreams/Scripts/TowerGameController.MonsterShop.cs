@@ -122,17 +122,17 @@ namespace AzureDreamsReimagined
                 var text = AssetMode.Load<TextAsset>("Town/Retail/monster_shop");
                 if (text) _monsterShopData = JsonUtility.FromJson<MonsterShopData>(text.text);
             }
-            if (_monsterShopData?.hunters == null) return;
             int hunterNumber = 0;
             foreach (var npc in _townPeople)
             {
                 if (!npc || npc.npcId != HunterId) continue;
                 if (hunterNumber >= 3) break;
                 npc.npcId = HunterId + "_" + ++hunterNumber;
+                // Scene order matches the three original hunter speaker slots.
+                // Replace the legacy captured body only after assigning its identity.
+                RetailResidentBanks.Apply(npc.gameObject, npc.npcId);
                 npc.GetComponent<CharacterStats>().displayName = T("Hunter", "Caçador");
             }
-            _message = T($"Monster Shop. Press {InteractKey} at the counter to speak with Master.",
-                $"Loja de Monstros. Pressione {InteractKey} no balcão para falar com Master.");
         }
 
         private bool TryMonsterShopHunterDialogue(NPCController speaker)
@@ -365,7 +365,6 @@ namespace AzureDreamsReimagined
             if (!InMonsterShop || _monsterShopData == null || _monsterShopPage == MonsterShopPage.Closed) return;
             DrawHudPanel(new Rect(85, 86, 470, 301));
             GUI.Label(new Rect(103, 101, 300, 24), T("Monster Shop - Master", "Loja de Monstros - Master"));
-            GUI.Label(new Rect(429, 101, 110, 24), _gold + "G");
             string dialogue = _monsterShopPage switch
             {
                 MonsterShopPage.Greeting => MasterShopGreeting(),

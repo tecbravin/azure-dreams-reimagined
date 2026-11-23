@@ -718,7 +718,6 @@ namespace AzureDreamsReimagined
                 if (animate)
                 {
                     PlayRetailSound(RetailSfx.Hit);
-                    SpawnFx(_fxMagic, start);
                 }
                 _wakingInBed = false;
                 if (_kohSprite) _kohSprite.PresentSleep(false);
@@ -852,7 +851,7 @@ namespace AzureDreamsReimagined
                 2f * DialogueChoiceRowHeight + 5f : DialogueChoiceRowHeight + 4f;
             float boxWidth = width * 0.87f;
             float textHeight = _dialogueTextStyle.CalcHeight(new GUIContent(body), boxWidth - 26f);
-            float boxHeight = Mathf.Clamp(textHeight + controlsHeight + 18f, height * 0.23f, height * 0.65f);
+            float boxHeight = Mathf.Clamp(textHeight + controlsHeight + 18f + WindowDesignSystem.Footer, height * 0.23f, height * 0.65f);
             var box = new Rect(width * 0.065f, height * 0.95f - boxHeight, boxWidth, boxHeight);
             if (line.HasValue)
             {
@@ -879,9 +878,7 @@ namespace AzureDreamsReimagined
                 DrawPrologueLine(box, speaker, body, portrait, controlsHeight, portraitScale);
                 if (_prologue == Prologue.Childhood && _prologueLine == ChildhoodLines.Length - 1)
                     DrawDialoguePortrait(StreamPortrait("Dialogue/YoungKoh"), box, rightAligned: true, scale: 0.25f);
-                if (!editingName && choices.First == null &&
-                    GUI.Button(new Rect(box.xMax - 40f, box.yMax - 29f, 32f, 22f), "›"))
-                    AdvancePrologue();
+                if (!editingName && choices.First == null) DrawContinuePrompt(box, AdvancePrologue);
             }
             else if (_prologue == Prologue.Name || _prologue == Prologue.Confirm)
             {
@@ -889,7 +886,7 @@ namespace AzureDreamsReimagined
             }
             if (editingName)
             {
-                float y = box.yMax - 37f;
+                float y = box.yMax - 37f - WindowDesignSystem.Footer;
                 GUI.SetNextControlName(HeroNameControl);
                 _prologueName = GUI.TextField(new Rect(box.x + 14f, y, 180f, 27f), _prologueName, 12);
                 if (_focusPrologueName && Event.current.type == EventType.Repaint)
@@ -902,7 +899,7 @@ namespace AzureDreamsReimagined
             }
             if (!editingName && choices.First != null)
             {
-                var rows = new Rect(box.x + 13f, box.yMax - controlsHeight - 4f, box.width - 26f, controlsHeight);
+                var rows = new Rect(box.x + 13f, box.yMax - controlsHeight - 4f - WindowDesignSystem.Footer, box.width - 26f, controlsHeight);
                 int picked = DrawDialogueChoices(rows, _prologueChoice, choices.First, choices.Second);
                 if (picked >= 0)
                 {
@@ -1015,13 +1012,8 @@ namespace AzureDreamsReimagined
             DrawDialoguePortrait(portrait, box, scale: portraitScale);
             if (speaker == "Jorda") DrawJordaBlink(portrait, box, _prologueStarted);
             DrawDialogueFrame(box, dialoguePole: true);
-            var name = new Rect(box.x, box.y - 28f, 150f, 27f);
-            if (!string.IsNullOrEmpty(speaker))
-            {
-                DrawDialogueFrame(name);
-                DrawHudText(new Rect(name.x + 8f, name.y, name.width - 16f, name.height), T(speaker, speaker switch { "Angel" => "Anjo", "Aunt" => "Tia", "Grandpa" => "Vovô", _ => speaker }), _messageStyle, dialogue: true);
-            }
-            DrawDialogueText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f - controlsHeight), line, line);
+            DrawSpeakerWindow(box, T(speaker, speaker switch { "Angel" => "Anjo", "Aunt" => "Tia", "Grandpa" => "Vovô", _ => speaker }));
+            DrawDialogueText(new Rect(box.x + 13f, box.y + 8f, box.width - 26f, box.height - 16f - controlsHeight - WindowDesignSystem.Footer), line, line);
         }
     }
 }

@@ -36,6 +36,16 @@ Music/VeiledGenuine.ogg
 Music/VivianTheme.ogg
 Portraits/Dialogue/Aunt_variant0_frame0.png
 Portraits/Dialogue/Aunt_variant1_frame0.png
+Portraits/Dialogue/Chero_variant0_frame0.png	*
+Portraits/Dialogue/Cherrl_variant1_frame0.png
+Portraits/Dialogue/Cherrl_variant1_frame1.png
+Portraits/Dialogue/Cherrl_variant1_frame2.png
+Portraits/Dialogue/Cherrl_variant1_frame3.png
+Portraits/Dialogue/Cherrl_variant2_frame0.png
+Portraits/Dialogue/Cherrl_variant2_frame1.png
+Portraits/Dialogue/Cherrl_variant2_frame2.png
+Portraits/Dialogue/Cherrl_variant2_frame3.png
+Portraits/Dialogue/Cherrl_variant3_frame0.png
 Portraits/Dialogue/Cherrl_variant7_frame0.png
 Portraits/Dialogue/Cherrl_variant7_frame1.png
 Portraits/Dialogue/Cherrl_variant7_frame2.png
@@ -46,6 +56,14 @@ Portraits/Dialogue/Cherrl_variant8_frame2.png
 Portraits/Dialogue/Cherrl_variant8_frame3.png
 Portraits/Dialogue/Cherrl_variant8_frame4.png
 Portraits/Dialogue/Cherrl_variant8_frame5.png
+Portraits/Dialogue/Fon_variant0_frame0.png	*
+Portraits/Dialogue/Fon_variant0_frame1.png	*
+Portraits/Dialogue/Fur_variant1_frame0.png
+Portraits/Dialogue/Fur_variant2_frame0.png
+Portraits/Dialogue/Fur_variant4_frame0.png
+Portraits/Dialogue/Fur_variant4_frame1.png
+Portraits/Dialogue/Fur_variant4_frame2.png
+Portraits/Dialogue/Fur_variant4_frame3.png
 Portraits/Dialogue/GhoshSwimsuitHD.png	*
 Portraits/Dialogue/Ghosh_variant0_frame0.png
 Portraits/Dialogue/Ghosh_variant1_frame0.png
@@ -59,6 +77,7 @@ Portraits/Dialogue/Jorda_variant0_frame1.png
 Portraits/Dialogue/Jorda_variant0_frame3.png
 Portraits/Dialogue/Kewne_variant0_frame0.png
 Portraits/Dialogue/Koh.png	*
+Portraits/Dialogue/Koh_variant0_frame0.png	*
 Portraits/Dialogue/Miya_variant0_frame0.png
 Portraits/Dialogue/Miya_variant1_frame0.png
 Portraits/Dialogue/Miya_variant2_frame0.png
@@ -88,7 +107,26 @@ Portraits/Dialogue/Nico_variant5_frame3.png
 Portraits/Dialogue/Nico_variant6_frame0.png
 Portraits/Dialogue/Nico_variant6_frame1.png
 Portraits/Dialogue/Nico_variant6_frame2.png
+Portraits/Dialogue/SelfiRetail_variant0_frame0.png
 Portraits/Dialogue/Selfi_variant0_frame0.png
+Portraits/Dialogue/Selfi_variant0_frame1.png	*
+Portraits/Dialogue/Selfi_variant0_frame2.png	*
+Portraits/Dialogue/Selfi_variant0_frame3.png	*
+Portraits/Dialogue/Selfi_variant4_frame0.png
+Portraits/Dialogue/VivianRetail_variant2_frame0.png
+Portraits/Dialogue/VivianRetail_variant2_frame1.png
+Portraits/Dialogue/VivianRetail_variant2_frame2.png
+Portraits/Dialogue/VivianRetail_variant2_frame3.png
+Portraits/Dialogue/VivianRetail_variant4_frame0.png
+Portraits/Dialogue/VivianRetail_variant4_frame1.png
+Portraits/Dialogue/VivianRetail_variant4_frame2.png
+Portraits/Dialogue/VivianRetail_variant4_frame3.png
+Portraits/Dialogue/VivianRetail_variant5_frame0.png
+Portraits/Dialogue/Vivian_variant0_frame0.png
+Portraits/Dialogue/Vivian_variant1_frame0.png
+Portraits/Dialogue/Vivian_variant1_frame1.png
+Portraits/Dialogue/Vivian_variant1_frame2.png
+Portraits/Dialogue/Vivian_variant1_frame3.png
 Portraits/Dialogue/Weedy_variant0_frame0.png
 Portraits/Dialogue/Weedy_variant1_frame0.png
 Portraits/Dialogue/Weedy_variant1_frame1.png

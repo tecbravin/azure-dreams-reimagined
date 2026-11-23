@@ -32,6 +32,8 @@ def main():
   ids={cp:i for i,cp in enumerate(chains)};atlas=Image.new('RGBA',(1024,128*((len(ids)+7)//8)))
   for cp,i in ids.items():atlas.alpha_composite(v.render(chains[cp],vr,bytes([1])*524288),(i%8*128,i//8*128))
   f=out/(name+'.png');atlas.save(f);v.write_meta(f,'texture')
-  data={'frameCount':len(ids),'clips':[{'directions':[{'frames':[ids[int(e['chain'],16)] for e in seq['entries']],'ticks':[e['ticks'] for e in seq['entries']]} for seq in seqs]} for seqs in clips]}
+  idle_chains={int(e['chain'],16) for seq in clips[0] for e in seq['entries']}
+  grounding=max(v.render(chains[cp],vr,bytes([1])*524288).getbbox()[3] for cp in idle_chains)-100
+  data={'frameCount':len(ids),'groundingPixels':grounding,'clips':[{'directions':[{'frames':[ids[int(e['chain'],16)] for e in seq['entries']],'ticks':[e['ticks'] for e in seq['entries']]} for seq in seqs]} for seqs in clips]}
   f=out/(name+'.json');f.write_text(json.dumps(data));v.write_meta(f,'text')
 if __name__=='__main__':main()

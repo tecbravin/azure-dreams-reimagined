@@ -9,6 +9,7 @@ namespace AzureDreamsReimagined
         private const string RaceLobby = "Interior_0a_racetrack_entrance";
         private const string RaceCourse = "Interior_37_racetrack_course";
         private const string RaceCourseMusicCue = "MonsterRaceCourse.mp3";
+        private const string RaceTicketWinner = "racetrack.ticket_winner";
         private const string RaceTicketPair = "racetrack.ticket_pair";
         private const string RaceTicketCount = "racetrack.ticket_count";
         private const string RaceTicketOdds = "racetrack.ticket_odds";
@@ -44,12 +45,12 @@ namespace AzureDreamsReimagined
         }
 
         private readonly NyuelRacer[] _nyuelRacers = new NyuelRacer[4];
-        private readonly int[] _raceOdds = new int[6];
+        private readonly int[] _raceOdds = new int[4];
         private readonly int[] _racePlaces = new int[4];
         private readonly int[] _raceFrameFinishers = new int[4];
         private readonly float[] _raceFrameFractions = new float[4];
         private RaceScreen _raceScreen;
-        private int _racePair, _raceTickets = 1, _raceFinished, _racePrize;
+        private int _raceHorse, _raceTickets = 1, _raceFinished, _racePrize;
         private float _raceStartTime, _raceClock, _raceThirdFinished, _raceLength;
         private float[] _raceDistances;
         private bool _raceSpectating;
@@ -62,7 +63,7 @@ namespace AzureDreamsReimagined
         {
             if (!InRaceLobby) return;
             _raceScreen = RaceScreen.Closed;
-            _racePair = 0;
+            _raceHorse = 0;
             _raceTickets = 1;
             _message = string.Empty;
             for (int i = 0; i < _raceOdds.Length; i++) _raceOdds[i] = Random.Range(3, 10);
@@ -145,7 +146,7 @@ namespace AzureDreamsReimagined
                 int row = (MenuDirectionPressed(2) ? 1 : 0) - (MenuDirectionPressed(1) ? 1 : 0);
                 if (_raceScreen == RaceScreen.Tickets && BoughtRaceTickets == 0)
                 {
-                    _racePair = (_racePair + row + RacePairs.Length) % RacePairs.Length;
+                    _raceHorse = (_raceHorse + row + RaceNames.Length) % RaceNames.Length;
                     int quantity = (MenuDirectionPressed(4) ? 1 : 0) - (MenuDirectionPressed(3) ? 1 : 0);
                     _raceTickets = Mathf.Clamp(_raceTickets + quantity, 1, RaceTicketLimit);
                 }
@@ -159,13 +160,16 @@ namespace AzureDreamsReimagined
             switch (_raceScreen)
             {
                 case RaceScreen.Tickets:
+                    if (!InRaceLobby || _changingInterior) return;
                     if (BoughtRaceTickets != 0) { _raceScreen = RaceScreen.Closed; return; }
+                    if ((uint)_raceHorse >= RaceNames.Length || _raceTickets < 1 || _raceTickets > RaceTicketLimit) return;
                     int price = _raceTickets * RaceTicketPrice;
                     if (_gold < price) return;
                     _gold -= price;
-                    TownSaveVariables.SetInt(RaceTicketPair, _racePair);
+                    TownSaveVariables.SetInt(RaceTicketWinner, _raceHorse);
+                    TownSaveVariables.SetInt(RaceTicketPair, -1);
                     TownSaveVariables.SetInt(RaceTicketCount, _raceTickets);
-                    TownSaveVariables.SetInt(RaceTicketOdds, _raceOdds[_racePair]);
+                    TownSaveVariables.SetInt(RaceTicketOdds, _raceOdds[_raceHorse]);
                     PersistTownProgress();
                     PlayRetailSound(RetailSfx.Confirm);
                     _raceScreen = RaceScreen.Closed;
@@ -344,22 +348,49 @@ namespace AzureDreamsReimagined
                 if (record) TownSaveVariables.SetInt(RaceBestTime, time);
             }
             int tickets = BoughtRaceTickets;
-            int pairIndex = TownSaveVariables.GetInt(RaceTicketPair, -1);
-            if (tickets > 0 && pairIndex >= 0 && pairIndex < RacePairs.Length)
+            _racePrize = 0;
+            if (tickets > 0 && RaceTicketWon())
             {
-                var pair = RacePairs[pairIndex];
-                int a = _racePlaces[0], b = _racePlaces[1];
-                if ((a == pair.A && b == pair.B) || (a == pair.B && b == pair.A))
-                {
-                    long prize = (long)tickets * RaceTicketPrice * TownSaveVariables.GetInt(RaceTicketOdds);
-                    _racePrize = (int)System.Math.Clamp(prize, 0L, (long)int.MaxValue - _gold);
-                    _gold += _racePrize;
-                }
+                long prize = (long)tickets * RaceTicketPrice * Mathf.Max(0, TownSaveVariables.GetInt(RaceTicketOdds));
+                _racePrize = (int)System.Math.Clamp(prize, 0L, (long)int.MaxValue - _gold);
+                _gold += _racePrize;
             }
-            if (tickets > 0) TownSaveVariables.SetInt(RaceTicketCount, 0);
+            // Consume both winning and losing tickets before persisting the result.
+            // Results cannot be settled twice or carried into another race.
+            TownSaveVariables.SetInt(RaceTicketCount, 0);
+            TownSaveVariables.SetInt(RaceTicketWinner, -1);
+            TownSaveVariables.SetInt(RaceTicketPair, -1);
+            TownSaveVariables.SetInt(RaceTicketOdds, 0);
             PersistTownProgress();
             _raceScreen = RaceScreen.Results;
             PlayAreaMusic(RaceCourseMusicCue);
+        }
+
+        private bool RaceTicketWon()
+        {
+            int winner = TownSaveVariables.GetInt(RaceTicketWinner, -1);
+            if (winner >= 0) return winner < RaceNames.Length && _racePlaces[0] == winner;
+            // Honor already purchased tickets from saves using the former pair bet.
+            int index = TownSaveVariables.GetInt(RaceTicketPair, -1);
+            if ((uint)index >= RacePairs.Length) return false;
+            var pair = RacePairs[index];
+            return (_racePlaces[0] == pair.A && _racePlaces[1] == pair.B) ||
+                   (_racePlaces[0] == pair.B && _racePlaces[1] == pair.A);
+        }
+
+        private Vector3 FrameRacetrackCamera(Vector3 fallback)
+        {
+            if (!InRaceCourse || _raceScreen is not (RaceScreen.Countdown or RaceScreen.Racing or RaceScreen.Results))
+                return fallback;
+            int focus = 0;
+            if (_raceSpectating && _raceFinished > 0)
+                focus = _racePlaces[0];
+            else if (_raceSpectating)
+                for (int i = 1; i < _nyuelRacers.Length; i++)
+                    if (_nyuelRacers[i] != null && (_nyuelRacers[focus] == null ||
+                        _nyuelRacers[i].Distance > _nyuelRacers[focus].Distance)) focus = i;
+            return _nyuelRacers[focus]?.Mount
+                ? _nyuelRacers[focus].Mount.transform.position : fallback;
         }
 
         private static float RaceCourseElevation(Vector2 position, Vector2 direction)
@@ -425,7 +456,7 @@ namespace AzureDreamsReimagined
             float w = Mathf.Min(width - 24f, 480f);
             var box = new Rect((width - w) * 0.5f, (height - 330f) * 0.5f, w, 330f);
             DrawDialogueFrame(box);
-            GUILayout.BeginArea(new Rect(box.x + 15f, box.y + 12f, box.width - 30f, box.height - 24f));
+            GUILayout.BeginArea(WindowDesignSystem.Content(box, footer: true));
             switch (_raceScreen)
             {
                 case RaceScreen.Tickets: DrawRaceTickets(); break;
@@ -454,17 +485,24 @@ namespace AzureDreamsReimagined
             GUILayout.Label(T($"{HeroName}, you're jockey number one. A ticket costs 100 G.", $"{HeroName}, você é o jóquei número um. Cada bilhete custa 100 G."), _messageStyle);
             if (BoughtRaceTickets > 0)
             {
-                var bought = RacePairs[Mathf.Clamp(TownSaveVariables.GetInt(RaceTicketPair), 0, RacePairs.Length - 1)];
-                GUILayout.Label(T($"{BoughtRaceTickets} ticket(s) on {bought.A + 1}–{bought.B + 1}. Good luck with the race itself too.",
-                    $"{BoughtRaceTickets} bilhete(s) na dupla {bought.A + 1}–{bought.B + 1}. Boa sorte na corrida também."), _messageStyle);
+                int winner = TownSaveVariables.GetInt(RaceTicketWinner, -1);
+                string selection;
+                if ((uint)winner < RaceNames.Length) selection = $"#{winner + 1} {RaceNames[winner]}";
+                else
+                {
+                    var bought = RacePairs[Mathf.Clamp(TownSaveVariables.GetInt(RaceTicketPair), 0, RacePairs.Length - 1)];
+                    selection = $"{bought.A + 1}–{bought.B + 1}";
+                }
+                GUILayout.Label(T($"{BoughtRaceTickets} ticket(s) on {selection}. Payout: ×{TownSaveVariables.GetInt(RaceTicketOdds)}.",
+                    $"{BoughtRaceTickets} bilhete(s) em {selection}. Prêmio: ×{TownSaveVariables.GetInt(RaceTicketOdds)}."), _messageStyle);
                 if (GUILayout.Button(WithInteractHint("Back", "Voltar"))) ConfirmRaceMenu();
                 return;
             }
-            for (int i = 0; i < RacePairs.Length; i++)
+            GUILayout.Label(T("Choose the winner.", "Escolha o vencedor."), _messageStyle);
+            for (int i = 0; i < RaceNames.Length; i++)
             {
-                var pair = RacePairs[i];
-                if (GUILayout.Button($"{(_racePair == i ? "› " : "")}{pair.A + 1}–{pair.B + 1}    ×{_raceOdds[i]}"))
-                    _racePair = i;
+                if (GUILayout.Button($"{(_raceHorse == i ? "› " : "")}#{i + 1} {RaceNames[i]}    ×{_raceOdds[i]}"))
+                    _raceHorse = i;
             }
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("−")) _raceTickets = Mathf.Max(1, _raceTickets - 1);

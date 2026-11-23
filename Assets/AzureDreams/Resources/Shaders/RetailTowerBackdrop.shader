@@ -41,6 +41,13 @@ Shader "AzureDreams/RetailTowerBackdrop"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
+                // Retail draws this into the background ordering table. Preserve
+                // its perspective without clipping the distant tower to the map camera.
+                #if defined(UNITY_REVERSED_Z)
+                    o.pos.z = o.pos.w * 0.000001;
+                #else
+                    o.pos.z = o.pos.w * 0.999999;
+                #endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.color = v.color;
                 return o;

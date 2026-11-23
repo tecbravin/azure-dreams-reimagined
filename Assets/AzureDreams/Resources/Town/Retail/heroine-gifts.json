@@ -1,0 +1,693 @@
+{
+  "source": "SLUS_006.14 gift scripts 0x8006B32C\u20130x8006C894; TOWN.BIN matrices 0x800D0E78; item_query_checks_g01145.c",
+  "heroes": [
+    {
+      "id": "nico",
+      "group": 11,
+      "loveFlag": 5230,
+      "matrix": [
+        2147922732,
+        2147922732,
+        2147922732,
+        2147922732,
+        2147922805,
+        2147922879,
+        2147923113,
+        2147923302,
+        2147922805,
+        2147923037,
+        2147923113,
+        2147923302,
+        2147922805,
+        2147923037,
+        2147923226,
+        2147923302
+      ]
+    },
+    {
+      "id": "selfi",
+      "group": 7,
+      "loveFlag": 5234,
+      "matrix": [
+        2147923460,
+        2147923572,
+        2147923678,
+        2147924018,
+        2147923460,
+        2147923572,
+        2147923678,
+        2147924018,
+        2147923460,
+        2147923572,
+        2147923678,
+        2147924018,
+        2147924229,
+        2147924229,
+        2147923899,
+        2147924229
+      ]
+    },
+    {
+      "id": "fur",
+      "group": 9,
+      "loveFlag": 5232,
+      "matrix": [
+        2147924313,
+        2147924313,
+        2147924313,
+        2147924313,
+        2147924379,
+        2147924435,
+        2147924713,
+        2147924951,
+        2147924379,
+        2147924637,
+        2147924713,
+        2147924951,
+        2147924379,
+        2147924637,
+        2147924889,
+        2147924951
+      ]
+    },
+    {
+      "id": "mia",
+      "group": 10,
+      "loveFlag": 5236,
+      "matrix": [
+        2147925185,
+        2147925437,
+        2147925673,
+        2147926040,
+        2147925333,
+        2147925437,
+        2147925673,
+        2147926040,
+        2147925333,
+        2147925520,
+        2147925673,
+        2147926040,
+        2147925333,
+        2147925520,
+        2147925805,
+        2147926040
+      ]
+    },
+    {
+      "id": "patty",
+      "group": 8,
+      "loveFlag": 5242,
+      "matrix": [
+        2147926170,
+        2147926232,
+        2147926400,
+        2147926611,
+        2147926170,
+        2147926232,
+        2147926400,
+        2147926611,
+        2147926170,
+        2147926292,
+        2147926400,
+        2147926611,
+        2147926170,
+        2147926292,
+        2147926527,
+        2147926611
+      ]
+    },
+    {
+      "id": "vivian",
+      "group": 12,
+      "loveFlag": 5238,
+      "matrix": [
+        2147926733,
+        2147926919,
+        2147927118,
+        2147927348,
+        2147926836,
+        2147926919,
+        2147927118,
+        2147927348,
+        2147926836,
+        2147927018,
+        2147927118,
+        2147927348,
+        2147926836,
+        2147927018,
+        2147927219,
+        2147927348
+      ]
+    },
+    {
+      "id": "cherrl",
+      "group": 13,
+      "loveFlag": 5240,
+      "matrix": [
+        2147927492,
+        2147927589,
+        2147927837,
+        2147928073,
+        2147927492,
+        2147927589,
+        2147927837,
+        2147928073,
+        2147927492,
+        2147927698,
+        2147927837,
+        2147928073,
+        2147927492,
+        2147927698,
+        2147927973,
+        2147928073
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "address": 2147922732,
+      "pages": [
+        "You\u2019re giving me that?\nNo thanks."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isso?\nN\u00e3o, obrigada."
+      ]
+    },
+    {
+      "address": 2147922805,
+      "pages": [
+        "A present for me? Thanks!"
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "Um presente para mim? Obrigada!"
+      ]
+    },
+    {
+      "address": 2147922879,
+      "pages": [
+        "You\u2019re giving me that?\nLooks very expensive. I\u2019m not\nworthy enough for that."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isso?\nParece muito caro. N\u00e3o mere\u00e7o algo assim."
+      ]
+    },
+    {
+      "address": 2147923037,
+      "pages": [
+        "Really?\nThanks! I\u2019ll cherish it!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "S\u00e9rio?\nObrigada! Vou guardar com carinho!"
+      ]
+    },
+    {
+      "address": 2147923113,
+      "pages": [
+        "No, that\u2019s too expensive for\nme! I can\u2019t accept that."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "N\u00e3o, isso \u00e9 caro demais para mim! N\u00e3o posso aceitar."
+      ]
+    },
+    {
+      "address": 2147923226,
+      "pages": [
+        "Really?\nThanks! I\u2019ll cherish it!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "S\u00e9rio?\nObrigada! Vou guardar com carinho!"
+      ]
+    },
+    {
+      "address": 2147923302,
+      "pages": [
+        "You\u2019re giving me that? Well,\nthanks. But I doubt if I\u2019d make\ngood use of it."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isso? Bem, obrigada. Mas duvido que eu fa\u00e7a bom uso."
+      ]
+    },
+    {
+      "address": 2147923460,
+      "pages": [
+        "A gift? Not bad. I shall accept\nit with gratitude."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Um presente? Nada mal. Aceitarei com gratid\u00e3o."
+      ]
+    },
+    {
+      "address": 2147923572,
+      "pages": [
+        "For me? Something of this value\nshall match me."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Para mim? Algo deste valor combina comigo."
+      ]
+    },
+    {
+      "address": 2147923678,
+      "pages": [
+        "I cannot accept your offer.",
+        "I suspect you have ulterior\nmotives for giving me something\nso valuable."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "N\u00e3o posso aceitar sua oferta.",
+        "Suspeito que tenha segundas inten\u00e7\u00f5es ao me dar algo t\u00e3o valioso."
+      ]
+    },
+    {
+      "address": 2147923899,
+      "pages": [
+        "What!  I can have this?\nHow nice of you!\nI\u2019m so happy!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "O qu\u00ea! Posso ficar com isto?\nQue gentileza!\nEstou t\u00e3o feliz!"
+      ]
+    },
+    {
+      "address": 2147924018,
+      "pages": [
+        "A present for me!?  I will not\ndecline your offer.",
+        "But you surely have no taste\nwhen picking a gift!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Um presente para mim!? N\u00e3o recusarei sua oferta.",
+        "Mas voc\u00ea n\u00e3o tem gosto nenhum para escolher presentes!"
+      ]
+    },
+    {
+      "address": 2147924229,
+      "pages": [
+        "A present for me?\nI will cherish it."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Um presente para mim?\nVou guardar com carinho."
+      ]
+    },
+    {
+      "address": 2147924313,
+      "pages": [
+        "For me? Nah, I don\u2019t want it."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Para mim? N\u00e3o, n\u00e3o quero."
+      ]
+    },
+    {
+      "address": 2147924379,
+      "pages": [
+        "For me?  Thanks."
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "Para mim? Obrigada."
+      ]
+    },
+    {
+      "address": 2147924435,
+      "pages": [
+        "You\u2019re giving that to me?\nNo thanks.",
+        "That\u2019s too expensive for me to\nreceive without a good reason."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isso?\nN\u00e3o, obrigada.",
+        "\u00c9 caro demais para eu receber sem um bom motivo."
+      ]
+    },
+    {
+      "address": 2147924637,
+      "pages": [
+        "For me?  Really? You\u2019re so\nnice."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Para mim? S\u00e9rio? Voc\u00ea \u00e9 t\u00e3o gentil."
+      ]
+    },
+    {
+      "address": 2147924713,
+      "pages": [
+        "You\u2019re giving this to me? You\nknow how much this costs? I\ncan\u2019t accept such a luxury!"
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isto? Sabe quanto custa? N\u00e3o posso aceitar esse luxo!"
+      ]
+    },
+    {
+      "address": 2147924889,
+      "pages": [
+        "For me!?  Really?\nThanks!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Para mim!? S\u00e9rio?\nObrigada!"
+      ]
+    },
+    {
+      "address": 2147924951,
+      "pages": [
+        "For me?  Thanks, but I don\u2019t\nreally want it. Maybe I\u2019ll put\nit out for sale."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Para mim? Obrigada, mas n\u00e3o quero muito. Talvez eu coloque \u00e0 venda."
+      ]
+    },
+    {
+      "address": 2147925114,
+      "pages": [
+        "Wow, dumplings! Thanks a lot!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Oba, bolinhos! Muito obrigada!"
+      ]
+    },
+    {
+      "address": 2147925185,
+      "pages": [
+        "Uh, you\u2019re giving me this? I\nhave no reason to take this.\nNo thank you."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Ah, est\u00e1 me dando isto? N\u00e3o tenho motivo para aceitar. N\u00e3o, obrigada."
+      ]
+    },
+    {
+      "address": 2147925333,
+      "pages": [
+        "Whaaat!\nFor me?\nThanks!  I appreciate it."
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "O qu\u00ea\u00ea\u00ea!\nPara mim?\nObrigada! Eu agrade\u00e7o."
+      ]
+    },
+    {
+      "address": 2147925437,
+      "pages": [
+        "That\u2019s too expensive.\nI can\u2019t take it."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Isso \u00e9 caro demais.\nN\u00e3o posso aceitar."
+      ]
+    },
+    {
+      "address": 2147925520,
+      "pages": [
+        "Wow!  Such a gorgeous gift for\nme! I\u2019ll cherish it!\nAre you sure?  Wow!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Uau! Um presente t\u00e3o lindo para mim! Vou guardar com carinho!\nTem certeza? Uau!"
+      ]
+    },
+    {
+      "address": 2147925673,
+      "pages": [
+        "It\u2019s too expensive for me! I\u2019d\nfeel guilty if I took it.\nSorry."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "\u00c9 caro demais para mim! Eu me sentiria culpada se aceitasse.\nDesculpe."
+      ]
+    },
+    {
+      "address": 2147925805,
+      "pages": [
+        "Oh my God!  This is for me? Um,\nwell, I... I\u2019m so happy! Wow!\nSuch an expensive gift for me!",
+        "I shall cherish it."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Meu Deus! Isto \u00e9 para mim? Ah, bem, eu... Estou t\u00e3o feliz! Uau! Um presente t\u00e3o caro para mim!",
+        "Vou guardar com carinho."
+      ]
+    },
+    {
+      "address": 2147926040,
+      "pages": [
+        "Realy?  I can have this? I just\nwanted something like this!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "S\u00e9rio? Posso ficar com isto? Eu queria algo assim!"
+      ]
+    },
+    {
+      "address": 2147926170,
+      "pages": [
+        "For me?  Thank you."
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "Para mim? Obrigada."
+      ]
+    },
+    {
+      "address": 2147926232,
+      "pages": [
+        "What?  For me?  No thanks."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "O qu\u00ea? Para mim? N\u00e3o, obrigada."
+      ]
+    },
+    {
+      "address": 2147926292,
+      "pages": [
+        "You\u2019re giving me this?  Thanks.\nI\u2019ll cherish it."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isto? Obrigada.\nVou guardar com carinho."
+      ]
+    },
+    {
+      "address": 2147926400,
+      "pages": [
+        "You want me to take this? No\nway!  This looks too expensive!"
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Quer que eu aceite isto? De jeito nenhum! Parece caro demais!"
+      ]
+    },
+    {
+      "address": 2147926527,
+      "pages": [
+        "What?  For me?  Thank you very\nmuch."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "O qu\u00ea? Para mim? Muito obrigada."
+      ]
+    },
+    {
+      "address": 2147926611,
+      "pages": [
+        "It may sound rude, but this\nhas no value to me.\nNo thanks."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Pode soar grosseiro, mas isto n\u00e3o tem valor para mim.\nN\u00e3o, obrigada."
+      ]
+    },
+    {
+      "address": 2147926733,
+      "pages": [
+        "What is it?  For me?  Why?\nNah, I don\u2019t want it."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "O que \u00e9? Para mim? Por qu\u00ea?\nN\u00e3o, n\u00e3o quero."
+      ]
+    },
+    {
+      "address": 2147926836,
+      "pages": [
+        "Oh!  I can have it?\nThank you."
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "Ah! Posso ficar com isto?\nObrigada."
+      ]
+    },
+    {
+      "address": 2147926919,
+      "pages": [
+        "No, you shouldn\u2019t! It is too\nexpensive for me!"
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "N\u00e3o, n\u00e3o devia! \u00c9 caro demais para mim!"
+      ]
+    },
+    {
+      "address": 2147927018,
+      "pages": [
+        "For me?   Thank you very much!\nI\u2019m so happy!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Para mim? Muito obrigada!\nEstou t\u00e3o feliz!"
+      ]
+    },
+    {
+      "address": 2147927118,
+      "pages": [
+        "No, I can\u2019t take it.\nIt\u2019s too expensive for me."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "N\u00e3o, n\u00e3o posso aceitar.\n\u00c9 caro demais para mim."
+      ]
+    },
+    {
+      "address": 2147927219,
+      "pages": [
+        "Oh, for me?  No kidding!\nThank you very much!\nI\u2019m so happy!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Ah, para mim? \u00c9 s\u00e9rio?\nMuito obrigada!\nEstou t\u00e3o feliz!"
+      ]
+    },
+    {
+      "address": 2147927348,
+      "pages": [
+        "You\u2019re giving me that?\nNo thanks... Sorry but...\nit\u2019s no good for me."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Voc\u00ea est\u00e1 me dando isso?\nN\u00e3o, obrigada... Desculpe, mas... n\u00e3o serve para mim."
+      ]
+    },
+    {
+      "address": 2147927492,
+      "pages": [
+        "You\u2019re saying it\u2019s for me!\nThank you!"
+      ],
+      "accepted": true,
+      "increment": true,
+      "portuguese": [
+        "Est\u00e1 dizendo que \u00e9 para mim!\nObrigada!"
+      ]
+    },
+    {
+      "address": 2147927589,
+      "pages": [
+        "For me?  I can\u2019t take it.\nI\u2019d feel guilty if I did."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "Para mim? N\u00e3o posso aceitar.\nEu me sentiria culpada."
+      ]
+    },
+    {
+      "address": 2147927698,
+      "pages": [
+        "Wow!  A present! Do I really\ndeserve this?  Thank you very\nmuch!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Uau! Um presente! Eu mere\u00e7o mesmo? Muito obrigada!"
+      ]
+    },
+    {
+      "address": 2147927837,
+      "pages": [
+        "What?  For me? It looks mighty\nexpensive!  No, I can\u2019t accept\nit."
+      ],
+      "accepted": false,
+      "increment": false,
+      "portuguese": [
+        "O qu\u00ea? Para mim? Parece muito caro! N\u00e3o, n\u00e3o posso aceitar."
+      ]
+    },
+    {
+      "address": 2147927973,
+      "pages": [
+        "Are you sure I can have it?\nWow!  Thank you!"
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "Tem certeza de que posso ficar com isto?\nUau! Obrigada!"
+      ]
+    },
+    {
+      "address": 2147928073,
+      "pages": [
+        "What?  This is for me? Well...\nactually... Thank you, I\nguess..."
+      ],
+      "accepted": true,
+      "increment": false,
+      "portuguese": [
+        "O qu\u00ea? Isto \u00e9 para mim? Bem... na verdade... Obrigada, eu acho..."
+      ]
+    }
+  ]
+}

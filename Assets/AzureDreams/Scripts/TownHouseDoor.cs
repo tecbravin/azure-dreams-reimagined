@@ -71,6 +71,14 @@ namespace AzureDreamsReimagined
             return true;
         }
 
+        internal void OpenImmediately()
+        {
+            InitializeHinge();
+            IsOpeningOrOpen = true;
+            _angle = 90f;
+            if (_hinge) _hinge.localRotation = Quaternion.Euler(0f, -_angle, 0f);
+        }
+
         private void Update()
         {
             if (!_hinge) return;

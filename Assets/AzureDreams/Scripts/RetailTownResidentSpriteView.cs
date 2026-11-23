@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 namespace AzureDreamsReimagined
 {
     /// <summary>Assembled retail field sprites with their original timed sequences.</summary>
-    [DisallowMultipleComponent]
+    [DefaultExecutionOrder(10), DisallowMultipleComponent]
     public sealed class RetailTownResidentSpriteView : MonoBehaviour
     {
         [Serializable] private sealed class Sequence
@@ -24,7 +24,7 @@ namespace AzureDreamsReimagined
         [Serializable] private sealed class Bank
         {
             public int cellSize, columns, frameCount;
-            public float pivotX, pivotY, ticksPerSecond;
+            public float pivotX, pivotY, ticksPerSecond, groundingPixels;
             public Clip[] clips;
         }
 
@@ -44,6 +44,7 @@ namespace AzureDreamsReimagined
         private double _ticks;
         private bool _moving, _explicitClip;
         private Vector3 _lastPosition;
+        internal bool UsesAtlas(Texture2D atlas) => _atlas == atlas && _frames != null;
 
         public void Configure(Texture2D atlas, TextAsset animations, float pixelsPerUnit = TownPixelsPerUnit)
         {
@@ -81,7 +82,10 @@ namespace AzureDreamsReimagined
                 var rectangle = new Rect((i % _bank.columns) * _bank.cellSize,
                     _atlas.height - (i / _bank.columns + 1) * _bank.cellSize,
                     _bank.cellSize, _bank.cellSize);
-                _frames[i] = Sprite.Create(_atlas, rectangle, new Vector2(_bank.pivotX, _bank.pivotY),
+                // Align the lowest standing/walking foot pixel with the actor's floor anchor.
+                // One constant per bank preserves the original animation's bounce and scale.
+                var pivot = new Vector2(_bank.pivotX, _bank.pivotY - _bank.groundingPixels / _bank.cellSize);
+                _frames[i] = Sprite.Create(_atlas, rectangle, pivot,
                     _pixelsPerUnit, 0, SpriteMeshType.FullRect);
                 _frames[i].name = name + " retail frame " + i;
             }
@@ -96,7 +100,7 @@ namespace AzureDreamsReimagined
                 Debug.LogError("Retail town sprite bank has no idle sequence.", this);
                 return;
             }
-            PresentFrame(1);
+            PresentFrame(_clip.directions.Length == 8 ? 2 : 1);
         }
 
         private bool ValidBank()
@@ -108,7 +112,7 @@ namespace AzureDreamsReimagined
                 return false;
             foreach (var clip in _bank.clips)
             {
-                if (clip.directions == null || clip.directions.Length != 4) return false;
+                if (clip.directions == null || (clip.directions.Length != 4 && clip.directions.Length != 8)) return false;
                 foreach (var sequence in clip.directions)
                 {
                     if (sequence.frames == null || sequence.ticks == null || sequence.frames.Length == 0 ||
@@ -161,9 +165,27 @@ namespace AzureDreamsReimagined
             return false;
         }
 
+        private bool _poolSwimming;
+        private bool _seated;
+        internal void SetSeated(bool seated)
+        {
+            _seated=seated;
+            if(!_renderer)return;
+            _renderer.transform.localScale = seated ? new Vector3(1f, .78f, 1f) : Vector3.one;
+        }
+        private float _poolWaterHeight;
+        internal void PresentPoolSwimming(bool swimming, float waterHeight)
+        {
+            _poolSwimming = swimming;
+            _poolWaterHeight = waterHeight;
+        }
+
         private void LateUpdate()
         {
             if (!_renderer || _clip == null) return;
+            _renderer.transform.localPosition = _poolSwimming
+                ? Vector3.up * (_poolWaterHeight - transform.position.y - .9f + Mathf.Sin(Time.time * 2.8f) * .025f)
+                : _seated ? Vector3.up*.06f : Vector3.zero;
             // Scripted residents can move without a patrol/locomotion call.
             Vector3 displacement = transform.position - _lastPosition;
             _lastPosition = transform.position;
@@ -175,7 +197,7 @@ namespace AzureDreamsReimagined
                 SelectClip(_moving || displaced ? "walk" : "idle");
             }
             if (!_camera || !_camera.isActiveAndEnabled) _camera = Camera.main;
-            int direction = 1;
+            int direction = _clip.directions.Length == 8 ? 2 : 1;
             if (_camera)
             {
                 Vector3 forward = _camera.transform.forward;
@@ -183,11 +205,23 @@ namespace AzureDreamsReimagined
                 forward.Normalize();
                 float side = Vector3.Dot(transform.forward, _camera.transform.right);
                 float depth = Vector3.Dot(transform.forward, forward);
-                direction = Mathf.Abs(side) > Mathf.Abs(depth) ? (side >= 0f ? 2 : 0) : (depth > 0f ? 3 : 1);
+                direction = FieldSpriteDirection(side, depth, _clip.directions.Length);
                 _renderer.transform.rotation = _camera.transform.rotation;
             }
             _ticks += Time.deltaTime * _bank.ticksPerSecond;
             PresentFrame(direction);
+        }
+
+        private static int FieldSpriteDirection(float side, float depth, int directions)
+        {
+            if (directions == 8)
+            {
+                // Native eight-direction order: left, front-left, front, front-right,
+                // right, back-right, back, back-left. Repeated side chains mirror.
+                int octant = Mathf.RoundToInt(Mathf.Atan2(side, -depth) * Mathf.Rad2Deg / 45f) & 7;
+                return (octant + 2) & 7;
+            }
+            return Mathf.Abs(side) > Mathf.Abs(depth) ? (side >= 0f ? 2 : 0) : (depth > 0f ? 3 : 1);
         }
 
         private void PresentFrame(int direction)
@@ -201,7 +235,7 @@ namespace AzureDreamsReimagined
                 time -= sequence.ticks[entry++];
             _renderer.sprite = _frames[sequence.frames[entry]];
             // The source side chain faces left; the opposite direction mirrors it.
-            _renderer.flipX = direction == 2;
+            _renderer.flipX = _clip.directions.Length == 8 ? direction is >= 3 and <= 5 : direction == 2;
         }
 
         private void OnDestroy()

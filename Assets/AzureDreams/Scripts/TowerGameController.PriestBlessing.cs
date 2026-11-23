@@ -76,6 +76,7 @@ namespace AzureDreamsReimagined
             JordaAsk(npc, "Welcome to the temple. Do you need anything?", "Bem-vindo ao templo. Precisa de algo?",
                 (T($"Buy a De-curse Scroll ({DecurseScrollPrice}G)", $"Comprar Pergaminho de purificação ({DecurseScrollPrice}G)"),
                     () => BuyDecurseScroll(npc)),
+                (T("Read the sacred book", "Ler o livro sagrado"), OpenJordaManual),
                 (T("Just visiting.", "Só estou visitando."), () => JordaTalk(npc, idleEn, idlePt)));
 
         private void BuyDecurseScroll(NPCController npc)

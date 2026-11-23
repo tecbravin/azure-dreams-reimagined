@@ -30,9 +30,15 @@ namespace AzureDreamsReimagined
         private const string ArcadeRequestStageKey = ConstructionKey + "arcade.request_stage";
         private const string CircuitRequestStageKey = ConstructionKey + "circuit.request_stage";
         private const string GymRequestStageKey = ConstructionKey + "gym.request_stage";
-        // No separate Fon portrait was recovered from the retail disc.  The
-        // captured town elder portrait is the art used by his temporary actor.
-        private const string FonPortrait = "Dialogue/Grandpa_variant0_frame0";
+        // Fon has a redesigned portrait only; Classic intentionally has none.
+        private const string FonPortrait = "Dialogue/Fon_variant0_frame0";
+        private Texture2D FonDialoguePortrait(float started)
+        {
+            if (!AssetMode.IsReimagined) return null;
+            int frame = (Time.unscaledTime - started) % 3.6f >= 3.45f ? 1 : 0;
+            return StreamImage($"Reimagined/Portraits/Dialogue/Fon_variant0_frame{frame}.png")
+                ?? StreamImage("Reimagined/Portraits/Dialogue/Fon_variant0_frame0.png");
+        }
         private const string JordaPortrait = "Dialogue/Jorda_variant0_frame0";
         private const string JordaEyesClosed = "Dialogue/Jorda_variant0_frame1";
         private const string JordaEyesClosedRetail = "Dialogue/Jorda_variant0_frame2";
@@ -109,32 +115,32 @@ namespace AzureDreamsReimagined
                 Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(52, 48, 60, 53), new(56, 53),
                 replaceBounds: Rect.MinMaxRect(50, 44, 62, 58)),
             new("home_2", "Expand Koh's house II", "Ampliar a casa do Koh II", 60000, "KohHome",
-                Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(50, 47, 61, 53), new(56, 56), "home",
+                Rect.MinMaxRect(48, 44, 63, 58), Rect.MinMaxRect(50, 47, 61, 53), new(54, 53), "home",
                 replaceBounds: Rect.MinMaxRect(50, 44, 62, 58)),
             new("hut_1", "Expand the monster hut to 3×3", "Ampliar o alojamento para 3×3", 4000, hutRank: 1),
             new("hut_2", "Expand the monster hut to 4×4", "Ampliar o alojamento para 4×4", 6000, hutRank: 2),
             new("hut_3", "Expand the monster hut to 6×6", "Ampliar o alojamento para 6×6", 20000, hutRank: 3),
             new("hut_4", "Expand the monster hut to 8×8", "Ampliar o alojamento para 8×8", 60000, hutRank: 4),
             new("hospital", "Renovate the hospital", "Reformar o hospital", 4000, "Interior_10_hospital_2",
-                Rect.MinMaxRect(8, 62, 23, 72), Rect.MinMaxRect(11, 65, 21, 69), new(16, 69.25f)),
+                Rect.MinMaxRect(8, 62, 23, 72), Rect.MinMaxRect(11, 65, 21, 69), new(16, 69)),
             new("temple", "Renovate the temple", "Reformar o templo", TempleRenovationCost, "Interior_12_temple_2",
                 Rect.MinMaxRect(64, 27, 84, 44), Rect.MinMaxRect(66, 31, 82, 41), new(74, 41)),
             new("library", "Build the library", "Construir a biblioteca", 8000, "Interior_07_library",
-                Rect.MinMaxRect(90, 30, 102, 41), Rect.MinMaxRect(92, 35, 100, 38), new(96, 38), lotOrigin: new(88, 28)),
+                Rect.MinMaxRect(104, 62, 119, 73), Rect.MinMaxRect(107, 65, 117, 69), new(112, 69)),
             new("fountain", "Build the fountain", "Construir a fonte", 2000, null,
                 Rect.MinMaxRect(55, 64, 73, 80), Rect.MinMaxRect(60, 69, 66, 74)),
             new("alley", "Build the bowling alley", "Construir o boliche", 40000, "Interior_0c_alley",
-                Rect.MinMaxRect(42, 29, 54, 41), Rect.MinMaxRect(43, 33, 53, 37), new(48, 37), lotOrigin: new(40, 28)),
+                Rect.MinMaxRect(91, 88, 102, 98), Rect.MinMaxRect(92, 91.5f, 100, 95), new(96, 95), lotOrigin: new(88, 86)),
             new("gym", "Build the gym", "Construir a academia", 30000, "Interior_08_gym",
-                Rect.MinMaxRect(25, 88, 38, 98), Rect.MinMaxRect(27, 91, 37, 95), new(32, 95), lotOrigin: new(24, 86)),
+                Rect.MinMaxRect(90, 30, 102, 41), Rect.MinMaxRect(92, 35, 100, 38), new(96, 38), lotOrigin: new(88, 28)),
             new("circuit", "Build the racetrack", "Construir a pista de corrida", 30000, "Interior_0a_racetrack_entrance",
                 Rect.MinMaxRect(7, 23, 25, 44), Rect.MinMaxRect(9, 25, 24, 40), new(16, 40)),
             new("theater", "Build the theater", "Construir o teatro", 8000, "Interior_0b_theater",
-                Rect.MinMaxRect(26, 28, 38, 40), Rect.MinMaxRect(27, 32, 37, 36), new(32, 36), lotOrigin: new(24, 28)),
+                Rect.MinMaxRect(42, 29, 54, 41), Rect.MinMaxRect(43, 33, 53, 37), new(48, 37), lotOrigin: new(40, 28)),
             new("casino", "Build the casino", "Construir o cassino", 100000, "Interior_2b_casino_1",
-                Rect.MinMaxRect(91, 88, 102, 98), Rect.MinMaxRect(92, 91.5f, 100, 95), new(96, 95), lotOrigin: new(88, 86)),
+                Rect.MinMaxRect(26, 28, 38, 40), Rect.MinMaxRect(27, 32, 37, 36), new(32, 36), lotOrigin: new(24, 28)),
             new("arcade", "Build the amusement center", "Construir o centro de diversão", 3000, "Interior_09_arcade_1",
-                Rect.MinMaxRect(104, 62, 119, 73), Rect.MinMaxRect(107, 65, 117, 69), new(112, 69))
+                Rect.MinMaxRect(25, 88, 38, 98), Rect.MinMaxRect(27, 91, 37, 95), new(32, 95), lotOrigin: new(24, 86))
         };
 
         // These are the five interchangeable 16x14 construction slots from
@@ -187,7 +193,7 @@ namespace AzureDreamsReimagined
         };
 
         private static bool UsesFlexibleConstructionLot(BuildingProject project) => project.Id is
-            "library" or "alley" or "gym" or "theater" or "casino";
+            "arcade" or "alley" or "gym" or "theater" or "casino";
 
         private static string ConstructionLotKey(BuildingProject project) =>
             ConstructionKey + project.Id + ConstructionLotSuffix;
@@ -229,11 +235,11 @@ namespace AzureDreamsReimagined
         {
             int slot = project.Id switch
             {
-                "theater" => 4,
-                "alley" => 5,
-                "library" => 7,
-                "gym" => 28,
-                "casino" => 31,
+                "casino" => 4,
+                "theater" => 5,
+                "gym" => 7,
+                "arcade" => 28,
+                "alley" => 31,
                 _ => -1
             };
             return Array.Find(FlexibleConstructionLots, candidate => candidate.Slot == slot);
@@ -254,6 +260,45 @@ namespace AzureDreamsReimagined
             return lot == null ? project : project.AtLot(lot.Origin);
         }
 
+        private static void EnsureConstructionLotAssignments()
+        {
+            // Keep valid player choices, repair collisions from the old library/arcade
+            // classification, and reserve pending work before offering another parcel.
+            var occupied = new HashSet<int>();
+            var unassigned = new List<BuildingProject>();
+            bool changed = false;
+            foreach (var project in BuildingProjects)
+            {
+                if (!UsesFlexibleConstructionLot(project) ||
+                    (!ProjectBuilt(project) && project.Id != PendingConstructionId)) continue;
+                string key = ConstructionLotKey(project);
+                int saved = TownSaveVariables.GetInt(key, -1);
+                if (TownSaveVariables.HasValue(key) &&
+                    Array.Exists(FlexibleConstructionLots, lot => lot.Slot == saved) && occupied.Add(saved)) continue;
+                unassigned.Add(project);
+            }
+            foreach (var project in unassigned)
+            {
+                var lot = DefaultConstructionLot(project);
+                if (lot == null || occupied.Contains(lot.Slot))
+                    lot = Array.Find(FlexibleConstructionLots, candidate => !occupied.Contains(candidate.Slot));
+                if (lot == null) continue;
+                occupied.Add(lot.Slot);
+                TownSaveVariables.SetInt(ConstructionLotKey(project), lot.Slot);
+                changed = true;
+            }
+            if (changed) TownSaveVariables.Save();
+        }
+
+        private static bool ConstructionLotAvailable(BuildingProject project, ConstructionLot lot)
+        {
+            foreach (var candidate in BuildingProjects)
+                if (candidate.Id != project.Id && UsesFlexibleConstructionLot(candidate) &&
+                    (ProjectBuilt(candidate) || candidate.Id == PendingConstructionId) &&
+                    SavedConstructionLot(candidate)?.Slot == lot.Slot) return false;
+            return true;
+        }
+
         private void RefreshConstructionLots(BuildingProject project)
         {
             _availableConstructionLots.Clear();
@@ -263,19 +308,7 @@ namespace AzureDreamsReimagined
 
             foreach (var lot in FlexibleConstructionLots)
             {
-                bool occupied = false;
-                foreach (var candidate in BuildingProjects)
-                {
-                    if (candidate.Id == project.Id || !UsesFlexibleConstructionLot(candidate) ||
-                        (!ProjectBuilt(candidate) && candidate.Id != PendingConstructionId))
-                        continue;
-                    if (SavedConstructionLot(candidate)?.Slot == lot.Slot)
-                    {
-                        occupied = true;
-                        break;
-                    }
-                }
-                if (!occupied) _availableConstructionLots.Add(lot);
+                if (ConstructionLotAvailable(project, lot)) _availableConstructionLots.Add(lot);
             }
         }
 
@@ -450,6 +483,7 @@ namespace AzureDreamsReimagined
         {
             return JordaAsk(npc, "Do you want me to give you information on the specifics of the tower?",
                 "Quer que eu explique os detalhes da torre?",
+                (T("Read the sacred book", "Ler o livro sagrado"), OpenJordaManual),
                 (T("Yes.", "Sim."), () => JordaTalk(npc, "I'm going to instruct you thoroughly, so listen up.",
                     "Vou ensinar tudo em detalhe, então preste atenção.", () => JordaTeachBasics(npc))),
                 (T("I don't need you to tell me.", "Não preciso que me diga."), () => JordaTalk(npc,
@@ -523,6 +557,7 @@ namespace AzureDreamsReimagined
             return JordaTalk(npc, "Oh, hi {name}. You have really come a long way.",
                 "Ah, olá, {name}. Você já chegou longe.", () => JordaAsk(npc,
                     "So, why are you here today?", "Então, por que veio hoje?",
+                    (T("Read the sacred book", "Ler o livro sagrado"), OpenJordaManual),
                     (T("To build a bigger temple.", "Para construir um templo maior."), () =>
                         JordaTalkSequence(npc, () => JordaAsk(npc,
                                 "But to rebuild this would cost 4,000 G. Do you have that kind of money?",
@@ -1039,6 +1074,7 @@ namespace AzureDreamsReimagined
 
         private void OpenCarpenter()
         {
+            EnsureConstructionLotAssignments();
             _constructionOpen = true;
             _constructionConfirm = false;
             _constructionChoosingLot = false;
@@ -1144,6 +1180,14 @@ namespace AzureDreamsReimagined
             var project = _availableConstructionProjects[_constructionRow];
             if (ConstructionPending || ProjectBuilt(project) || ProjectRequirement(project) != null) return;
             if (UsesFlexibleConstructionLot(project) && _selectedConstructionLot == null) return;
+            if (_selectedConstructionLot != null && !ConstructionLotAvailable(project, _selectedConstructionLot))
+            {
+                RefreshConstructionLots(project);
+                _constructionConfirm = false;
+                _constructionChoosingLot = true;
+                _constructionMessage = T("That lot is occupied. Choose another lot.", "Esse terreno está ocupado. Escolha outro terreno.");
+                return;
+            }
             if (_gold < project.Price)
             {
                 _constructionMessage = T("You don't have enough gold.", "Você não tem ouro suficiente.");
@@ -1186,7 +1230,6 @@ namespace AzureDreamsReimagined
             if (!_constructionOpen || !InCarpenterShop) return;
             DrawHudPanel(new Rect(85, 86, 470, 301));
             GUI.Label(new Rect(103, 101, 310, 24), T("Carpenter · Tonka", "Carpintaria · Tonka"));
-            GUI.Label(new Rect(429, 101, 110, 24), _gold + " G");
             if (_constructionConfirm)
             {
                 var project = _availableConstructionProjects[_constructionRow];
@@ -1240,6 +1283,7 @@ namespace AzureDreamsReimagined
 
         private void ApplyTownConstruction(GameObject town)
         {
+            EnsureConstructionLotAssignments();
             _fountainCollisionRoot = null;
             _fountainFaces.Clear();
             var shader = Shader.Find("AzureDreams/TownCaptured");
@@ -1324,6 +1368,11 @@ namespace AzureDreamsReimagined
                 int count = reader.ReadInt32();
                 var texture = AssetMode.Load<Texture2D>(ConstructionResources + "Textures/" + textureName);
                 var material = new Material(shader) { mainTexture = texture };
+                if ((project.Id == "fountain" || project.Id == "home_2") && textureName is "page_44_clut_32390" or "page_44_clut_32448")
+                {
+                    var water = Shader.Find("AzureDreams/TownWater");
+                    if (water) material.shader = water;
+                }
                 materials[sub] = material;
                 _constructionGeometry.Add(material);
                 triangles[sub] = new int[count];
@@ -1372,9 +1421,11 @@ namespace AzureDreamsReimagined
 
         private void EnterConstruction(BuildingProject project)
         {
-            string interior = project.Interior == "KohHome" ? CurrentHomeScene() : project.Interior;
-            StartCoroutine(LoadInterior(interior, ConstructionReturnPosition(project), spawnAboveExitMarker: true));
+            StartCoroutine(LoadInterior(ConstructionInterior(project), ConstructionReturnPosition(project), spawnAboveExitMarker: true));
         }
+
+        private string ConstructionInterior(BuildingProject project) =>
+            project.Interior == "KohHome" ? CurrentHomeScene() : project.Interior;
 
         private bool TryConstructionEntrance()
         {

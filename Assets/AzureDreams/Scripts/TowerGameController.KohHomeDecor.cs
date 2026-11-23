@@ -246,8 +246,9 @@ namespace AzureDreamsReimagined
 
         private void CreateLight(GameObject root, Color stem, Color shade)
         {
-            HomePart(root, PrimitiveType.Cylinder, "lamp stand", new Vector3(0f, 0.56f, 0f), new Vector3(0.10f, 1.12f, 0.10f), stem);
-            HomePart(root, PrimitiveType.Cylinder, "lamp shade", new Vector3(0f, 1.15f, 0f), new Vector3(0.46f, 0.28f, 0.46f), shade);
+            // Unity's cylinder is two units tall; use half the intended height.
+            HomePart(root, PrimitiveType.Cylinder, "lamp stand", new Vector3(0f, 0.36f, 0f), new Vector3(0.07f, 0.36f, 0.07f), stem);
+            HomePart(root, PrimitiveType.Cylinder, "lamp shade", new Vector3(0f, 0.74f, 0f), new Vector3(0.32f, 0.10f, 0.32f), shade);
         }
 
         private void CreateTelephone(GameObject root, Color body, Color brass)

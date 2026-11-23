@@ -6,8 +6,36 @@ namespace AzureDreamsReimagined
     {
         private GameObject _auraBike;
         private AuraBikeSpriteView _auraBikeView;
+        private AuraBikeDust _auraBikeDust;
         private bool _ridingAuraBike;
         private float _auraBikeSpeed;
+        private float _auraBikeSoundTime;
+        private AudioSource _auraBikeAudio;
+
+        private void PresentAuraBikeSound(float dt, float maximum, bool moving)
+        {
+            if (!Application.isPlaying) return;
+            if (!moving || _sfxVolume <= 0f)
+            {
+                if (_auraBikeAudio) _auraBikeAudio.Stop();
+                _auraBikeSoundTime=0f;
+                return;
+            }
+            if (!_auraBikeAudio)
+            {
+                var clip=AssetMode.Load<AudioClip>("Sfx/Retail/60A");
+                if (!clip) return;
+                _auraBikeAudio=_auraBike.AddComponent<AudioSource>();
+                _auraBikeAudio.playOnAwake=false;_auraBikeAudio.spatialBlend=0f;
+                _auraBikeAudio.clip=clip;
+            }
+            _auraBikeAudio.volume=_sfxVolume*.38f;
+            _auraBikeSoundTime-=dt;
+            if (_auraBikeSoundTime>0f) return;
+            // Retrigger a single voice, as on SPU; do not overlap 30 one-shots/sec.
+            _auraBikeAudio.Stop();_auraBikeAudio.Play();
+            _auraBikeSoundTime=(2f+7f*(1f-Mathf.Clamp01(Mathf.Abs(_auraBikeSpeed)/maximum)))/60f;
+        }
         private Vector2 _auraBikeRecoil;
         private float _auraBikeBumpRemaining, _auraBikeBumpHeight, _auraBikeBumpLength=AuraBikeBumpDuration, _auraBikeBumpStrength;
         private const float AuraBikeBumpDuration=.32f;
@@ -80,6 +108,31 @@ namespace AzureDreamsReimagined
             _generated.Add(_auraBike);
             _auraBikeView = _auraBike.AddComponent<AuraBikeSpriteView>();
             _auraBikeView.Initialize(GeneralStoreOwned("booster") > 0);
+            var dust=new GameObject("Aura Bike acceleration dust");
+            dust.transform.SetParent(transform,false);
+            _generated.Add(dust);
+            _auraBikeDust=dust.AddComponent<AuraBikeDust>();
+            _auraBikeDust.Initialize();
+        }
+
+        private bool SummonAuraBike()
+        {
+            if(_area!=Area.Town || _interior || !_player || _ridingAuraBike || GeneralStoreOwned("aura_bike")==0) return false;
+            EnsureAuraBike();
+            if(!_auraBike) return false;
+            var facing=_townFacing.sqrMagnitude>.001f ? _townFacing.normalized : Vector2.down;
+            var position=_player.transform.position+new Vector3(facing.x,0f,facing.y)*1.25f;
+            if(!AuraBikeParkingOpen(position)) position=_player.transform.position;
+            position.y=TownTerrainHeight(position)+.04f;
+            _auraBike.transform.position=position;
+            _auraBikeHeading=facing;
+            _auraBikeSpeed=0f;
+            ResetAuraBikeBump();
+            _auraBikeView.Present(facing,false);
+            TownSaveVariables.SetFloat("aura_bike.x",position.x);
+            TownSaveVariables.SetFloat("aura_bike.z",position.z);
+            TownSaveVariables.Save();
+            return true;
         }
 
         private bool TryAuraBikeInteraction()
@@ -90,6 +143,8 @@ namespace AzureDreamsReimagined
             {
                 if(_townJumpHeight>TownGroundTolerance || _townJumpVelocity!=0f) return true;
                 _ridingAuraBike = false;
+                if (_kohSprite) _kohSprite.PresentBike(false);
+                if (_auraBikeAudio) _auraBikeAudio.Stop();
                 _auraBikeSpeed = 0f;
                 _townMomentum = Vector2.zero;
                 ResetAuraBikeBump();
@@ -107,6 +162,8 @@ namespace AzureDreamsReimagined
             delta.y = 0f;
             if (delta.sqrMagnitude > 2.25f || _carriedItem != null || _heldTownPot || _townJumpHeight > TownGroundTolerance) return false;
             _ridingAuraBike = true;
+            if (_kohSprite) _kohSprite.PresentBike(true);
+            _auraBikeSoundTime=0f;
             ResetAuraBikeBump();
             _auraBikeHeading = _townFacing;
 
@@ -121,7 +178,8 @@ namespace AzureDreamsReimagined
         private void DriveAuraBike(Vector2 input,float maximum,float dt,bool recoiling)
         {
             bool hasInput=input.sqrMagnitude>.001f;
-            bool reverse=hasInput && Vector2.Dot(input.normalized,_auraBikeHeading)<-.65f;
+            float alignment=hasInput ? Vector2.Dot(input.normalized,_auraBikeHeading) : 1f;
+            bool reverse=hasInput && (alignment<-.65f || _auraBikeSpeed<-.1f && alignment<=.15f);
             if(!recoiling)
             {
                 float target=hasInput ? (reverse ? -maximum*.5f : maximum) : 0f;
@@ -132,10 +190,12 @@ namespace AzureDreamsReimagined
                 _auraBikeSpeed=Mathf.MoveTowards(_auraBikeSpeed,stepTarget,acceleration*dt);
             }
             // Gentle contacts do not lock steering. Reverse keeps the bike's facing.
-            if(hasInput && !reverse && (!recoiling || _auraBikeBumpStrength<.35f))
+            if(hasInput && (!recoiling || _auraBikeBumpStrength<.35f))
             {
                 float heading=Mathf.Atan2(_auraBikeHeading.x,_auraBikeHeading.y)*Mathf.Rad2Deg;
-                float target=Mathf.Atan2(input.x,input.y)*Mathf.Rad2Deg;
+                // Reversing toward screen-left turns the nose right, and vice versa.
+                Vector2 steering=reverse ? -input : input;
+                float target=Mathf.Atan2(steering.x,steering.y)*Mathf.Rad2Deg;
                 heading=Mathf.MoveTowardsAngle(heading,target,AuraBikeTurnRate(Mathf.Abs(_auraBikeSpeed))*dt)*Mathf.Deg2Rad;
                 _auraBikeHeading=new Vector2(Mathf.Sin(heading),Mathf.Cos(heading));
             }
@@ -159,10 +219,12 @@ namespace AzureDreamsReimagined
         private bool MoveAuraBike(Vector2 input, float deltaTime)
         {
             EnsureAuraBike();
-            if (!_ridingAuraBike || !_auraBike || _interior) { _ridingAuraBike = false; ResetAuraBikeBump(); return false; }
+            if (!_ridingAuraBike || !_auraBike || _interior) { _ridingAuraBike = false; if(_kohSprite)_kohSprite.PresentBike(false); if(_auraBikeAudio)_auraBikeAudio.Stop(); ResetAuraBikeBump(); return false; }
+            if(_kohSprite)_kohSprite.PresentBike(true);
             float dt = Mathf.Clamp(deltaTime,0f,.1f);
             bool recoiling=_auraBikeBumpRemaining>0f;
             float maximum = AuraBikeMaximumSpeed(GeneralStoreOwned("booster") > 0);
+            float previousSpeed=Mathf.Abs(_auraBikeSpeed);
             DriveAuraBike(input,maximum,dt,recoiling);
             Vector3 before = _player.transform.position, position = before;
             float startFeet=before.y-TownActorFootOffset-_auraBikeBumpHeight;
@@ -217,6 +279,17 @@ namespace AzureDreamsReimagined
             if (_playerLocomotion) _playerLocomotion.Present(Vector3.zero, 0f, false, false);
             _auraBike.transform.position = position - Vector3.up * (TownActorFootOffset - .04f);
             _auraBikeView.Present(_auraBikeHeading, Mathf.Abs(_auraBikeSpeed) > .1f || _auraBikeRecoil.sqrMagnitude>.01f);
+            float distance=new Vector2(position.x-before.x,position.z-before.z).magnitude;
+            // Retail update_actor_movement_and_actions: SD_Call(0x60A), 2..9 ticks
+            // between pulses as speed approaches the cap. Reverse uses absolute speed.
+            PresentAuraBikeSound(dt,maximum,distance>.001f && !recoiling);
+            bool accelerating=Mathf.Abs(_auraBikeSpeed)>previousSpeed+.001f;
+            // Never emit from a blocked wheel, airborne bike, or shallow water.
+            float dustIntensity=accelerating && !recoiling && _townJumpHeight<=TownGroundTolerance &&
+                _townJumpVelocity==0f && distance>.001f && feet>=-.05f
+                ? Mathf.Lerp(1f,.3f,Mathf.Clamp01(Mathf.Abs(_auraBikeSpeed)/maximum)) : 0f;
+            if(_auraBikeDust) _auraBikeDust.Present(new Vector3(position.x,feet,position.z),
+                _auraBikeHeading*(_auraBikeSpeed<0f ? -1f : 1f),dustIntensity,dt);
             return true;
         }
     }

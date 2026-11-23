@@ -61,6 +61,28 @@ public class TowerActorActionsIntegrationTests
     }
 
     [Test]
+    public void EggWarming_OnlyHeatsOnRequestedTurn_AndRemainsActive()
+    {
+        var inventory = Get<Inventory>("_runInventory");
+        int index = inventory.DungeonItems.Count;
+        inventory.AddDungeonItem(MonsterEgg.CreateTowerSpawn(1, true, 0, 10));
+        Call("BeginEggWarming", index, null);
+        Call("CompleteEggWarming");
+        Assert.That(MonsterEgg.HeatOf(inventory.DungeonItems[index]), Is.EqualTo(10));
+        Set("_warmingStepPending", true);
+        Call("CompleteEggWarming");
+        int heat = MonsterEgg.HeatOf(inventory.DungeonItems[index]);
+        Assert.That(heat, Is.InRange(11, 14));
+        Assert.That(Get<int>("_warmingEggIndex"), Is.EqualTo(index));
+        Call("CompleteEggWarming");
+        Assert.That(MonsterEgg.HeatOf(inventory.DungeonItems[index]), Is.EqualTo(heat));
+        int turns = Get<int>("_completedTowerTurns");
+        Call("StopEggWarming");
+        Assert.That(Get<int>("_warmingEggIndex"), Is.EqualTo(-1));
+        Assert.That(Get<int>("_completedTowerTurns"), Is.EqualTo(turns));
+    }
+
+    [Test]
     public void FamiliarEvolvesInPlaceWhenOneAwardCrossesLevelTwenty()
     {
         int flame = (int)AzureDreams.Core.MonsterSpecies.FLAME;

@@ -194,10 +194,9 @@ TownRetailScriptFlags.CreatePersistent().ApplyOneTimeFlagOperation(0x1389);
             var panel = new Rect(width * 0.1f, height * 0.75f, width * 0.8f, height * 0.21f);
             DrawDialoguePortrait(portrait, panel);
             DrawHudPanel(panel);
-            DrawHudText(new Rect(panel.x + 12f, panel.y + 7f, panel.width - 24f, 22f), speaker, _bodyStyle, dialogue: true);
-            DrawHudText(new Rect(panel.x + 12f, panel.y + 30f, panel.width - 24f, panel.height - 39f), line, _messageStyle, dialogue: true);
-            if (GUI.Button(new Rect(panel.xMax - 112f, panel.yMax - 26f, 103f, 21f), WithInteractHint("Next", "Avançar")))
-                AdvanceBeldoDialogue();
+            DrawSpeakerWindow(panel, speaker);
+            DrawDialogueText(WindowDesignSystem.Content(panel, footer: true), line, line);
+            DrawContinuePrompt(panel, AdvanceBeldoDialogue);
         }
     }
 }

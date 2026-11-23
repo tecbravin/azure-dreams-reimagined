@@ -38,8 +38,10 @@ namespace AzureDreamsReimagined
         {
             if (kind == QuestItemKind && subtype == OctopusDumplingId)
             {
+                var redesigned=ReimaginedItemSprite("dumplings");
+                if(redesigned) return redesigned;
                 if (!_dumplingsInventorySprite && AssetMode.Load<Texture2D>("Tower/Dumplings") is { } dumplings)
-                    _dumplingsInventorySprite = Sprite.Create(dumplings, new Rect(0, 0, dumplings.width, dumplings.height), new Vector2(0.5f, 0.5f), 16f);
+                    _dumplingsInventorySprite = Sprite.Create(dumplings, new Rect(0, 0, dumplings.width, dumplings.height), new Vector2(0.5f, 0.5f), 16f, 0, SpriteMeshType.FullRect);
                 if (_dumplingsInventorySprite) return _dumplingsInventorySprite;
             }
             if (kind == 13 && subtype == 4)
@@ -242,12 +244,12 @@ namespace AzureDreamsReimagined
             DrawHudText(new Rect(gold.x + 11f, gold.y, gold.width - 20f, gold.height), $"{_runLoot}G", _bodyStyle);
         }
 
-        private static void DrawDialogueFrame(Rect rect, bool dialoguePole = false)
+        private static void DrawDialogueFrame(Rect rect, bool dialoguePole = false, bool pageCorner = false)
         {
             if (Event.current.type != EventType.Repaint || rect.width <= 0f || rect.height <= 0f) return;
             if (HasRetailHudFrames)
             {
-                DrawHudFill(rect, new Color(0.025f, 0.027f, 0.12f, 0.74f));
+                DrawHudFill(rect, WindowDesignSystem.Background);
                 const float corner = 10f;
                 const float edge = 8f;
                 DrawFramePart(new Rect(rect.x, rect.y - edge * 0.5f, rect.width, edge), 2, 0, 112, 128, 8);
@@ -268,6 +270,7 @@ namespace AzureDreamsReimagined
                     DrawFramePart(new Rect(x, rect.y - 12f, 20f, 20f), 0, 0, 0, 16, 16);
                     DrawFramePart(new Rect(x, rect.yMax - 10f, 20f, 20f), 0, 0, 16, 16, 16);
                 }
+                if (pageCorner) DrawWindowPageCorner(rect);
                 return;
             }
             DrawFlatHudPanel(rect);
@@ -284,6 +287,7 @@ namespace AzureDreamsReimagined
                 DrawHudFill(new Rect(x - 3f, y - 3f, 6f, 6f), gold);
                 DrawHudFill(new Rect(x - 2f, y - 2f, 2f, 2f), light);
             }
+            if (pageCorner) DrawWindowPageCorner(rect);
         }
     }
 }

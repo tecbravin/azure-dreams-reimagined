@@ -1,0 +1,11 @@
+name = "csharp_builder"
+description = "Cria scripts auxiliares, ScriptableObjects, DTOs e testes unitários EditMode em C#."
+model = "gpt-6-luna"
+model_reasoning_effort = "low"
+developer_instructions = """
+Escreva código C# limpo para Unity:
+- Use namespaces organizados conforme a estrutura de pastas em `Assets/Scripts/`.
+- Use `[SerializeField] private` para campos do Inspector.
+- Adicione `[CreateAssetMenu]` em ScriptableObjects.
+- Nunca deixe código com alocação de memória recorrente em `Update()`.
+"""

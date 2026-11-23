@@ -327,15 +327,13 @@ namespace AzureDreamsReimagined
             int end = _familiarStatus ? FamiliarInventoryCount : count;
             for (int i = first; i < first + InventoryRowsPerPage; i++)
             {
-                float rowHeight=(items.height-80f-(!_familiarStatus && OccupiedInventoryPageCount>1 ? 24f : 0f))/InventoryRowsPerPage;
+                float rowHeight=(items.height-80f-WindowDesignSystem.Footer)/InventoryRowsPerPage;
                 var row = new Rect(items.x + 10f, items.y + 73f + (i - first) * rowHeight, panelWidth - 20f, rowHeight-2f);
                 if (i >= end)
                 {
                     if (!_familiarStatus)
                     {
                         DrawHudFill(row, new Color(0.08f, 0.12f, 0.19f, 0.30f));
-                        row.xMin += 27f;
-                        DrawInventoryText(row, "-", _messageStyle);
                     }
                     continue;
                 }
@@ -375,7 +373,6 @@ namespace AzureDreamsReimagined
                 if (_itemCommandIndex < 0 && GUI.Button(hitArea, GUIContent.none, GUIStyle.none))
                 { _inventoryOffset = i; OpenItemCommands(); }
             }
-            if (!_familiarStatus && OccupiedInventoryPageCount>1) DrawInventoryNextPage(items);
             float descriptionY = layout.Description.y;
             var shortcuts = new Rect(items.x,items.yMax+10f,items.width,56f);
             DrawDialogueFrame(shortcuts);
@@ -386,10 +383,10 @@ namespace AzureDreamsReimagined
                 DrawDialogueFrame(description);
                 var selected = SelectedInventoryItem(out _);
                 if (SelectedRawIndex <= FamiliarInventoryRow)
-                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f),
+                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f - WindowDesignSystem.Footer),
                         T("E: Familiar actions", "E: Ações do familiar"));
                 else if (selected != null)
-                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f),
+                    DrawInventoryParagraph(new Rect(description.x + 10f, description.y + 6f, description.width - 20f, description.height - 12f - WindowDesignSystem.Footer),
                         ItemDescription(selected) + (selected.Kind == ItemKind.Ball && !SecondTowerItems.IsUnknown(selected) ?
                             "  " + BallChargeText(selected) + T(" · Spell Lv. ", " · Nív. da magia ") +
                             BallSpellLevel(selected.Param) : ""));
@@ -441,7 +438,7 @@ namespace AzureDreamsReimagined
             var panel = new Rect(items.x, items.yMax + 10f, items.width, Mathf.Max(56f,bottom-items.yMax-10f));
             DrawDialogueFrame(panel);
             DrawInventoryText(new Rect(panel.x + 9f, panel.y + 3f, panel.width - 18f, 20f), T("Familiars", "Familiares"), _bodyStyle);
-            var list = new Rect(panel.x + 9f, panel.y + 22f, panel.width - 18f, panel.height - 25f);
+            var list = new Rect(panel.x + 9f, panel.y + 22f, panel.width - 18f - WindowDesignSystem.Footer, panel.height - 25f);
             float rowWidth = list.width - (count > 1 ? 16f : 0f);
             _inventoryFamiliarScroll = GUI.BeginScrollView(list, _inventoryFamiliarScroll,
                 new Rect(0f, 0f, rowWidth, count * rowHeight));
@@ -531,7 +528,7 @@ namespace AzureDreamsReimagined
             }
             bool clicked = GUI.Button(rect, GUIContent.none, GUIStyle.none);
             var text = new Rect(rect.x + 5f, rect.y, rect.width - 10f, rect.height);
-            DrawInventoryText(text, value, textStyle ?? _bodyStyle);
+            DrawInventoryText(text, value, InventoryFittedStyle(text, value, textStyle ?? _bodyStyle));
             return clicked;
         }
 
@@ -744,9 +741,25 @@ namespace AzureDreamsReimagined
         }
 
         private Texture2D _monsterPortraitSheet;
+        private MonsterStatusPortraitCatalog _monsterStatusPortraits;
+
+        private Texture2D MonsterStatusPortrait(ActorRecord actor)
+        {
+            if (!_monsterStatusPortraits)
+                _monsterStatusPortraits = Resources.Load<MonsterStatusPortraitCatalog>("Tower/MonsterStatusPortraits");
+            int column = UnitElement(actor) switch { Element.Water => 1, Element.Wind => 2, _ => 0 };
+            return _monsterStatusPortraits ? _monsterStatusPortraits.Get(
+                IsFrog(actor) ? (byte)MonsterSpecies.FROG : actor.Species, column) : null;
+        }
 
         private void DrawFamiliarStatusPortrait(Rect portrait, ActorRecord actor, string species)
         {
+            var statusPortrait = MonsterStatusPortrait(actor);
+            if (statusPortrait)
+            {
+                GUI.DrawTexture(portrait, statusPortrait, ScaleMode.ScaleToFit);
+                return;
+            }
             if (actor.Species == (byte)MonsterSpecies.KEWNE && !IsFrog(actor) && _kewneStatusSheet)
             {
                 float width = portrait.height * 93f / 140f;

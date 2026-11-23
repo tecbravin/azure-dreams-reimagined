@@ -17,32 +17,10 @@ namespace AzureDreamsReimagined
         private GameObject _tutorialKewne;
         private bool InTowerTutorial => _tutorialRun && _floor == 1;
 
-        private enum KewneMeeting { None, Arriving, Introduction, Question, Reply }
+        private enum KewneMeeting { None, Arriving, Introduction, Question, Reply, Naming }
         private int _kewneIntroPage;
         private int _tutorialHintPage;
 
-        // Adapted from TOWN.BIN 0x2D980D–0x2DA2B1.
-        private static readonly (string En, string Pt)[] KewneIntroduction =
-        {
-            ("Aren't you a monster tamer? Hey, don't be frightened. I'm not your enemy.",
-                "Você é um domador de monstros, não é? Ei, não se assuste. Não sou seu inimigo."),
-            ("Surprised that I can talk? I'm clever enough to have learned the human language.",
-                "Surpreso porque eu sei falar? Sou esperto o bastante para ter aprendido a língua dos humanos."),
-            ("Are you going in alone? Monster tamers fight alongside monsters, and you don't have a single familiar with you.",
-                "Vai entrar sozinho? Domadores lutam ao lado de monstros, e você não tem nenhum familiar com você."),
-            ("You can't take on the Tower alone yet. You've got a magic collar, haven't you? I can smell it.",
-                "Você ainda não pode encarar a torre sozinho. Tem um colar mágico, não tem? Consigo sentir o cheiro."),
-            ("Believe it or not, I was the familiar of a great monster tamer once. My master passed away, and I've been alone ever since.",
-                "Acredite se quiser, já fui o familiar de um grande domador. Meu mestre faleceu e fiquei sozinho desde então."),
-            ("People keep away from me because I speak their language. And I can't go back to living by instinct like the other monsters.",
-                "As pessoas me evitam porque falo a língua delas. E não consigo voltar a viver só por instinto, como os outros monstros."),
-            ("I can be your familiar. Put that magic collar on me if you like.",
-                "Posso ser seu familiar. Pode colocar esse colar mágico em mim, se quiser."),
-            ("Great! You're my master now. What will you call me?",
-                "Ótimo! Agora você é meu mestre. Como vai me chamar?"),
-            ("Kewne, huh? I think my old master called me that too. And you're {name}? Yes, Master {name}!",
-                "Kewne, é? Acho que meu antigo mestre também me chamava assim. E você é o {name}? Sim, mestre {name}!")
-        };
         private KewneMeeting _kewneMeeting;
         private EventTrigger _townTowerGate;
         private GameObject _kewneMeetingView;
@@ -53,7 +31,7 @@ namespace AzureDreamsReimagined
         private bool _kewneSkipTransition;
         private Texture2D _kewneSkipIcon;
         private GUIStyle _dialogueSkipStyle;
-        private bool KewneMeetingSpeaking => _kewneMeeting is KewneMeeting.Introduction or KewneMeeting.Question or KewneMeeting.Reply;
+        private bool KewneMeetingSpeaking => _kewneMeeting is KewneMeeting.Introduction or KewneMeeting.Question or KewneMeeting.Reply or KewneMeeting.Naming;
         private bool NeedsKewneMeeting => _kewneDefinition && _kewnePrefab &&
             !TownSaveVariables.GetBool("starter_kewne_received");
 
@@ -102,9 +80,7 @@ namespace AzureDreamsReimagined
             _kewneMeetingSelection = 0;
             _kewneIntroPage = 0;
             _kewneSkipHeld = 0f;
-            _kewneMeeting = KewneMeeting.Introduction;
-            var line = KewneIntroduction[_kewneIntroPage];
-            SetKewneMeetingLine(T(line.En, line.Pt));
+            BeginKewneGateDialogue();
         }
 
         private void PresentGateKewne(GameObject view, Vector3 position, Vector3 direction, float time, bool moving)
@@ -124,6 +100,11 @@ namespace AzureDreamsReimagined
         {
             if (_kewneSkipTransition) return true;
             if (_kewneMeeting == KewneMeeting.None) return false;
+            if (_kewneMeeting == KewneMeeting.Naming)
+            {
+                if (Keyboard.current?.enterKey.wasPressedThisFrame == true) ConfirmKewneName();
+                return true;
+            }
             // Skipping a conversation follows the universal cancel binding.  The
             // map control must remain available for the tower HUD instead of
             // doubling as a hidden dialogue command.
@@ -172,6 +153,7 @@ namespace AzureDreamsReimagined
 
         private void DrawKewneSkipPrompt(float width)
         {
+            if (_kewneMeeting == KewneMeeting.Naming) return;
             if (!KewneMeetingSpeaking && !_kewneSkipTransition) return;
             DrawDialogueSkipPrompt(width, _kewneSkipHeld / KewneSkipHoldSeconds);
         }
@@ -219,25 +201,16 @@ namespace AzureDreamsReimagined
             if (_kewneSkipHeld > 0f || _kewneSkipTransition) return;
             if (_kewneMeeting == KewneMeeting.Introduction)
             {
-                if (++_kewneIntroPage < KewneIntroduction.Length)
+                if (++_kewneIntroPage < _kewneGateLines.Length)
                 {
-                    var line = KewneIntroduction[_kewneIntroPage];
+                    var line = _kewneGateLines[_kewneIntroPage];
                     SetKewneMeetingLine(T(line.En, line.Pt));
-                    return;
                 }
-                _kewneMeeting = KewneMeeting.Question;
-                SetKewneMeetingLine(T("You are a beginner, aren't you?", "Você é iniciante, não é?"));
+                else _kewneGateNext?.Invoke();
                 return;
             }
             if (_kewneMeeting == KewneMeeting.Question)
-            {
-                _kewneTutorialChoice = selection == 0;
-                _kewneMeeting = KewneMeeting.Reply;
-                SetKewneMeetingLine(selection == 0
-                    ? T("OK, I will teach you many things about the tower. Let's go.",
-                        "Certo, vou ensinar muita coisa sobre a torre. Vamos lá.")
-                    : T("I can see you're a champ! Let's go.", "Já vi que você é fera! Vamos lá."));
-            }
+                AnswerKewneGateQuestion(Mathf.Clamp(selection,0,1));
             else if (_kewneMeeting == KewneMeeting.Reply && _townTowerGate &&
                 _townTowerGate.TryGetComponent<TownGateDoor>(out var door))
             {
@@ -248,8 +221,15 @@ namespace AzureDreamsReimagined
 
         private void DrawKewneMeetingChoices(Rect choices)
         {
+            if (_kewneMeeting == KewneMeeting.Naming)
+            {
+                _kewneNameDraft=GUI.TextField(new Rect(choices.x,choices.y,choices.width,DialogueChoiceRowHeight-2f),_kewneNameDraft,24);
+                if(DrawInventoryButton(new Rect(choices.x,choices.y+DialogueChoiceRowHeight,choices.width,DialogueChoiceRowHeight-2f),T("Confirm name","Confirmar nome")))ConfirmKewneName();
+                return;
+            }
             if (_kewneMeeting != KewneMeeting.Question) return;
-            int reply = DrawDialogueChoices(choices, _kewneMeetingSelection, T("Yes", "Sim"), T("No", "Não"));
+            var answers=KewneGateAnswers();
+            int reply = DrawDialogueChoices(choices, _kewneMeetingSelection, answers.First, answers.Second);
             if (reply >= 0) AdvanceKewneMeeting(reply);
         }
 

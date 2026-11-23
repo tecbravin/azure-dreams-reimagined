@@ -283,7 +283,7 @@ namespace AzureDreamsReimagined
             }
             var rect = new Rect(width * 0.5f - 180, height * 0.5f - 100, 360, 200);
             DrawDialogueFrame(rect);
-            GUILayout.BeginArea(new Rect(rect.x + 12, rect.y + 10, rect.width - 24, rect.height - 20));
+            GUILayout.BeginArea(WindowDesignSystem.Content(rect, footer: true));
             switch (_checkpointMenu)
             {
                 case CheckpointMenu.Ascend:

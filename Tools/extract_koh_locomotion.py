@@ -28,7 +28,7 @@ def opaque_bottoms(atlas):
     return bottoms
 
 
-def main(hit_only=False):
+def main(hit_only=False, warming_only=False):
     dungeon = (workspace / 'DUNGEON/DUNGEON.BIN').read_bytes()
     assert dungeon[0xF7858:0xF7868] == bytes([2, 1, 0, 1, 2, 3, 4, 3, 7, 6, 5, 6, 7, 8, 9, 8])
     bank = dungeon[BANK_OFFSET:]
@@ -69,6 +69,23 @@ def main(hit_only=False):
             tile = Image.new('RGBA', (width, height))
             tile.putdata([palette[indices[y * stride + x]] for y in range(height) for x in range(width)])
             yield tile, CELL // 2 + part['x'], 53 + part['y']
+
+    if warming_only:
+        # Retail groups 31/32/33: sit on the egg, keep warming, stand up.
+        sequences = [list(frames(group)) for group in (31, 32, 33)]
+        columns = max(map(len, sequences))
+        atlas = Image.new('RGBA', (CELL * columns, CELL * 3))
+        timings = []
+        for row, (group, sequence) in enumerate(zip((31, 32, 33), sequences)):
+            offset = struct.unpack_from('<I', bank, meta['animation_table_offset'] + group * 4)[0]
+            timings.append([struct.unpack_from('<H', bank, offset + i * 8)[0] for i in range(len(sequence))])
+            for column, pointer in enumerate(sequence):
+                for tile, x, y in body(pointer):
+                    atlas.alpha_composite(tile, (column * CELL + x, row * CELL + y))
+        target = workspace / 'Azure Dreams Reimagined/Assets/AzureDreams/Resources/Tower/koh-retail-warming.bytes'
+        atlas.save(target, format='PNG')
+        target.with_name('koh-retail-warming-timings.json').write_text(json.dumps(dict(columns=columns, sit=timings[0], warm=timings[1], stand=timings[2])) + '\n', encoding='utf-8')
+        return
 
     # The retail damage table stores front through back at indices 2-6.
     damage_groups = dungeon[0xF7888:0xF7890]
@@ -136,6 +153,6 @@ def main(hit_only=False):
 
 
 if __name__ == '__main__':
-    main(hit_only=sys.argv[1:] == ['--hit-only'])
+    main(hit_only=sys.argv[1:] == ['--hit-only'], warming_only=sys.argv[1:] == ['--warming-only'])
 
 

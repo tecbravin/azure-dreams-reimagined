@@ -9,19 +9,26 @@ namespace AzureDreamsReimagined
         private const string PoolFurPortrait = FurPortraitPrefix + "5_frame0";
         private const string PoolMiaPortrait = MiaPortraitPrefix + "6_frame0";
         private const string PoolChangingRoomObjectId = "pool_changing_room";
-        private static readonly Vector3 PoolChangingRoomPosition = new(12.5f, 0f, 13.25f);
-        // Surface 15 of the captured pool mesh is the original water plane:
-        // X 18..29, Z 18..30. Keep the test independent from presentation so
-        // entry/exit state stays deterministic.
-        private static readonly Rect PoolWaterBounds = Rect.MinMaxRect(18f, 18f, 29f, 30f);
+        private static readonly Vector3 PoolChangingRoomPosition = new(20f, 0f, 13.5f);
+        // Swimming follows the captured water triangles, including the shaped
+        // corners and slide inlet, instead of treating the whole bounding box as water.
         private bool _poolKohWearingSwimsuit;
         private bool _poolKohSwimming;
+        private bool _poolExitContact;
         private NPCController _poolChangingRoomSpeaker;
 
         private bool InRestoredPool => _area == Area.Town && PoolRestored && StoryRoom == PoolOpenRoom && _player;
 
         private bool IsPoolWater(Vector3 position) => InRestoredPool &&
-            PoolWaterBounds.Contains(new Vector2(position.x, position.z));
+            _interior.TryGetPoolWaterHeight(position, out _);
+
+        private bool BlockPoolExitInSwimwear()
+        {
+            if (!_interior || _interior.interiorId != PoolOpenRoom || !_poolKohWearingSwimsuit) return false;
+            if (!_poolExitContact) _message = T("I need to change first.", "Preciso me trocar primeiro.");
+            _poolExitContact = true;
+            return true;
+        }
 
         private bool PoolWaterRequiresSwimsuit(Vector3 position) =>
             IsPoolWater(position) && !_poolKohWearingSwimsuit;
@@ -37,60 +44,46 @@ namespace AzureDreamsReimagined
 
         private void ResetPoolPresentation()
         {
-            if (_kohSprite) _kohSprite.PresentSwimming(false);
+            ResetPoolSlide();
+            if (_kohSprite) { _kohSprite.PresentSwimming(false); _kohSprite.PresentSwimsuit(false); }
             if (_player) PoolAttireView.Remove(_player);
             _poolKohWearingSwimsuit = false;
             _poolKohSwimming = false;
+            _poolExitContact = false;
             _poolChangingRoomSpeaker = null;
+            _poolSceneAnimating = false;
+            _poolEntrySceneChecked = false;
+            _poolHecklersStarted = false;
+            var flags = TownRetailScriptFlags.CreatePersistent();
+            flags.ClearBit(0x1200);
+            flags.ClearBit(0x1201);
+            flags.ClearBit(KohSwimsuitFlag);
         }
 
         private void SetupRestoredPoolInterior()
         {
             if (!InRestoredPool) return;
 
-            // The changing cubicle is a separate interactable rather than part
-            // of the captured pool mesh, so it stays non-blocking and cannot
-            // alter the source room's walkability or resident positions.
-            var room = new GameObject("Pool changing room");
-            room.transform.SetParent(transform, false);
-            _generated.Add(room);
-            float ground = RetailTownHeight(PoolChangingRoomPosition);
-            Vector3 center = new(PoolChangingRoomPosition.x, ground, PoolChangingRoomPosition.z);
+            ConfigureRestoredPoolEventState();
+            SetupPoolSlide();
 
-            CreatePoolChangingRoomPart(room.transform, "changing-room floor", center + Vector3.up * 0.03f,
-                new Vector3(2.6f, 0.06f, 2.1f), _wallMaterial, Color.white);
-            CreatePoolChangingRoomPart(room.transform, "changing-room back wall", center + new Vector3(0f, 0.85f, 0.92f),
-                new Vector3(2.55f, 1.7f, 0.12f), _wallMaterial, Color.white);
-            CreatePoolChangingRoomPart(room.transform, "changing-room left post", center + new Vector3(-1.15f, 0.9f, -0.75f),
-                new Vector3(0.13f, 1.8f, 0.13f), _accentMaterial, new Color(0.7f, 0.88f, 1f));
-            CreatePoolChangingRoomPart(room.transform, "changing-room right post", center + new Vector3(1.15f, 0.9f, -0.75f),
-                new Vector3(0.13f, 1.8f, 0.13f), _accentMaterial, new Color(0.7f, 0.88f, 1f));
-            CreatePoolChangingRoomPart(room.transform, "changing-room curtain", center + new Vector3(0f, 0.84f, -0.79f),
-                new Vector3(2.15f, 1.55f, 0.08f), _accentMaterial, new Color(0.13f, 0.43f, 0.88f));
-            CreatePoolChangingRoomPart(room.transform, "changing-room sign", center + new Vector3(0f, 1.72f, -0.81f),
-                new Vector3(1.05f, 0.24f, 0.05f), _accentMaterial, new Color(1f, 0.95f, 0.53f));
-
-            var changingRoom = room.AddComponent<TownObject>();
-            changingRoom.objectId = PoolChangingRoomObjectId;
-            changingRoom.message = T("Changing room", "Vestiário");
-            changingRoom.interactionRadius = 1.65f;
-            changingRoom.persistInteraction = false;
-            _townObjects.Add(changingRoom);
+            // The blue-diamond doorway already belongs to the original captured room.
         }
 
-        private void CreatePoolChangingRoomPart(Transform parent, string label, Vector3 position, Vector3 scale,
-            Material material, Color tint)
+        private static bool ApproachingPoolChangingRoomDoor(Vector3 before, Vector3 after) =>
+            before.z > 14.5f && after.z <= 14.5f && after.z >= 13.5f &&
+            Mathf.Abs(after.x - PoolChangingRoomPosition.x) <= 0.45f;
+
+        private bool TryEnterPoolChangingRoom(Vector3 before, Vector3 after)
         {
-            var part = CreatePrimitive(PrimitiveType.Cube, "Pool " + label, position, scale, material, false);
-            part.transform.SetParent(parent, true);
-            if (!part.TryGetComponent<Renderer>(out var renderer)) return;
-            var properties = new MaterialPropertyBlock();
-            renderer.GetPropertyBlock(properties);
-            properties.SetColor("_Color", tint);
-            properties.SetColor("_BaseColor", tint);
-            renderer.SetPropertyBlock(properties);
+            if (!InRestoredPool || _changingInterior || _storySpeaker || _poolSceneAnimating ||
+                _inventoryOpen || _settingsOpen || _heldTownPot || _carriedItem != null ||
+                _townJumpHeight > TownGroundTolerance || _townJumpVelocity != 0f ||
+                !ApproachingPoolChangingRoomDoor(before, after)) return false;
+            _townMomentum = Vector2.zero;
+            OpenPoolChangingRoom();
+            return true;
         }
-
         private NPCController PoolChangingRoomSpeaker()
         {
             if (_poolChangingRoomSpeaker) return _poolChangingRoomSpeaker;
@@ -122,18 +115,39 @@ namespace AzureDreamsReimagined
                 (T("Not now", "Agora não"), null));
         }
 
+        private void ReleasePoolChangingRoomInput()
+        {
+            _townObjectDialogueOpen = false;
+            _dialogueLine = null;
+            _visibleDialogue = string.Empty;
+            if (_activeTownNpc == _poolChangingRoomSpeaker)
+            {
+                if (_activeTownNpc) _activeTownNpc.CancelDialogue();
+                _activeTownNpc = null;
+            }
+            if (_townFlow && _townFlow.State.Current == TownGameState.State.TownDialogue)
+                _townFlow.State.TrySet(TownGameState.State.TownIdle);
+        }
+
         private void WearKohSwimsuit()
         {
             if (!InRestoredPool) return;
+            if (_kohSprite && !_kohSprite.PresentSwimsuit(true))
+            {
+                _message = T("Swimwear sprites could not be loaded.", "Não foi possível carregar os sprites da roupa de banho.");
+                return;
+            }
             _poolKohWearingSwimsuit = true;
-            PoolAttireView.Apply(_player, PoolAttireView.Style.Trunks,
-                new Color(0.19f, 0.50f, 0.96f), new Color(0.9f, 0.97f, 1f), 1.48f);
+            TownRetailScriptFlags.CreatePersistent().SetBit(KohSwimsuitFlag);
+            PoolAttireView.Remove(_player);
             _message = T("Koh changed into his swimsuit.", "Koh trocou para a roupa de banho.");
         }
 
         private void RemoveKohSwimsuit()
         {
             _poolKohWearingSwimsuit = false;
+            if (_kohSprite) _kohSprite.PresentSwimsuit(false);
+            TownRetailScriptFlags.CreatePersistent().ClearBit(KohSwimsuitFlag);
             if (_poolKohSwimming && _player)
             {
                 Vector3 exit = new(17.1f, 0f, 17.2f);
@@ -150,6 +164,20 @@ namespace AzureDreamsReimagined
         private void ApplyPoolPresentation(NPCController npc)
         {
             if (!npc) return;
+            if (InRestoredPool)
+            {
+                var swimmer = npc.GetComponent<PoolSwimmerView>();
+                if (!swimmer) swimmer = npc.gameObject.AddComponent<PoolSwimmerView>();
+                swimmer.Configure(_interior);
+            }
+            // Wotta's retail bank already contains his complete outfit. The
+            // generic trunks overlay sits at his feet instead of his waist.
+            if (npc.npcId == "wookie")
+            {
+                RetailResidentBanks.ApplyBank(npc.gameObject, "wata");
+                PoolAttireView.Remove(npc.gameObject);
+                return;
+            }
             string portrait = npc.npcId switch
             {
                 "pool_nico" => PoolNicoPortrait,
@@ -157,12 +185,20 @@ namespace AzureDreamsReimagined
                 "pool_fur" => PoolFurPortrait,
                 "pool_patty" => PattyPortrait(4),
                 "pool_cherrl" => CherrlPortrait(6),
+                "pool_selfi" => SelfiPortrait(5),
                 "vivian" when StoryRoom == PoolOpenRoom => VivianPortrait(5),
                 "mia" when StoryRoom == PoolOpenRoom => PoolMiaPortrait,
                 _ => null
             };
             if (portrait != null && npc.TryGetComponent<CharacterStats>(out var stats))
                 stats.portraitTexture = StreamPortrait(portrait);
+
+            string bank = PoolSwimsuitBank(npc.npcId);
+            if (bank != null && RetailResidentBanks.ApplyBank(npc.gameObject, bank))
+            {
+                PoolAttireView.Remove(npc.gameObject);
+                return;
+            }
 
             switch (npc.npcId)
             {
@@ -198,7 +234,6 @@ namespace AzureDreamsReimagined
                     PoolAttireView.Apply(npc, PoolAttireView.Style.OnePiece,
                         new Color(0.62f, 0.42f, 0.77f), new Color(0.89f, 0.75f, 0.48f));
                     break;
-                case "wookie":
                 case "pool_visitor":
                     PoolAttireView.Apply(npc, PoolAttireView.Style.Trunks,
                         new Color(0.16f, 0.48f, 0.86f), new Color(0.9f, 0.96f, 1f));
@@ -237,17 +272,11 @@ namespace AzureDreamsReimagined
                 {
                     if (StoryRoom == PoolOpenRoom)
                     {
-                        PoolSequence(npc, null, null,
-                            ($"Hey, {HeroName}. Thanks for coming! Have a whale of a time.",
-                                $"Oi, {HeroName}. Obrigado por vir! Divirta-se muito."),
-                            ("The task of managing this pool is calling me! Keep the water clean and watch your step around the deep end.",
-                                "O trabalho de cuidar desta piscina está me chamando! Mantenha a água limpa e cuidado na parte funda."));
-                        return true;
+                        // TOWN.BIN 0x533614: pool manager's repeat welcome.
+                        return StoryTalk(npc, "Have lots of fun!", "Divirta-se bastante!");
                     }
-                    return StoryAsk(npc, $"Hey, {HeroName}! You are free to come and go as you wish!",
-                        $"Oi, {HeroName}! Pode entrar e sair quando quiser!",
-                        (T("Enter the pool", "Entrar na piscina"), () => StartCoroutine(LoadInterior(PoolOpenRoom))),
-                        (T("Later", "Depois"), null));
+                    return StoryTalk(npc, $"Hey, {HeroName}! You are free to come and go as you wish!",
+                        $"Oi, {HeroName}! Pode entrar e sair quando quiser!");
                 }
 
                 if (FindStoryItem(QuestItemKind, WaterMedalId) >= 0)
@@ -257,6 +286,7 @@ namespace AzureDreamsReimagined
                             int medal = FindStoryItem(QuestItemKind, WaterMedalId);
                             if (medal < 0 || !_townInventory.ConsumeDungeonItem(medal, QuestItemKind)) return;
                             TownRetailScriptFlags.CreatePersistent().SetBit(PoolQuestCompleteFlag);
+                            TownRetailScriptFlags.CreatePersistent().SetBit(PoolOpenFlag);
                             if (StoryStage("hal") >= HalWaterMedalSearch && StoryStage("hal") < HalPoolRestored)
                                 AdvanceTownStory("hal", HalPoolRestored);
                             PersistTownProgress();

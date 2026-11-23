@@ -4,6 +4,7 @@ using UnityEngine;
 namespace AzureDreamsReimagined
 {
     /// <summary>Camera-relative locomotion using the recovered PS1 body frames.</summary>
+    [DefaultExecutionOrder(10)]
     public sealed class KohSpriteView : MonoBehaviour
     {
         private const int CellSize = 64;
@@ -30,6 +31,8 @@ namespace AzureDreamsReimagined
         };
 
         internal bool HasRetailRun => _retailFrames != null;
+        private bool _reversed;
+        internal void PresentReversal(bool reversed) => _reversed = reversed;
 
         [SerializeField] private Texture2D _sheet;
         [SerializeField] private Texture2D _retailLocomotion;
@@ -50,6 +53,119 @@ namespace AzureDreamsReimagined
         private Texture2D _sleepAtlas;
         private Sprite[] _sleepFrames;
         private bool _sleeping;
+        [System.Serializable] private sealed class BathTimings { public int columns; public int[] enter, soak, exit; }
+        private BathTimings _bathTimings;
+        private Texture2D _bathAtlas;
+        private Sprite[] _bathFrames;
+        private Sprite _bathPose;
+        [System.Serializable] private sealed class BikeSequence { public int[] frames, ticks; }
+        [System.Serializable] private sealed class BikeRiderBank { public int frameCount; public BikeSequence[] directions; }
+        private BikeRiderBank _bikeBank;
+        private Sprite[] _bikeRiderFrames;
+        private Texture2D _bikeRiderAtlas;
+        private bool _ridingBike;
+        internal void PresentBike(bool riding) => _ridingBike = riding;
+        private bool PresentBikeFrame(int octant)
+        {
+            if (_bikeRiderFrames == null)
+            {
+                var image=Resources.Load<TextAsset>("Town/AuraBike/Rider");
+                // Separate names for the two TextAssets avoid Resources ambiguity.
+                var data=Resources.Load<TextAsset>("Town/AuraBike/RiderTimings");
+                if(!image || !data) return false;
+                _bikeBank=JsonUtility.FromJson<BikeRiderBank>(data.text);
+                _bikeRiderAtlas=new Texture2D(2,2,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
+                if(!_bikeRiderAtlas.LoadImage(image.bytes,true)) return false;
+                _bikeRiderFrames=new Sprite[_bikeBank.frameCount];
+                for(int i=0;i<_bikeRiderFrames.Length;i++)
+                    _bikeRiderFrames[i]=Sprite.Create(_bikeRiderAtlas,new Rect(i%8*96,_bikeRiderAtlas.height-(i/8+1)*96,96,96),new Vector2(.5f,27f/96),RetailPixelsPerUnit,0,SpriteMeshType.FullRect);
+            }
+            int direction=(6-octant)&7;
+            var seq=_bikeBank.directions[direction];int total=0;foreach(int ticks in seq.ticks)total+=ticks;
+            float phase=Time.time*60f%Mathf.Max(1,total);int entry=0;
+            while(entry+1<seq.frames.Length && phase>=seq.ticks[entry])phase-=seq.ticks[entry++];
+            _renderer.sprite=_bikeRiderFrames[seq.frames[entry]];_renderer.flipX=direction is >=3 and <=5;
+            return true;
+        }
+        internal float PresentBath(int phase, float elapsed)
+        {
+            if (phase < 0) { _bathPose = null; return 0f; }
+            if (_bathFrames == null)
+            {
+                var image = Resources.Load<TextAsset>("Town/Retail/koh-bath");
+                var json = Resources.Load<TextAsset>("Town/Retail/koh-bath-timings");
+                if (!image || !json) return 0f;
+                _bathTimings = JsonUtility.FromJson<BathTimings>(json.text);
+                _bathAtlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+                { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+                if (!_bathAtlas.LoadImage(image.bytes, true)) return 0f;
+                _bathFrames = new Sprite[_bathTimings.columns * 3];
+                for (int row = 0; row < 3; row++)
+                for (int col = 0; col < _bathTimings.columns; col++)
+                    _bathFrames[row * _bathTimings.columns + col] = Sprite.Create(_bathAtlas,
+                        new Rect(col * 96, (2 - row) * 96, 96, 96), new Vector2(.5f, 27f / 96f),
+                        RetailPixelsPerUnit, 0, SpriteMeshType.FullRect);
+            }
+            var durations = phase == 0 ? _bathTimings.enter : phase == 1 ? _bathTimings.soak : _bathTimings.exit;
+            int total = 0; foreach (int duration in durations) total += duration;
+            int tick = Mathf.Min(total - 1, Mathf.FloorToInt(elapsed * 60f));
+            int frame = 0;
+            while (frame < durations.Length - 1 && tick >= durations[frame]) tick -= durations[frame++];
+            _bathPose = _bathFrames[phase * _bathTimings.columns + frame];
+            return total / 60f;
+        }
+        [System.Serializable] private sealed class WarmingTimings { public int columns; public int[] sit, warm, stand; }
+        private WarmingTimings _warmingTimings;
+        private Texture2D _warmingAtlas;
+        private Sprite[] _warmingFrames;
+        private int _warmingPhase = -1;
+        private float _warmingStarted;
+
+        internal void PresentWarming(bool warming)
+        {
+            if (warming && _warmingPhase is 0 or 1 || !warming && _warmingPhase < 0) return;
+            if (warming && _warmingFrames == null)
+            {
+                var image = Resources.Load<TextAsset>("Tower/koh-retail-warming");
+                // The timing file uses a separate resource name to avoid TextAsset ambiguity.
+                var json = Resources.Load<TextAsset>("Tower/koh-retail-warming-timings");
+                if (!image || !json) return;
+                _warmingTimings = JsonUtility.FromJson<WarmingTimings>(json.text);
+                _warmingAtlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+                { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+                if (!_warmingAtlas.LoadImage(image.bytes, true)) return;
+                _warmingFrames = new Sprite[_warmingTimings.columns * 3];
+                for (int row = 0; row < 3; row++)
+                for (int col = 0; col < _warmingTimings.columns; col++)
+                    _warmingFrames[row * _warmingTimings.columns + col] = Sprite.Create(_warmingAtlas,
+                        new Rect(col * CellSize, (2 - row) * CellSize, CellSize, CellSize),
+                        new Vector2(0.5f, 11f / CellSize), RetailPixelsPerUnit, 0, SpriteMeshType.FullRect);
+            }
+            _warmingPhase = warming ? 0 : 2;
+            _warmingStarted = Time.unscaledTime;
+        }
+
+        private bool PresentWarmingFrame()
+        {
+            if (_warmingPhase < 0 || _warmingFrames == null) return false;
+            int[] timings = _warmingPhase == 0 ? _warmingTimings.sit :
+                _warmingPhase == 1 ? _warmingTimings.warm : _warmingTimings.stand;
+            int ticks = Mathf.FloorToInt((Time.unscaledTime - _warmingStarted) * 60f);
+            int total = 0;
+            foreach (int duration in timings) total += duration;
+            if (ticks >= total && _warmingPhase != 1)
+            {
+                _warmingPhase = _warmingPhase == 0 ? 1 : -1;
+                _warmingStarted = Time.unscaledTime;
+                return PresentWarmingFrame();
+            }
+            ticks %= total;
+            int column = 0;
+            while (column < timings.Length - 1 && ticks >= timings[column]) ticks -= timings[column++];
+            _renderer.flipX = false; // Retail warming is a single, unmirrored animation.
+            _renderer.sprite = _warmingFrames[_warmingPhase * _warmingTimings.columns + column];
+            return true;
+        }
         private float _sleepStartedAt;
         private const int SleepColumns = 8;
         private const int HitColumns = 9;
@@ -122,8 +238,59 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>Pool presentation state. Gameplay movement remains owned by the town controller.</summary>
+        private bool _wearingSwimsuit;
+        private Texture2D _swimsuitAtlas;
+        private Sprite[] _swimsuitFrames;
+        [System.Serializable] private sealed class SwimmingTimings { public int columns; public int[] ticks; }
+        private SwimmingTimings _swimTimings;
+        private Texture2D _swimmingAtlas;
+        private Sprite[] _swimmingFrames;
+        private float _swimmingStarted;
+
+        internal bool PresentSwimsuit(bool wearing)
+        {
+            if (wearing && _swimsuitFrames == null)
+            {
+                var data = AssetMode.Load<TextAsset>("Town/Retail/koh-swimsuit");
+                if (!data) return false;
+                var atlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+                    { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+                if (!atlas.LoadImage(data.bytes, markNonReadable: true) ||
+                    atlas.width != AtlasColumns * CellSize || atlas.height != AtlasRows * CellSize)
+                { Destroy(atlas); return false; }
+                _swimsuitAtlas = atlas;
+                _swimsuitFrames = new Sprite[AtlasRows * AtlasColumns];
+                for (int row = 0; row < AtlasRows; row++)
+                for (int column = 0; column < AtlasColumns; column++)
+                {
+                    int index = row * AtlasColumns + column;
+                    _swimsuitFrames[index] = CreateRetailBodyFrame(atlas, row, column, Vector2Int.zero, null, index);
+                }
+            }
+            _wearingSwimsuit = wearing;
+            if (!wearing) _swimming = false;
+            return true;
+        }
+
         internal void PresentSwimming(bool swimming)
         {
+            if(swimming && _swimmingFrames==null)
+            {
+                var image=AssetMode.Load<TextAsset>("Town/Retail/koh-swimming");
+                var timings=AssetMode.Load<TextAsset>("Town/Retail/koh-swimming-timings");
+                if(image && timings)
+                {
+                    _swimTimings=JsonUtility.FromJson<SwimmingTimings>(timings.text);
+                    _swimmingAtlas=new Texture2D(2,2,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
+                    if(_swimmingAtlas.LoadImage(image.bytes,true))
+                    {
+                        _swimmingFrames=new Sprite[5*_swimTimings.columns];
+                        for(int row=0;row<5;row++)for(int col=0;col<_swimTimings.columns;col++)
+                            _swimmingFrames[row*_swimTimings.columns+col]=Sprite.Create(_swimmingAtlas,new Rect(col*64,(4-row)*64,64,64),new Vector2(.5f,11f/64),RetailPixelsPerUnit,0,SpriteMeshType.FullRect);
+                    }
+                }
+            }
+            if(swimming && !_swimming) _swimmingStarted=Time.time;
             _swimming = swimming;
         }
 
@@ -403,6 +570,40 @@ namespace AzureDreamsReimagined
         private Sprite _weaponIcon, _shieldIcon;
         private int _weaponRow = -1, _shieldRow = -1;
         private bool _equippedWeaponIsSword;
+        private const int WandPoseColumns = 20, WandCellSize = 32;
+        private Texture2D _wandEquipmentAtlas;
+        private Sprite[] _wandEquipmentFrames;
+        [System.Serializable] private class WandHandOffset { public int x, y; }
+        [System.Serializable] private class WandHandOffsets { public WandHandOffset[] offsets; }
+        private WandHandOffset[] _wandHandOffsets;
+
+        private int WandEquipmentIndex(int facingRow, bool walking, bool running)
+        {
+            if (_inTown || _weaponRow < EquipmentSwords || _weaponRow >= EquipmentSwords + EquipmentWands) return -1;
+            int pose = _attackFrames != null && _attackProgress >= 0f
+                ? 17 + Mathf.Min(2, Mathf.FloorToInt(_attackProgress * 3f))
+                : walking ? 1 + (running ? FramesPerCycle : 0) + Mathf.Clamp((int)_clock, 0, FramesPerCycle - 1) : 0;
+            return ((_weaponRow - EquipmentSwords) * AtlasRows + facingRow) * WandPoseColumns + pose;
+        }
+
+        private Sprite WandEquipmentFrame(int index)
+        {
+            if (index < 0) return null;
+            if (_wandEquipmentFrames == null)
+            {
+                _wandEquipmentAtlas = AssetMode.Load<Texture2D>("Tower/KohWandEquipment");
+                var offsets = AssetMode.Load<TextAsset>("Tower/KohWandEquipment");
+                _wandHandOffsets = offsets ? JsonUtility.FromJson<WandHandOffsets>(offsets.text)?.offsets : null;
+                if (!_wandEquipmentAtlas || _wandEquipmentAtlas.width != WandPoseColumns * WandCellSize ||
+                    _wandEquipmentAtlas.height != EquipmentWands * AtlasRows * WandCellSize ||
+                    _wandHandOffsets?.Length != EquipmentWands * AtlasRows * WandPoseColumns) return null;
+                _wandEquipmentFrames = new Sprite[_wandHandOffsets.Length];
+            }
+            int row = index / WandPoseColumns, column = index % WandPoseColumns;
+            return _wandEquipmentFrames[index] ??= Sprite.Create(_wandEquipmentAtlas,
+                new Rect(column * WandCellSize, _wandEquipmentAtlas.height - (row + 1) * WandCellSize, WandCellSize, WandCellSize),
+                new Vector2(.5f, .5f), RetailPixelsPerUnit, 0, SpriteMeshType.FullRect);
+        }
 
         internal void SetEquipment(byte weaponKind, byte weaponSubtype, Sprite weaponIcon, byte shieldSubtype, Sprite shieldIcon)
         {
@@ -442,7 +643,7 @@ namespace AzureDreamsReimagined
             if (hand.sprite != sprite) hand.sprite = sprite;
         }
 
-        private void PresentEquipment(Vector3 facing, int octant, bool walking, Camera camera)
+        private void PresentEquipment(Vector3 facing, int octant, bool walking, bool running, Camera camera)
         {
             var right = camera ? _renderer.transform.right : Vector3.right;
             var forward = camera ? Vector3.Cross(right, Vector3.up) : Vector3.forward;
@@ -450,9 +651,11 @@ namespace AzureDreamsReimagined
             float depth = Vector3.Dot(facing, forward);
             float stride = walking ? Mathf.Sin(_clock * (2f * Mathf.PI / FramesPerCycle)) : 0f;
             float swing = _attackProgress < 0f ? 0f : Mathf.Sin(_attackProgress * Mathf.PI);
-            bool handsFree = !_sleeping && !_bagPose && _pushEffort == 0f && !_swimming && !_dining;
+            bool handsFree = !_ridingBike && !_wearingSwimsuit && !_sleeping && !_bathPose && _warmingPhase < 0 && !_bagPose && _pushEffort == 0f && !_swimming && !_dining;
             int facingRow = AtlasRowByOctant[octant];
-            Sprite weaponFrame = EquipmentFrame(_weaponRow, facingRow);
+            int wandIndex = WandEquipmentIndex(facingRow, walking, running);
+            var wandFrame = WandEquipmentFrame(wandIndex);
+            Sprite weaponFrame = wandFrame ? wandFrame : EquipmentFrame(_weaponRow, facingRow);
             Sprite shieldFrame = EquipmentFrame(_shieldRow, facingRow);
             SetHandSprite(ref _rightWeapon, weaponFrame ? weaponFrame : _weaponIcon, "Koh right-hand weapon");
             SetHandSprite(ref _leftShield, shieldFrame ? shieldFrame : _shieldIcon, "Koh left-arm shield");
@@ -476,6 +679,12 @@ namespace AzureDreamsReimagined
                     Vector2 bodyPivot = _renderer.sprite ? _renderer.sprite.pivot : new Vector2(32f, 11f);
                     Vector2 equipmentPivot = hand.sprite.pivot;
                     Vector2 pixelOffset = (equipmentPivot - bodyPivot) / RetailPixelsPerUnit;
+                    if (!shield && wandFrame)
+                    {
+                        var grip = _wandHandOffsets[wandIndex];
+                        pixelOffset = (new Vector2(32f + grip.x, 11f + grip.y) - bodyPivot) / RetailPixelsPerUnit;
+                        if (_renderer.flipX) pixelOffset.x = -pixelOffset.x;
+                    }
                     hand.transform.localPosition = new Vector3(pixelOffset.x, pixelOffset.y, 0f);
                     hand.transform.localRotation = Quaternion.identity;
                     bool isBehindBody = side * anatomicalSide > 0.25f;
@@ -549,7 +758,9 @@ namespace AzureDreamsReimagined
                 // any pitch) stayed consistent. Matching their technique keeps Koh's
                 // proportions identical everywhere, same as the rest of the cast.
                 var billboard = camera.transform.rotation;
-                visual.rotation = billboard * Quaternion.Euler(0f, 0f, lean);
+                // Billboarding normally cancels the camera's roll on screen.
+                // Reversal must turn Koh too; his equipment shares this transform.
+                visual.rotation = billboard * Quaternion.Euler(0f, 0f, lean + (_reversed ? 180f : 0f));
             }
             int octant = Mathf.RoundToInt(angle / 45f) & 7;
             float jump = 0f;
@@ -570,11 +781,14 @@ namespace AzureDreamsReimagined
             if (_renderer.sprite && _soleClearances.TryGetValue(_renderer.sprite, out float clearance))
                 offset.y += clearance * _visualUnitsPerPixel;
             visual.localPosition = (_baseVisualPosition ??= visual.localPosition) + offset;
-            PresentEquipment(facing.normalized, octant, walking, camera);
+            PresentEquipment(facing.normalized, octant, walking, running, camera);
         }
 
         private void PresentBody(int octant, bool walking, bool running)
         {
+            if (_bathPose) { _renderer.sprite = _bathPose; _renderer.flipX = false; return; }
+            if (_ridingBike && PresentBikeFrame(octant)) return;
+            if (!_sleeping && PresentWarmingFrame()) return;
             if (_dining && _diningFrames != null)
             {
                 // Town Koh groups 223-227 hold the seated pose. Groups 218-222
@@ -585,14 +799,20 @@ namespace AzureDreamsReimagined
                 _renderer.sprite = _diningFrames[AtlasRowByOctant[octant] * DiningColumns + column];
                 return;
             }
-            if (_swimming && !_sleeping && !_lifting && _attackProgress < 0f && _retailFrames != null)
+            if (_swimming && _swimmingFrames != null && !_sleeping && !_lifting)
             {
-                // The retail locomotion cells provide the directional body poses;
-                // cycling the middle stride poses becomes Koh's breaststroke while
-                // the pool waterline covers his lower body.
-                int stroke = walking ? 2 + Mathf.FloorToInt(_clock * 1.35f) % 4 : 3;
+                int total=0;foreach(int duration in _swimTimings.ticks)total+=duration;
+                float tick=(Time.time-_swimmingStarted)*60f%Mathf.Max(1,total);int frame=0;
+                while(frame+1<_swimTimings.columns && tick>=_swimTimings.ticks[frame])tick-=_swimTimings.ticks[frame++];
+                _renderer.flipX=octant is >=1 and <=3;
+                _renderer.sprite=_swimmingFrames[AtlasRowByOctant[octant]*_swimTimings.columns+frame];
+                return;
+            }
+            if (_wearingSwimsuit && _swimsuitFrames != null && !_sleeping && !_lifting)
+            {
+                int pose = walking ? 1 + (running && !_swimming ? FramesPerCycle : 0) + Mathf.Clamp((int)_clock, 0, FramesPerCycle - 1) : 0;
                 _renderer.flipX = octant is >= 1 and <= 3;
-                _renderer.sprite = _retailFrames[AtlasRowByOctant[octant] * AtlasColumns + stroke];
+                _renderer.sprite = _swimsuitFrames[AtlasRowByOctant[octant] * AtlasColumns + pose];
                 return;
             }
             if (_sleeping && _sleepFrames != null)
@@ -694,12 +914,28 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if(_swimmingFrames!=null)foreach(var frame in _swimmingFrames)if(frame)Destroy(frame);
+            if(_swimmingAtlas)Destroy(_swimmingAtlas);
+            if (_bikeRiderFrames != null)
+                foreach (var frame in _bikeRiderFrames) if (frame) Destroy(frame);
+            if (_bikeRiderAtlas) Destroy(_bikeRiderAtlas);
+            if (_swimsuitFrames != null)
+                foreach (var frame in _swimsuitFrames) if (frame) Destroy(frame);
+            if (_swimsuitAtlas) Destroy(_swimsuitAtlas);
+            if (_bathFrames != null)
+                foreach (var frame in _bathFrames) if (frame) Destroy(frame);
+            if (_bathAtlas) Destroy(_bathAtlas);
+            if (_warmingFrames != null)
+                foreach (var frame in _warmingFrames) if (frame) Destroy(frame);
+            if (_warmingAtlas) Destroy(_warmingAtlas);
             if (_diningFrames != null)
                 foreach (var frame in _diningFrames) if (frame) Destroy(frame);
             if (_diningAtlas) Destroy(_diningAtlas);
             if (_hitFrames != null)
                 foreach (var frame in _hitFrames) if (frame) Destroy(frame);
             if (_hitAtlas) Destroy(_hitAtlas);
+            if (_wandEquipmentFrames != null)
+                foreach (var frame in _wandEquipmentFrames) if (frame) Destroy(frame);
             if (_equipmentFrames != null)
                 foreach (var frame in _equipmentFrames) if (frame) Destroy(frame);
             if (_sleepFrames != null)

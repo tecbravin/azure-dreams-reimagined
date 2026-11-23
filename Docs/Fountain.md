@@ -7,3 +7,9 @@ A arrecadação existente da Nico mantém a meta de 3000 G contando sua doação
 Nico, Ghosh e Chero continuam aparecendo nas respectivas etapas da história. Sua posição vertical agora acompanha o piso original elevado. Wookie permanece no ponto já usado junto à praça, acima da geometria capturada, sem alteração de escala nesta mudança.
 
 Validação: compilação do runtime; teste isolado em Unity de arrecadação zero/parcial/completa, construção pendente no retorno, malha/collider original, praça caminhável, centro sólido, posição vertical dos residentes, elenco Nico/Ghosh sem duplicações e descarregamento. As 20 referências de texturas da fonte foram verificadas no disco. A aparência completa na cena principal não foi inspecionada nesta execução.
+
+## Conversas dos moradores da praça
+
+`FountainResidentTalk` liga os sete moradores às janelas normais de diálogo, sem herdar a fala do cliente do restaurante. Fonte primária: TOWN.BIN 0x2CE000–0x2CF218. Os comandos `57 <speaker>` identificam narder (61), kiku (60), obasan (45), oyaji (62), der (44), nouhuko (31) e ran (64); os bancos de três aliases antes provisórios foram corrigidos de acordo com esses identificadores. Os identificadores de instância existentes foram preservados.
+
+Inclui canções das crianças, explicação dos controles com os bindings atuais no lugar dos símbolos PSX, agricultura, camisetas, comentários sobre o domador e as falas da moradora sobre os andares 10, 15 e 20. O inglês vem do disco com normalização de largura e apóstrofos; o português é tradução. O posicionamento anterior dos moradores não foi alterado. Não implementa a encenação coletiva das três fãs presente no mesmo bloco do roteiro.

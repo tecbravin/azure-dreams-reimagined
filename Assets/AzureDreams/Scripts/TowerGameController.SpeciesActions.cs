@@ -89,9 +89,6 @@ namespace AzureDreamsReimagined
                 case MonsterSpecies.MANOEVA when ManoevaCanDisguise && !_manoevaDisguised.ContainsKey(actor) &&
                     RollSpeciesAiOnce(actor, 16) && TryManoevaDisguise(actor, creature.Cell):
                     return true;
-                case MonsterSpecies.VIPER when !_viperCarriedEgg.ContainsKey(actor) &&
-                    RollSpeciesAiOnce(actor, 8) && TryViperGrabEgg(actor, creature.Cell):
-                    return true;
                 default:
                     return false;
             }
@@ -166,25 +163,21 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        // Viper "come" (carrega) um ovo numa celula adjacente, igual ao decomp
-        // (update_viper_item_grab.c: lunca na direcao do item, checa se e um ovo -
-        // bytes[1]==0x12/ItemKind.Egg - e o remove do chao). O ovo fica guardado em
-        // _viperCarriedEgg em vez de ser destruido: se a Viper for derrotada antes de
-        // voltar a comer outro, o ovo cai de volta no chao (ver TowerGameController.Movement.cs).
+        // User-requested behavior: walk onto the egg before picking it up.
+        // Keep the exact item entry for the death drop, including species/heat/flags.
         private bool TryViperGrabEgg(ActorRecord actor, Vector2Int cell)
         {
-            foreach (var step in BellSteps)
-            {
-                var target = cell + step;
-                var item = _towerItemTraps?.GetItemAt(target);
-                if (item == null || item.Kind != AzureDreams.Core.ItemKind.Egg) continue;
-                _towerItemTraps.TakeItem(target);
-                _viperCarriedEgg[actor] = item;
-                AddSpeciesMessage(T($"{TowerCombatName(actor)} swallows the egg!",
-                    $"{TowerCombatName(actor)} engoliu o ovo!"));
-                return true;
-            }
-            return false;
+            if (_viperCarriedEgg.ContainsKey(actor)) return false;
+            var item = _towerItemTraps?.GetItemAt(cell);
+            if (item == null || item.Kind != AzureDreams.Core.ItemKind.Egg) return false;
+            item = _towerItemTraps.TakeItem(cell);
+            if (item == null) return false;
+            _viperCarriedEgg[actor] = item;
+            if (_itemMarkers.Remove(cell, out var view) && view) RemoveGenerated(view);
+            PlayRetailSound(RetailSfx.Pickup);
+            AddSpeciesMessage(T($"{TowerCombatName(actor)} picked up the egg!",
+                $"{TowerCombatName(actor)} pegou o ovo!"));
+            return true;
         }
 
         // Manoeva se multiplica quando atingido e sobrevive - habilidade distinta e
@@ -428,6 +421,8 @@ namespace AzureDreamsReimagined
             _pendingRocks.Clear();
             _manoevaDisguised.Clear();
             _viperCarriedEgg.Clear();
+            _enemyStolenItems.Clear();
+            _pendingEnemyThefts.Clear();
             _speciesActionMessages = null;
         }
     }

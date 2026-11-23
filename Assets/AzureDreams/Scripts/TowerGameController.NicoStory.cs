@@ -15,6 +15,8 @@ namespace AzureDreamsReimagined
         private const int NicoCheroMorningFlag = 5205; // F_niko_selro_asa
         private const int NicoAfterBeldoVisionFlag = 5001; // F_veldil_dungeon_deatta
         private const string NicoPortraitPrefix = "Dialogue/NicoRetail_variant";
+        private Texture2D CheroDialoguePortrait() => AssetMode.IsReimagined
+            ? StreamImage("Reimagined/Portraits/Dialogue/Chero_variant0_frame0.png") : null;
         private const int NicoNeutral = 0;
         private const int NicoFlustered = 1;
         private const int NicoCollecting = 2;
@@ -80,13 +82,25 @@ namespace AzureDreamsReimagined
 
             if (StoryRoom.Length == 0)
             {
-                if (npc.npcId == "nico" && (stage is NicoFirstDonation or NicoSecondDonation))
-                    return StoryNewDay(route) ? NicoDonationOffer(npc, stage) : NicoDonationFollowUp(npc);
-                if (npc.npcId == "nico" && stage == NicoFountainTalk)
+                bool squareNico = npc.npcId is "nico" or "nico_fountain";
+                if (squareNico && (stage is NicoFirstDonation or NicoSecondDonation))
+                    return NicoDonationOffer(npc, stage);
+                if (squareNico && stage == NicoFountainTalk)
+                {
+                    // Older saves can reach the waiting stage without having funded
+                    // or scheduled the fountain. Keep the collection accessible.
+                    if (!StoryBuilding("fountain") && !TownSaveVariables.GetBool(PendingFountainKey))
+                    {
+                        int total = TownSaveVariables.GetInt(NicoDonationTotalKey, NicoLegacyDonationTotal);
+                        if (total < NicoFountainGoal) return NicoDonationOffer(npc, NicoSecondDonation);
+                        TownSaveVariables.SetBool(PendingFountainKey, true);
+                        PersistTownProgress();
+                    }
                     return StoryNewDay(route) && StoryBuilding("fountain")
                         ? NicoFountainCelebration(npc)
                         : NicoTalk(npc, NicoNeutral, "You should be a little more cultured.",
                             "Você devia ser um pouco mais culto.");
+                }
                 if (npc.npcId == "chero" && stage == NicoCheroIntroduction && StoryNewDay(route))
                     return StoryTalk(npc, "I’m a travelling cellist. Please listen to my song.",
                         "Sou um violoncelista viajante. Por favor, ouça minha música.", () =>
@@ -218,6 +232,7 @@ namespace AzureDreamsReimagined
 
         private void DonateToNicoFountain(NPCController nico, int stage, int amount)
         {
+            if (!nico || amount is not (0 or 1 or 100 or 1000)) return;
             if (amount == 0)
             {
                 NicoTalk(nico, NicoCollecting, "....... It was stupid of me that I expected you to do better.",
@@ -226,7 +241,8 @@ namespace AzureDreamsReimagined
             }
             if (_gold < amount)
             {
-                _message = T("Not enough gold.", "Ouro insuficiente.");
+                NicoTalk(nico, NicoCollecting, "Not enough gold.", "Ouro insuficiente.",
+                    () => NicoChooseDonation(nico, stage));
                 return;
             }
 
@@ -331,6 +347,7 @@ namespace AzureDreamsReimagined
 
         private void SpawnNicoFountainCast()
         {
+            SpawnNicoChero();
             if (!FindStoryActor("nico_fountain"))
                 SpawnStoryResident("nico", "nico_fountain", "Nico", TownResidentPlacementCatalog.GetTownCells("nico")[0]);
             if (StoryStage("nico") == NicoGhoshConfrontation) SpawnNicoFountainGhosh();
@@ -338,6 +355,13 @@ namespace AzureDreamsReimagined
 
         // TOWN.BIN 0x2D2B40–0x2D3819.
         private bool NicoGhoshFountainConversation(NPCController ghosh)
+        {
+            if (!ghosh) return false;
+            BeginNicoGhoshArrival(ghosh, () => NicoGhoshFountainDialogue(ghosh));
+            return true;
+        }
+
+        private bool NicoGhoshFountainDialogue(NPCController ghosh)
         {
             var nico = FindStoryActor("nico_fountain");
             var chero = FindStoryActor("chero");
@@ -384,7 +408,7 @@ namespace AzureDreamsReimagined
 
         private void NicoPraiseCheroMusic(NPCController chero, NPCController nico)
         {
-            void ThankKoh() => StoryTalk(chero, "Thank you so much.", "Muito obrigado.", () => NicoCheroApology(nico));
+            void ThankKoh() => FinishNicoGhoshVisit(() => StoryTalk(chero, "Thank you so much.", "Muito obrigado.", () => NicoCheroApology(nico)));
             NicoPages(nico, NicoNeutral, () =>
                 {
                     var ghosh = FindStoryActor("nico_ghosh");

@@ -7,7 +7,7 @@ namespace AzureDreamsReimagined
 {
     // Captured geometry, not a guessed room layout. Navigation is a sampled floor mask.
     [ExecuteAlways]
-    public sealed class TownInteriorScene : MonoBehaviour
+    public sealed partial class TownInteriorScene : MonoBehaviour
     {
         private const string KohHouseLevelOneId = "Interior_01_koh_house_1";
         // The first captured house uses the PS1 coordinate frame, whose X axis
@@ -176,6 +176,7 @@ namespace AzureDreamsReimagined
             if (UsesMirroredCoordinateFrame && data.vertices != null)
                 for (int i = 0; i < data.vertices.Length; i++)
                     data.vertices[i] = MapLayoutPosition(data.vertices[i]);
+            PreparePoolGeometry(data);
             _mesh = new Mesh { name = displayName, indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 };
             _mesh.vertices = data.vertices; _mesh.uv = data.uv;
             _mesh.subMeshCount = data.surfaces.Length;
@@ -195,6 +196,7 @@ namespace AzureDreamsReimagined
                 var shader = FindCapturedFallbackShader(surfaceShader);
                 if (!shader && source && source.shader && source.shader.isSupported) shader = source.shader;
                 if (!shader && surfaceShader && surfaceShader.isSupported) shader = surfaceShader;
+                if (IsPoolWaterSurface(i) && Shader.Find("AzureDreams/TownWater") is { } waterShader) shader = waterShader;
                 if (!shader) continue;
 
                 var useSourceMaterial = source && source.shader == shader && source.shader.isSupported;
@@ -209,11 +211,18 @@ namespace AzureDreamsReimagined
                 else if (texture && material.HasProperty("_BaseMap"))
                     material.SetTexture("_BaseMap", texture);
 
+                if (IsPoolWaterSurface(i) && material.HasProperty("_Opacity"))
+                {
+                    material.SetFloat("_Opacity", .58f);
+                    material.SetFloat("_ZWrite", 1f);
+                    material.SetVector("_Flow", new Vector4(0f, 6f, 0f, 0f));
+                }
                 assigned[i] = material;
                 _runtimeMaterials[i] = material;
             }
             renderer.sharedMaterials = assigned;
             renderer.enabled = true;
+            BuildPoolBasin(data);
         }
         private void Start()
         {
@@ -223,6 +232,7 @@ namespace AzureDreamsReimagined
         }
         private void OnDisable()
         {
+            ClearPoolBasin();
             _capturedFurniture.Clear();
             if (_runtimeMaterials != null)
                 foreach (var material in _runtimeMaterials)

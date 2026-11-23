@@ -45,6 +45,7 @@ namespace AzureDreamsReimagined
             var stats = instance.GetComponent<CharacterStats>();
             npc.npcId = id;
             bool retailSprite = RetailResidentBanks.Apply(instance, id);
+            SetupCherrlFirstMeetingVisual(npc);
             if (!retailSprite && IsSilverResident(id)) ConfigureSilverPresentation(npc);
             if (!retailSprite && id == "wookie" && instance.GetComponentInChildren<SpriteRenderer>() is { } sprite)
             {
@@ -65,10 +66,11 @@ namespace AzureDreamsReimagined
             // The restored-pool cast has unique swimwear and portrait variants.
             // Apply these only in its interior: the same source prefabs are used
             // unchanged throughout Monsbaiya.
-            if (!retailSprite && StoryRoom == PoolOpenRoom && (id is "wookie" or "pool_nico" or "pool_fur" or "pool_selfi" or "pool_patty" or
+            if (StoryRoom == PoolOpenRoom && (id is "wookie" or "pool_nico" or "pool_fur" or "pool_selfi" or "pool_patty" or
                 "pool_cherrl" or "pool_visitor" or "pool_ghosh" ||
                 (id == "vivian" && TownSaveVariables.GetInt(VivianPoolDateKey) != 1) ||
-                (id == "mia" && MiaStage() > MiaPoolDate)))
+                (id == "mia" && (MiaStage() > MiaPoolDate ||
+                    TownRetailScriptFlags.CreatePersistent().IsFlagSet(MiaPoolPresentFlag)))))
                 ApplyPoolPresentation(npc);
             if (prefabId == id)
             {
@@ -107,6 +109,7 @@ namespace AzureDreamsReimagined
 
         private void UpdateOutdoorSelfiMusic()
         {
+            if (_nicoGhoshMusic) return;
             UpdateCheroConcertMusic();
             if (_area != Area.Town || _interior || !_outdoorSelfi || !_player || _prologue != Prologue.Off) return;
             float distance = Vector3.Distance(_player.transform.position, _outdoorSelfi.transform.position);
@@ -118,6 +121,7 @@ namespace AzureDreamsReimagined
         {
             if (!UsingRetailTown) return;
             SpawnConstructionResidents();
+            SpawnFountainTownspeople();
             SpawnStoryResident("isaac", "isaac", "Isaac",
                 TownResidentPlacementCatalog.GetTownCells("isaac")[0]);
             _outdoorSelfi = null;
@@ -148,8 +152,7 @@ namespace AzureDreamsReimagined
             if (MiaStage() is MiaFollowing or MiaFollowingReady)
                 SpawnStoryResident("mia", "mia", "Mia", TownResidentPlacementCatalog.GetTownCells("mia")[0]);
             int cherrlStage = StoryStage("cherrl");
-            if ((cherrlStage == CherrlFirstMeeting && StoryBuilding("hospital")) ||
-                (cherrlStage == StoryComplete && !TownSaveVariables.GetBool(CherrlOutdoorWalkKey)))
+            if (cherrlStage == CherrlFirstMeeting && StoryBuilding("hospital"))
             {
                 foreach (var (door, interior) in _facadeInteriors)
                 {
@@ -164,6 +167,7 @@ namespace AzureDreamsReimagined
 
         private bool ShouldSpawnStoryResident(NPCController npc, string room)
         {
+            if (room == BarRoom && OkamiBarClosed) return npc.npcId == "okami";
             if (npc.npcId == "selfi" && room == RhodesHouse) return false;
             if (room == RestaurantRoom && npc.npcId != "patty" && PattyAloneInRestaurant) return false;
             if (npc.npcId == "cherrl" && room == CherrlHouse)
@@ -186,6 +190,10 @@ namespace AzureDreamsReimagined
         {
             switch (room)
             {
+                case CherrlHouse:
+                    if (!FindStoryActor("nadia"))
+                        SpawnStoryResident("dar", "nadia", "Nadia", new Vector2Int(20,16));
+                    break;
                 case NicoHouse:
                 {
                     int nicoStage = StoryStage("nico");
@@ -263,8 +271,11 @@ namespace AzureDreamsReimagined
                         TownRetailScriptFlags.CreatePersistent().IsFlagSet(PattyLoveFlag))
                         SpawnStoryResident("patty", "pool_patty", "Patty", default);
                     SpawnPoolResidents();
-                    if (MiaStage() >= MiaPoolDate) SpawnStoryResident("mia", "mia", "Mia", default);
-                    if (StoryStage("vivian") >= StoryComplete) SpawnStoryResident("vivian", "vivian", "Vivian", default);
+                    if (MiaStage() >= MiaPoolDate || TownRetailScriptFlags.CreatePersistent().IsFlagSet(MiaPoolPresentFlag))
+                        SpawnStoryResident("mia", "mia", "Mia", default);
+                    if (StoryStage("vivian") >= StoryComplete || TownSaveVariables.GetInt(VivianPoolDateKey) is 1 or 2 ||
+                        TownRetailScriptFlags.CreatePersistent().IsFlagSet(VivianPoolPresentFlag))
+                        SpawnStoryResident("vivian", "vivian", "Vivian", default);
                     if (StoryStage("cherrl") >= StoryComplete)
                         SpawnStoryResident("cherrl", "pool_cherrl", "Cherrl", default);
                     break;
@@ -297,7 +308,7 @@ namespace AzureDreamsReimagined
             if (_townPeople.Count > priorCount)
             {
                 var ghosh = _townPeople[_townPeople.Count - 1];
-                StartCoroutine(PlayStoryWalk(ghosh, ghosh.transform.position + Vector3.right * 0.75f, 0.4f));
+                ghosh.GetComponent<ActorLocomotionView>()?.Present(Vector3.left, 0f, false);
             }
         }
 

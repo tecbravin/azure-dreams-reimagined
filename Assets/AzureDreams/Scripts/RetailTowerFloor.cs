@@ -266,10 +266,19 @@ namespace AzureDreamsReimagined
         // ---------------------------------------------------------------- queries
         public int Index(int x, int y) => (x + (y << 6)) & 4095;
 
+        private int WalkSurface(int x,int y)
+        {
+            int index=Index(x,y);
+            // Doorway emits four orientations, five variants each (79..98).
+            // All contain an overhead lintel; sample the passage floor beneath it.
+            int minimum=Kind[index] is >=79 and <=98 ? -Value[index]-TowerFloorManager.TerrainBlockHeight : -0x400;
+            return Geometry.SampleSurface(Kind,Value,(x<<6)+0x20,(y<<6)+0x20,minimum);
+        }
+
         /// <summary>Surface height at the cell centre in the port's convention (positive up, 64 per tile).</summary>
         public int GroundHeight(int x, int y)
         {
-            int surface = Geometry.SampleSurface(Kind, Value, (x << 6) + 0x20, (y << 6) + 0x20, -0x400);
+            int surface = WalkSurface(x,y);
             return surface >= 0x200 ? Value[Index(x, y)] : -surface;
         }
 
@@ -278,7 +287,7 @@ namespace AzureDreamsReimagined
             if (x <= 0 || y <= 0 || x >= Size - 1 || y >= Size - 1) return false;
             int i = Index(x, y);
             if (Kind[i] == 0 || (Flags[i] & 0x8408) != 0) return false;
-            return Geometry.SampleSurface(Kind, Value, (x << 6) + 0x20, (y << 6) + 0x20, -0x400) < 0x200;
+            return WalkSurface(x,y) < 0x200;
         }
 
         public bool InRoom(int x, int y)

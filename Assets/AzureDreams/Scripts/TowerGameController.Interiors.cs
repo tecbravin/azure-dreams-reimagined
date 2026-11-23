@@ -181,6 +181,7 @@ namespace AzureDreamsReimagined
             _townFacing = Vector2.up;
             ConfigurePlayerView(); ConfigureTriggerPlayer();
             _townFlow.State.ForceSet(TownGameState.State.TownIdle);
+            _message = string.Empty;
             SpawnInteriorResidents(room);
             SpawnInteriorStoryResidents(room.interiorId);
             SpawnAmbientInteriorResidents(room.interiorId);
@@ -188,12 +189,6 @@ namespace AzureDreamsReimagined
             CreatePrimitive(PrimitiveType.Cylinder, "Interior return marker (provisional)",
                 new Vector3(entry.x, RetailTownHeight(entry) + 0.03f, entry.z),
                 new Vector3(0.8f, 0.03f, 0.8f), _accentMaterial, false);
-            var label = GetInteriorCatalog()?.entries;
-            var entryLabel = label == null ? null : Array.Find(label, entry => entry.id == room.interiorId);
-            string roomName = entryLabel == null ? room.displayName : T(entryLabel.label, entryLabel.labelPtBr);
-            _message = room.interiorId == RhodesHouse || room.interiorId == BarRoom || room.interiorId == RestaurantRoom || room.interiorId == HushClinic || room.interiorId == CherrlHospital
-                ? ""
-                : roomName + T(". E at the entrance: return. F2: interiors.", ". E na entrada: voltar. F2: interiores.");
             CacheHomeFloorPlan();
             SetupKohHomeInterior();
             SetupMonsterShop();
@@ -204,6 +199,7 @@ namespace AzureDreamsReimagined
             SetupArcade();
             SetupGym();
             SetupNativeInteriorProps();
+            SetupFortuneHouse();
             if (room.interiorId == BlacksmithInterior)
             {
                 PlaceBlacksmithVase("Pot_Brown", new Vector3(13.25f, 0f, 9.5f));
@@ -268,6 +264,15 @@ namespace AzureDreamsReimagined
                 var npc = instance.GetComponent<NPCController>();
                 npc.npcId = placedId;
                 RetailResidentBanks.Apply(instance, placedId);
+                if (seated)
+                {
+                    instance.transform.position=new Vector3(cell.x+.5f,0f,cell.y+.625f);
+                    instance.transform.rotation=Quaternion.LookRotation(Vector3.forward);
+                    if(instance.TryGetComponent<RetailTownResidentSpriteView>(out var seatedView))seatedView.SetSeated(true);
+                    var depth=instance.GetComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
+                    if(!depth)depth=instance.AddComponent<AzureDreamsReimagined.Rendering.ActorSpriteDepth>();
+                    depth.SetSeated(true,new Vector3(0f,0f,.22f));
+                }
                 if (seated && npc.TryGetComponent<TownHumanoidView>(out var humanoid))
                     humanoid.SetSeated(0.5f);
                 if (placedId is "bar_hunter_1" or "bar_hunter_2" or "bar_hunter_3")
@@ -388,7 +393,9 @@ namespace AzureDreamsReimagined
             if (ArcadeBatting) return false;
             if (_interior.interiorId == CasinoRouletteRoom) return false;
             Vector3 delta = _player.transform.position - (InMonsterShop ? CellPosition(MonsterShopExit) : HomeEntry(_interior)); delta.y = 0f;
-            if (delta.sqrMagnitude > 1.44f) return false;
+            float exitRadius = house == 0 ? 0.58f : 1.2f;
+            if (delta.sqrMagnitude > exitRadius * exitRadius) { _poolExitContact = false; return false; }
+            if (BlockPoolExitInSwimwear()) return true;
 
             // The Monster Hut is an extension of Koh's home, not a town building.
             // Walking through its return marker must therefore load the currently
@@ -408,6 +415,7 @@ namespace AzureDreamsReimagined
         private IEnumerator LeaveInterior()
         {
             if (_changingInterior || !_interior || _carriedItem != null) yield break;
+            if (BlockPoolExitInSwimwear()) yield break;
             _changingInterior = true;
             var scene = _interior.gameObject.scene;
             _interior = null;

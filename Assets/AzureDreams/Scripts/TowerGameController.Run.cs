@@ -16,7 +16,7 @@ namespace AzureDreamsReimagined
                  _towerRun.CurrentState != TowerRunManager.State.Victory)) return false;
             if (_carriedItem != null)
             {
-                if (!CreditCoinPickup(_carriedItem))
+                if (survived && !CreditCoinPickup(_carriedItem))
                 {
                     if (_runInventory != null && _runInventory.HasSpace()) _runInventory.AddDungeonItem(_carriedItem);
                     else if (_townStorage.TotalItems < HomeStorageCapacity) _townStorage.AddDungeonItem(_carriedItem);
@@ -54,6 +54,7 @@ namespace AzureDreamsReimagined
             _familiarOrders.Clear();
             if (_starterJoinedThisRun) TownSaveVariables.SetBool("starter_kewne_received", true);
             _starterJoinedThisRun = false;
+            AdvanceOkamiBarAfterTowerReturn();
             TownSaveVariables.SetInt(StoryPrefix + "day", StoryDay + 1);
             ApplyPendingConstruction();
             if (survived) ScheduleWreathHomecoming();

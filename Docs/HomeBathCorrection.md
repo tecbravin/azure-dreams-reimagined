@@ -1,0 +1,7 @@
+# Koh home bath correction
+
+The former extractor used town animation groups 204/205/207: Koh getting into a small pot, unrelated to bathing. The native SSTP_PLT_DM_BATH and SSTP_PLT_DM_BATH_TURN callbacks select D_800D01E0 -> D_800D0060, whose frame groups are 240/241. The extractor now installs those static front/back bath poses. Holds and the single turn are reconstructed staging; original bath scene timing has not been established.
+
+The bathroom cutaway previously had floor/walls and purchased decorations, but no bath vessel. It now creates a hollow wooden barrel for house 1 and an oval porcelain tub for house 2 (also used by the existing house 3 cutaway), with an inner wall, rim and water surface. These meshes are reconstructed, not claimed as extracted PS1 props. Native house texture tiles and purchased furnishings are preserved. Koh is seated at a bath-specific height so his head and shoulders remain above water. Bath-generated meshes/materials are released when the sequence ends.
+
+Validation: runtime Roslyn compilation; isolated Unity GPU render of all three levels; front/back pose selection, vessel presence, furnishings preserved, sequence completion, health restoration, repeat bathing, room/resource cleanup and original return position. Images: Validation/NpcRestaurant/bath-updated-1.png and bath-updated-2.png. This is an isolated sequence probe, not a complete saved-game playthrough.

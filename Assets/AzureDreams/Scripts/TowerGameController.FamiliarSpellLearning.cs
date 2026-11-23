@@ -107,11 +107,11 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>Handles "Give to familiar" for a ball with 10+ charges. Returns true when handled.</summary>
-        private bool TryGiveBallToLearn(Inventory inventory, int index, DungeonItemEntry item, System.Func<bool> remove)
+        private bool TryGiveBallToLearn(Inventory inventory, int index, DungeonItemEntry item, System.Func<bool> remove, ActorRecord recipient=null, System.Action refresh=null)
         {
             if (!TeachesFamiliar(item)) return false;
-            var actor = _familiarActor;
-            bool present = _familiar || (_area != Area.Tower && _familiarDefinition);
+            var actor = recipient ?? _familiarActor;
+            bool present = GiveRecipientAvailable(actor);
             if (actor == null || !present || IsFamiliarLost(actor)) return false;
             string spellName = FamiliarSpellNames[SpellFamily(SpellForElement(BallSpellIds[item.Subtype], UnitElement(actor)))];
 
@@ -141,7 +141,7 @@ namespace AzureDreamsReimagined
             ScheduleInventoryAction(() =>
             {
                 var current = index < inventory.DungeonItems.Count ? inventory.DungeonItems[index] : null;
-                if (_familiarActor != actor || current == null || current.Kind != ItemKind.Ball ||
+                if (!GiveRecipientAvailable(actor) || current == null || current.Kind != ItemKind.Ball ||
                     current.Subtype != item.Subtype || current.Param != item.Param || !remove()) return;
                 var result = TeachFamiliarSpell(actor, item, out _);
                 PlayRetailSound(RetailSfx.Restore);
@@ -150,7 +150,7 @@ namespace AzureDreamsReimagined
                     ? T($"{FamiliarDisplayName}'s {spellName} rose to LV {newLevel}.",
                         $"{spellName} de {FamiliarDisplayName} subiu para o NÍV {newLevel}.")
                     : T($"{FamiliarDisplayName} learned {spellName}!", $"{FamiliarDisplayName} aprendeu {spellName}!");
-                RefreshInventoryCommands();
+                if(refresh!=null) refresh(); else RefreshInventoryCommands();
             });
             return true;
         }

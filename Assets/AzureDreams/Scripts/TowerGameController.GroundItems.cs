@@ -6,7 +6,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        private enum GroundItemAction { Use, PutIntoBag, Lift, Rearm }
+        private enum GroundItemAction { Use, PutIntoBag, Lift, Give, Rearm }
 
         private Vector2Int? _groundItemPrompt;
         private bool _groundItemActionsOpen, _inspectItemOnArrival;
@@ -62,7 +62,7 @@ namespace AzureDreamsReimagined
             if (_groundItemActionsOpen && keyboard != null)
             {
                 int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
-                _groundItemSelection = (GroundItemAction)Mathf.Clamp((int)_groundItemSelection + delta, 0, CanRearmUnderKoh ? 3 : 2);
+                _groundItemSelection = (GroundItemAction)Mathf.Clamp((int)_groundItemSelection + delta, 0, CanRearmUnderKoh ? 4 : 3);
             }
             if (_interact?.WasPressedThisFrame() == true)
             {
@@ -77,6 +77,11 @@ namespace AzureDreamsReimagined
             if (!_groundItemPrompt.HasValue || _groundItemPrompt.Value != _playerCell || _turnBusy) return;
             var cell = _groundItemPrompt.Value;
             _groundItemPrompt = null;
+            if (action == GroundItemAction.Give)
+            {
+                GiveGroundItem(cell);
+                return;
+            }
             if (_area == Area.Town)
             {
                 ExecuteTownGroundAction(cell, action);
@@ -95,6 +100,8 @@ namespace AzureDreamsReimagined
                 case GroundItemAction.Use:
                     if (item.Kind == MonsterEgg.Kind && _carriedView)
                         _message = T("Put down what you are holding before warming an egg.", "Coloque no chão o que está segurando antes de aquecer um ovo.");
+                    else if (item.Kind == MonsterEgg.Kind)
+                        BeginEggWarming(-1, cell);
                     else if (IsPitaFruit(item))
                         _message = T("Koh cannot eat Pita Fruit.", "Koh não pode comer fruta Pita.");
                     else if (item.Kind != MonsterEgg.Kind && !CanUseInventoryEffect(item, false))
@@ -112,6 +119,34 @@ namespace AzureDreamsReimagined
             }
         }
 
+        private void GiveGroundItem(Vector2Int cell)
+        {
+            var item = ItemUnderKoh(cell);
+            if (!IsGiveableToFamiliar(item))
+            {
+                _message = T("That item cannot be given to a familiar.", "Esse item não pode ser dado a um familiar.");
+                return;
+            }
+            var area = _area;
+            var source = new Inventory();
+            source.AddDungeonItem(new DungeonItemEntry(item.Subtype, item.Kind, item.Param, item.Flags));
+            bool Available() => _area == area && _playerCell == cell && ReferenceEquals(ItemUnderKoh(cell), item);
+            void Commit()
+            {
+                if (!Available()) return;
+                if (area == Area.Tower) ConsumeGroundItem(cell);
+                else if (RemoveTownGroundItem(cell, out var drop)) RemoveGenerated(drop.view);
+                // A charged ball stays on the ground; a Troll's previous weapon replaces the gift.
+                foreach (var remaining in source.DungeonItems) PlaceInventoryItem(cell, remaining);
+                if (area == Area.Town) PersistTownProgress();
+            }
+            OpenGiveRecipientPicker(item, actor =>
+            {
+                if (!Available()) return;
+                GiveItemToRecipient(source, 0, source.DungeonItems[0], actor,
+                    () => Available() && source.ConsumeDungeonItem(0, item.Kind), Commit, Available);
+            });
+        }
         private void ExecuteTownGroundAction(Vector2Int cell, GroundItemAction action)
         {
             if (!_townDroppedItems.TryGetValue(cell, out var drop)) return;
@@ -279,7 +314,7 @@ namespace AzureDreamsReimagined
             var item = ItemUnderKoh(_groundItemPrompt.Value);
             if (item == null) return;
             var panel = new Rect(width * 0.5f - 145f, height * 0.5f - 60f, 290f,
-                _groundItemActionsOpen ? (CanRearmUnderKoh ? 172f : 140f) : 62f);
+                _groundItemActionsOpen ? (CanRearmUnderKoh ? 204f : 172f) : 62f);
             DrawDialogueFrame(panel);
             var title = DrawEquipmentCurseIcon(new Rect(panel.x + 10f, panel.y + 6f, panel.width - 20f, 23f), item);
             DrawHudText(title, InventoryItemName(item), InventoryNameStyle(item));
@@ -293,6 +328,7 @@ namespace AzureDreamsReimagined
             DrawGroundItemAction(panel, GroundItemAction.PutIntoBag, item.Kind == ItemKind.Coin
                 ? T("Collect gold", "Recolher ouro") : T("Pick up", "Pegar"));
             DrawGroundItemAction(panel, GroundItemAction.Lift, T("Lift", "Levantar"));
+            DrawGroundItemAction(panel, GroundItemAction.Give, T("Give to familiar", "Dar para o familiar"));
             if (CanRearmUnderKoh) DrawGroundItemAction(panel, GroundItemAction.Rearm, T("Rearm", "Reativar"));
         }
 

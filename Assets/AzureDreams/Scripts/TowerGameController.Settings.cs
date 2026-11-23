@@ -325,7 +325,6 @@ namespace AzureDreamsReimagined
         private void DrawSettingsPanel(float width, float height)
         {
             var panel = new Rect(0f, 0f, width, height);
-            DrawHudFill(panel, new Color(0.015f, 0.025f, 0.065f, 1f));
             DrawHudPanel(panel);
             if (GUI.Button(new Rect(panel.xMax - 27f, panel.y + 5f, 22f, 22f),
                 new GUIContent("X", T("Close", "Fechar"))))
@@ -334,7 +333,7 @@ namespace AzureDreamsReimagined
                 CloseSettings();
                 return;
             }
-            GUILayout.BeginArea(new Rect(panel.x + 24f, panel.y + 18f, panel.width - 48f, panel.height - 36f));
+            GUILayout.BeginArea(new Rect(panel.x + 24f, panel.y + 18f, panel.width - 48f, panel.height - 36f - WindowDesignSystem.Footer));
             string heading = _mappingOpen ? T("Input Mapping", "Mapeamento de controles") :
                 _graphicsSettingsOpen ? T("Graphics Effects", "Efeitos gráficos") : T("Settings", "Configurações");
             _settingsHeadingStyle ??= new GUIStyle(GUI.skin.label) { fontSize = 15, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
@@ -404,8 +403,8 @@ namespace AzureDreamsReimagined
         private string SettingsArtTooltip => T("Sets the game's appearance and music to the PSX version or recreated versions.",
             "Define a aparência e músicas do jogo entre versão PSX ou recriadas.");
 
-        private string SettingsAutorunTooltip => T("If on, Koh always runs in town.",
-            "Se estiver ligado, Koh sempre corre na cidade.");
+        private string SettingsAutorunTooltip => T("If on, Koh runs in town. Hold the Run button to walk.",
+            "Se estiver ligado, Koh corre na cidade. Segure o botão de correr para andar.");
 
         private void DrawSettingsTooltip(float width, float height)
         {

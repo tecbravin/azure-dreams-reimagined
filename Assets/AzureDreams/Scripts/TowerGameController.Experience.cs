@@ -361,10 +361,8 @@ namespace AzureDreamsReimagined
                 palette: FamiliarPalette(actor.Species, actor));
             view.transform.SetPositionAndRotation(previous.transform.position, previous.transform.rotation);
             _frogViews.Remove(previous);
-            previous.SetActive(false);
-            RemoveGenerated(previous);
             PresentFrogForm(view, actor);
-            SpawnFx(_fxMagic, view.transform.position);
+            StartCoroutine(PresentFamiliarEvolution(previous, view));
             return view;
         }
 

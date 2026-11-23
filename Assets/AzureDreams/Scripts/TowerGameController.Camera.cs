@@ -101,13 +101,17 @@ namespace AzureDreamsReimagined
             AnimateSecondTowerElevator();
             // Update the camera first so the lift uses this frame's screen axes.
             UpdateCameraFollow();
+            Shader.SetGlobalVector("_KohWallFadeTarget", _player && _player.activeInHierarchy && _gameCamera
+                ? new Vector4(_player.transform.position.x, _player.transform.position.y - TownActorFootOffset,
+                    _player.transform.position.z, 1f) : Vector4.zero);
             UpdateMinimapTerrain();
             DiscoverMinimapItems();
             OrientVisibleTrapMarkers();
             AnimateTrapMarkerEffects();
             UpdateTownKewne();
             PresentFamiliarEquipment();
-            if (_kohSprite) _kohSprite.PresentLift(_heldTownPot || _carriedView || _pickupView || HoldingBowlingBall);
+            if (_kohSprite) _kohSprite.PresentLift(_heldTownPot || _carriedView || _pickupView || HoldingBowlingBall || _cherrlWalkCarrying);
+            UpdateCherrlWalkCarry();
             PresentGroundPickup();
             if (_area == Area.Tower && _carriedView)
                 PlaceHeldView(_carriedView, _carriedFamiliar || _carriedMonster.Actor != null);
@@ -121,6 +125,7 @@ namespace AzureDreamsReimagined
                 bool paralyzed = _area == Area.Tower && KohIsParalyzed;
                 _kohSprite.PresentStatusTint(paralyzed, greenFlash);
                 _kohSprite.PresentParalysis(paralyzed);
+                _kohSprite.PresentReversal(_area == Area.Tower && _trapReversalUntil > _completedTowerTurns);
                 _kohSprite.PresentSleep(_wakingInBed || _kohCollapsePlaying || (_area == Area.Tower && KohIsAsleep));
                 var visibleEquipment = _area == Area.Tower && !IsFrog(_playerActor) ? _runInventory : null;
                 var weapon = visibleEquipment?.EquippedItem(PlayerEquipped, false);
@@ -192,7 +197,10 @@ namespace AzureDreamsReimagined
 
         private void UpdateTownKewne()
         {
-            bool hasKewne = _area == Area.Town && !InRaceCourse && _arcadePhase == ArcadePhase.Closed && _player && _kewnePrefab && _familiarDefinition &&
+            bool hasKewne = _area == Area.Town && !_changingInterior && !_wakingInBed && !_cherrlWalkActive &&
+                _theaterAct is not (TheaterAct.Comedy or TheaterAct.Results) &&
+                !_wakeUpVisitor && !_wakeUpVisitorArriving && !_wakeUpVisitorLeaving &&
+                !InRaceCourse && _arcadePhase == ArcadePhase.Closed && _player && _kewnePrefab && _familiarDefinition &&
                 ((_kewneDefinition && _familiarDefinition == _kewneDefinition) ||
                  _hatchedSpecies == (int)AzureDreams.Core.MonsterSpecies.KEWNE);
             if (!hasKewne)
@@ -230,6 +238,7 @@ namespace AzureDreamsReimagined
             var target = _player.transform.position;
             target.y -= TownActorFootOffset + (_area == Area.Town ? _townJumpHeight : 0f);
             target = FrameTheaterCamera(FrameBowlingCamera(FrameVisitorEvent(target)));
+            target = FrameRacetrackCamera(target);
             target = FrameRainPrologue(target);
 
             UpdateTowerCameraBackdrop();
@@ -267,7 +276,8 @@ namespace AzureDreamsReimagined
             // the retail framing at the existing 8-unit camera distance.
             _gameCamera.fieldOfView = tower ? 45f : 40f;
             _gameCamera.transform.SetPositionAndRotation(focus - rotation * Vector3.forward * _cameraFollowDistance + TowerQuakeShake(), rotation);
-            if (tower && UsesManagedTowerLayout) UpdateTowerWallCutaway();
+            // Nearby foreground walls now fade in the shader, keeping their
+            // geometry and collision intact instead of shortening the wall mesh.
         }
     }
 }

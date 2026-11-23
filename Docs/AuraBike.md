@@ -12,3 +12,18 @@ Jump/recoil regression validation: regular and booster speed caps 21/28.5; measu
 Reverse: holding an input opposite the current facing (dot product below -0.65) brakes to zero, then reverses without turning the facing. Reverse caps at half forward maximum and accelerates at half the forward rate. Animation uses absolute speed. Small height changes use the next support height as wheel clearance, allowing low flower/plant surfaces and bridge-to-shallow-water transitions; native deep-water, tall-obstacle and building restrictions remain.
 
 Reverse/terrain regression checks passed half-speed and half-acceleration caps, braking before reversal, facing retention, soft-contact steering, shallow bridge descent, low flower surfaces, and rejection of deep water/buildings. Existing jump and recoil regression checks also passed.
+`nSummon: press T while on foot in the town exterior after purchasing Aura Bike. The bike parks 1.25 units ahead in Koh's facing; if that position is obstructed it parks under Koh instead. Parking is saved. Disabled while riding or inside buildings.
+
+Acceleration dust: dedicated AuraBikeDust particle system and Resources/Shaders/AuraBikeDust shader. World-space overlapping soft tan puffs, up to 110 particles/sec, 0.5-0.95 second lifetime, growing and fading; maximum 256 particles. Emission follows actual acceleration and movement, reverses with travel, skips airborne/recoil/blocked/shallow-water cases, reuses one emitter and owned material per bike lifecycle.
+
+## Riding presentation correction
+
+Recovered rider table TOWN D_800D0C50: groups 225,224,223,224,225,226,227,226, with original sequence ticks. Tools/extract_aura_bike_rider.py installs Rider.bytes and RiderTimings.json. Koh now uses these riding poses instead of idle/walking body sprites and hides held weapons while mounted. Dismount restores normal presentation.
+
+Both vehicle and rider use the native direction order (left/front-left/front/front-right/right/back-right/back/back-left), with mirrored directions 3..5. World/camera-relative Koh octants map with (6 - octant) & 7. The bike uses the resident pixel density 48/1.8 PPU, and the extractor measures the lowest parked wheel pixel for a fixed sole correction (1 pixel in the regular bank). ActorSpriteDepth provides the same object-depth treatment as NPC billboards.
+
+Sound: native update_actor_movement_and_actions calls SD_Call(0x60A), at a period of 2..9 ticks based on speed. The original selector has been extracted to Sfx/Retail/60A.wav. Riding retriggers one dedicated voice at that cadence (absolute reverse speed), respects SFX volume, and stops on blocked movement, idle, dismount or mute. It does not accumulate overlapping one-shots.
+
+Reverse steering now aims the nose opposite the requested travel direction: left input while reversing turns the nose right, and right input turns it left. Half reverse speed/acceleration, braking, terrain clearance and recoil remain intact.
+
+Validation: runtime compilation; isolated GPU render of all eight rider/bike directions and matching mirroring/scale; reverse steering tests; prior collision, jump, reverse cap, terrain and summon probes. Audio verified separately in Play Mode. No full town saved-game playthrough was performed.

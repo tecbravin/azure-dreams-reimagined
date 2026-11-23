@@ -10,13 +10,15 @@ namespace AzureDreamsReimagined
 
         private MonsterTurnSpriteView _sprite;
         private ActorLocomotionView _locomotion;
+        private RetailTownResidentSpriteView _retail;
         private Rendering.CameraFacingSprite _billboard;
 
         private void Awake()
         {
-            _sprite = GetComponentInChildren<MonsterTurnSpriteView>();
+            _retail=GetComponent<RetailTownResidentSpriteView>();
+            _sprite = _retail ? null : GetComponentInChildren<MonsterTurnSpriteView>();
             _locomotion = GetComponent<ActorLocomotionView>();
-            _billboard = GetComponentInChildren<Rendering.CameraFacingSprite>();
+            _billboard = _retail ? null : GetComponentInChildren<Rendering.CameraFacingSprite>();
         }
 
         public bool HasSpoken { get; private set; }
@@ -43,6 +45,7 @@ namespace AzureDreamsReimagined
             direction.y = 0f;
             if (direction.sqrMagnitude <= 0.001f) return;
             transform.rotation = Quaternion.LookRotation(direction);
+            if(_retail) _retail.Present(direction,false);
             if (_sprite) _sprite.Face(new Vector2Int(Mathf.RoundToInt(direction.normalized.x), Mathf.RoundToInt(direction.normalized.z)));
             if (_billboard) _billboard.FaceMonster(direction);
         }
@@ -54,6 +57,7 @@ namespace AzureDreamsReimagined
             var direction = to - from;
             direction.y = 0f;
             bool walking = progress < 1f;
+            if (_retail) _retail.Present(direction,walking);
             if (_sprite) _sprite.PresentMovement(direction, progress, walking);
             if (_locomotion) _locomotion.Present(direction, progress, walking);
         }

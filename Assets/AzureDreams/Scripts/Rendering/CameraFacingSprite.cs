@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace AzureDreamsReimagined.Rendering
 {
+    [DefaultExecutionOrder(5)]
     public sealed class CameraFacingSprite : MonoBehaviour
     {
         private Vector3 _monsterDirection;

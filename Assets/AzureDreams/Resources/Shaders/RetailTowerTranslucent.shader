@@ -17,9 +17,11 @@ Shader "AzureDreams/RetailTowerTranslucent"
         Pass
         {
             CGPROGRAM
+            #pragma target 3.0
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+            #include "../../Shaders/KohWallFade.cginc"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -42,6 +44,7 @@ Shader "AzureDreams/RetailTowerTranslucent"
                 float2 uv : TEXCOORD0;
                 fixed4 color : COLOR;
                 float w : TEXCOORD1;
+                float3 world : TEXCOORD2;
             };
 
             v2f vert(appdata v)
@@ -56,6 +59,7 @@ Shader "AzureDreams/RetailTowerTranslucent"
                 }
                 o.pos = clipPos;
                 o.w = clipPos.w;
+                o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
                 // Pre-multiply by w; frag() divides back out by the recovered w_pixel, cancelling
                 // the hardware's perspective-correct interpolation down to screen-space-linear UVs.
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex) * lerp(1.0, clipPos.w, saturate(_PSXAffineWarpStrength));
@@ -70,6 +74,7 @@ Shader "AzureDreams/RetailTowerTranslucent"
                 clip(color.a - 0.5);
                 color.rgb *= i.color.rgb;
                 color.a = 0.5;
+                ClipKohWall(i.world, i.pos.xy);
                 return color;
             }
             ENDCG

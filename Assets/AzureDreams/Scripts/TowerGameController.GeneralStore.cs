@@ -193,7 +193,6 @@ namespace AzureDreamsReimagined
             if (_generalStorePage == GeneralStorePage.Closed) return;
             DrawHudPanel(new Rect(85, 86, 470, 301));
             GUI.Label(new Rect(103, 101, 320, 24), T("General Store · Fur", "Loja Geral · Fur"));
-            GUI.Label(new Rect(429, 101, 110, 24), _gold + " G");
             if (_generalStoreConfirm)
             {
                 var item = GeneralStock[_generalStoreStockRows[_generalStoreSelection]];

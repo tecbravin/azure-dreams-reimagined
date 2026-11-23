@@ -101,9 +101,22 @@ namespace AzureDreamsReimagined
             _ => element == Element.Water ? "Aqua Wheel" : element == Element.Wind ? "Earth Shaker" : "Mt. Burn"
         };
 
+        // Hidden species spells are not learned spells and cannot enable Mix Magic.
+        private int FamiliarMixSpell(ActorRecord actor)
+        {
+            if (actor == null) return 0;
+            for (int slot = 0; slot < MaxFamiliarSpells; slot++)
+            {
+                int spell = actor.U8(SpellSlotOffset(slot));
+                if (spell > 0 && MixtureFor(spell).Type != Mixture.None) return spell;
+            }
+            int native = UnitProfile(actor.Species)?.nativeSpellId ?? 0;
+            return native > 0 && MixtureFor(native).Type != Mixture.None ? native : 0;
+        }
+
         private void TryManualMixMagic(ActorRecord actor, GameObject view, Vector2Int from, Vector2Int origin, int spell)
         {
-            if (IsFamiliarLost(actor) || Distance(from, origin) > 2 || KohSkipsAction || IsFrog(_playerActor) || _carriedView ||
+            if (FamiliarMixSpell(actor) == 0 || !CanCastMagic(actor) || IsFamiliarLost(actor) || Distance(from, origin) > 2 || KohSkipsAction || IsFrog(_playerActor) || _carriedView ||
                 !FamiliarHasSight(from, origin)) return;
             var (type, cost) = MixtureFor(spell);
             if (type == Mixture.None) return;

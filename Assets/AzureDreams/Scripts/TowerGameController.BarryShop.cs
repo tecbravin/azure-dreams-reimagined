@@ -8,7 +8,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        private const byte RustySwordSubtype = 16;
+        internal const byte RustySwordSubtype = 16;
         private const byte FireStaffSubtype = 10;
         private const int BarryRowsPerPage = 5;
         private const byte ShopMedicinalHerbSubtype = 15;
@@ -26,7 +26,6 @@ namespace AzureDreamsReimagined
         private const string BarryFloor15StockMigrated = "blacksmith.stock.floor_15_initialized";
         private static readonly (byte Kind, byte Subtype, int Price, int Floor)[] BarryStock =
         {
-            (ItemKind.Sword, RustySwordSubtype, 100, 0),
             (ItemKind.Sword, 3, 200, 0),
             (ItemKind.Wand, FireStaffSubtype, 300, 0),
             (ItemKind.Herb, ShopMedicinalHerbSubtype, ShopMedicinalHerbPrice, 0),
@@ -263,7 +262,6 @@ namespace AzureDreamsReimagined
             if (_barryPage == BarryShopPage.Closed) return;
             DrawHudPanel(new Rect(85, 86, 470, 301));
             GUI.Label(new Rect(103, 101, 310, 24), _wreathItemSale ? T("Wreath - Sell Items", "Wreath - Vender Itens") : _hospitalHerbShop ? T("Hospital - Hush", "Hospital - Hush") : T("Blacksmith - Barry", "Ferraria - Barry"));
-            GUI.Label(new Rect(429, 101, 110, 24), _gold + "G");
             if (_barryPage == BarryShopPage.Temper) { DrawBarryTemper(); return; }
 
             if (_barryPage == BarryShopPage.Farewell)

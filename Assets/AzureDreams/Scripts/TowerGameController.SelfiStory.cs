@@ -472,13 +472,13 @@ namespace AzureDreamsReimagined
         }
 
         private bool SelfiPoolStory(NPCController npc) => SelfiTalkSequence(npc, null, // TOWN.BIN 0x535BC9.
-            new SelfiStoryLine(0, "Oh my, this is wonderful that I’m able to meet you like this, Mr. {name}.",
+            new SelfiStoryLine(5, "Oh my, this is wonderful that I’m able to meet you like this, Mr. {name}.",
                 "Minha nossa, que maravilha encontrar você assim, Sr. {name}."),
-            new SelfiStoryLine(0, "Personally, I’m more relaxed in my own pool at home.",
+            new SelfiStoryLine(5, "Personally, I’m more relaxed in my own pool at home.",
                 "Pessoalmente, fico mais à vontade na piscina lá de casa."),
-            new SelfiStoryLine(0, "I’m glad I came. I thought there might be a possibility of seeing you if I came.",
+            new SelfiStoryLine(5, "I’m glad I came. I thought there might be a possibility of seeing you if I came.",
                 "Ainda bem que vim. Achei que, se viesse, talvez encontrasse você."),
-            new SelfiStoryLine(0, "I’m sure this is a sign that we are to be together.\nYes, I’m certain.",
+            new SelfiStoryLine(5, "I’m sure this is a sign that we are to be together.\nYes, I’m certain.",
                 "Tenho certeza de que é um sinal de que devemos ficar juntos.\nSim, tenho certeza."));
 
         private void CompleteSelfiStory()
