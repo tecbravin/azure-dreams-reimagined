@@ -12,6 +12,7 @@ namespace AzureDreamsReimagined
 
         private TheaterAct _theaterAct;
         private int _comedyLine, _comedyMistakes;
+        private bool _comedySilentReaction;
         private float _theaterStarted, _comedyNextAt;
         private NPCController _theaterHost, _theaterPerformer;
         private Vector3 _theaterHome, _theaterStage, _theaterPlayerHome;
@@ -279,6 +280,7 @@ namespace AzureDreamsReimagined
         private void SetComedyBeat(ComedyBeat beat, float length, string speaker = null, string text = null)
         {
             _comedyBeat = beat;
+            _comedySilentReaction = false;
             _comedyBeatStarted = Time.unscaledTime;
             _comedyBeatLength = length;
             _comedySpeaker = speaker;
@@ -310,6 +312,7 @@ namespace AzureDreamsReimagined
                 if (string.IsNullOrEmpty(agree ? line.AgreeEn : line.TalkEn))
                 {
                     SetComedyBeat(line.Laugh ? ComedyBeat.Laugh : ComedyBeat.Next, line.Laugh ? 1.5f : 0.3f);
+                    _comedySilentReaction = true;
                     if (line.Laugh) StartComedyLaugh();
                     return;
                 }
@@ -767,13 +770,12 @@ namespace AzureDreamsReimagined
             if (!string.IsNullOrEmpty(text))
             {
                 DrawDialogueFrame(box, dialoguePole: true);
-                bool kohThanks = (_comedyBeat == ComedyBeat.Bow ||
-                    _theaterAct == TheaterAct.Results && !closing && _comedyMistakes < 3);
-                if (kohThanks && AssetMode.IsReimagined)
-                    DrawDialoguePortrait(StreamImage("Reimagined/Portraits/Dialogue/Koh_variant0_frame0.png"), box);
+                DrawComedyPortrait(box, speaker);
                 DrawSpeakerWindow(box, speaker);
                 DrawDialogueText(new Rect(box.x + 12f, box.y + 8f, box.width - 24f, 52f), text, text);
             }
+            else if (_comedySilentReaction && AssetMode.IsReimagined)
+                DrawDialoguePortrait(ComedyKohPortrait(2), box, rightAligned: true);
             DrawHudText(new Rect(width - 190f, 12f, 178f, 22f),
                 T($"Bonks: {_comedyMistakes}/3", $"Pancadas: {_comedyMistakes}/3"), _bodyStyle);
             if (_theaterAnswerReady && _comedyBeat == ComedyBeat.FonLine)
@@ -790,6 +792,35 @@ namespace AzureDreamsReimagined
             }
             if (_theaterAct == TheaterAct.Results && !closing) DrawContinuePrompt(box, FinishComedyDialogue);
             return true;
+        }
+        private Texture2D ComedyKohPortrait(int variant) =>
+            StreamPortrait($"Dialogue/Koh_variant{variant}_frame0") ??
+            (variant == 0 ? null : StreamPortrait("Dialogue/Koh_variant0_frame0"));
+
+        private void DrawComedyPortrait(Rect box, string speaker)
+        {
+            if (!AssetMode.IsReimagined) return;
+
+            bool finalLine = _comedyLine >= ComedyLines.Length && _comedyMistakes < 3;
+            if (finalLine)
+            {
+                var duo = StreamPortrait("Dialogue/comedy_variant0_frame0");
+                if (!duo) return;
+                Rect portrait = DialoguePortraitRect(duo, box);
+                if (portrait.width > box.width) portrait.size *= box.width / portrait.width;
+                portrait.x = box.center.x - portrait.width * .5f;
+                portrait.y = box.y - portrait.height;
+                if (Event.current.type == EventType.Repaint)
+                    GUI.DrawTexture(portrait, duo, ScaleMode.ScaleToFit);
+                return;
+            }
+
+            if (_comedyBeat == ComedyBeat.KohReply)
+                DrawDialoguePortrait(ComedyKohPortrait(IsCorrectReplyBeat() ? 2 : 1), box, rightAligned: true);
+            else if (speaker == FonName)
+                DrawDialoguePortrait(FonDialoguePortrait(_comedyBeatStarted), box);
+            else if (speaker == HeroName)
+                DrawDialoguePortrait(ComedyKohPortrait(0), box, rightAligned: true);
         }
     }
 }

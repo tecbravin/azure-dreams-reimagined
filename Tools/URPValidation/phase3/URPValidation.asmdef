@@ -1,0 +1,13 @@
+{
+    "name": "AzureDreams.URPValidation.Editor",
+    "references": [
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime",
+        "AzureDreams.Runtime",
+        "AzureDreams.URP"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": false
+}
