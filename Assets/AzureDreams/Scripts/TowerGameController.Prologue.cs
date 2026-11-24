@@ -12,6 +12,7 @@ namespace AzureDreamsReimagined
 
         private static readonly string[] PrologueFilms = { "JO001_WS.mp4", "JO002_WS.mp4", "JO003_WS.mp4", "LOP2_WS.mp4" };
         [SerializeField] private Texture2D _prologueAngel;
+        [SerializeField] private AudioClip _prologueBabyCry;
         private float _prologueAngelStarted;
         private Texture2D _prologueClouds;
         private const string AngelMusicCue = "AngelSong";
@@ -173,6 +174,7 @@ namespace AzureDreamsReimagined
             _prologueLine = 0;
             _prologueChoice = 0;
             _prologueStarted = Time.unscaledTime;
+            if (phase == Prologue.Birth && _prologueBabyCry) PlayRetailClip(_prologueBabyCry, 0.85f);
             if (phase is Prologue.Rain or Prologue.ReturnInRain)
             {
                 PresentRainCast();
@@ -196,7 +198,7 @@ namespace AzureDreamsReimagined
             // Textura grande (sprite sheet da animacao de voo) agora vem de StreamingAssets - pode nao
             // estar pronta neste frame; o timer so e sincronizado quando ela chega de verdade, em
             // DrawPrologueAngel (senao a animacao perderia os primeiros quadros do voo).
-            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Bilinear, TextureWrapMode.Repeat);
+            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Point, TextureWrapMode.Clamp);
             _prologueAngelStarted = Time.unscaledTime;
             SetPrologue(Prologue.Angel);
             PlayAreaMusic(AngelMusicCue);
@@ -428,7 +430,16 @@ namespace AzureDreamsReimagined
         private IEnumerator EnterPrologueHome()
         {
             StreamPortrait(WreathBirthPortrait);
+            StreamMediaSprite("Title/WreathResting", 96f);
+            StreamMediaSprite("Title/Newborn", 96f);
+            foreach (string actor in new[] { "Aunt", "Grandpa" })
+                foreach (string direction in new[] { "Front", "Side" })
+                    StreamMediaSprite($"Title/RainCast/{actor}{direction}", 48f);
             yield return LoadPrologueBedroom();
+            float deadline = Time.unscaledTime + 3f;
+            while (_prologueHomeLoaded && Time.unscaledTime < deadline &&
+                   (!StreamMediaSprite("Title/WreathResting", 96f) || !StreamMediaSprite("Title/Newborn", 96f)))
+                yield return null;
             if (_prologueHomeLoaded)
             {
                 _prologueStanding = _player.transform.position;
@@ -438,10 +449,10 @@ namespace AzureDreamsReimagined
                 ClearPrologueCast();
                 Vector3 bed = CellPosition(HomeLayoutCell(HouseIndex, WakeUpBeds[HouseIndex]));
                 _player.transform.position = bed;
-                PlacePrologueActor("guy", bed + Vector3.forward * 0.65f + Vector3.right * 0.15f);
+                PlacePrologueActor("guy", bed + Vector3.left * 0.85f + Vector3.back * 0.25f);
                 Vector3 mattress = bed + Vector3.up * MattressHeight;
-                PlaceBirthSprite("WreathResting", mattress);
-                PlaceBirthSprite("Newborn", mattress - Vector3.forward * 0.38f);
+                PlaceBirthSprite("WreathResting", mattress + Vector3.forward * 0.18f);
+                PlaceBirthSprite("Newborn", mattress + Vector3.right * 0.34f + Vector3.back * 0.24f);
                 UpdateCameraFollow(snap: true);
             }
             SetPrologue(Prologue.Birth);
@@ -459,13 +470,7 @@ namespace AzureDreamsReimagined
             pose.AddComponent<Rendering.CameraFacingSprite>();
             var renderer = pose.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
-            if (name == "WreathResting")
-            {
-                // The resting sprite uses a centered pivot. Raise it by half its
-                // height so her body lies on top of the mattress instead of
-                // intersecting the bed geometry.
-                pose.transform.position += Vector3.up * sprite.bounds.extents.y;
-            }
+            pose.transform.position += Vector3.up * sprite.bounds.extents.y;
         }
 
         private void ClearPrologueCast()
@@ -487,7 +492,7 @@ namespace AzureDreamsReimagined
         {
             var prefab = id == "jorda" && _prologuePriest ? _prologuePriest : FindStoryResidentPrefab(id);
             if (!prefab) return null;
-            var actor = Instantiate(prefab, RetailTownActorPosition(point, 0f), Quaternion.identity, _prologueCast.transform);
+            var actor = Instantiate(prefab, new Vector3(point.x, TownTerrainHeight(point), point.z), Quaternion.identity, _prologueCast.transform);
             foreach (var collider in actor.GetComponentsInChildren<Collider>()) collider.enabled = false;
             if (id == "guy")
             {
@@ -597,7 +602,8 @@ namespace AzureDreamsReimagined
         {
             Vector3 point = HouseIndex == 0 ? HomeLayoutPoint(0, new Vector3(x, 0f, z)) :
                 _prologueStanding + new Vector3(18.7f - x, 0f, z - 12f);
-            return RetailTownActorPosition(point, 0f);
+            point.y = TownTerrainHeight(point);
+            return point;
         }
 
         private Vector3 FrameRainPrologue(Vector3 target) =>
@@ -611,9 +617,9 @@ namespace AzureDreamsReimagined
             int page = _prologueLine;
             if (_prologue == Prologue.Rain)
             {
-                SetRainPose(ref _prologueAunt, "Aunt", page < AuntNoticesNecklace ? "Back" : "Side",
+                SetRainPose(ref _prologueAunt, "Aunt", page < AuntNoticesNecklace ? "Front" : "Side",
                     RainCastPosition(18.1f, 9.9f), 1.42f);
-                SetRainPose(ref _prologueGrandpa, "Grandpa", "Back", RainCastPosition(17.25f, 10.55f), 1.25f);
+                SetRainPose(ref _prologueGrandpa, "Grandpa", "Front", RainCastPosition(17.25f, 10.55f), 1.25f);
                 return;
             }
 
@@ -625,7 +631,7 @@ namespace AzureDreamsReimagined
             bool auntFacesWreath = page >= AuntAnswersGrandpa && (page < RainDoorReaction || page >= AuntAfterGuysReturn);
             SetRainPose(ref _prologueAunt, "Aunt", auntFacesWreath ? "Side" : "Front",
                 RainCastPosition(17.9f, 11.5f), 1.42f);
-            string grandpaPose = page == 0 ? "Side" : page < AuntAnswersGrandpa ? "Back" :
+            string grandpaPose = page == 0 ? "Side" : page < AuntAnswersGrandpa ? "Front" :
                 page < RainDoorReaction ? "Side" : "Front";
             SetRainPose(ref _prologueGrandpa, "Grandpa", grandpaPose, RainCastPosition(20.75f, 12.8f),
                 1.25f, flipX: page == 0);
@@ -648,7 +654,7 @@ namespace AzureDreamsReimagined
             }
             actor.sprite = sprite;
             actor.flipX = flipX;
-            actor.transform.position = position;
+            actor.transform.position = position + Vector3.up * (height * 0.5f + 0.025f);
             actor.transform.localScale = Vector3.one * (height / sprite.bounds.size.y);
         }
 
@@ -984,20 +990,20 @@ namespace AzureDreamsReimagined
         {
             if (Event.current.type != EventType.Repaint) return;
             bool angelWasMissing = !_prologueAngel;
-            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Bilinear, TextureWrapMode.Repeat);
+            if (!_prologueAngel) _prologueAngel = StreamMediaTexture("Title/AngelOpeningFrames", FilterMode.Point, TextureWrapMode.Clamp);
             if (!_prologueAngel) return;
             if (angelWasMissing) _prologueAngelStarted = Time.unscaledTime; // reinicia o timer so quando a textura chega (streaming assincrono)
 
             const int frameCount = 10;
-            const float flapFramesPerSecond = 12f;
-            const float hoverPeriod = 1.3f;
+            const float flapFramesPerSecond = 9f;
+            const float hoverPeriod = 2.8f;
             float age = Time.unscaledTime - _prologueAngelStarted;
             int frame = Mathf.FloorToInt(age * flapFramesPerSecond) % frameCount;
             float frameUvWidth = 1f / frameCount;
             float frameAspect = _prologueAngel.width * frameUvWidth / _prologueAngel.height;
             float height = Mathf.Min(screen.height * 0.42f, screen.width * 0.65f / frameAspect);
             float width = height * frameAspect;
-            float hover = Mathf.Sin(age * (2f * Mathf.PI / hoverPeriod)) * screen.height * 0.042f;
+            float hover = Mathf.Sin(age * (2f * Mathf.PI / hoverPeriod)) * screen.height * 0.012f;
             var bounds = new Rect(screen.center.x - width * 0.5f,
                 screen.height * 0.37f - height * 0.5f + hover, width, height);
             Color previousColor = GUI.color;

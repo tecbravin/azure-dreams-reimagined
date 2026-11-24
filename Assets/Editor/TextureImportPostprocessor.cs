@@ -6,6 +6,12 @@ public class TextureImportPostprocessor : AssetPostprocessor
 {
     private const string AngelFramesPath = "Assets/AzureDreams/Resources/Title/AngelOpeningFrames.png";
 
+    // Read/Write keeps a second, CPU-side copy of every texture in memory (WebGL heap).
+    // Only textures that runtime code reads with GetPixels need it: the casino reel page
+    // is redrawn like VRAM (TowerGameController.Casino.SetupSlotRoom matches "page_134").
+    private static bool NeedsCpuReadback(string path) =>
+        System.IO.Path.GetFileName(path).StartsWith("page_134", System.StringComparison.Ordinal);
+
     void OnPreprocessTexture()
     {
         TextureImporter importer = (TextureImporter)assetImporter;
@@ -36,7 +42,7 @@ public class TextureImportPostprocessor : AssetPostprocessor
             importer.wrapMode = TextureWrapMode.Repeat;
             importer.mipmapEnabled = false;
             importer.sRGBTexture = true;
-            importer.isReadable = true;
+            importer.isReadable = false;
             importer.npotScale = TextureImporterNPOTScale.None;
             importer.maxTextureSize = 32;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
@@ -62,7 +68,7 @@ public class TextureImportPostprocessor : AssetPostprocessor
             importer.wrapMode = TextureWrapMode.Repeat;
             importer.mipmapEnabled = true;
             importer.sRGBTexture = true;
-            importer.isReadable = true;
+            importer.isReadable = NeedsCpuReadback(assetPath);
             importer.npotScale = TextureImporterNPOTScale.ToNearest;
             importer.maxTextureSize = 1024;
             importer.textureCompression = TextureImporterCompression.Compressed;

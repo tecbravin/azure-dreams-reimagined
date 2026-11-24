@@ -121,11 +121,11 @@ namespace AzureDreamsReimagined
         }
 
         /// <summary>sample_terrain_surface_height: lowest surface (z down) at or below <paramref name="minimum"/>; 0x400 if none.</summary>
-        public int SampleSurface(ushort[] kinds, short[] values, int x, int y, int minimum)
+        public int SampleSurface(ushort[] kinds, short[] values, int x, int y, int minimum, int sideLength = RetailTowerFloor.Size)
         {
             int localX = x & 0x3F, localY = y & 0x3F;
-            int cellX = Mathf.Clamp((x & 0xFFFF) >> 6, 0, 63), cellY = Mathf.Clamp((y & 0xFFFF) >> 6, 0, 63);
-            int index = cellX + (cellY << 6);
+            int cellX = Mathf.Clamp((x & 0xFFFF) >> 6, 0, sideLength - 1), cellY = Mathf.Clamp((y & 0xFFFF) >> 6, 0, sideLength - 1);
+            int index = cellX + cellY * sideLength;
             int best = 0x400;
             int kind = kinds[index];
             if (kind == 0 || kind >= Count) return best;
@@ -179,9 +179,17 @@ namespace AzureDreamsReimagined
         private static readonly int[] OffsetY = { 0, 64, 64, 64, 0, -64, -64, -64 };
         private static readonly int[] Turns = { 2, -2 };
 
-        public readonly ushort[] Kind = new ushort[Size * Size];
-        public readonly short[] Value = new short[Size * Size];
-        public readonly ushort[] Flags = new ushort[Size * Size];
+        public readonly int SideLength;
+        public readonly ushort[] Kind;
+        public readonly short[] Value;
+        public readonly ushort[] Flags;
+        private RetailTowerFloor(int sideLength = Size)
+        {
+            SideLength = sideLength;
+            Kind = new ushort[sideLength * sideLength];
+            Value = new short[Kind.Length];
+            Flags = new ushort[Kind.Length];
+        }
         public readonly List<RectInt> Rooms = new();
         public readonly List<(int Kind, Vector2Int Cell)> Markers = new();
         public readonly List<(Vector2Int Cell, int Size)> Dens = new();
@@ -209,12 +217,12 @@ namespace AzureDreamsReimagined
             return Math.Abs(floor * 7) % 24;
         }
 
-        public static RetailTowerFloor CreateRandom(int floor, int seed, bool eventFloor)
+        public static RetailTowerFloor CreateRandom(int floor, int seed, bool eventFloor, bool largerFloor = false)
         {
             var geometry = RetailTowerGeometry.Load("geometry_29");
             if (geometry == null) return null;
             int variant = FloorVariant(floor);
-            var result = new RetailTowerFloor
+            var result = new RetailTowerFloor(largerFloor ? Size * 2 : Size)
             {
                 Geometry = geometry,
                 TextureSet = $"tiles_v{variant:00}",
@@ -264,7 +272,7 @@ namespace AzureDreamsReimagined
         }
 
         // ---------------------------------------------------------------- queries
-        public int Index(int x, int y) => (x + (y << 6)) & 4095;
+        public int Index(int x, int y) => (x + y * SideLength) & (Kind.Length - 1);
 
         private int WalkSurface(int x,int y)
         {
@@ -272,7 +280,7 @@ namespace AzureDreamsReimagined
             // Doorway emits four orientations, five variants each (79..98).
             // All contain an overhead lintel; sample the passage floor beneath it.
             int minimum=Kind[index] is >=79 and <=98 ? -Value[index]-TowerFloorManager.TerrainBlockHeight : -0x400;
-            return Geometry.SampleSurface(Kind,Value,(x<<6)+0x20,(y<<6)+0x20,minimum);
+            return Geometry.SampleSurface(Kind,Value,(x<<6)+0x20,(y<<6)+0x20,minimum,SideLength);
         }
 
         /// <summary>Surface height at the cell centre in the port's convention (positive up, 64 per tile).</summary>
@@ -284,7 +292,7 @@ namespace AzureDreamsReimagined
 
         public bool IsWalkable(int x, int y)
         {
-            if (x <= 0 || y <= 0 || x >= Size - 1 || y >= Size - 1) return false;
+            if (x <= 0 || y <= 0 || x >= SideLength - 1 || y >= SideLength - 1) return false;
             int i = Index(x, y);
             if (Kind[i] == 0 || (Flags[i] & 0x8408) != 0) return false;
             return WalkSurface(x,y) < 0x200;
@@ -300,8 +308,8 @@ namespace AzureDreamsReimagined
         // apply_state_index_tile_masks / apply_tile_flags_to_rectangle with the tileset's per-tile flag table.
         private void ApplyTileFlags()
         {
-            for (int y = 0; y < Size; y++)
-            for (int x = 0; x < Size; x++)
+            for (int y = 0; y < SideLength; y++)
+            for (int x = 0; x < SideLength; x++)
             {
                 int i = Index(x, y);
                 int flags = Kind[i] < Geometry.Count ? Geometry.Aux[Kind[i]] : 0;
@@ -312,9 +320,9 @@ namespace AzureDreamsReimagined
                 if ((flags & 2) != 0)
                 {
                     if (x > 0) Flags[i - 1] |= 1;
-                    if (x < Size - 1) Flags[i + 1] |= 1;
-                    if (y > 0) Flags[i - Size] |= 1;
-                    if (y < Size - 1) Flags[i + Size] |= 1;
+                    if (x < SideLength - 1) Flags[i + 1] |= 1;
+                    if (y > 0) Flags[i - SideLength] |= 1;
+                    if (y < SideLength - 1) Flags[i + SideLength] |= 1;
                 }
                 if ((flags & 0x80) != 0) Flags[i] |= 0x8000;
                 if ((flags & 0x40) != 0) Flags[i] |= 0x40;
@@ -324,9 +332,9 @@ namespace AzureDreamsReimagined
         // initialize_grid_border_cells
         private void WriteGridBorder()
         {
-            for (int e = 0; e < Size; e++)
+            for (int e = 0; e < SideLength; e++)
             {
-                foreach (int i in new[] { Index(0, e), Index(Size - 1, e), Index(e, 0), Index(e, Size - 1) })
+                foreach (int i in new[] { Index(0, e), Index(SideLength - 1, e), Index(e, 0), Index(e, SideLength - 1) })
                 {
                     Kind[i] = 3;
                     Value[i] = 0x400;
@@ -384,7 +392,7 @@ namespace AzureDreamsReimagined
             private ushort[] K => _f.Kind;
             private short[] V => _f.Value;
             private ushort[] F => _f.Flags;
-            private int I(int x, int y) => (x + (y << 6)) & 4095;
+            private int I(int x, int y) => _f.Index(x, y);
 
             public void Run()
             {
@@ -402,7 +410,7 @@ namespace AzureDreamsReimagined
             }
 
             // ---- terrain sampling helpers (tile.c / generate.c)
-            private int Surface(int x, int y, int minimum) => _g.SampleSurface(K, V, x, y, minimum);
+            private int Surface(int x, int y, int minimum) => _g.SampleSurface(K, V, x, y, minimum, _f.SideLength);
 
             private int OffsetKind(int x, int y, int d, out int flags)
             {
@@ -676,7 +684,7 @@ namespace AzureDreamsReimagined
 
             private int FirstMark(int x0, int y0, int w, int h)
             {
-                if (y0 <= 0 || x0 <= 0 || y0 + h >= 64 || x0 + w >= 64) return -1;
+                if (y0 <= 0 || x0 <= 0 || y0 + h >= _f.SideLength || x0 + w >= _f.SideLength) return -1;
                 for (int y = y0; y < y0 + h; y++)
                 for (int x = x0; x < x0 + w; x++)
                     if (F[I(x, y)] != 0) return (short)F[I(x, y)];
@@ -975,7 +983,7 @@ namespace AzureDreamsReimagined
                 else
                 {
                     for (int k = 0; k < n; k++) flags[k] = (Next() & 3) != 0 ? 1 : 0;
-                    int cellW = 64 / cols, cellH = 64 / rows;
+                    int cellW = _f.SideLength / cols, cellH = _f.SideLength / rows;
                     for (int oy = 0; oy < rows; oy++)
                     for (int ox = 0; ox < cols; ox++)
                     {
@@ -1013,7 +1021,7 @@ namespace AzureDreamsReimagined
                 {
                     _ready = 1;
                     var room = _rooms[0];
-                    room.X = 2; room.Y = 2; room.Active = 1; room.W = 60; room.H = 60;
+                    room.X = 2; room.Y = 2; room.Active = 1; room.W = _f.SideLength - 4; room.H = _f.SideLength - 4;
                     room.Tint = Next() & 0x60;
                     Region(room);
                 }
@@ -1021,14 +1029,14 @@ namespace AzureDreamsReimagined
                 {
                     for (int k = 0; k < n; k++)
                         if (_rooms[k].Active != 0) Region(_rooms[k]);
-                    for (int y = 1; y < 63; y++)
-                    for (int x = 1; x < 63; x++)
+                    for (int y = 1; y < _f.SideLength - 1; y++)
+                    for (int x = 1; x < _f.SideLength - 1; x++)
                         if (K[I(x, y)] == 0) V[I(x, y)] = 16384;
                     int current = (Next() & 0xFFFF) % n;
                     int dir = Next() & 6;
                     int dv = dir;
                     int tries = 1024;
-                    for (int guard = 0; guard < 4096; guard++)
+                    for (int guard = 0; guard < K.Length; guard++)
                     {
                         int i = 0;
                         while (i < n)
@@ -1079,7 +1087,7 @@ namespace AzureDreamsReimagined
                         }
                     }
                 }
-                MaskRect(0, 0, 64, 64, 0);
+                MaskRect(0, 0, _f.SideLength, _f.SideLength, 0);
                 UpdateAreaTiles();
                 return 0;
             }

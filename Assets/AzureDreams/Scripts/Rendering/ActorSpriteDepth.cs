@@ -10,6 +10,13 @@ namespace AzureDreamsReimagined.Rendering
         private static readonly int Anchor=Shader.PropertyToID("_ActorDepthAnchor");
         private static readonly int DepthNormal=Shader.PropertyToID("_ActorDepthNormal");
         private static readonly Dictionary<Material,Material> Materials=new();
+        // Object.name allocates a new string on every read; LateUpdate runs per sprite, per frame.
+        private static readonly Dictionary<Shader,string> ShaderNames=new();
+        private static string ShaderName(Shader shader)
+        {
+            if(!ShaderNames.TryGetValue(shader,out var name)) ShaderNames[shader]=name=shader.name;
+            return name;
+        }
         private readonly List<SpriteRenderer> _sprites=new();
         private MaterialPropertyBlock _properties;
         private TownInteriorScene _interior;
@@ -86,7 +93,7 @@ namespace AzureDreamsReimagined.Rendering
                 if(!sprite || !sprite.enabled || !sprite.sprite) continue;
                 var source=sprite.sharedMaterial;
                 if(!source || !source.shader) continue;
-                string shaderName=source.shader.name;
+                string shaderName=ShaderName(source.shader);
                 if(shaderName!="AzureDreams/ActorSpriteDepth")
                 {
                     if(shaderName!="Sprites/Default" && shaderName!="AzureDreams/KohColorKey") continue;
@@ -113,6 +120,7 @@ namespace AzureDreamsReimagined.Rendering
         {
             foreach(var material in Materials.Values) if(material) Destroy(material);
             Materials.Clear();
+            ShaderNames.Clear();
         }
     }
 }

@@ -15,6 +15,98 @@ Shader "AzureDreams/PSX Indexed CLUT"
         [HideInInspector] _BlendOp ("Blend operation", Float) = 0
         [HideInInspector] _BlendAlpha ("ABR source weight", Float) = 0.5
     }
+    // URP (HLSL). The Built-in SubShader below stays as the fallback.
+    // URP only draws one pass per LightMode, so OPAQUE_TEXELS is tagged SRPDefaultUnlit and
+    // STP_TEXELS UniversalForward; URP draws SRPDefaultUnlit first, preserving the pass order.
+    SubShader
+    {
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" "RenderPipeline"="UniversalPipeline" }
+        Cull Off
+        ZTest [_ZTest]
+        HLSLINCLUDE
+        #include "Assets/AzureDreams/Shaders/AzureURP.hlsl"
+        TEXTURE2D(_IndexTex); SAMPLER(sampler_IndexTex);
+        TEXTURE2D(_ClutTex); SAMPLER(sampler_ClutTex);
+        CBUFFER_START(UnityPerMaterial)
+        float4 _IndexTex_TexelSize, _ClutTex_TexelSize;
+        float4 _Color;
+        float _PaletteRow, _SemiTransparency, _BlendAlpha, _AbrMode;
+        float _ZTest, _ZWrite, _SrcBlend, _DstBlend, _BlendOp;
+        CBUFFER_END
+        struct AzVertex { float4 vertex : POSITION; float2 uv : TEXCOORD0; float4 color : COLOR; };
+        struct AzPixel { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float4 color : COLOR; float w : TEXCOORD1; };
+        AzPixel vert(AzVertex v)
+        {
+            AzPixel o;
+            float4 clipPos = AzurePsxSnap(TransformObjectToHClip(v.vertex.xyz), _PSXVertexSnapResolution);
+            o.pos = clipPos;
+            o.w = clipPos.w;
+            o.uv = v.uv * AzureAffineFactor(clipPos.w, _PSXAffineWarpStrength);
+            o.color = v.color * _Color;
+            return o;
+        }
+        float4 ReadPixel(AzPixel i, out float blendPixel)
+        {
+            float2 uv = i.uv / AzureAffineFactor(i.w, _PSXAffineWarpStrength);
+            float2 size = _IndexTex_TexelSize.zw;
+            float2 pixel = min(floor(saturate(uv) * size), size - 1);
+            float index = floor(SAMPLE_TEXTURE2D(_IndexTex, sampler_IndexTex, (pixel + 0.5) / size).r * 255.0 + 0.5);
+            clip(15.5 - index);
+            float row = clamp(floor(_PaletteRow + 0.5), 0, 15);
+            float2 paletteUV = (float2(index, row) + 0.5) * _ClutTex_TexelSize.xy;
+            float2 bytes = floor(SAMPLE_TEXTURE2D(_ClutTex, sampler_ClutTex, paletteUV).rg * 255.0 + 0.5);
+            float word = bytes.x + bytes.y * 256.0;
+            clip(word - 0.5); // ONLY 0x0000 disappears. 0x8000 is real black.
+            float stp = floor(word / 32768.0);
+            blendPixel = step(0.5, _SemiTransparency) * stp;
+            float3 rgb = fmod(floor(word / float3(1.0, 32.0, 1024.0)), 32.0) / 31.0;
+            #ifndef UNITY_COLORSPACE_GAMMA
+                rgb = AzureGammaToLinear(rgb);
+            #endif
+            return float4(saturate(rgb * i.color.rgb), 1.0);
+        }
+        float4 fragOpaque(AzPixel i) : SV_Target
+        {
+            float blendPixel;
+            float4 c = ReadPixel(i, blendPixel);
+            clip(0.5 - blendPixel);
+            return c;
+        }
+        float4 fragBlend(AzPixel i) : SV_Target
+        {
+            float blendPixel;
+            float4 c = ReadPixel(i, blendPixel);
+            clip(blendPixel - 0.5);
+            c.a = _BlendAlpha;
+            return c;
+        }
+        ENDHLSL
+        Pass
+        {
+            Name "OPAQUE_TEXELS"
+            Tags { "LightMode"="SRPDefaultUnlit" }
+            ZWrite [_ZWrite]
+            Blend Off
+            HLSLPROGRAM
+            #pragma target 3.0
+            #pragma vertex vert
+            #pragma fragment fragOpaque
+            ENDHLSL
+        }
+        Pass
+        {
+            Name "STP_TEXELS"
+            Tags { "LightMode"="UniversalForward" }
+            ZWrite Off
+            Blend [_SrcBlend] [_DstBlend], One OneMinusSrcAlpha
+            BlendOp [_BlendOp], Add
+            HLSLPROGRAM
+            #pragma target 3.0
+            #pragma vertex vert
+            #pragma fragment fragBlend
+            ENDHLSL
+        }
+    }
     SubShader
     {
         Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" }

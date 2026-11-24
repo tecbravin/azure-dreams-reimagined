@@ -214,7 +214,9 @@ namespace AzureDreamsReimagined
                 if (IsPoolWaterSurface(i) && material.HasProperty("_Opacity"))
                 {
                     material.SetFloat("_Opacity", .58f);
-                    material.SetFloat("_ZWrite", 1f);
+                    material.SetFloat("_ZWrite", 0f);
+                    material.SetFloat("_SurfaceDepthBias", -2f);
+                    material.SetFloat("_SmoothFlow", 1f);
                     material.SetVector("_Flow", new Vector4(0f, 6f, 0f, 0f));
                 }
                 assigned[i] = material;

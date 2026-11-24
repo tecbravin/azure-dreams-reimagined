@@ -1003,8 +1003,11 @@ namespace AzureDreamsReimagined
                     return FonConstructionStory(npc, flags.IsFlagSet(TheaterPlanFlag));
                 case "theater_door_fon" when StoryBuilding("theater"):
                     return FonTheaterDoorStory(npc);
-                case "construction_silver" or "silver" when !StoryBuilding("circuit"):
+                case "silver" when !StoryBuilding("circuit"):
                     return SilverConstructionStory(npc, flags.IsFlagSet(CircuitPlanFlag));
+                case "silver":
+                    return SilverTalk(npc, "How are the Nyuels doing out at the track?",
+                        "Como estão os Nyuels lá na pista?");
                 case "construction_pen" when !StoryBuilding("arcade"):
                     return PenConstructionStory(npc, flags.IsFlagSet(ArcadePlanFlag));
             }
@@ -1025,11 +1028,7 @@ namespace AzureDreamsReimagined
             }
             else if (StoryStage("vivian") >= 4)
                 SpawnStoryResident("dar", "construction_fon", "Fon", new Vector2Int(87, 70));
-            if (!StoryBuilding("circuit"))
-            {
-                SpawnStoryResident("dar", "construction_silver", "Silver", new Vector2Int(21, 45));
-                SpawnSilverTownNyuels();
-            }
+            SpawnSilverTownNyuels();
         }
 
         // TOWN.BIN 0x5EA806–0x5EAFC3.

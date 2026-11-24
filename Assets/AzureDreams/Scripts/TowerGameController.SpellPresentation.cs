@@ -54,7 +54,7 @@ namespace AzureDreamsReimagined
         {
             public Vector3 From, To;
             public Vector3? ReflectFrom;
-            public bool FireWall;
+            public bool FireWall, CycloneSmoke;
             public int Family;
             public Color Color;
             public string Impact;
@@ -269,7 +269,7 @@ namespace AzureDreamsReimagined
         }
 
         private void QueueSpellCue(int spell, int element, Vector2Int origin, Vector2Int destination,
-            Vector2Int? reflectFrom = null)
+            Vector2Int? reflectFrom = null, bool cycloneSmoke = false)
         {
             int family = spell > 0 ? SpellFamily(spell) : 17;
             // Familias 0,1,2,3,6,7,8,9,13,14,15,16 sao todas magias elementais (fogo/agua/vento)
@@ -313,7 +313,7 @@ namespace AzureDreamsReimagined
             _spellCues.Add(new SpellCue
             {
                 From = from, To = to, ReflectFrom = reflection, Family = family, Color = color, Impact = impact,
-                FireWall = spell == FireWallSpell,
+                FireWall = spell == FireWallSpell, CycloneSmoke = cycloneSmoke,
                 Travel = Mathf.Clamp(0.30f + distance * 0.08f, 0.30f, 1.05f)
             });
         }
@@ -345,6 +345,15 @@ namespace AzureDreamsReimagined
                     continue;
                 }
                 waiting = true;
+                if (cue.CycloneSmoke)
+                {
+                    if (!cue.HitShown && elapsed >= hitTime)
+                    {
+                        cue.HitShown = true;
+                        StartCoroutine(AnimateImpactBurst(cue.To, new Color(0.80f, 0.86f, 0.82f), swirl: true));
+                    }
+                    continue;
+                }
                 if (!cue.Orb) cue.Orb = CreateSpellOrb(cue.Color);
                 float t = Mathf.Clamp01((elapsed - charge) / cue.Travel);
                 Vector3 position = Vector3.Lerp(cue.From, cue.To, t);
@@ -502,7 +511,7 @@ namespace AzureDreamsReimagined
             StartCoroutine(AnimateImpactBurst(center, color));
         }
 
-        private System.Collections.IEnumerator AnimateImpactBurst(Vector3 center, Color color)
+        private System.Collections.IEnumerator AnimateImpactBurst(Vector3 center, Color color, bool swirl = false)
         {
             const int count = 5;
             var puffs = new SpriteRenderer[count];
@@ -515,7 +524,7 @@ namespace AzureDreamsReimagined
                 puffs[i].sortingOrder = 4;
             }
 
-            const float duration = 0.24f;
+            float duration = swirl ? 0.42f : 0.24f;
             for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
             {
                 if (!puffs[0]) yield break;
@@ -524,10 +533,13 @@ namespace AzureDreamsReimagined
                 color.a = 1f - progress;
                 for (int i = 0; i < count; i++)
                 {
-                    float angle = i * Mathf.PI * 2f / count;
+                    float angle = (i / (float)count + (swirl ? progress * 0.75f : 0f)) * Mathf.PI * 2f;
                     var puff = puffs[i];
                     puff.transform.position = center + spread * (right * Mathf.Cos(angle) + up * Mathf.Sin(angle));
-                    puff.transform.localScale = Vector3.one * Mathf.Lerp(0.19f, 0.10f, progress);
+                    if (swirl) puff.transform.position += Vector3.up * (0.16f * progress);
+                    puff.transform.localScale = Vector3.one * (swirl
+                        ? Mathf.Lerp(0.16f, 0.25f, progress)
+                        : Mathf.Lerp(0.19f, 0.10f, progress));
                     puff.color = color;
                 }
                 yield return null;

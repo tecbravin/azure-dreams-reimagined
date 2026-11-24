@@ -48,6 +48,8 @@ namespace AzureDreamsReimagined
         private static readonly int[] FirstFloorLayouts = { 3, 6, 7, 8 };
 
         /// <summary>Whether the current floor has been generated.</summary>
+        public int SideLength => Dungeon?.SideLength ?? CoreDungeon.GridSize;
+
         public bool IsGenerated => Dungeon != null;
 
         /// <summary>
@@ -128,7 +130,9 @@ namespace AzureDreamsReimagined
             else
             {
                 // Floor 31 carries the Beldo vision record, which disables the den room (dungeon_floor_flags).
-                retail = RetailTowerFloor.CreateRandom(floorNumber, seed, floorNumber == 31);
+                bool largerFloor = floorNumber >= TowerGameController.SecondTowerFirstFloor &&
+                    new System.Random(seed ^ (floorNumber * 7919) ^ 0x351A).Next(100) < 15;
+                retail = RetailTowerFloor.CreateRandom(floorNumber, seed, floorNumber == 31, largerFloor);
                 entrance = exit = default;
                 if (retail != null && !PickRetailStairs(retail, seed, out entrance, out exit)) retail = null;
             }
@@ -165,11 +169,11 @@ namespace AzureDreamsReimagined
 
         private void BuildFromRetail(RetailTowerFloor retail, int floor, int seed, Vector2Int entrance, Vector2Int exit)
         {
-            int size = CoreDungeon.GridSize;
+            int size = retail.SideLength;
             CurrentFloor = floor;
             Seed = seed;
             Retail = retail;
-            Dungeon = new CoreDungeon(seed, floor);
+            Dungeon = new CoreDungeon(seed, floor, size);
             Heights = new int[size, size];
             for (int y = 0; y < size; y++)
                 for (int x = 0; x < size; x++)
@@ -363,7 +367,7 @@ namespace AzureDreamsReimagined
                 if (Dungeon == null ||
                     Dungeon.Grid[StairsDownCell.y, StairsDownCell.x] != CoreDungeon.TileType.StairsDown ||
                     Dungeon.Grid[StairsUpCell.y, StairsUpCell.x] != CoreDungeon.TileType.StairsUp) return false;
-                var seen = new bool[CoreDungeon.GridSize, CoreDungeon.GridSize];
+                var seen = new bool[SideLength, SideLength];
                 var queue = new Queue<Vector2Int>();
                 queue.Enqueue(StairsDownCell);
                 seen[StairsDownCell.y, StairsDownCell.x] = true;
@@ -391,7 +395,7 @@ namespace AzureDreamsReimagined
         public bool IsWalkable(int x, int y)
         {
             if (Dungeon == null) return false;
-            if (x < 0 || y < 0 || x >= CoreDungeon.GridSize || y >= CoreDungeon.GridSize) return false;
+            if (x < 0 || y < 0 || x >= SideLength || y >= SideLength) return false;
             var t = Dungeon.Grid[y, x];
             return t == CoreDungeon.TileType.Floor || t == CoreDungeon.TileType.Corridor ||
                    t == CoreDungeon.TileType.StairsDown || t == CoreDungeon.TileType.StairsUp ||
@@ -405,7 +409,7 @@ namespace AzureDreamsReimagined
         public int GroundHeight(int x, int y)
         {
             if (Heights == null) return 0;
-            if (x < 0 || y < 0 || x >= CoreDungeon.GridSize || y >= CoreDungeon.GridSize) return 0;
+            if (x < 0 || y < 0 || x >= SideLength || y >= SideLength) return 0;
             return Heights[y, x];
         }
 
@@ -413,7 +417,7 @@ namespace AzureDreamsReimagined
         public void SetHeight(int x, int y, int height)
         {
             if (Heights == null) return;
-            if (x < 0 || y < 0 || x >= CoreDungeon.GridSize || y >= CoreDungeon.GridSize) return;
+            if (x < 0 || y < 0 || x >= SideLength || y >= SideLength) return;
             Heights[y, x] = height;
         }
 
@@ -456,9 +460,9 @@ namespace AzureDreamsReimagined
             StairsDownCell = Vector2Int.zero;
             StairsUpCell = Vector2Int.zero;
             if (Dungeon == null) return;
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
+            for (int y = 0; y < SideLength; y++)
             {
-                for (int x = 0; x < CoreDungeon.GridSize; x++)
+                for (int x = 0; x < SideLength; x++)
                 {
                     if (Dungeon.Grid[y, x] == CoreDungeon.TileType.StairsDown) StairsDownCell = new Vector2Int(x, y);
                     if (Dungeon.Grid[y, x] == CoreDungeon.TileType.StairsUp) StairsUpCell = new Vector2Int(x, y);
@@ -470,8 +474,8 @@ namespace AzureDreamsReimagined
         {
             _openCells.Clear();
             if (Dungeon == null) return;
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-                for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < SideLength; y++)
+                for (int x = 0; x < SideLength; x++)
                     if (IsWalkable(x, y)) _openCells.Add(new Vector2Int(x, y));
         }
 

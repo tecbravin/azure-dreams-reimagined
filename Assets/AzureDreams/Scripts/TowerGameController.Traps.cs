@@ -78,6 +78,7 @@ namespace AzureDreamsReimagined
             BuildTowerFloor();
             _towerRun.CompleteFloorTransition();
             _message = T($"You fall through to {TowerFloorLabel(_floor)}.", $"Você cai para o {TowerFloorLabel(_floor)}.");
+            AddKewneFloorHint();
         }
         private float _trapAnimationSpeed = TowerAnimationSpeed;
         private const int TerrainTrapTurns = 20;
@@ -273,12 +274,7 @@ namespace AzureDreamsReimagined
             if (!sprung) return;
             RefreshTrapMarker(cell);
             var effect = TrapAt(cell).Effect;
-            PlayRetailSound(effect switch
-            {
-                TowerTrapEffect.Frog => RetailSfx.Frog,
-                TowerTrapEffect.Crack or TowerTrapEffect.Upheaval => RetailSfx.TerrainShift,
-                _ => RetailSfx.Trap
-            });
+            PlayRetailSound(TrapActivationSound(effect));
             switch (effect)
             {
                 case TowerTrapEffect.Rust:
@@ -335,6 +331,19 @@ namespace AzureDreamsReimagined
                 _message = T($"Koh steps on a trap ({name}).", $"Koh pisa em uma armadilha ({name}).");
             }
         }
+
+        // Match the retail SD_Call selectors used by the original trap handlers.
+        // 0x611 is the confusion effect, not a universal trap cue.
+        private static RetailSfx TrapActivationSound(TowerTrapEffect effect) => effect switch
+        {
+            TowerTrapEffect.Chaos => RetailSfx.TrapConfusion,
+            TowerTrapEffect.Slam => RetailSfx.FallingWeight,
+            TowerTrapEffect.Frog => RetailSfx.Frog,
+            TowerTrapEffect.Slow => RetailSfx.TrapSlow,
+            TowerTrapEffect.Crack or TowerTrapEffect.Upheaval => RetailSfx.TerrainShift,
+            TowerTrapEffect.Warp => RetailSfx.TrapWarp,
+            _ => RetailSfx.TrapTrigger
+        };
 
         private string TrapDisplayName(TowerTrapEffect effect) => effect switch
         {

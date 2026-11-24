@@ -25,29 +25,30 @@ namespace AzureDreamsReimagined
 
         private Texture2D StreamPortrait(string path) => string.IsNullOrEmpty(path) ? null : StreamImage("Portraits/" + path + ".png");
 
-        private Texture2D StreamImage(string path)
+        private Texture2D StreamImage(string path, bool exactPath = false)
         {
             if (string.IsNullOrEmpty(path)) return null;
-            if (_streamedPortraits.TryGetValue(path, out var portrait))
+            string key = exactPath ? "gallery:" + path : path;
+            if (_streamedPortraits.TryGetValue(key, out var portrait))
             {
-                if (_portraitLru.Last?.Value != path)
+                if (_portraitLru.Last?.Value != key)
                 {
-                    _portraitLru.Remove(path);
-                    _portraitLru.AddLast(path);
+                    _portraitLru.Remove(key);
+                    _portraitLru.AddLast(key);
                 }
                 return portrait;
             }
 
-            if (_portraitRequests.Count < 2 && !_portraitRequests.ContainsKey(path) &&
-                (!_portraitRetryAfter.TryGetValue(path, out float retry) || Time.unscaledTime >= retry))
+            if (_portraitRequests.Count < 2 && !_portraitRequests.ContainsKey(key) &&
+                (!_portraitRetryAfter.TryGetValue(key, out float retry) || Time.unscaledTime >= retry))
             {
                 // Classic has no original for redesigned-only images: show nothing instead of a broken request.
-                string resolved = AssetMode.ResolveMedia(path);
+                string resolved = exactPath ? path : AssetMode.ResolveMedia(path);
                 if (resolved == null) return null;
                 var request = UnityWebRequestTexture.GetTexture(StreamedMediaUrl(resolved), nonReadable: true);
                 request.timeout = 15;
-                _portraitRequests.Add(path, request);
-                StartCoroutine(LoadPortrait(path, request));
+                _portraitRequests.Add(key, request);
+                StartCoroutine(LoadPortrait(key, request));
             }
             return null;
         }

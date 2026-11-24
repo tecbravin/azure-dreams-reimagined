@@ -110,8 +110,8 @@ namespace AzureDreamsReimagined
             var cells = new List<Vector2Int>();
             const CoreDungeon.TileFlag occupied = CoreDungeon.TileFlag.HasItem | CoreDungeon.TileFlag.HasTrap |
                 CoreDungeon.TileFlag.HasActor | CoreDungeon.TileFlag.Blocked | CoreDungeon.TileFlag.Door;
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-            for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < _floor.SideLength; y++)
+            for (int x = 0; x < _floor.SideLength; x++)
             {
                 var cell = new Vector2Int(x, y);
                 var terrain = _floor.Dungeon.Grid[y, x];
@@ -191,8 +191,8 @@ namespace AzureDreamsReimagined
         {
             var dungeon = _floor.Dungeon;
             Array.Clear(dungeon.FloorItems, 0, dungeon.FloorItems.Length);
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-            for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < _floor.SideLength; y++)
+            for (int x = 0; x < _floor.SideLength; x++)
                 dungeon.Flags[y, x] &= unchecked((ushort)~(ushort)CoreDungeon.TileFlag.HasItem);
             _cellToSlot.Clear();
         }
@@ -352,7 +352,7 @@ namespace AzureDreamsReimagined
         {
             if (_floor.Dungeon == null) return null;
             RegisterExistingItems();
-            if (cell.x < 0 || cell.y < 0 || cell.x >= CoreDungeon.GridSize || cell.y >= CoreDungeon.GridSize) return null;
+            if (cell.x < 0 || cell.y < 0 || cell.x >= _floor.SideLength || cell.y >= _floor.SideLength) return null;
             if ((_floor.Dungeon.GetFlags(cell.x, cell.y) & (ushort)CoreDungeon.TileFlag.HasItem) == 0) return null;
             if (!_cellToSlot.TryGetValue(cell, out int slot)) return null;
 
@@ -398,7 +398,7 @@ namespace AzureDreamsReimagined
             EnsureFloor();
             if (_traps.TryGetValue(cell, out var trap)) return trap;
             if (_floor.Dungeon == null || cell.x < 0 || cell.y < 0 ||
-                cell.x >= CoreDungeon.GridSize || cell.y >= CoreDungeon.GridSize ||
+                cell.x >= _floor.SideLength || cell.y >= _floor.SideLength ||
                 _floor.Dungeon.Grid[cell.y, cell.x] != CoreDungeon.TileType.Trap) return null;
             trap = new TowerTrapState();
             _traps.Add(cell, trap);
@@ -454,8 +454,8 @@ namespace AzureDreamsReimagined
             EnsureFloor();
             if (_floor.Dungeon == null) return;
             var usedSlots = new HashSet<int>(_cellToSlot.Values);
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-            for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < _floor.SideLength; y++)
+            for (int x = 0; x < _floor.SideLength; x++)
             {
                 var cell = new Vector2Int(x, y);
                 if (_cellToSlot.ContainsKey(cell)) continue;

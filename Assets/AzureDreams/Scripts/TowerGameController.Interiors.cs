@@ -259,6 +259,13 @@ namespace AzureDreamsReimagined
                     if (cell.x < 0) continue;
                     position = RetailTownActorPosition(CellPosition(cell), 0f);
                 }
+                // Keep the race service in its authored spot after Silver moves home.
+                if (room.interiorId == RaceLobby && placedId == "race_silver")
+                {
+                    prefab = FindStoryResidentPrefab("dar");
+                    if (!prefab) continue;
+                    placedId = "race_host";
+                }
                 var instance = Spawn(prefab, cell, prefab.name);
                 instance.transform.position = position;
                 var npc = instance.GetComponent<NPCController>();

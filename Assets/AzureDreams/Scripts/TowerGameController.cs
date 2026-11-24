@@ -559,7 +559,7 @@ namespace AzureDreamsReimagined
                     !_inventoryOpen && _inventoryMenu == InventoryMenu.Closed && _faceAction?.IsPressed() != true && _interact?.IsPressed() != true &&
                     _interact?.WasReleasedThisFrame() != true &&
                     ((runHeld && TowerRoomsClearForRunning(_playerCell, _playerCell)) ||
-                     !_creatures.Exists(creature => Distance(creature.Cell, _playerCell) <= CombatMovementRadius)))
+                     !AnyCreatureWithin(_playerCell, CombatMovementRadius)))
                     MoveInTower(ReadMovementDirection());
                 return;
             }
@@ -1301,6 +1301,7 @@ namespace AzureDreamsReimagined
 
         private void ClearGenerated()
         {
+            ReleaseFractalBackdrop();
             ResetCherrlWalk();
             ResetHomeSlide();
             _familiarEvolutionVersion++;
@@ -1328,6 +1329,7 @@ namespace AzureDreamsReimagined
             _tutorialKewne = null;
             _townKewne = null;
             ResetMinimap();
+            ReleaseTowerTiles(_area == Area.Tower ? TowerTileLabel(_floor) : null);
             ResetCarry();
             ResetPush();
             _checkpointMenu = CheckpointMenu.Closed;

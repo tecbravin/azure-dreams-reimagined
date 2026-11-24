@@ -203,6 +203,7 @@ namespace AzureDreamsReimagined
                     new Vector3(0.17f, height, 0.4f), stone);
             if (!addThreshold || width == 0) return;
 
+            var earlyTowerTiles = EarlyTowerTiles;
             var v = new List<Vector3>();
             var indices = new List<int>();
             var uv = new List<Vector2>();
@@ -212,10 +213,10 @@ namespace AzureDreamsReimagined
                 var left = origin + gate.transform.right * (i - span * 0.5f);
                 var right = left + gate.transform.right;
                 AppendFloorQuad(v, indices, uv, left - forward * 1.2f, left, right, right - forward * 1.2f);
-                if (_earlyTowerTiles) SetTowerTileUvs(uv, 68, 324, 24, 384);
+                if (earlyTowerTiles) SetTowerTileUvs(uv, 68, 324, 24, 384);
             }
             CreateManagedMesh("Tower entrance threshold", v, indices, uv,
-                _earlyTowerTiles ? _earlyTowerTiles : _groundMaterial, false);
+                earlyTowerTiles ? earlyTowerTiles : _groundMaterial, false);
         }
 
         private IEnumerator PlayTowerArrival()

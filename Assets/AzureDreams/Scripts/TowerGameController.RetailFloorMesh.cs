@@ -21,8 +21,11 @@ namespace AzureDreamsReimagined
         private readonly List<Material> _retailWaterMaterials = new();
         private Mesh _retailBackdropMesh;
         private Material _retailBackdropMaterial;
+        private Texture2D _fractalBackdropTexture;
+        private int _retailBackdropPackage;
         private int _retailBackdropTicks;
         private float _retailBackdropClock;
+        private float _fractalBackdropAngle;
         private int _retailBackdropSpeed = 2;
         private int _retailBackdropMode;
         private int _retailWaterOffset;
@@ -112,8 +115,8 @@ namespace AzureDreamsReimagined
             var uvs = new Vector2[4];
             var waterUvs = new Vector2[4];
 
-            for (int y = 0; y < RetailTowerFloor.Size; y++)
-            for (int x = 0; x < RetailTowerFloor.Size; x++)
+            for (int y = 0; y < retail.SideLength; y++)
+            for (int x = 0; x < retail.SideLength; x++)
             {
                 int index = retail.Index(x, y);
                 int kind = retail.Kind[index];
@@ -194,7 +197,7 @@ namespace AzureDreamsReimagined
         {
             if (nz < 0 || (nx & 0x0FFF) != 0 || (ny & 0x0FFF) != 0 || (nx == 0 && ny == 0)) return false;
             int ox = x + Math.Sign(nx), oy = y + Math.Sign(ny);
-            if (ox < 0 || oy < 0 || ox >= RetailTowerFloor.Size || oy >= RetailTowerFloor.Size) return false;
+            if (ox < 0 || oy < 0 || ox >= retail.SideLength || oy >= retail.SideLength) return false;
             int neighbor = retail.Index(ox, oy);
             int flags = retail.Flags[neighbor];
             if ((flags & 0xC1) != 0) return false;
@@ -293,10 +296,13 @@ namespace AzureDreamsReimagined
             texture.wrapMode = TextureWrapMode.Clamp;
             if (_retailBackdropMaterial) Destroy(_retailBackdropMaterial);
             _retailBackdropMaterial = new Material(shader) { name = "Retail tower backdrop", mainTexture = texture };
+            _retailBackdropPackage = package;
+            RefreshFractalBackdrop();
             _retailBackdropSpeed = speed;
             _retailBackdropMode = InSecondTower ? 2 : 0;
             _retailBackdropTicks = 0;
             _retailBackdropClock = 0f;
+            _fractalBackdropAngle = 0f;
             _retailBackdropMesh = new Mesh { name = "Retail tower backdrop" };
             _retailBackdropMesh.MarkDynamic();
             _ownedManagedFloorMeshes.Add(_retailBackdropMesh);
@@ -310,6 +316,74 @@ namespace AzureDreamsReimagined
             _towerBackdrop = backdrop.transform;
             RebuildRetailBackdrop();
             return true;
+        }
+
+        private void ReleaseFractalBackdrop()
+        {
+            if (_fractalBackdropTexture) Destroy(_fractalBackdropTexture);
+            _fractalBackdropTexture = null;
+        }
+
+        private void RefreshFractalBackdrop()
+        {
+            if (!_retailBackdropMaterial || _area != Area.Tower) return;
+            if (AssetMode.IsReimagined)
+            {
+                if (!_fractalBackdropTexture) _fractalBackdropTexture = CreateFractalBackdrop();
+                _retailBackdropMaterial.mainTexture = _fractalBackdropTexture;
+                return;
+            }
+
+            _retailBackdropMaterial.mainTexture =
+                AssetMode.Load<Texture2D>($"Tower/Retail/backdrop_{_retailBackdropPackage:00}");
+            ReleaseFractalBackdrop();
+        }
+
+        private Texture2D CreateFractalBackdrop()
+        {
+            const int size = 256;
+            const int iterations = 48;
+            // A separate RNG keeps artwork independent of encounters and loot.
+            var random = new System.Random(unchecked((_towerFloorLayout?.Seed ?? 0) ^ (_floor * 7919)));
+            float phase = (float)(random.NextDouble() * Mathf.PI * 2f);
+            float hue = (float)random.NextDouble();
+            float cx = -0.65f + 0.22f * Mathf.Cos(phase);
+            float cy = 0.22f * Mathf.Sin(phase);
+            var palette = new Color32[iterations + 1];
+            for (int i = 0; i < iterations; i++)
+            {
+                float intensity = Mathf.Lerp(0.14f, 0.88f, Mathf.Sqrt(i / (float)iterations));
+                palette[i] = Color.HSVToRGB(Mathf.Repeat(hue + i * 0.032f, 1f), 0.73f, intensity);
+            }
+            palette[iterations] = new Color32(9, 8, 22, 255);
+
+            var axis = new float[size];
+            for (int i = 0; i < size; i++) axis[i] = 1.55f * Mathf.Cos(i * Mathf.PI * 2f / (size - 1));
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float zx = axis[x], zy = axis[y];
+                int i = 0;
+                while (i < iterations && zx * zx + zy * zy < 4f)
+                {
+                    float nextX = zx * zx - zy * zy + cx;
+                    zy = 2f * zx * zy + cy;
+                    zx = nextX;
+                    i++;
+                }
+                pixels[y * size + x] = palette[i];
+            }
+
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                name = "Tower Julia fractal",
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            return texture;
         }
 
         /// <summary>
@@ -388,6 +462,14 @@ namespace AzureDreamsReimagined
 
         private void AdvanceRetailBackdrop(float deltaTime)
         {
+            if (_fractalBackdropTexture)
+            {
+                const float degreesPerSecond = 1.5f;
+                float direction = InSecondTower ? 1f : -1f;
+                _fractalBackdropAngle = Mathf.Repeat(_fractalBackdropAngle +
+                    direction * degreesPerSecond * Mathf.Max(0f, deltaTime), 360f);
+                _towerBackdrop.localRotation = Quaternion.Euler(0f, _fractalBackdropAngle, 0f);
+            }
             _retailBackdropClock += Mathf.Max(0f, deltaTime) * RetailFrameRate;
             int ticks = Mathf.FloorToInt(_retailBackdropClock);
             if (ticks == 0) return;
@@ -397,7 +479,7 @@ namespace AzureDreamsReimagined
             _towerBackdrop.localPosition = Vector3.zero;
             float angle = _retailBackdropMode == 2 ? 0f :
                 ((_retailBackdropTicks * _retailBackdropSpeed) & 0xFF) * (360f / 4096f);
-            _towerBackdrop.localRotation = Quaternion.Euler(0f, angle, 0f);
+            if (!_fractalBackdropTexture) _towerBackdrop.localRotation = Quaternion.Euler(0f, angle, 0f);
             if (_retailBackdropMode == 2) RebuildRetailBackdrop();
         }
     }

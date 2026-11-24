@@ -20,6 +20,12 @@ namespace AzureDreamsReimagined
                             : "Welcome to the amusement center.\nDo you want to play ”Hit the Mole”?",
                         ArcadeBatting ? "Bem-vindo ao centro de diversão.\nQuer jogar no centro de rebatidas?" : "Bem-vindo ao centro de diversão.\nQuer jogar Acerte a Toupeira?",
                         (T("Yes, let me try.", "Sim, quero tentar."), () => AskArcadeInstructions(npc)),
+                        (ArcadeBatting ? T("Go to Hit the Mole", "Ir para Acerte a Toupeira") :
+                            T("Go to the batting center", "Ir para o centro de rebatidas"), () =>
+                            {
+                                if (!_changingInterior && _arcadePhase == ArcadePhase.Closed)
+                                    StartCoroutine(LoadInterior(ArcadeBatting ? ArcadeMoleRoom : ArcadeBattingRoom));
+                            }),
                         (T("No, not today.", "Hoje não."), () => StoryTalk(npc,
                             "We’ll see you again next time.", "Esperamos vê-lo na próxima vez.")));
                 case "arcade_bet": return ArcadeBetDialogue(npc);

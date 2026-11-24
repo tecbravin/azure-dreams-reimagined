@@ -1,6 +1,6 @@
 {
   "assembly": "Assets/Plugins/AzureDreams.Core.dll",
-  "sha256": "0d8fd08aa6afc4252fb0382f9106f202a894477d2179505db76884aae25d5a99",
+  "sha256": "7402345396c86c526a2caf5ae7ac5b60072c25046029a93e65949c7d90334f7c",
   "framework": "netstandard2.1",
   "build_property": "UnityPort=true",
   "excluded": [
@@ -14,7 +14,7 @@
     "AudioSystem.cs": "6c8eed21245d15263ace058e46141d09c8356c9a2080be0d7fafac65f7b98362",
     "Combat.cs": "275cd7c32ca76b2657c5121d8c101c4ee9d1b408e7f77c62dd042b66badc07c9",
     "DirStep.cs": "b8fd1fb0cdea5c2d98f867439e7a85d6d4ea0d8e22eb329dc7e6fdbd3a17cbe6",
-    "DungeonGenerator.cs": "9ee2488ad48daccaca7a5b6bdbeeab1cedc829f4b1b75ee6ba17c0ffb2546b12",
+    "DungeonGenerator.cs": "ec33c7dfd8535d28701df9aa21ddbf7af64fb1aa1db72143a99a6d5530c2be34",
     "DungeonItemEntry.cs": "07643f26ad0820afd5e717d98b444649547ad23d7bb40490c589cec3102f26af",
     "FamiliarSystem.cs": "95cf1eb79431fde5bc3053e9f21cd51c9f735c8640b7062a9df1e2c6b8c63ad7",
     "InitialStatsTable.cs": "d4bf1911756adab8ba37933419d0b55ff4450202ef4c0a5b4980882531dc10d7",
@@ -27,7 +27,7 @@
     "Rng.cs": "93c69c4a4c392975cef5af2510e761a80e04d989eb26f475a599c9974c65d435",
     "SpellRecord.cs": "22accbdde9e97b648644f09a2ec20b685932e18f6b35d5d930fbcc4bdf407467",
     "TownSystem.cs": "4f9d2c48c13932f03a011525a9734110afa8cbb357e9b645a231e12647b6847f",
-    "TurnSystem.cs": "28e6154dfe85d7d90f89b8d9b4585aa2926514771f0ae14d268aa432e4ea88e4",
+    "TurnSystem.cs": "de7e13ef5a8542668ab4b80fa145144eafda2a89d85d252e9d9741198dec6116",
     "UiSystem.cs": "e04a93f50e3ae872077ae7ec6da2a57813f148029309046546adaa9a0c96d7bc"
   }
 }

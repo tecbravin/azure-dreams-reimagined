@@ -7,6 +7,50 @@ Shader "AzureDreams/PSX Vertex Lit"
         _LightDir ("Light Direction", Vector) = (0.3, 0.8, 0.5, 0)
         _Ambient ("Ambient", Range(0, 1)) = 0.3
     }
+    // URP (HLSL). Lighting comes from the material's _LightDir, not scene lights, as in the
+    // Built-in SubShader below (kept as the fallback).
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" "RenderPipeline" = "UniversalPipeline" }
+        LOD 100
+        Pass
+        {
+            Tags { "LightMode" = "UniversalForward" }
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Assets/AzureDreams/Shaders/AzureURP.hlsl"
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            float4 _Color;
+            float4 _LightDir;
+            float _Ambient;
+            CBUFFER_END
+            struct AzVertex { float4 vertex : POSITION; float3 normal : NORMAL; float2 uv : TEXCOORD0; };
+            struct AzPixel { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float3 lighting : TEXCOORD1; float w : TEXCOORD2; };
+            AzPixel vert(AzVertex v)
+            {
+                AzPixel o;
+                float4 clipPos = AzurePsxSnap(TransformObjectToHClip(v.vertex.xyz), _PSXVertexSnapResolution);
+                o.pos = clipPos;
+                o.w = clipPos.w;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * AzureAffineFactor(clipPos.w, _PSXAffineWarpStrength);
+                float3 worldNormal = TransformObjectToWorldNormal(v.normal);
+                float ndotl = max(0, dot(worldNormal, normalize(_LightDir.xyz)));
+                o.lighting = _Ambient + (1.0 - _Ambient) * ndotl;
+                return o;
+            }
+            half4 frag(AzPixel i) : SV_Target
+            {
+                float2 uv = i.uv / AzureAffineFactor(i.w, _PSXAffineWarpStrength);
+                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                col.rgb *= i.lighting;
+                return col * _Color;
+            }
+            ENDHLSL
+        }
+    }
     SubShader
     {
         Tags { "RenderType" = "Opaque" "Queue" = "Geometry" }

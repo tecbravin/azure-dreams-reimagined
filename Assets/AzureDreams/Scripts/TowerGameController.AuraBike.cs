@@ -59,6 +59,8 @@ namespace AzureDreamsReimagined
         }
         private Vector2 _auraBikeHeading = Vector2.down;
 
+        private const string AuraBikeReturnParkingKey = "aura_bike.return_parking";
+
         private bool AuraBikeParkingOpen(Vector3 position)
         {
             if (float.IsNaN(position.x) || float.IsNaN(position.z) || float.IsInfinity(position.x) || float.IsInfinity(position.z) ||
@@ -77,10 +79,28 @@ namespace AzureDreamsReimagined
                     for (int lane = 0; lane < 4; lane++)
                     {
                         position = new Vector3(left - lane * .75f, 0f, front + distance * (side == 0 ? 1f : -1f));
-                        if (AuraBikeParkingOpen(position)) return true;
+                        if (AuraBikeHomeGroundOpen(position)) return true;
                     }
+            Rect bounds = home?.Bounds ?? Rect.MinMaxRect(48f, 44f, 63f, 58f);
+            for (int distance = 1; distance <= 6; distance++)
+                for (float x = bounds.xMin; x <= bounds.xMax; x += 1f)
+                {
+                    position = new Vector3(x, 0f, bounds.yMax + distance);
+                    if (AuraBikeHomeGroundOpen(position)) return true;
+                }
             position = default;
             return false;
+        }
+
+        private bool AuraBikeHomeGroundOpen(Vector3 position)
+        {
+            const float radius = .55f;
+            Rect bounds = BuiltKohHome()?.Bounds ?? Rect.MinMaxRect(48f, 44f, 63f, 58f);
+            if (position.x > bounds.xMin - radius && position.x < bounds.xMax + radius &&
+                position.z > bounds.yMin - radius && position.z < bounds.yMax + radius) return false;
+            return AuraBikeParkingOpen(position) &&
+                float.IsNegativeInfinity(HomeRoofGround(position)) &&
+                float.IsNegativeInfinity(TownObstacleTop(position, radius));
         }
 
         private void EnsureAuraBike()
@@ -92,13 +112,14 @@ namespace AzureDreamsReimagined
             ResetAuraBikeBump();
             Vector3 position = new(TownSaveVariables.GetFloat("aura_bike.x"), 0f, TownSaveVariables.GetFloat("aura_bike.z"));
             Rect homeBounds = BuiltKohHome()?.Bounds ?? Rect.MinMaxRect(48f, 44f, 63f, 58f);
-            bool relocate = !TownSaveVariables.HasValue("aura_bike.x") || !TownSaveVariables.HasValue("aura_bike.z") ||
+            bool relocate = TownSaveVariables.GetBool(AuraBikeReturnParkingKey) || !TownSaveVariables.HasValue("aura_bike.x") || !TownSaveVariables.HasValue("aura_bike.z") ||
                 homeBounds.Contains(new Vector2(position.x, position.z)) || !AuraBikeParkingOpen(position);
             if (relocate)
             {
                 if (!TryAuraBikeHomeParking(out position)) return;
                 TownSaveVariables.SetFloat("aura_bike.x", position.x);
                 TownSaveVariables.SetFloat("aura_bike.z", position.z);
+                TownSaveVariables.SetBool(AuraBikeReturnParkingKey, false);
                 TownSaveVariables.Save();
             }
             position.y = TownTerrainHeight(position) + .04f;

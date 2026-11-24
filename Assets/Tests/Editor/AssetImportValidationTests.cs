@@ -9,7 +9,7 @@ public class AssetImportValidationTests
     private const string AudioFolder = "Assets/AzureDreams/Audio";
 
     [Test]
-    public void AlbedoTextures_Exist_AndAreReadable()
+    public void AlbedoTextures_Exist_AndAreReadableOnlyWhenReadAtRuntime()
     {
         if (!AssetDatabase.IsValidFolder(TextureFolder))
         {
@@ -28,7 +28,10 @@ public class AssetImportValidationTests
 
             var importer = AssetImporter.GetAtPath(path) as TextureImporter;
             Assert.IsNotNull(importer, "Importer missing for: " + path);
-            Assert.IsTrue(importer.isReadable, "Texture should be readable for ActorView: " + path);
+            // Only the casino reel page is read with GetPixels at runtime; a CPU copy of the
+            // rest would double their memory (see TextureImportPostprocessor.NeedsCpuReadback).
+            bool readAtRuntime = Path.GetFileName(path).StartsWith("page_134", System.StringComparison.Ordinal);
+            Assert.AreEqual(readAtRuntime, importer.isReadable, "Unexpected Read/Write setting: " + path);
         }
     }
 

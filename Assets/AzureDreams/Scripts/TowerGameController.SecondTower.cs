@@ -70,7 +70,7 @@ namespace AzureDreamsReimagined
         {
             var previous = GUI.color;
             if (InSecondTower) GUI.color = previous * SecondTowerLabelTint;
-            DrawHudText(rect, HudFloorText, _bodyStyle);
+            DrawHudText(rect, CachedHudFloorText(), _bodyStyle);
             GUI.color = previous;
         }
 

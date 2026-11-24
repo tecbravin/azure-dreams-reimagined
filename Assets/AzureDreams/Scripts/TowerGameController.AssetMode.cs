@@ -23,6 +23,7 @@ namespace AzureDreamsReimagined
             ReleaseReimaginedItemSprites();
             ReloadLevelUpMusic();
             RestartAreaMusicForAssetMode();
+            if (_towerBackdrop) RefreshFractalBackdrop();
         }
 
         private static string AssetModeLabel(ArtStyle style) => style == ArtStyle.Classic

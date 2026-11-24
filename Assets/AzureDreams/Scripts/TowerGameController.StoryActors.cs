@@ -84,7 +84,7 @@ namespace AzureDreamsReimagined
         }
 
         private static bool IsSilverResident(string id) =>
-            id is "silver" or "construction_silver" or "race_silver";
+            id == "silver";
 
         private static void ConfigureSilverPresentation(NPCController npc)
         {
@@ -238,12 +238,15 @@ namespace AzureDreamsReimagined
                     }
                     break;
                 case CarpenterInterior:
-                    if (!StoryBuilding("arcade"))
-                        SpawnStoryResident("dar", "construction_pen", "Pen", default);
+                    if (!StoryBuilding("arcade") && !FindStoryActor("construction_pen"))
+                    {
+                        string penPrefab = FindStoryResidentPrefab("pen") ? "pen" : "dar";
+                        SpawnStoryResident(penPrefab, "construction_pen", "Pen", default);
+                    }
                     if (StoryStage("vivian") >= 4 && !StoryBuilding("theater"))
                         SpawnStoryResident("dar", "carpenter_fon", "Fon", default);
                     break;
-                case SilverHouse when !StoryBuilding("circuit"):
+                case SilverHouse:
                     SpawnStoryResident("dar", "silver", "Silver", default);
                     break;
                 case CasinoRoom or CasinoSlotsRoom when StoryStage("vivian") == 4 && !TownSaveVariables.GetBool(VivianCasinoVisitKey):

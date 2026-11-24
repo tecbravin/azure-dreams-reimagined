@@ -5,13 +5,7 @@ namespace AzureDreamsReimagined
 {
     public sealed partial class TowerGameController
     {
-        [SerializeField] private Material _earlyTowerTiles;
-        [SerializeField] private Material _thirdFloorTiles;
-        [SerializeField] private Material _fourthFifthFloorTiles;
-        [SerializeField] private Material _sixthSeventhFloorTiles;
-        [SerializeField] private Material _eighthNinthFloorTiles;
-        [SerializeField] private Material _tenthEleventhFloorTiles;
-        [SerializeField] private Material[] _upperTowerTiles;
+        // Floor tile sheets load on demand: see TowerGameController.TowerTileMaterials.cs.
 
         // Coordinates are 32 px cells in the retail sheets. The right-hand block is the backdrop.
         private static readonly (Vector2Int Room, Vector2Int Passage, Vector2Int Wall)[] UpperTowerTiles =
@@ -224,12 +218,7 @@ namespace AzureDreamsReimagined
                 if (_managedFloorMesh) return;
             }
             int upperIndex = _floor is >= 12 and <= 39 ? (_floor - 12) / 2 : -1;
-            Material retailTiles = _floor <= 2 ? _earlyTowerTiles :
-                _floor == 3 ? _thirdFloorTiles : _floor <= 5 ? _fourthFifthFloorTiles :
-                _floor <= 7 ? _sixthSeventhFloorTiles : _floor <= 9 ? _eighthNinthFloorTiles :
-                _floor <= 11 ? _tenthEleventhFloorTiles :
-                _floor == TowerFloorRules.BeldoFloor && (_upperTowerTiles?.Length ?? 0) > 0 ? _upperTowerTiles[^1] :
-                upperIndex >= 0 && upperIndex < (_upperTowerTiles?.Length ?? 0) ? _upperTowerTiles[upperIndex] : null;
+            Material retailTiles = TowerTilesForFloor(_floor);
             bool retail = retailTiles != null;
             var floorVertices = new List<Vector3>();
             var floorIndices = new List<int>();

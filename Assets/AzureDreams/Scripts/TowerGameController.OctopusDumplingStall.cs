@@ -45,9 +45,10 @@ namespace AzureDreamsReimagined
                 return part;
             }
 
-            // A compact open counter, deliberately built from the existing town materials
-            // until the original stand mesh is isolated from the retail town package.
+            // Open counter with a projecting worktop and a front fascia.
             Part("Octopus stall counter", new Vector3(0f, 0.34f, 0.12f), new Vector3(1.75f, 0.68f, 0.55f), _wallMaterial);
+            Part("Octopus stall worktop", new Vector3(0f, 0.71f, 0.12f), new Vector3(1.94f, 0.10f, 0.74f), _wallMaterial);
+            Part("Octopus stall fascia", new Vector3(0f, 1.49f, -0.52f), new Vector3(2.18f, 0.15f, 0.10f), _accentMaterial);
             Part("Octopus stall awning", new Vector3(0f, 1.62f, 0.05f), new Vector3(2.18f, 0.16f, 1.14f), _accentMaterial);
             Part("Octopus stall post left", new Vector3(-0.88f, 0.92f, 0.05f), new Vector3(0.12f, 1.46f, 0.12f), _wallMaterial);
             Part("Octopus stall post right", new Vector3(0.88f, 0.92f, 0.05f), new Vector3(0.12f, 1.46f, 0.12f), _wallMaterial);
@@ -57,7 +58,7 @@ namespace AzureDreamsReimagined
             {
                 var sign = new GameObject("Octopus dumpling sign");
                 sign.transform.SetParent(root.transform, false);
-                sign.transform.localPosition = new Vector3(0f, 1.14f, -0.33f);
+                sign.transform.localPosition = new Vector3(0f, 1.49f, -0.59f);
                 sign.transform.localScale = Vector3.one * 0.72f;
                 var renderer = sign.AddComponent<SpriteRenderer>();
                 renderer.sprite = icon;
@@ -67,9 +68,10 @@ namespace AzureDreamsReimagined
 
             var vendor=new GameObject("Shin - original animated vendor");
             vendor.transform.SetParent(root.transform,false);
-            vendor.transform.localPosition=new Vector3(0f,0f,.68f);
+            vendor.transform.localPosition=new Vector3(0f,0.025f,.55f);
             vendor.transform.rotation=Quaternion.LookRotation(Vector3.back);
-            RetailResidentBanks.Apply(vendor,"shin");
+            if (RetailResidentBanks.Apply(vendor, "shin") && vendor.TryGetComponent<RetailTownResidentSpriteView>(out var view))
+                view.ShowFrontPose = true;
             vendor.AddComponent<ActorLocomotionView>();
             vendor.AddComponent<ActorSpriteDepth>();
 

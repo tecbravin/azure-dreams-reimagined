@@ -125,6 +125,8 @@ namespace AzureDreamsReimagined
             return true;
         }
 
+        internal bool ShowFrontPose { get; set; }
+
         internal void Present(Vector3 direction, bool moving)
         {
             _moving = moving;
@@ -173,7 +175,10 @@ namespace AzureDreamsReimagined
             if(!_renderer)return;
             _renderer.transform.localScale = seated ? new Vector3(1f, .78f, 1f) : Vector3.one;
         }
+        private static readonly int PoolWaterHeightId = Shader.PropertyToID("_PoolWaterHeight");
         private float _poolWaterHeight;
+        private Material _poolSpriteMaterial, _drySpriteMaterial;
+        private MaterialPropertyBlock _poolSpriteProperties;
         internal void PresentPoolSwimming(bool swimming, float waterHeight)
         {
             _poolSwimming = swimming;
@@ -183,9 +188,7 @@ namespace AzureDreamsReimagined
         private void LateUpdate()
         {
             if (!_renderer || _clip == null) return;
-            _renderer.transform.localPosition = _poolSwimming
-                ? Vector3.up * (_poolWaterHeight - transform.position.y - .9f + Mathf.Sin(Time.time * 2.8f) * .025f)
-                : _seated ? Vector3.up*.06f : Vector3.zero;
+            UpdatePoolWaterline();
             // Scripted residents can move without a patrol/locomotion call.
             Vector3 displacement = transform.position - _lastPosition;
             _lastPosition = transform.position;
@@ -205,11 +208,45 @@ namespace AzureDreamsReimagined
                 forward.Normalize();
                 float side = Vector3.Dot(transform.forward, _camera.transform.right);
                 float depth = Vector3.Dot(transform.forward, forward);
-                direction = FieldSpriteDirection(side, depth, _clip.directions.Length);
+                if (!ShowFrontPose) direction = FieldSpriteDirection(side, depth, _clip.directions.Length);
                 _renderer.transform.rotation = _camera.transform.rotation;
             }
             _ticks += Time.deltaTime * _bank.ticksPerSecond;
             PresentFrame(direction);
+        }
+
+        private void UpdatePoolWaterline()
+        {
+            if (!_poolSwimming)
+            {
+                if (_poolSpriteMaterial && _renderer.sharedMaterial == _poolSpriteMaterial)
+                    _renderer.sharedMaterial = _drySpriteMaterial;
+                _renderer.transform.localPosition = _seated ? Vector3.up * .06f : Vector3.zero;
+                return;
+            }
+
+            // Put the waist at the surface. The shader hides the submerged
+            // portion even when transparent sprite and water sorting disagree.
+            const float waistHeight = .64f;
+            float bob = Mathf.Sin(Time.time * 2.8f) * .02f;
+            var position = transform.position;
+            position.y = _poolWaterHeight - waistHeight + bob;
+            _renderer.transform.position = position;
+            if (!_poolSpriteMaterial)
+            {
+                var shader = AssetMode.Load<Shader>("Shaders/PoolResident");
+                if (!shader) return;
+                _poolSpriteMaterial = new Material(shader) { name = "Pool resident waterline" };
+                _poolSpriteProperties = new MaterialPropertyBlock();
+            }
+            if (_renderer.sharedMaterial != _poolSpriteMaterial)
+            {
+                _drySpriteMaterial = _renderer.sharedMaterial;
+                _renderer.sharedMaterial = _poolSpriteMaterial;
+            }
+            _renderer.GetPropertyBlock(_poolSpriteProperties);
+            _poolSpriteProperties.SetFloat(PoolWaterHeightId, _poolWaterHeight);
+            _renderer.SetPropertyBlock(_poolSpriteProperties);
         }
 
         private static int FieldSpriteDirection(float side, float depth, int directions)
@@ -240,6 +277,7 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_poolSpriteMaterial) Destroy(_poolSpriteMaterial);
             if (_frames == null) return;
             foreach (var frame in _frames)
                 if (frame) Destroy(frame);

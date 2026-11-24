@@ -245,7 +245,15 @@ namespace AzureDreamsReimagined
         private SwimmingTimings _swimTimings;
         private Texture2D _swimmingAtlas;
         private Sprite[] _swimmingFrames;
-        private float _swimmingStarted;
+        private float _swimmingStarted, _swimmingWaterHeight;
+        // Bounds in each 64-pixel cel, measured from its top-left corner.
+        // The side cels lie nearly flat, so a horizontal waterline alone
+        // would still show arms and legs next to the head.
+        private static readonly RectInt[] SwimmingHeadBounds =
+        {
+            new(20, 15, 24, 19), new(12, 15, 19, 19), new(11, 13, 20, 20),
+            new(15, 13, 18, 20), new(23, 12, 21, 17)
+        };
 
         internal bool PresentSwimsuit(bool wearing)
         {
@@ -272,26 +280,53 @@ namespace AzureDreamsReimagined
             return true;
         }
 
-        internal void PresentSwimming(bool swimming)
+        internal void PresentSwimming(bool swimming, float waterHeight = 0f)
         {
-            if(swimming && _swimmingFrames==null)
+            if (swimming && !_swimming)
             {
-                var image=AssetMode.Load<TextAsset>("Town/Retail/koh-swimming");
-                var timings=AssetMode.Load<TextAsset>("Town/Retail/koh-swimming-timings");
-                if(image && timings)
-                {
-                    _swimTimings=JsonUtility.FromJson<SwimmingTimings>(timings.text);
-                    _swimmingAtlas=new Texture2D(2,2,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
-                    if(_swimmingAtlas.LoadImage(image.bytes,true))
-                    {
-                        _swimmingFrames=new Sprite[5*_swimTimings.columns];
-                        for(int row=0;row<5;row++)for(int col=0;col<_swimTimings.columns;col++)
-                            _swimmingFrames[row*_swimTimings.columns+col]=Sprite.Create(_swimmingAtlas,new Rect(col*64,(4-row)*64,64,64),new Vector2(.5f,11f/64),RetailPixelsPerUnit,0,SpriteMeshType.FullRect);
-                    }
-                }
+                if (_swimmingFrames == null) LoadSwimmingHeadFrames();
+                _swimmingStarted = Time.time;
             }
-            if(swimming && !_swimming) _swimmingStarted=Time.time;
+            _swimmingWaterHeight = waterHeight;
             _swimming = swimming;
+        }
+
+        private void LoadSwimmingHeadFrames()
+        {
+            var image = AssetMode.Load<TextAsset>("Town/Retail/koh-swimming");
+            var timings = AssetMode.Load<TextAsset>("Town/Retail/koh-swimming-timings");
+            if (!image || !timings) return;
+            var data = JsonUtility.FromJson<SwimmingTimings>(timings.text);
+            if (data == null || data.columns <= 0 || data.ticks?.Length != data.columns) return;
+
+            var atlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+                { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+            if (!atlas.LoadImage(image.bytes) || atlas.width != data.columns * CellSize ||
+                atlas.height != AtlasRows * CellSize)
+            {
+                Destroy(atlas);
+                return;
+            }
+
+            var pixels = atlas.GetPixels32();
+            for (int row = 0; row < AtlasRows; row++)
+            for (int column = 0; column < data.columns; column++)
+            for (int y = 0; y < CellSize; y++)
+            for (int x = 0; x < CellSize; x++)
+            {
+                if (SwimmingHeadBounds[row].Contains(new Vector2Int(x, y))) continue;
+                int index = (atlas.height - 1 - row * CellSize - y) * atlas.width + column * CellSize + x;
+                pixels[index] = default;
+            }
+            atlas.SetPixels32(pixels);
+            atlas.Apply(false, true);
+            _swimTimings = data;
+            _swimmingAtlas = atlas;
+            _swimmingFrames = new Sprite[AtlasRows * data.columns];
+            for (int row = 0; row < AtlasRows; row++)
+            for (int column = 0; column < data.columns; column++)
+                _swimmingFrames[row * data.columns + column] = CreateRetailBodyFrame(atlas, row, column,
+                    Vector2Int.zero, null, row * data.columns + column);
         }
 
         internal void PresentDining(bool seated, bool eating = false)
@@ -577,9 +612,12 @@ namespace AzureDreamsReimagined
         [System.Serializable] private class WandHandOffsets { public WandHandOffset[] offsets; }
         private WandHandOffset[] _wandHandOffsets;
 
+        private bool TowerWandEquipped => !_inTown &&
+            _weaponRow >= EquipmentSwords && _weaponRow < EquipmentSwords + EquipmentWands;
+
         private int WandEquipmentIndex(int facingRow, bool walking, bool running)
         {
-            if (_inTown || _weaponRow < EquipmentSwords || _weaponRow >= EquipmentSwords + EquipmentWands) return -1;
+            if (!TowerWandEquipped || _retailFrames == null) return -1;
             int pose = _attackFrames != null && _attackProgress >= 0f
                 ? 17 + Mathf.Min(2, Mathf.FloorToInt(_attackProgress * 3f))
                 : walking ? 1 + (running ? FramesPerCycle : 0) + Mathf.Clamp((int)_clock, 0, FramesPerCycle - 1) : 0;
@@ -659,7 +697,8 @@ namespace AzureDreamsReimagined
             Sprite shieldFrame = EquipmentFrame(_shieldRow, facingRow);
             SetHandSprite(ref _rightWeapon, weaponFrame ? weaponFrame : _weaponIcon, "Koh right-hand weapon");
             SetHandSprite(ref _leftShield, shieldFrame ? shieldFrame : _shieldIcon, "Koh left-arm shield");
-            PositionHand(_rightWeapon, false, weaponFrame, 0.255f, 0.20f, 0.43f, handsFree, swing);
+            PositionHand(_rightWeapon, false, weaponFrame, 0.255f, 0.20f, 0.43f,
+                handsFree && !(TowerWandEquipped && _lifting), swing);
             PositionHand(_leftShield, true, shieldFrame, 0.195f, 0.22f, 0.39f, handsFree && !_lifting, 0f);
 
             void PositionHand(SpriteRenderer hand, bool shield, bool retail, float size, float width, float height,
@@ -682,12 +721,20 @@ namespace AzureDreamsReimagined
                     if (!shield && wandFrame)
                     {
                         var grip = _wandHandOffsets[wandIndex];
-                        pixelOffset = (new Vector2(32f + grip.x, 11f + grip.y) - bodyPivot) / RetailPixelsPerUnit;
+                        var wandPivot = new Vector2(32f + grip.x, 11f + grip.y);
+                        // In the front-facing carry pose, bring the shaft across the
+                        // right glove. The attack cels have their own placements.
+                        if (facingRow == 0 && _attackProgress < 0f)
+                            wandPivot += new Vector2(7f, -2f);
+                        pixelOffset = (wandPivot - bodyPivot) / RetailPixelsPerUnit;
                         if (_renderer.flipX) pixelOffset.x = -pixelOffset.x;
                     }
                     hand.transform.localPosition = new Vector3(pixelOffset.x, pixelOffset.y, 0f);
                     hand.transform.localRotation = Quaternion.identity;
-                    bool isBehindBody = side * anatomicalSide > 0.25f;
+                    // The wand's back-facing cels belong behind the arm and body.
+                    // A lateral dot product alone cannot distinguish front from back.
+                    bool isBehindBody = !shield && wandFrame && facingRow == AtlasRows - 1 ||
+                        side * anatomicalSide > 0.25f;
                     hand.sortingOrder = _renderer.sortingOrder + (isBehindBody ? -1 : 1);
                     hand.flipX = _renderer.flipX;
                     return;
@@ -703,7 +750,7 @@ namespace AzureDreamsReimagined
                 // Keep the blade edge upright in front/rear views, and turn it into
                 // profile only for side-facing views instead of mirroring the blade
                 // into the character's body.
-                float yaw = shield ? 75f * depth : (Mathf.Abs(depth) < 0.38f ? 90f : 0f);
+                float yaw = shield ? 75f * depth : !TowerWandEquipped && Mathf.Abs(depth) < 0.38f ? 90f : 0f;
                 hand.transform.localRotation = Quaternion.Euler(0f, yaw, -side * attack * 65f);
                 hand.sortingOrder = _renderer.sortingOrder + (farHand ? -1 : 1);
                 bool sideProfile = Mathf.Abs(side) >= 0.92388f;
@@ -776,11 +823,18 @@ namespace AzureDreamsReimagined
                     jump = Mathf.Abs(Mathf.Sin(_levelUpProgress / 0.9f * Mathf.PI * 3f)) * 0.26f;
             }
             PresentBody(octant, walking, running);
-            var poseOffset = facing.normalized * (_pushEffort * 0.14f) + Vector3.up * (idleBob + jump - (_swimming ? 0.12f : 0f));
+            var poseOffset = facing.normalized * (_pushEffort * 0.14f) + Vector3.up * (idleBob + jump);
             var offset = visual.parent.InverseTransformVector(poseOffset);
             if (_renderer.sprite && _soleClearances.TryGetValue(_renderer.sprite, out float clearance))
                 offset.y += clearance * _visualUnitsPerPixel;
             visual.localPosition = (_baseVisualPosition ??= visual.localPosition) + offset;
+            if (_swimming && _swimmingFrames != null && !_sleeping && !_lifting)
+            {
+                int row = AtlasRowByOctant[octant];
+                float neckY = CellSize - SwimmingHeadBounds[row].yMax - _renderer.sprite.pivot.y;
+                float neckWorldY = visual.TransformPoint(Vector3.up * (neckY / RetailPixelsPerUnit)).y;
+                visual.position += Vector3.up * (_swimmingWaterHeight + 0.015f + idleBob - neckWorldY);
+            }
             PresentEquipment(facing.normalized, octant, walking, running, camera);
         }
 

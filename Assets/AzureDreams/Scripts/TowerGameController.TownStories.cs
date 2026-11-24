@@ -98,6 +98,7 @@ namespace AzureDreamsReimagined
         private const string CherrlAnonymousHerbKey = StoryPrefix + "cherrl.anonymous";
         private const string CherrlHouseConversationKey = StoryPrefix + "cherrl.houseConversation";
         private const string CherrlMascotReceivedKey = StoryPrefix + "cherrl.mascotReceived";
+        private const string HushClinicUpgradeFollowUpKey = StoryPrefix + "hush.clinicUpgradeFollowUp";
         private const string HushHerbFollowUpKey = StoryPrefix + "hush.herbFollowUp";
         private const string VivianCasinoVisitKey = StoryPrefix + "vivian.casinoVisit";
         private const string VivianCasinoGreetingKey = StoryPrefix + "vivian.casinoGreeting";
@@ -197,9 +198,15 @@ namespace AzureDreamsReimagined
         private bool StoryAsk(NPCController npc, string en, string pt, string portraitPath,
             params (string Label, Action Apply)[] choices)
         {
-            // Okami has no retail portrait; Reimagined gives her the redesigned aunt portrait, Classic none.
-            if (portraitPath == null && npc && npc.npcId == "okami" && AssetMode.IsReimagined)
-                portraitPath = OkamiReimaginedPortrait;
+            if (npc && AssetMode.IsReimagined)
+                portraitPath = npc.npcId switch
+                {
+                    "bet" or "arcade_bet" or "race_bet" => "Dialogue/Bet_variant0_frame0",
+                    "rhodes_butler" => "Dialogue/Butler_variant0_frame0",
+                    "hal" => "Dialogue/drhal_variant0_frame0",
+                    "okami" when portraitPath == null => OkamiReimaginedPortrait,
+                    _ => portraitPath
+                };
             _storySpeaker = npc;
             _storyChoices = choices;
             _storyChoice = 0;
@@ -800,6 +807,19 @@ namespace AzureDreamsReimagined
             bool doctor = npc.npcId == "hush";
             bool cherrl = npc.npcId == "cherrl";
             if (doctor && !StoryBuilding("hospital")) return false;
+
+            // The remodeled hospital has its own first-visit follow-up. Keep it
+            // independent from Hush's herb advice so both conversations can play.
+            if (doctor && StoryRoom == CherrlHospital &&
+                !TownSaveVariables.GetBool(HushClinicUpgradeFollowUpKey))
+                return StoryTalk(npc,
+                    "Thanks to you, this clinic finally has the equipment it needs. Now I can properly care for the people of Monsbaya.",
+                    "Graças a você, esta clínica finalmente tem os equipamentos necessários. Agora posso cuidar melhor das pessoas de Monsbaya.",
+                    () =>
+                    {
+                        TownSaveVariables.SetBool(HushClinicUpgradeFollowUpKey, true);
+                        PersistTownProgress();
+                    });
 
             // Preserve a save that was already partway through the earlier,
             // abbreviated route: the old stage 4 was reached on herb delivery.

@@ -209,7 +209,11 @@ namespace AzureDreamsReimagined
                 foreach (var effect in fx)
                     if (effect) Destroy(effect);
                 if (camera) camera.cullingMask = cameraMask;
-                if (glowCamera) Destroy(glowCamera.gameObject);
+                if (glowCamera)
+                {
+                    AzureDreamsReimagined.Rendering.CameraStacking.RemoveOverlay(camera, glowCamera);
+                    Destroy(glowCamera.gameObject);
+                }
                 if (darkness)
                 {
                     var material = darkness.GetComponent<MeshRenderer>()?.sharedMaterial;
@@ -344,6 +348,7 @@ namespace AzureDreamsReimagined
             glow.depth = camera.depth + 1f;
             glow.clearFlags = CameraClearFlags.Depth;
             glow.cullingMask = 1 << FusionGlowLayer;
+            AzureDreamsReimagined.Rendering.CameraStacking.AddOverlay(camera, glow);
             return glow;
         }
 

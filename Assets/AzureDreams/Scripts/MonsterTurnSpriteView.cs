@@ -74,6 +74,8 @@ namespace AzureDreamsReimagined
         }
 
         private static readonly Dictionary<string, Texture2D> CommunitySourceAtlases = new(StringComparer.Ordinal);
+        // The manifest is the same for every monster: parse it once, not once per spawned instance.
+        private static CommunityManifest s_communityManifest;
 
         private void Awake()
         {
@@ -230,20 +232,24 @@ namespace AzureDreamsReimagined
         private IEnumerator LoadCommunityActions()
         {
             const string relativeRoot = "Monsters/Community/";
-            using var manifestRequest = UnityWebRequest.Get(StreamingUrl(relativeRoot + "manifest.json"));
-            yield return manifestRequest.SendWebRequest();
-            if (manifestRequest.result != UnityWebRequest.Result.Success)
+            CommunityManifest manifest = s_communityManifest;
+            if (manifest == null)
             {
-                Debug.LogWarning($"Could not load community monster animation manifest: {manifestRequest.error}", this);
-                yield break;
-            }
+                using var manifestRequest = UnityWebRequest.Get(StreamingUrl(relativeRoot + "manifest.json"));
+                yield return manifestRequest.SendWebRequest();
+                if (manifestRequest.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogWarning($"Could not load community monster animation manifest: {manifestRequest.error}", this);
+                    yield break;
+                }
 
-            CommunityManifest manifest;
-            try { manifest = JsonUtility.FromJson<CommunityManifest>(manifestRequest.downloadHandler.text); }
-            catch (Exception exception)
-            {
-                Debug.LogWarning($"Community monster animation manifest is invalid: {exception.Message}", this);
-                yield break;
+                try { manifest = JsonUtility.FromJson<CommunityManifest>(manifestRequest.downloadHandler.text); }
+                catch (Exception exception)
+                {
+                    Debug.LogWarning($"Community monster animation manifest is invalid: {exception.Message}", this);
+                    yield break;
+                }
+                s_communityManifest = manifest;
             }
             CommunityMonster monster = null;
             if (manifest?.monsters != null)

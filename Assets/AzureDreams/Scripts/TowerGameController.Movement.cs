@@ -373,7 +373,7 @@ namespace AzureDreamsReimagined
             _pendingEnemyThefts.Clear();
             Vector2Int? reservedPushCell = yieldingDestination ??
                 (pushedActor == null ? (Vector2Int?)null : _playerCell + pushStep * 2);
-            _pushedEggAlly = pushedActor == null ? null : _thrownEggs.Find(ally => ally.Actor == pushedActor);
+            _pushedEggAlly = pushedActor == null ? null : ThrownEggOf(pushedActor);
             PrepareThrownEggTurn(summonCell ?? reservedPushCell, destination, _pushedEggAlly);
             if (_pushedEggAlly != null)
             {
@@ -497,7 +497,8 @@ namespace AzureDreamsReimagined
                     SpendMonsterMp(cs.Actor, spinning ? 256 : NativeSpellCost(cs.Actor, spellId));
                     bool reflected = !spinning && ReflectMonsterSpell(target);
                     QueueSpellCue(spellId, UnitElement(cs.Actor), cs.Cell, reflected ? cs.Cell : targetCell,
-                        reflected ? targetCell : null);
+                        reflected ? targetCell : null, cycloneSmoke: spinning &&
+                        cs.Actor.Species == (byte)MonsterSpecies.CYCLONE);
                     if (spellStatus != 0)
                     {
                         _pendingMonsterStatuses.Add((cs.Actor, reflected ? cs.Actor : target, targetCell, spellStatus, reflected));
@@ -637,14 +638,13 @@ namespace AzureDreamsReimagined
                 _creatureFroms[cs.Actor] = cs.View ? cs.View.transform.position : CellPosition(cs.Cell);
             bool quietStep = (!executeFamiliarCommands || _pendingFamiliarCommands.Count == 0) &&
                 !wait && !pushing && !_carriedView && !InTowerTutorial && _floor != 2 &&
-                !_creatures.Exists(creature => Distance(creature.Cell, _playerCell) <= CombatMovementRadius ||
-                    Distance(creature.Cell, destination) <= CombatMovementRadius);
+                !AnyCreatureWithin(_playerCell, destination, CombatMovementRadius);
             Vector2Int runFrom = _playerCell;
             bool runStep = _runAction?.IsPressed() == true && !wait && !pushing && !_carriedView &&
                 (!executeFamiliarCommands || _pendingFamiliarCommands.Count == 0) &&
                 TowerRoomsClearForRunning(runFrom, destination);
             bool delayFamiliarCommand = ShouldDelayFamiliarTurn(executeFamiliarCommands, pushedActor, familiarCasting);
-            CoreTurns.ResolveTurn(_turnIntents, _turnGrid);
+            CoreTurns.ResolveTurn(_turnIntents, _turnGrid, _playerActor);
             ApplyFastMovement(pushedActor, summonCell, pushing, executeFamiliarCommands);
             if (executeFamiliarCommands) _pendingFamiliarCommands.Clear();
             foreach (var intent in _turnIntents)
@@ -789,7 +789,7 @@ namespace AzureDreamsReimagined
                 var from = new Vector2Int(actor.TileX, actor.TileY);
                 var original = actor == _playerActor ? _playerCell : actor == _familiarActor ? _familiarCell :
                     actor == _blueCollarAlly?.Actor ? _blueCollarAlly.Cell :
-                    _creatures.Find(creature => creature.Actor == actor).Cell;
+                    CreatureCellOf(actor);
                 var step = new Vector2Int(intent.DeltaX, intent.DeltaY);
                 if (from != original + step || from == _stairCell || TrapAt(from) is { IsActive: true }) continue;
                 if (actor == _playerActor && (_itemMarkers.ContainsKey(from) || (_hasLoot && from == _lootCell) ||
@@ -798,8 +798,7 @@ namespace AzureDreamsReimagined
                 if (!CanTowerStep(from, step) || !CanClimbTowerHeight(original, next) || next == summonCell ||
                     (actor != _playerActor && (next == _stairCell ||
                     (intent.Priority == CoreTurns.PriorityMonster && IsSacredTile(next))))) continue;
-                if (_turnIntents.Exists(other => other.Actor.TileX == next.x && other.Actor.TileY == next.y) ||
-                    _thrownEggs.Exists(ally => ally.View && ally.Cell == next)) continue;
+                if (AnyIntentActorAt(next) || AnyThrownEggViewAt(next)) continue;
                 SetActorCell(actor, next);
             }
         }
@@ -820,6 +819,11 @@ namespace AzureDreamsReimagined
         private bool IsDiagonalSideWall(Vector2Int cell)
         {
             if (!InsideMap(cell)) return true;
+            // The generated collision grid labels every unwalkable retail tile
+            // as Wall, including void and raised obstacles. Use the actual wall
+            // tile for corner clearance while keeping the landing check intact.
+            if (UsesManagedTowerLayout && _towerFloorLayout?.Retail is { } retail)
+                return retail.Kind[retail.Index(cell.x, cell.y)] == 3;
             return UsesManagedTowerLayout && _towerFloorLayout?.Dungeon != null
                 ? _towerFloorLayout.Dungeon.Grid[cell.y, cell.x] == CoreDungeon.TileType.Wall
                 : _walls.Contains(cell);
@@ -898,11 +902,15 @@ namespace AzureDreamsReimagined
             Vector2Int first = Mathf.Abs(delta.x) >= Mathf.Abs(delta.y)
                 ? new Vector2Int(System.Math.Sign(delta.x), 0) : new Vector2Int(0, System.Math.Sign(delta.y));
             Vector2Int second = first.x != 0 ? new Vector2Int(0, System.Math.Sign(delta.y)) : new Vector2Int(System.Math.Sign(delta.x), 0);
-            foreach (var step in new[] { first, second })
-                if (step != Vector2Int.zero && CanTowerStep(from, step) && from + step != _stairCell &&
-                    (!avoidSacredTiles || !IsSacredTile(from + step)))
-                    return step;
+            if (IsChaseStepOpen(from, first, avoidSacredTiles)) return first;
+            if (IsChaseStepOpen(from, second, avoidSacredTiles)) return second;
             return Vector2Int.zero;
+        }
+
+        private bool IsChaseStepOpen(Vector2Int from, Vector2Int step, bool avoidSacredTiles)
+        {
+            return step != Vector2Int.zero && CanTowerStep(from, step) && from + step != _stairCell &&
+                (!avoidSacredTiles || !IsSacredTile(from + step));
         }
 
         /// <summary>All views share this one clock; no actor runs its own turn coroutine.</summary>
@@ -958,7 +966,7 @@ namespace AzureDreamsReimagined
             }
             for (int ci = 0; ci < _creatures.Count; ci++)
                 if (_creatures[ci].View) _creatures[ci].View.transform.position = TowerStepPosition(CreatureTurnOrigin(_creatures[ci]), _creatures[ci].Cell, t);
-            if (_familiar) _familiar.transform.position = TowerStepPosition(_familiarFrom, _familiarCell, _familiarActsAfterKoh && _turnIntents.Exists(intent => intent.Actor == _familiarActor && intent.Priority == CoreTurns.PriorityPlayer) ? t : familiarT);
+            if (_familiar) _familiar.transform.position = TowerStepPosition(_familiarFrom, _familiarCell, _familiarActsAfterKoh && FamiliarActsAtPlayerPriority() ? t : familiarT);
             if (_blueCollarAlly?.View)
                 _blueCollarAlly.View.transform.position = TowerStepPosition(_blueFamiliarFrom, _blueCollarAlly.Cell, _blueCollarAlly == _pushedEggAlly ? t : familiarT);
             if (_pushedEggAlly?.View && _pushedEggAlly != _blueCollarAlly)
@@ -1282,8 +1290,8 @@ namespace AzureDreamsReimagined
             else if (target == _familiarActor) view = _familiar;
             else
             {
-                int enemy = _creatures.FindIndex(creature => creature.Actor == target);
-                view = enemy >= 0 ? _creatures[enemy].View : _thrownEggs.Find(ally => ally.Actor == target)?.View;
+                int enemy = CreatureIndexOf(target);
+                view = enemy >= 0 ? _creatures[enemy].View : ThrownEggOf(target)?.View;
             }
             if (!view || IsSubmerged(target)) return;
 
@@ -1302,7 +1310,7 @@ namespace AzureDreamsReimagined
             float defeatDuration = monster ? MonsterDefeatPresenter.Begin(monster, monster.DefeatSpecies, monster.Facing) : 0f;
             if (defeatDuration > 0f)
             {
-                foreach (var collider in view.GetComponentsInChildren<Collider>()) collider.enabled = false;
+                DisableColliders(view);
                 StartCoroutine(RemoveAfterDefeat(view, defeatDuration));
                 return;
             }
@@ -1311,13 +1319,13 @@ namespace AzureDreamsReimagined
                 RemoveGenerated(view);
                 return;
             }
-            foreach (var collider in view.GetComponentsInChildren<Collider>()) collider.enabled = false;
+            DisableColliders(view);
             StartCoroutine(RemoveAfterFlinch(view));
         }
 
         private System.Collections.IEnumerator RemoveAfterFlinch(GameObject view)
         {
-            yield return new WaitForSeconds(ActorLocomotionView.HitDuration);
+            yield return FlinchRemovalWait;
             if (view) RemoveGenerated(view);
         }
 
@@ -1468,7 +1476,7 @@ namespace AzureDreamsReimagined
                 Vector3 creatureDelta = CellPosition(_creatures[ci].Cell) - CreatureTurnOrigin(_creatures[ci]);
                 if (_creatures[ci].Locomotion) _creatures[ci].Locomotion.Present(creatureDelta, progress, progress < 1f && creatureDelta.sqrMagnitude > 0.000001f);
             }
-            float redProgress = _turnIntents.Exists(intent => intent.Actor == _familiarActor && intent.Priority == CoreTurns.PriorityPlayer) ? progress : familiarProgress;
+            float redProgress = FamiliarActsAtPlayerPriority() ? progress : familiarProgress;
             if (_familiarLocomotion) _familiarLocomotion.Present(familiarDelta, redProgress, redProgress > 0f && redProgress < 1f && familiarDelta.sqrMagnitude > 0.000001f);
             if (_blueCollarAlly?.View)
             {

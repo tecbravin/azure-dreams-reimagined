@@ -39,8 +39,8 @@ namespace AzureDreamsReimagined
         private const int WindmillQuestCompleteFlag = 0x1460; // Ftt_fkoya_isaku_scene01_ok
         private const int TavernQuestCompleteFlag = 4806;
         private const int PoolQuestCompleteFlag = 150;
-        private bool UsesManagedTowerLayout => _useGeneratedTowerFloors || _floor is 2 or BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor or 31 or TowerFloorRules.BeldoFloor;
-        private int ActiveMapSize => _area == Area.Tower && UsesManagedTowerLayout ? CoreDungeon.GridSize : MapSize;
+        private bool UsesManagedTowerLayout => _useGeneratedTowerFloors || _floor >= SecondTowerFirstFloor || _floor is 2 or BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor or 31 or TowerFloorRules.BeldoFloor;
+        private int ActiveMapSize => _area == Area.Tower && UsesManagedTowerLayout ? (_towerFloorLayout?.SideLength ?? CoreDungeon.GridSize) : MapSize;
         private int TowerTileHeight(Vector2Int cell) => _area == Area.Tower && UsesManagedTowerLayout &&
             _towerFloorLayout != null ? _towerFloorLayout.GroundHeight(cell.x, cell.y) : 0;
         private float TowerGroundY(Vector2Int cell) => TowerTileHeight(cell) / 64f;
@@ -108,8 +108,8 @@ namespace AzureDreamsReimagined
                 _towerItemTraps.SpawnTraps((4 + _floor) / 2);
             }
             _npcCells.Clear();
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-                for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < _towerFloorLayout.SideLength; y++)
+                for (int x = 0; x < _towerFloorLayout.SideLength; x++)
                     if (!_towerFloorLayout.IsWalkable(x, y)) _walls.Add(new Vector2Int(x, y));
 
             BuildManagedFloorMeshes();
@@ -161,8 +161,8 @@ namespace AzureDreamsReimagined
             if (_floor == 2) SpawnTowerEventNpc();
             if (!InTowerTutorial && _floor != TowerFloorRules.BeldoFloor) PlaceGeneratedEgg();
             _hasLoot = false;
-            for (int y = 0; y < CoreDungeon.GridSize; y++)
-                for (int x = 0; x < CoreDungeon.GridSize; x++)
+            for (int y = 0; y < _towerFloorLayout.SideLength; y++)
+                for (int x = 0; x < _towerFloorLayout.SideLength; x++)
                 {
                     var cell = new Vector2Int(x, y);
                     var item = _towerItemTraps.GetItemAt(cell);
@@ -177,6 +177,44 @@ namespace AzureDreamsReimagined
             if (_floor == 1)
                 CreateInnerTowerDoor(_towerEntranceEdge, _towerEntranceInward, _towerEntranceWidth, addThreshold: true);
             UpdateCameraFollow(snap: true);
+        }
+
+        private void AddKewneFloorHint()
+        {
+            if (_floor is not (BlueCollarFloor or GurusOilPotFloor or BlueCapeFloor or WaterMedalFloor
+                or TowerItemTrapManager.CherrlHealingHerbFloor)) return;
+
+            const byte kewne = (byte)AzureDreams.Core.MonsterSpecies.KEWNE;
+            bool active = (_familiar && !_familiarInBag && !_familiarDefeated && _familiarActor.Hp > 0 &&
+                           _familiarActor.Species == kewne) ||
+                          _thrownEggs.Exists(ally => ally.View && ally.Actor.Hp > 0 && ally.Actor.Species == kewne);
+            if (!active) return;
+
+            var flags = TownRetailScriptFlags.CreatePersistent();
+            bool missing = _floor switch
+            {
+                BlueCollarFloor => !HasBlueCollar,
+                GurusOilPotFloor => !flags.IsFlagSet(WindmillQuestCompleteFlag) && !OwnsTowerQuestItem(GurusOilPotId),
+                BlueCapeFloor => !flags.IsFlagSet(TavernQuestCompleteFlag) && !OwnsTowerQuestItem(BlueCapeId),
+                WaterMedalFloor => !PoolRestored && !OwnsTowerQuestItem(WaterMedalId),
+                TowerItemTrapManager.CherrlHealingHerbFloor => !TownSaveVariables.GetBool(CherrlHealingQuestCompleted) &&
+                    !OwnsTowerQuestItem(AzureDreams.Core.ItemSystem.Id.HealingHerb, AzureDreams.Core.ItemSystem.Kind.Herb),
+                _ => false
+            };
+            if (!missing) return;
+
+            string hint = T("Kewne: Hey, I smell something important here! Stay alert!",
+                "Kewne: Hey, sinto cheiro de algo importante aqui! Fique atento!");
+            _message = string.IsNullOrEmpty(_message) ? hint : _message + "\n" + hint;
+        }
+
+        private bool OwnsTowerQuestItem(int subtype, int kind = QuestItemKind)
+        {
+            foreach (var item in _runInventory.DungeonItems)
+                if (item.Kind == kind && item.Subtype == subtype) return true;
+            foreach (var item in _townStorage.DungeonItems)
+                if (item.Kind == kind && item.Subtype == subtype) return true;
+            return false;
         }
 
         private bool ShouldPlaceGurusOilPot()

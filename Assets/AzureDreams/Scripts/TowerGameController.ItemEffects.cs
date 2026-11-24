@@ -1323,7 +1323,7 @@ namespace AzureDreamsReimagined
                         (!_familiar || ice != _familiarCell) && CreatureAt(ice) < 0 && !BellCellOccupied(ice))
                     {
                         _walls.Add(ice);
-                        var view = CreateMarker(ice, "Ice Rock", _earlyTowerTiles ? _earlyTowerTiles : _accentMaterial, PrimitiveType.Cube, 0.75f);
+                        var view = CreateMarker(ice, "Ice Rock", EarlyTowerTiles ? EarlyTowerTiles : _accentMaterial, PrimitiveType.Cube, 0.75f);
                         _iceBlocks.Add((ice, view, 8));
                     }
                     return;

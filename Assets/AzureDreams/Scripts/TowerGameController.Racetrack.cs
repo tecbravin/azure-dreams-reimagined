@@ -71,12 +71,12 @@ namespace AzureDreamsReimagined
             foreach (var npc in _townPeople)
             {
                 if (!npc) continue;
-                bool silver = npc.npcId == "race_silver";
+                bool host = npc.npcId == "race_host";
                 bool clerk = npc.npcId == "race_clerk";
                 if (npc.TryGetComponent<CharacterStats>(out var stats))
                 {
-                    stats.displayName = silver ? "Silver" : clerk ? T("Ticket Clerk", "Bilheteria") : npc.npcId == "race_bet" ? "Bet" : T("Gambler", "Apostador");
-                    stats.portraitTexture = silver ? StreamPortrait(SilverPortrait) : null;
+                    stats.displayName = host ? T("Race attendant", "Atendente da pista") : clerk ? T("Ticket Clerk", "Bilheteria") : npc.npcId == "race_bet" ? "Bet" : T("Gambler", "Apostador");
+                    stats.portraitTexture = null;
                 }
                 npc.dialogueLines = System.Array.Empty<string>();
             }

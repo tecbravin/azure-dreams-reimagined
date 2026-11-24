@@ -57,6 +57,7 @@ namespace AzureDreamsReimagined
             AdvanceOkamiBarAfterTowerReturn();
             TownSaveVariables.SetInt(StoryPrefix + "day", StoryDay + 1);
             ApplyPendingConstruction();
+            if (GeneralStoreOwned("aura_bike") > 0) TownSaveVariables.SetBool(AuraBikeReturnParkingKey, true);
             if (survived) ScheduleWreathHomecoming();
             TownSaveVariables.SetInt(TownReputation.WakeEntryKey, 0);
             TownRetailScriptFlags.CreatePersistent().ClearBit(TownReputation.WreathSpokenFlag);

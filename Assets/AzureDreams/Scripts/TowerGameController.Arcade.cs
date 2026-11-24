@@ -49,6 +49,8 @@ namespace AzureDreamsReimagined
         {
             if (!InArcade) return;
             _message = string.Empty;
+            if (!FindStoryActor("arcade_attendant"))
+                SpawnStoryResident("dar", "arcade_attendant", T("Attendant", "Atendente"), default);
             ApplyNativeMinigameResident("arcade_boy", "ArcadeBoy");
             ApplyNativeMinigameResident("arcade_girl", "ArcadeGirl");
             foreach (var npc in _townPeople)

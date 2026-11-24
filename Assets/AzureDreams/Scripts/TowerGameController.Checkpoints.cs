@@ -270,6 +270,7 @@ namespace AzureDreamsReimagined
             BuildTowerFloor();
             _towerRun.CompleteFloorTransition();
             _message = T($"You reach {TowerFloorLabel(_floor)}.", $"Você chega ao {TowerFloorLabel(_floor)}.");
+            AddKewneFloorHint();
         }
 
         private void DrawCheckpointMenu(float width, float height)

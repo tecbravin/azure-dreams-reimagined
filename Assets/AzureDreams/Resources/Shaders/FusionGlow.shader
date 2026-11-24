@@ -6,6 +6,41 @@ Shader "AzureDreams/FusionGlow"
     {
         [PerRendererData] _MainTex ("Texture", 2D) = "white" {}
     }
+    // URP (HLSL). The Built-in SubShader below stays as the fallback.
+    SubShader
+    {
+        Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "PreviewType" = "Plane" "RenderPipeline" = "UniversalPipeline" }
+        Cull Off
+        ZWrite Off
+        Blend SrcAlpha One
+        Pass
+        {
+            Tags { "LightMode" = "UniversalForward" }
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Assets/AzureDreams/Shaders/AzureURP.hlsl"
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            CBUFFER_END
+            struct AzVertex { float4 vertex : POSITION; float4 color : COLOR; float2 uv : TEXCOORD0; };
+            struct AzPixel { float4 pos : SV_POSITION; half4 color : COLOR; float2 uv : TEXCOORD0; };
+            AzPixel vert(AzVertex v)
+            {
+                AzPixel o;
+                o.pos = TransformObjectToHClip(v.vertex.xyz);
+                o.color = v.color;
+                o.uv = v.uv;
+                return o;
+            }
+            half4 frag(AzPixel i) : SV_Target
+            {
+                return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * i.color;
+            }
+            ENDHLSL
+        }
+    }
     SubShader
     {
         Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "PreviewType" = "Plane" }

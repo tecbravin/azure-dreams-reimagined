@@ -10,7 +10,7 @@ namespace AzureDreamsReimagined
         private static readonly Vector3 PoolSlideFoot = new(34.5f, 1f, 26.5f);
         private static readonly Vector3 PoolSlideLanding = new(22.5f, .75f, 24.5f);
         private const float PoolSlideClimbEnd = 1.55f, PoolSlideLaunchTime = 1.97f;
-        private const float PoolSlideLandingTime = 3.77f, PoolSlideDuration = 4.12f;
+        private const float PoolSlideLandingTime = 3.77f;
         private Coroutine _poolSlideRoutine;
         private int _poolSlideVersion;
         private static readonly Vector2[] PoolSlideProfile =
@@ -43,7 +43,7 @@ namespace AzureDreamsReimagined
             return PoolSlideProfile[PoolSlideProfile.Length-1].y;
         }
 
-        private static Vector3 PoolSlidePosition(Vector3 start, float elapsed)
+        private static Vector3 PoolSlidePosition(Vector3 start, Vector3 landing, float elapsed)
         {
             if (elapsed < .25f) return Vector3.Lerp(start, PoolSlideFoot, Mathf.SmoothStep(0,1,elapsed/.25f));
             if (elapsed < PoolSlideClimbEnd)
@@ -57,7 +57,7 @@ namespace AzureDreamsReimagined
                 return new Vector3(x,PoolSlideHeight(x),26.5f);
             }
             float flight = Mathf.InverseLerp(PoolSlideLaunchTime,PoolSlideLandingTime,elapsed);
-            var point = Vector3.Lerp(new Vector3(26f,1.625f,26.5f),PoolSlideLanding,flight);
+            var point = Vector3.Lerp(new Vector3(26f,1.625f,26.5f),landing,flight);
             point.y += 40f * flight * (1f-flight);
             return point;
         }
@@ -75,39 +75,73 @@ namespace AzureDreamsReimagined
                 _message = T("Put down what you are holding first.", "Coloque no chão o que está segurando primeiro.");
                 return;
             }
+            if (!TryFindPoolSlideLanding(out var landing))
+            {
+                _message = T("The bottom of the slide is blocked.", "A saída do escorregador está bloqueada.");
+                return;
+            }
             _poolSceneAnimating = true;
             _townMomentum = Vector2.zero;
             _townJumpHeight = _townJumpVelocity = 0f;
-            _poolSlideRoutine = StartCoroutine(PlayPoolSlide());
+            _poolSlideRoutine = StartCoroutine(PlayPoolSlide(landing));
         }
 
-        private IEnumerator PlayPoolSlide()
+        private bool TryFindPoolSlideLanding(out Vector3 landing)
+        {
+            for (int radius = 0; radius <= 4; radius++)
+            for (int z = -radius; z <= radius; z++)
+            for (int x = -radius; x <= radius; x++)
+            {
+                if (Mathf.Max(Mathf.Abs(x), Mathf.Abs(z)) != radius) continue;
+                var candidate = PoolSlideLanding + new Vector3(x * .5f, 0f, z * .5f);
+                if (!_interior.TryGetPoolWaterHeight(candidate, out float waterHeight)) continue;
+                candidate.y = TownTerrainHeight(candidate);
+                if (Mathf.Abs(candidate.y - waterHeight) > TownGroundTolerance ||
+                    !TownPositionOpen(candidate, candidate.y)) continue;
+                landing = candidate;
+                return true;
+            }
+            landing = default;
+            return false;
+        }
+
+        private IEnumerator PlayPoolSlide(Vector3 landing)
         {
             int version = _poolSlideVersion;
             var room = _interior;
-            var start = _player.transform.position - Vector3.up * TownActorFootOffset;
+            var actor = _player;
+            var start = actor.transform.position - Vector3.up * TownActorFootOffset;
             bool launched = false, landed = false;
             try
             {
-                for (float elapsed = 0; elapsed < PoolSlideDuration; elapsed += Mathf.Min(Time.deltaTime,.1f))
+                for (float elapsed = 0f; ; elapsed += Mathf.Min(Time.deltaTime, .1f))
                 {
-                    if (!_player || _interior != room || version != _poolSlideVersion) yield break;
-                    var feet = PoolSlidePosition(start,elapsed);
-                    var before = _player.transform.position;
-                    _player.transform.position = feet + Vector3.up * TownActorFootOffset;
-                    _playerCell = new Vector2Int(Mathf.RoundToInt(feet.x),Mathf.RoundToInt(feet.z));
-                    _townFacing = Vector2.left;
-                    _kohSprite?.SetFacing(Vector2.left);
-                    // Keep the original swimwear frames throughout the ride and flight.
-                    _kohSprite?.PresentDining(false);
-                    _kohSprite?.SetAirborne(elapsed >= PoolSlideLaunchTime && elapsed < PoolSlideLandingTime);
-                    _playerLocomotion?.Present(_player.transform.position-before,elapsed*3f,elapsed < PoolSlideClimbEnd);
-                    if (!launched && elapsed >= PoolSlideLaunchTime) { launched = true; PlayRetailSound(RetailSfx.Jump); }
-                    if (!landed && elapsed >= PoolSlideLandingTime)
+                    if (!actor || _player != actor || _interior != room || version != _poolSlideVersion) yield break;
+                    if (elapsed >= PoolSlideLandingTime)
                     {
-                        landed = true;
-                        UpdateKohPoolSwimming(_player.transform.position);
-                        StartCoroutine(PlayPoolSlideSplash(version));
+                        if (TryFindPoolSlideLanding(out var openLanding))
+                        {
+                            landing = openLanding;
+                            landed = true;
+                        }
+                        var feet = landed ? landing : start;
+                        actor.transform.position = feet + Vector3.up * TownActorFootOffset;
+                        _playerCell = new Vector2Int(Mathf.RoundToInt(feet.x), Mathf.RoundToInt(feet.z));
+                        break;
+                    }
+
+                    var point = PoolSlidePosition(start, landing, elapsed);
+                    var before = actor.transform.position;
+                    actor.transform.position = point + Vector3.up * TownActorFootOffset;
+                    _playerCell = new Vector2Int(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.z));
+                    _townFacing = Vector2.left;
+                    _kohSprite?.SetFacing(_townFacing);
+                    _kohSprite?.SetAirborne(elapsed >= PoolSlideLaunchTime);
+                    _playerLocomotion?.Present(actor.transform.position - before, elapsed * 3f, elapsed < PoolSlideClimbEnd);
+                    if (!launched && elapsed >= PoolSlideLaunchTime)
+                    {
+                        launched = true;
+                        PlayRetailSound(RetailSfx.Jump);
                     }
                     yield return null;
                 }
@@ -116,19 +150,25 @@ namespace AzureDreamsReimagined
             {
                 if (version == _poolSlideVersion)
                 {
-                    _kohSprite?.PresentDining(false);
-                    _kohSprite?.SetAirborne(false);
-                    _playerLocomotion?.Present(Vector3.zero,0f,false);
+                    _poolSlideRoutine = null;
+                    _poolSceneAnimating = false;
                     _townMomentum = Vector2.zero;
                     _townJumpHeight = _townJumpVelocity = 0f;
-                    _poolSceneAnimating = false;
-                    _poolSlideRoutine = null;
-                    if (_player && _interior == room) UpdateKohPoolSwimming(_player.transform.position);
+                    if (actor && _player == actor && _interior == room)
+                    {
+                        _kohSprite?.PresentDining(false);
+                        _kohSprite?.SetAirborne(false);
+                        _playerLocomotion?.Present(Vector3.zero, 0f, false);
+                        UpdateKohPoolSwimming(actor.transform.position);
+                    }
                 }
             }
+
+            // Splash continues on its own after control has returned.
+            if (landed) StartCoroutine(PlayPoolSlideSplash(version, landing));
         }
 
-        private IEnumerator PlayPoolSlideSplash(int version)
+        private IEnumerator PlayPoolSlideSplash(int version, Vector3 landing)
         {
             var objects = new List<GameObject>();
             var drops = new SpriteRenderer[12];
@@ -136,7 +176,7 @@ namespace AzureDreamsReimagined
             {
                 for (int i=0;i<drops.Length;i++)
                 {
-                    drops[i]=SpawnFusionGlow(PoolSlideLanding,.18f,Color.clear,objects);
+                    drops[i]=SpawnFusionGlow(landing,.18f,Color.clear,objects);
                     drops[i].gameObject.layer=_player.layer;
                     _generated.Add(drops[i].gameObject);
                 }
@@ -146,7 +186,7 @@ namespace AzureDreamsReimagined
                     for(int i=0;i<drops.Length;i++)
                     {
                         float angle=i*Mathf.PI*2/drops.Length;
-                        drops[i].transform.position=PoolSlideLanding+new Vector3(Mathf.Cos(angle)*elapsed*1.8f,
+                        drops[i].transform.position=landing+new Vector3(Mathf.Cos(angle)*elapsed*1.8f,
                             Mathf.Max(.02f,(2.3f+(i%3)*.35f)*elapsed-4f*elapsed*elapsed),Mathf.Sin(angle)*elapsed*1.8f);
                         drops[i].color=new Color(.65f,.9f,1f,1f-elapsed/.65f);
                     }

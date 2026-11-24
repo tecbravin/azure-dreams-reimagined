@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>Built-in camera effects; no dependency on an uninstalled URP package.</summary>
 [RequireComponent(typeof(Camera))]
 [DisallowMultipleComponent]
-public sealed class PostProcessingController : MonoBehaviour
+public sealed partial class PostProcessingController : MonoBehaviour
 {
     [Header("Post-Processing Toggles")]
     public bool enablePostProcessing = true;
@@ -178,32 +178,22 @@ public sealed class PostProcessingController : MonoBehaviour
             Graphics.Blit(source, destination);
             return;
         }
-        _material.SetVector(AAAndBloom, new Vector4(fxaa || smaa ? 1 : 0, bloom ? 1 : 0, bloomIntensity, bloomThreshold));
-        float cameraContrast = colorGrading ? contrast : 1f;
-        if (PreserveBlackBackground) cameraContrast = Mathf.Max(1f, cameraContrast);
-        _material.SetVector(Grade, new Vector4(colorGrading ? saturation : 1, cameraContrast,
-            vignette ? vignetteIntensity : 0, filmGrain && !PreserveBlackBackground ? grainIntensity : 0));
-        _material.SetVector(Balance, new Vector4(colorGrading ? temperature / 100 : 0,
-            colorGrading ? tint / 100 : 0, chromaticAberration ? chromaticIntensity : 0, Time.unscaledTime));
-        _material.SetVector(Depth, new Vector4(aoIntensity, Mathf.Max(focalDistance, 0.1f),
-            depthOfField ? 1 : 0, ambientOcclusion ? 1 : 0));
-        if (!_retroMaterial || !(lowResolution || colorQuantization || crtScanlines))
+        ApplyEffectParameters(_material);
+        if (!_retroMaterial || !RetroActive)
         {
             Graphics.Blit(source, destination, _material, 0);
             return;
         }
 
         // Preserve the aspect ratio and shade the final pass on the same grid as the point upscale.
-        int height = lowResolution ? Mathf.Clamp(pixelHeight, 1, source.height) : source.height;
-        int width = Mathf.Max(1, Mathf.RoundToInt((float)source.width / source.height * height));
+        RetroTargetSize(source.width, source.height, out int width, out int height);
         var pixels = RenderTexture.GetTemporary(width, height, 0, source.format);
         try
         {
             pixels.filterMode = FilterMode.Point;
             pixels.wrapMode = TextureWrapMode.Clamp;
             Graphics.Blit(source, pixels, _material, 0);
-            _retroMaterial.SetVector(Retro, new Vector4(colorQuantization ? Mathf.Clamp(colorBits, 3, 8) : 0,
-                ditherStrength, crtScanlines ? scanlineStrength : 0, lowResolution ? height : 240));
+            ApplyRetroParameters(_retroMaterial, height);
             Graphics.Blit(pixels, destination, _retroMaterial, 0);
         }
         finally

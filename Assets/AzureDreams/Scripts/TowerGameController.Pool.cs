@@ -35,10 +35,14 @@ namespace AzureDreamsReimagined
 
         private void UpdateKohPoolSwimming(Vector3 position)
         {
-            bool swimming = _poolKohWearingSwimsuit && IsPoolWater(position);
+            float waterHeight = 0f;
+            bool swimming = _poolKohWearingSwimsuit && InRestoredPool &&
+                _interior.TryGetPoolWaterHeight(position, out waterHeight) &&
+                position.y - TownActorFootOffset <= waterHeight + 0.05f;
+            if (_kohSprite && (swimming || _poolKohSwimming != swimming))
+                _kohSprite.PresentSwimming(swimming, waterHeight);
             if (_poolKohSwimming == swimming) return;
             _poolKohSwimming = swimming;
-            if (_kohSprite) _kohSprite.PresentSwimming(swimming);
             PoolAttireView.SetSwimming(_player, swimming);
         }
 

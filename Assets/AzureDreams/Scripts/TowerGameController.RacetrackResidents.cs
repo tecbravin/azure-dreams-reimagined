@@ -27,37 +27,34 @@ namespace AzureDreamsReimagined
                         }),
                         (T("I’m only joking", "Só estou brincando."), () =>
                             StoryTalk(npc, "Please buy some next time, okay?", "Compre alguns na próxima vez, está bem?")));
-                case "race_silver":
+                case "race_host":
                     if (TownSaveVariables.GetBool(RaceRecord))
                     {
                         TownSaveVariables.SetBool(RaceRecord, false);
                         PersistTownProgress();
-                        return TownDialogueSequence(npc, SilverPortrait, () => SilverRacetrackMenu(npc),
-                            ("A new record?\nThat’s pretty awesome.", "Um novo recorde?\nIsso é impressionante."),
-                            ("Your racing abilities remind me of myself, during my younger days.",
-                                "Sua habilidade nas corridas me lembra de mim mesmo quando era jovem."));
+                        return TownDialogueSequence(npc, null, () => RaceAttendantMenu(npc),
+                            ("You set a new track record. Congratulations!", "Você bateu o recorde da pista. Parabéns!"));
                     }
-                    return SilverRacetrackMenu(npc);
+                    return RaceAttendantMenu(npc);
                 case "race_bet": return RaceBetDialogue(npc);
                 case "race_husband": return RaceHusbandDialogue(npc);
             }
             if (!npc.npcId.StartsWith("race_nyuel_", System.StringComparison.Ordinal) ||
                 !int.TryParse(npc.npcId.Substring("race_nyuel_".Length), out int horse) ||
                 (uint)horse >= (uint)RaceNames.Length) return false;
-            var silver = FindStoryActor("race_silver");
-            return SilverTalk(silver ? silver : npc, $"She’s No. {horse + 1}, {RaceNames[horse]}.",
+            var host = FindStoryActor("race_host");
+            return StoryTalk(host ? host : npc, $"She’s No. {horse + 1}, {RaceNames[horse]}.",
                 $"Ela é a número {horse + 1}, {RaceNames[horse]}.");
         }
 
-        // TOWN.BIN 0x4E276A–0x4E28EE.
-        private bool SilverRacetrackMenu(NPCController npc) =>
-            SilverAsk(npc, "Hi, {name}.\nLook, isn’t it a beautiful Monster racetrack?\nThank you so much.\nWhat are you going to do today?\nDo you want to get on a horse?",
-                "Oi, {name}.\nVeja, que bela pista de corrida de monstros, não acha?\nMuito obrigado.\nO que vai fazer hoje?\nQuer montar um cavalo?",
+        private bool RaceAttendantMenu(NPCController npc) =>
+            StoryAsk(npc, "Welcome, {name}. What would you like to do at the track?",
+                "Boas-vindas, {name}. O que você gostaria de fazer na pista?",
                 (T("I’m going to race.", "Vou correr."), () =>
-                    SilverTalk(npc, "Good luck!", "Boa sorte!", () => BeginNyuelRace(false))),
+                    StoryTalk(npc, "Good luck!", "Boa sorte!", () => BeginNyuelRace(false))),
                 (T("I’ll just watch.", "Só vou assistir."), () => BeginNyuelRace(true)),
                 (T("Show me how to ride a horse.", "Ensine-me a montar um cavalo."), () => ShowNyuelInstructions(npc)),
-                (T("Not today.", "Hoje não."), () => SilverTalk(npc,
+                (T("Not today.", "Hoje não."), () => StoryTalk(npc,
                     "I see. Well, if you need me for anything, let me know.",
                     "Entendo. Bem, se precisar de alguma coisa, me avise.")));
 
@@ -65,7 +62,7 @@ namespace AzureDreamsReimagined
         {
             string run = _runAction?.GetBindingDisplayString() ?? "Shift";
             string jump = _wait?.GetBindingDisplayString() ?? "Space";
-            TownDialogueSequence(npc, SilverPortrait, () => SilverRacetrackMenu(npc),
+            TownDialogueSequence(npc, null, () => RaceAttendantMenu(npc),
                 ($"Press {run} to move forward, and down to move backwards.",
                     $"Aperte {run} para avançar e para baixo para recuar."),
                 ($"If you keep pressing the button, the horse will trot slowly, and if you quickly push the button several times, the horse will trot faster.",

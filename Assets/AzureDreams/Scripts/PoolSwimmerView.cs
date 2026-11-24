@@ -15,9 +15,14 @@ namespace AzureDreamsReimagined
             residentView = GetComponent<RetailTownResidentSpriteView>();
         }
 
+        private void Start()
+        {
+            if (!residentView) residentView = GetComponent<RetailTownResidentSpriteView>();
+        }
+
         private void LateUpdate()
         {
-            if (room == null || residentView == null)
+            if (!room || !residentView)
                 return;
 
             bool inside = room.TryGetPoolWaterHeight(transform.position, out float waterHeight);

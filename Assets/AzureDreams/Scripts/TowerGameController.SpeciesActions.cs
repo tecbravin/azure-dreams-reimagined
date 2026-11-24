@@ -195,7 +195,7 @@ namespace AzureDreamsReimagined
                 _creatures.Count >= SpeciesSpawnLimit) return damage;
             int survivingHp = target.Hp - damage;
             if (survivingHp <= 1) return damage; // morreu ou ficaria com 1 HP - nao ha o que dividir
-            int cellIndex = _creatures.FindIndex(creature => creature.Actor == target);
+            int cellIndex = CreatureIndexOf(target);
             if (cellIndex < 0) return damage; // Manoeva domesticada (familiar/aliado) - nao se multiplica
             if (RollSpawnRange(2) != 0) return damage;
             Vector2Int cell = _creatures[cellIndex].Cell;

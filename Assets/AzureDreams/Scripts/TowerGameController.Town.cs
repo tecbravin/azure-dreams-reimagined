@@ -279,10 +279,17 @@ namespace AzureDreamsReimagined
             GameObject signObject;
             if (UsingRetailTown)
             {
-                signObject = new GameObject("Town Guild Sign interaction");
-                signObject.transform.SetParent(transform, false);
-                signObject.transform.position = new Vector3(66, 0f, 29);
-                _generated.Add(signObject);
+                // The captured retail town mesh does not include the freestanding
+                // guild sign. Spawn the sign prefab as well as its interaction.
+                signObject = CreateTownAsset("Guild_Sign", "Town Guild Sign", new Vector3(66, 0f, 29),
+                    Quaternion.Euler(0f, 180f, 0f));
+                if (!signObject)
+                {
+                    signObject = new GameObject("Town Guild Sign");
+                    signObject.transform.SetParent(transform, false);
+                    signObject.transform.position = new Vector3(66, 0f, 29);
+                    _generated.Add(signObject);
+                }
             }
             else
                 signObject = CreateTownAssetOrFallback("Guild_Sign", "Town Guild Sign", new Vector3(6, 0f, 8),
@@ -290,7 +297,9 @@ namespace AzureDreamsReimagined
             var sign = signObject.GetComponent<TownObject>();
             if (!sign) sign = signObject.AddComponent<TownObject>();
             sign.objectId = "guild_sign";
-            sign.message = UsingRetailTown ? "The Monster Tower lies beyond this gate." : "Tower gate: east. Return safely to bank your salvage.";
+            sign.message = UsingRetailTown
+                ? T("The Monster Tower lies beyond this gate.", "A Torre dos Monstros fica além deste portão.")
+                : T("Tower gate: east. Return safely to bank your salvage.", "Portão da torre: leste. Volte em segurança para guardar seus itens.");
             _townObjects.Add(sign);
             _townBuildings.Add(new Rect(signObject.transform.position.x - 0.36f, signObject.transform.position.z - 0.055f, 0.72f, 0.11f));
             if (!UsingRetailTown)
@@ -318,6 +327,7 @@ namespace AzureDreamsReimagined
                     if (pot.TryGetComponent<TownPotView>(out var potView)) _townPots.Add(potView);
                 }
                 CreateOctopusDumplingStall();
+                SpawnRoost();
             }
             foreach (var instance in _generated)
             {
@@ -461,6 +471,7 @@ namespace AzureDreamsReimagined
                     speaker.GetComponent<ActorLocomotionView>()?.Present(facing, 0f, false);
                 }
                 if (TryHeldHeroineGift(speaker)) return true;
+                if (speaker.npcId == "roost") return RoostDialogue(speaker);
                 if (speaker.npcId == "master" && TalkToMaster(speaker)) return true;
                 if (TryMonsterShopHunterDialogue(speaker)) return true;
                 if (speaker.npcId == "barry" && _interior && _interior.interiorId == BlacksmithInterior)

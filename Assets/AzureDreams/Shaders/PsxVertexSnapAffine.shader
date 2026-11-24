@@ -7,6 +7,48 @@ Shader "AzureDreams/PSX Vertex Snap Affine"
         _AffineWarp ("Affine Warp Strength", Range(0, 1)) = 1.0
         _Color ("Tint", Color) = (1,1,1,1)
     }
+    // URP (HLSL). The Built-in SubShader below stays as the fallback.
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" "RenderPipeline" = "UniversalPipeline" }
+        LOD 100
+        Pass
+        {
+            Tags { "LightMode" = "UniversalForward" }
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Assets/AzureDreams/Shaders/AzureURP.hlsl"
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            float _SnapResolution;
+            float _AffineWarp;
+            float4 _Color;
+            CBUFFER_END
+            struct AzVertex { float4 vertex : POSITION; float2 uv : TEXCOORD0; };
+            struct AzPixel { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float w : TEXCOORD1; };
+            AzPixel vert(AzVertex v)
+            {
+                AzPixel o;
+                float4 clipPos = TransformObjectToHClip(v.vertex.xyz);
+                float2 snapRes = float2(_SnapResolution, _SnapResolution * _ScreenParams.y / _ScreenParams.x);
+                clipPos.xy = round(clipPos.xy / clipPos.w * snapRes) / snapRes * clipPos.w;
+                o.pos = clipPos;
+                o.w = clipPos.w;
+                float2 uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = _AffineWarp > 0 ? uv * lerp(1.0, clipPos.w, _AffineWarp) : uv;
+                return o;
+            }
+            half4 frag(AzPixel i) : SV_Target
+            {
+                float2 uv = i.uv;
+                if (_AffineWarp > 0) uv = uv / lerp(1.0, i.w, _AffineWarp);
+                return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv) * _Color;
+            }
+            ENDHLSL
+        }
+    }
     SubShader
     {
         Tags { "RenderType" = "Opaque" "Queue" = "Geometry" }

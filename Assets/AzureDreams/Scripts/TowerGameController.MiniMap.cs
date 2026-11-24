@@ -235,14 +235,19 @@ namespace AzureDreamsReimagined
             GUIUtility.RotateAroundPivot(-yaw, center);
             GUI.DrawTexture(map, _mapTexture, ScaleMode.StretchToFill, true, 0f,
                 new Color(1f, 1f, 1f, opacity), 0f, 0f);
-            DrawVisibleMapItems(map, opacity);
+            // Two seconds from dim to bright, then two seconds back to dim.
+            float markerPulse = 0.65f - 0.35f * Mathf.Cos(Time.unscaledTime * Mathf.PI * 0.5f);
+            DrawVisibleMapItems(map, opacity * markerPulse);
             foreach (var cell in _trapMarkers.Keys)
                 if (TrapAt(cell) is { IsRevealedOnMinimap: true } trap)
                     DrawMinimapMarker(map, cell, new Color(0.7f, 0.25f, 1f, opacity * (trap.IsActive ? 0.5f : 1f)));
             if (_seeMonsters)
                 foreach (var enemy in _creatures) DrawMinimapMarker(map, enemy.Cell, new Color(0.9f, 0.2f, 0.7f, opacity));
-            if (IsElevatorKnownOnMinimap())
-                DrawMinimapMarker(map, _stairCell, new Color(1f, 0.9f, 0.15f, opacity));
+            var elevatorColor = new Color(1f, 0.9f, 0.15f, opacity * markerPulse);
+            if (_floor == 2 || IsElevatorKnownOnMinimap())
+                DrawMinimapMarker(map, _stairCell, elevatorColor);
+            if (HasSecondTowerElevator)
+                DrawMinimapMarker(map, SecondTowerElevatorCell, elevatorColor);
             DrawMinimapMarker(map, _playerCell, new Color(1f, 0.18f, 0.16f, opacity));
             GUI.matrix = previousMatrix;
             GUI.color = previousColor;

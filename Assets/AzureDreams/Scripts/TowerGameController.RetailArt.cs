@@ -47,7 +47,7 @@ namespace AzureDreamsReimagined
             if (kind == 13 && subtype == 4)
             {
                 if (!_musicBoxInventorySprite && AssetMode.Load<Texture2D>("Tower/MusicBox") is { } box)
-                    _musicBoxInventorySprite = Sprite.Create(box, new Rect(0, 0, box.width, box.height), new Vector2(0.5f, 0.5f), 16f);
+                    _musicBoxInventorySprite = Sprite.Create(box, new Rect(0, 0, box.width, box.height), new Vector2(0.5f, 0.5f), 16f, 0, SpriteMeshType.FullRect);
                 if (_musicBoxInventorySprite) return _musicBoxInventorySprite;
             }
             if (kind == Items.Kind.Herb && subtype == ShopMedicinalHerbSubtype) subtype = 1;
@@ -222,9 +222,10 @@ namespace AzureDreamsReimagined
             }
             DrawFloorHudText(new Rect(floor.x + 12f, floor.y, 55f, floor.height));
             float levelInset = level < 10 ? 30f : 26f;
-            DrawHudText(new Rect(levelDial.x + levelInset, levelDial.y + 17f, 40f, 26f), $"{level}", _bodyStyle);
+            DrawHudText(new Rect(levelDial.x + levelInset, levelDial.y + 17f, 40f, 26f), HudLevelText(level), _bodyStyle);
             DrawHudText(new Rect(levelDial.x + 48f, levelDial.y - 6f, 30f, 23f), T("LV", "NÍV"), _messageStyle);
             int currentHp = Mathf.Max(0, _health);
+            RefreshHudHpText(currentHp, maxHp);
             if (GameLanguage.Portuguese)
             {
                 _portugueseHpStyle ??= new GUIStyle(_bodyStyle)
@@ -234,14 +235,14 @@ namespace AzureDreamsReimagined
                     wordWrap = false
                 };
                 DrawHudText(new Rect(hp.x + 10f, hp.y, hp.width - 20f, hp.height),
-                    $"{currentHp:000} / {maxHp:000} MÁX", _portugueseHpStyle);
+                    _hudHpText, _portugueseHpStyle);
             }
             else
             {
-                DrawHudText(new Rect(hp.x + 16f, hp.y, 57f, hp.height), $"{currentHp:000} /", _bodyStyle);
-                DrawHudText(new Rect(hp.x + 78f, hp.y + 2f, 67f, 16f), $"MAX {maxHp:000}", _bodyStyle);
+                DrawHudText(new Rect(hp.x + 16f, hp.y, 57f, hp.height), _hudHpText, _bodyStyle);
+                DrawHudText(new Rect(hp.x + 78f, hp.y + 2f, 67f, 16f), _hudMaxHpText, _bodyStyle);
             }
-            DrawHudText(new Rect(gold.x + 11f, gold.y, gold.width - 20f, gold.height), $"{_runLoot}G", _bodyStyle);
+            DrawHudText(new Rect(gold.x + 11f, gold.y, gold.width - 20f, gold.height), HudLootText(), _bodyStyle);
         }
 
         private static void DrawDialogueFrame(Rect rect, bool dialoguePole = false, bool pageCorner = false)

@@ -16,7 +16,12 @@ namespace AzureDreams.Reimagined.EditorTests
         [Test]
         public void EveryArchOrientationUsesThePassageFloorInsteadOfTheLintel()
         {
-            var floor = new RetailTowerFloor();
+            // The constructor is private (floors come from RetailTowerFloor's factory);
+            // build the default-size grid through its optional sideLength parameter.
+            var constructor = typeof(RetailTowerFloor).GetConstructor(
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                null, new[] { typeof(int) }, null)!;
+            var floor = (RetailTowerFloor)constructor.Invoke(new[] { constructor.GetParameters()[0].DefaultValue });
             typeof(RetailTowerFloor).GetProperty(nameof(RetailTowerFloor.Geometry))!
                 .SetValue(floor, RetailTowerGeometry.Load("geometry_29"));
             for (int kind = 79; kind <= 98; kind++)

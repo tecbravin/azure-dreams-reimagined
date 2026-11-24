@@ -10,7 +10,7 @@ namespace AzureDreamsReimagined
             if (!_interior) return;
             switch (_interior.interiorId)
             {
-                case SilverHouse when !StoryBuilding("circuit"):
+                case SilverHouse:
                     SpawnInteriorDisplayMonster("silver_nyuel_1", MonsterSpecies.NYUEL,
                         new Vector3(12f, 0f, 11.75f), new Vector2(0.12f, 0.15f), 0.2f);
                     SpawnInteriorDisplayMonster("silver_nyuel_2", MonsterSpecies.NYUEL,
@@ -29,12 +29,11 @@ namespace AzureDreamsReimagined
 
         private void SpawnSilverTownNyuels()
         {
-            var silver = FindStoryActor("construction_silver");
-            if (!silver || _interior) return;
+            if (_interior) return;
+            Vector3 origin = CellPosition(new Vector2Int(21, 45));
             for (int i = 0; i < 2; i++)
             {
-                // Keep both sides of the quest giver clear of town scenery.
-                Vector3 origin = silver.transform.position;
+                // Keep the former outdoor gathering spot clear of scenery.
                 for (int candidate = 0; candidate < 8; candidate++)
                 {
                     float angle = (candidate * 45f + (i == 0 ? 180f : 0f)) * Mathf.Deg2Rad;

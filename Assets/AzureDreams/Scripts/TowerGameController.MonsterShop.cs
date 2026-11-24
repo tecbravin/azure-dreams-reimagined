@@ -172,6 +172,9 @@ namespace AzureDreamsReimagined
         private bool TalkToMaster(NPCController master)
         {
             if (!InMonsterShop || _monsterShopData == null) return false;
+            if (StoryDay <= 0)
+                return StoryTalk(master, _monsterShopData.buy, _monsterShopData.buyPtBr);
+
             const string introduced = "dialogue.master.introduced";
             int tier = MasterReputationTier(TownReputation.Read());
             bool firstVisit = !TownSaveVariables.GetBool(introduced);
@@ -231,11 +234,35 @@ namespace AzureDreamsReimagined
 
         private static int PurchasePrice(EggPrice egg) => 2 * egg.sell;
 
+        // Species IDs in unlock order, starting at floor 1.
+        private static readonly int[] ShopEggUnlockOrder =
+        {
+            21 /* Pulunpa */, 6 /* Flame */, 23 /* Noise */, 25 /* Baloon */,
+            29 /* Cyclone */, 22 /* Troll */, 27 /* Blume */, 4 /* Kid */,
+            30 /* Manoeva */, 24 /* U-Boat */, 16 /* Clown */, 26 /* Dreamin */,
+            28 /* Volcano */, 14 /* Nyuel */, 8 /* Griffon */, 33 /* Kraken */,
+            41 /* Garuda */, 32 /* Picket */, 15 /* Death */, 12 /* Arachne */,
+            13 /* Battnel */, 18 /* Unicorn */, 34 /* Weadog */, 35 /* Stealth */,
+            20 /* Block */, 31 /* Barong */, 36 /* Viper */, 38 /* Zu */,
+            39 /* Mandara */, 10 /* Snowman */, 37 /* Naplass */, 40 /* Killer */,
+            19 /* Metal */, 42 /* Glacier */, 43 /* Tyrant */, 3 /* Dragon */,
+        };
+
         private void OpenEggStock()
         {
             _eggsForSale.Clear();
-            foreach (var egg in _monsterShopData.eggs)
-                if (FindEggSpecies(egg.id)?.forSale == true) _eggsForSale.Add(egg);
+            int unlocked = Mathf.Min(TownReputation.Read().HighestFloor, ShopEggUnlockOrder.Length);
+            for (int i = 0; i < unlocked; i++)
+            {
+                int speciesId = ShopEggUnlockOrder[i];
+                var egg = Array.Find(_monsterShopData.eggs, row => row.id == speciesId);
+                if (egg != null) _eggsForSale.Add(egg);
+            }
+            _eggsForSale.Sort((left, right) =>
+            {
+                int priceOrder = PurchasePrice(left).CompareTo(PurchasePrice(right));
+                return priceOrder != 0 ? priceOrder : left.id.CompareTo(right.id);
+            });
             _shopPurchaseMessage = null;
             SetMonsterShopPage(MonsterShopPage.Buy);
         }

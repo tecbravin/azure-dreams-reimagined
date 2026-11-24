@@ -46,7 +46,7 @@ namespace AzureDreamsReimagined
             ("shoes", "Shoes", "Sapatos", 500, true),
             ("aura_bike", "Aura Bike", "Moto de aura", 20000, true),
             ("booster", "Booster", "Propulsor", 15000, true),
-            ("music_box", "Music Box", "Caixa de música", 700, true)
+            ("music_box", "Music Box", "Caixa de música", 700, false)
         };
 
         private GeneralStorePage _generalStorePage;
@@ -178,7 +178,7 @@ namespace AzureDreamsReimagined
                 _generalStoreFeedback = T("Music Box added to your inventory.", "Caixa de música adicionada ao inventário.");
             PlayRetailSound(RetailSfx.Confirm);
             TownEventBus.Publish(TownEventBus.EventId.ShopPurchased, item.Id);
-            if (item.Id == "music_box" && FindStoryActor("fur") is { } fur && fur)
+            if (item.Id == "music_box" && owned == 0 && FindStoryActor("fur") is { } fur && fur)
             {
                 SetGeneralStorePage(GeneralStorePage.Closed);
                 // TOWN.BIN 0x410744 and 0x4107A9, after buying the music box.
@@ -186,6 +186,50 @@ namespace AzureDreamsReimagined
                     ("It's a gem.  You've got a great sense for quality.", "É uma joia. Você sabe reconhecer qualidade."),
                     ("You've made an excellent purchase if I may say so myself, {name}.", "Foi uma excelente compra, se posso dizer, {name}."));
             }
+        }
+
+        [System.Serializable]
+        private sealed class GeneralStoreCatalog
+        {
+            public GeneralStoreCatalogEntry[] entries;
+        }
+
+        [System.Serializable]
+        private sealed class GeneralStoreCatalogEntry
+        {
+            public string id;
+            public string description;
+            public string descriptionPtBr;
+        }
+
+        private readonly System.Collections.Generic.Dictionary<string, Texture2D> _generalStoreIcons = new();
+        private GeneralStoreCatalog _generalStoreCatalog;
+
+        private Texture2D GeneralStoreIcon(string id)
+        {
+            if (!_generalStoreIcons.TryGetValue(id, out var icon))
+                _generalStoreIcons[id] = icon = AssetMode.Load<Texture2D>(id == "music_box" ? "Tower/MusicBox" : "Town/GeneralStore/" + id);
+            return icon;
+        }
+
+        private string GeneralStoreDescription(string id)
+        {
+            if (_generalStoreCatalog == null)
+            {
+                var asset = AssetMode.Load<TextAsset>("Town/GeneralStore/catalog");
+                _generalStoreCatalog = (asset ? JsonUtility.FromJson<GeneralStoreCatalog>(asset.text) : null)
+                    ?? new GeneralStoreCatalog();
+            }
+
+            var entries = _generalStoreCatalog.entries;
+            if (entries == null) return string.Empty;
+            foreach (var entry in entries)
+                if (entry != null && entry.id == id)
+                {
+                    string english = entry.description ?? string.Empty;
+                    return T(english, string.IsNullOrEmpty(entry.descriptionPtBr) ? english : entry.descriptionPtBr);
+                }
+            return string.Empty;
         }
 
         private void DrawGeneralStore()
@@ -198,8 +242,13 @@ namespace AzureDreamsReimagined
                 var item = GeneralStock[_generalStoreStockRows[_generalStoreSelection]];
                 GUI.Label(new Rect(103, 144, 432, 50), _generalStoreFeedback ??
                     T($"Buy {item.English} for {item.Price} G?", $"Comprar {item.Portuguese} por {item.Price} G?"));
-                if (GUI.Button(new Rect(103, 212, 215, 26), WithInteractHint("Confirm", "Confirmar"))) BuyGeneralStoreItem();
-                if (GUI.Button(new Rect(320, 212, 215, 26), T("Back", "Voltar"))) BackFromGeneralStore();
+                var icon = GeneralStoreIcon(item.Id);
+                if (icon) GUI.DrawTexture(new Rect(103, 190, 32, 32), icon, ScaleMode.ScaleToFit);
+                string description = GeneralStoreDescription(item.Id);
+                if (!string.IsNullOrEmpty(description))
+                    GUI.Label(new Rect(145, 184, 390, 93), description, _messageStyle);
+                if (GUI.Button(new Rect(103, 284, 215, 26), WithInteractHint("Confirm", "Confirmar"))) BuyGeneralStoreItem();
+                if (GUI.Button(new Rect(320, 284, 215, 26), T("Back", "Voltar"))) BackFromGeneralStore();
                 return;
             }
             string prompt = _generalStorePage switch
@@ -216,15 +265,19 @@ namespace AzureDreamsReimagined
             {
                 var row = new Rect(103, 211 + (i - first) * 26, 432, 24);
                 string label;
+                Texture2D rowIcon = null;
                 if (_generalStorePage == GeneralStorePage.Services)
                     label = i == 0 ? T("Buy", "Comprar") : i == 1 ? T("Purchases", "Compras") : T("Leave", "Sair");
                 else
                 {
                     bool buying = _generalStorePage == GeneralStorePage.Buy;
                     var item = GeneralStock[buying ? _generalStoreStockRows[i] : _generalStorePurchasedRows[i]];
+                    rowIcon = GeneralStoreIcon(item.Id);
                     label = T(item.English, item.Portuguese) + (buying ? $"   {item.Price} G" : $"   ×{GeneralStoreOwned(item.Id)}");
                 }
-                if (GUI.Button(row, i == _generalStoreSelection ? "› " + label : label))
+                bool clicked = GUI.Button(row, i == _generalStoreSelection ? "› " + label : label);
+                if (rowIcon) GUI.DrawTexture(new Rect(row.x + 6f, row.y + 3f, 18f, 18f), rowIcon, ScaleMode.ScaleToFit);
+                if (clicked)
                 {
                     _generalStoreSelection = i;
                     ChooseGeneralStoreRow(i);

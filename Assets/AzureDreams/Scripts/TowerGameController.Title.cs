@@ -14,7 +14,6 @@ namespace AzureDreamsReimagined
 
         private enum TitlePage { Closed, Opening, Main, Continue, NewGame, Options, Manual, Gallery }
         private const int ManualPageCount = 32;
-        private const int FamiliarPortraitCount = 50;
         private TitlePage _titlePage;
         private int _titleSelection;
         private int _titleSubSelection;
@@ -28,7 +27,6 @@ namespace AzureDreamsReimagined
         private bool _titleHasSave;
         private int _manualPage = 1;
         private int _galleryTab;
-        private int _familiarPortrait = 1;
         private Vector2 _titleImageScroll;
         private bool _manualZoom;
         private float _titleMainStarted;
@@ -500,20 +498,7 @@ namespace AzureDreamsReimagined
             }
             else
             {
-                int tab = GUILayout.Toolbar(_galleryTab, new[] { T("Characters", "Personagens"), T("Monsters", "Monstros"),
-                    T("Koh's status", "Estados de Koh"), T("Weedy's book", "Livro da Weedy") });
-                if (tab != _galleryTab) { _galleryTab = tab; _titleImageScroll = Vector2.zero; }
-                Texture2D image = tab switch { 0 => StreamPortrait("Gallery/dialogue"), 1 => StreamPortrait("Gallery/monsters"), 2 => StreamPortrait("Gallery/koh"), _ => null };
-                if (tab == 3)
-                {
-                    GUILayout.BeginHorizontal();
-                    if (GUILayout.Button("‹", GUILayout.Width(35f))) _familiarPortrait = (_familiarPortrait + FamiliarPortraitCount - 2) % FamiliarPortraitCount + 1;
-                    GUILayout.Label($"{_familiarPortrait} / {FamiliarPortraitCount}", GUILayout.Width(72f));
-                    if (GUILayout.Button("›", GUILayout.Width(35f))) _familiarPortrait = _familiarPortrait % FamiliarPortraitCount + 1;
-                    GUILayout.EndHorizontal();
-                    image = StreamPortrait($"Book/portrait_{_familiarPortrait:00}");
-                }
-                DrawTitleImage(image, panel.width - 34f, panel.height - (tab == 3 ? 103f : 80f), 1f, tab < 2);
+                DrawGalleryCollection(panel);
             }
             GUILayout.EndArea();
         }

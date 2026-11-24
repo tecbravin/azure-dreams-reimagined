@@ -6,6 +6,52 @@ Shader "AzureDreams/RetailTowerTranslucent"
     {
         _MainTex ("Texture", 2D) = "white" {}
     }
+    // URP (HLSL). The Built-in SubShader below stays as the fallback.
+    SubShader
+    {
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" "IgnoreProjector"="True" "RenderPipeline"="UniversalPipeline" }
+        Cull Back
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+        Pass
+        {
+            Tags { "LightMode"="UniversalForward" }
+            HLSLPROGRAM
+            #pragma target 3.0
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "Assets/AzureDreams/Shaders/AzureURP.hlsl"
+            #include "Assets/AzureDreams/Shaders/KohWallFade.cginc"
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            CBUFFER_END
+            struct AzVertex { float4 vertex : POSITION; float2 uv : TEXCOORD0; half4 color : COLOR; };
+            struct AzPixel { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; half4 color : COLOR; float w : TEXCOORD1; float3 world : TEXCOORD2; };
+            AzPixel vert(AzVertex v)
+            {
+                AzPixel o;
+                float4 clipPos = AzurePsxSnap(TransformObjectToHClip(v.vertex.xyz), _PSXVertexSnapResolution);
+                o.pos = clipPos;
+                o.w = clipPos.w;
+                o.world = TransformObjectToWorld(v.vertex.xyz);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex) * AzureAffineFactor(clipPos.w, _PSXAffineWarpStrength);
+                o.color = v.color;
+                return o;
+            }
+            half4 frag(AzPixel i) : SV_Target
+            {
+                float2 uv = i.uv / AzureAffineFactor(i.w, _PSXAffineWarpStrength);
+                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                clip(color.a - 0.5);
+                color.rgb *= i.color.rgb;
+                color.a = 0.5;
+                ClipKohWall(i.world, i.pos.xy);
+                return color;
+            }
+            ENDHLSL
+        }
+    }
     SubShader
     {
         Tags { "RenderType"="Transparent" "Queue"="Transparent" "IgnoreProjector"="True" }
