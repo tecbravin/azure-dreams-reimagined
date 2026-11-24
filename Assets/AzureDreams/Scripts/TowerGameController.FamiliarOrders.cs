@@ -100,9 +100,6 @@ namespace AzureDreamsReimagined
             PlayRetailSound(RetailSfx.Confirm);
         }
         private Vector3 _blueFamiliarFrom;
-        private BagFamiliar _fusionFirst, _fusionSecond;
-        private bool _fusionPendingSecond;
-        private string _fusionMessage;
 
         private ActorRecord InventoryCollarActor(int slot) => _area != Area.Tower ? null : slot switch
         {
@@ -142,24 +139,6 @@ namespace AzureDreamsReimagined
             orders.Ai = (FamiliarAi)saved.ai;
             if (saved.offset != Vector2Int.zero && saved.offset.x is >= -1 and <= 1 && saved.offset.y is >= -1 and <= 1)
                 orders.Offset = saved.offset;
-        }
-
-        private BagFamiliar FindBagFamiliar(ActorRecord actor)
-        {
-            if (actor == null) return null;
-            // Search in the familiar inventory (bag)
-            if (_bagFamiliars != null)
-            {
-                foreach (var f in _bagFamiliars)
-                {
-                    if (f.Actor == actor) return f;
-                }
-            }
-            // Check blue collar familiar (BagFamiliar)
-            if (_blueCollarFamiliar != null && _blueCollarFamiliar.Actor == actor) return _blueCollarFamiliar;
-            // Check blue collar ally (ThrownEggAlly)
-            if (_blueCollarAlly != null && _blueCollarAlly.Actor == actor) return null; // ThrownEggAlly is not a BagFamiliar
-            return null;
         }
 
         // Status-page cycling follows the party on the current floor. Familiars
@@ -255,51 +234,20 @@ namespace AzureDreamsReimagined
 
         private Vector2Int FormationWorldOffset(Vector2Int screen) => Vector2Int.RoundToInt(CameraRelativeMovement(screen));
 
-        private void OpenFamiliarOrderPicker(FamiliarOrders orders)
+        private void OpenFamiliarOrderPicker(ActorRecord actor)
         {
             if (_familiarOrderChoice == FusionOrderIndex)
             {
-                if (_fusionPendingSecond)
-                {
-                    // Second familiar selected: build the fusion preview from both familiars
-                    var redFamiliar = _fusionFirst;
-                    var blueFamiliar = FindBagFamiliar(orders.Target);
-                    if (redFamiliar != null && blueFamiliar != null)
-                    {
-                        BuildFusionPreview(redFamiliar, blueFamiliar);
-                        _fusionPendingSecond = false;
-                        _fusionFirst = null;
-                        _fusionMessage = null;
-                        _familiarOrderPicker = FamiliarOrderPicker.Fusion;
-                        _fusionSecond = null;
-                        return;
-                    }
-                    // Fallback: if BagFamiliar not found, reset and exit
-                    _fusionFirst = null;
-                    _fusionSecond = null;
-                    _fusionPendingSecond = false;
-                    _fusionMessage = null;
-                    return;
-                }
-                else
-                {
-                    // First familiar selected: store the BagFamiliar object
-                    var familiar = FindBagFamiliar(orders.Target);
-                    if (familiar != null)
-                        _fusionFirst = familiar;
-                    _fusionSecond = null;
-                    _fusionMessage = null;
-                    return;
-                }
+                OpenTowerFusion();
+                return;
             }
             if (_familiarOrderChoice == 1)
             {
-                _familiarAiCursor = _inventoryActorSlot == 1 && _familiarWaiting ? FamiliarAi.Wait : orders.Ai;
+                _familiarAiCursor = actor == _familiarActor && _familiarWaiting ? FamiliarAi.Wait : OrdersFor(actor).Ai;
                 _familiarOrderPicker = FamiliarOrderPicker.Ai;
                 return;
             }
-            var actor = InventoryCollarActor(_inventoryActorSlot == 2 ? 2 : 1);
-            if (actor != null) OpenFamiliarFormation(actor);
+            OpenFamiliarFormation(actor);
         }
 
         private void SetFamiliarAi(ActorRecord actor, FamiliarAi ai)
@@ -325,25 +273,11 @@ namespace AzureDreamsReimagined
         private void HandleFamiliarOrders(ActorRecord actor, int horizontal, int vertical, bool confirm)
         {
             if (IsFamiliarLost(actor)) return;
-            var orders = OrdersFor(actor);
-            if (_fusionPendingSecond)
-            {
-                if (vertical != 0)
-                {
-                    _familiarOrderChoice = Mathf.Clamp(_familiarOrderChoice + vertical, 0, FamiliarOrderCount - 1);
-                    _fusionMessage = null;
-                }
-                if (confirm)
-                {
-                    OpenFamiliarOrderPicker(orders);
-                }
-                return;
-            }
             switch (_familiarOrderPicker)
             {
                 case FamiliarOrderPicker.None:
                     _familiarOrderChoice = Mathf.Clamp(_familiarOrderChoice + vertical, 0, FamiliarOrderCount - 1);
-                    if (confirm) OpenFamiliarOrderPicker(orders);
+                    if (confirm) OpenFamiliarOrderPicker(actor);
                     break;
                 case FamiliarOrderPicker.Formation:
                     var delta = new Vector2Int(horizontal, -vertical);
@@ -376,8 +310,8 @@ namespace AzureDreamsReimagined
         private void DrawInventoryCollarOrders(Rect panel, Rect stats, ActorRecord actor)
         {
             bool blue = actor == _blueCollarAlly?.Actor;
-            bool frogBlocksFusion = _familiarOrderPicker == FamiliarOrderPicker.Fusion && FusionBlockedByFrog;
-            if (_familiarOrderPicker != FamiliarOrderPicker.Fusion || _fusionPreview == null || frogBlocksFusion)
+            var preview = _fusionPreview;
+            if (_familiarOrderPicker != FamiliarOrderPicker.Fusion || preview == null)
                 DrawActorStatus(stats, blue ? _blueCollarFamiliar.Name : FamiliarDisplayName, actor, true,
                     blue ? actor.Hp : _familiarHealth, actor.MaxHp, actor.CurrentAttack, actor.CurrentDefense);
             DrawInventoryText(new Rect(stats.x + 10f, stats.yMax + 6f, stats.width - 20f, 23f),
@@ -391,26 +325,22 @@ namespace AzureDreamsReimagined
                 DrawInventoryText(new Rect(panel.x + 10f, panel.y + 7f, panel.width - 20f, 23f),
                     T("Fusion", "Fusão"), _bodyStyle);
                 bool bothActive = _familiar && _blueCollarAlly?.View;
-                string details = frogBlocksFusion ? FrogFusionMessage() :
-                    _fusionPreview != null
-                        ? _fusionFirst.Definition.DisplayName + " + " + _fusionSecond.Definition.DisplayName + "\n" +
-                          T("The other familiar will be absorbed.", "O outro familiar será absorvido.")
-                        : _fusionPendingSecond
-                            ? (_fusionFirst != null ? _fusionFirst.Definition.DisplayName : T("Select first familiar first.", "Selecione o primeiro familiar."))
-                            : bothActive ? T("These familiars cannot fuse.", "Esses familiares não podem se fundir.") :
-                                T("Summon both familiars first.", "Invoque os dois familiares primeiro.");
-                DrawInventoryText(new Rect(panel.x + 10f, panel.y + 38f, panel.width - 20f, 52f), details, _messageStyle);
-                if (_fusionMessage != null)
-                    DrawInventoryText(new Rect(panel.x + 10f, panel.y + 93f, panel.width - 20f, 38f), _fusionMessage, _messageStyle);
-                if (!frogBlocksFusion && _fusionPreview is { } preview)
+                string details = !bothActive ? T("Summon both familiars first.", "Invoque os dois familiares primeiro.") :
+                    IsFrog(_familiarActor) || IsFrog(_blueCollarAlly.Actor) ? FrogFusionMessage() :
+                    IsFamiliarLost(_familiarActor) || IsFamiliarLost(_blueCollarAlly.Actor)
+                        ? T("Both familiars must be near Koh.", "Os dois familiares precisam estar perto de Koh.") :
+                    preview == null ? T("These familiars cannot fuse.", "Esses familiares não podem se fundir.") :
+                        preview.RedName + " + " + preview.BlueName + "\n" +
+                        T("The other familiar will be absorbed.", "O outro familiar será absorvido.");
+                DrawInventoryParagraph(new Rect(panel.x + 10f, panel.y + 38f, panel.width - 20f, 70f), details);
+                if (preview != null)
                 {
                     var result = preview.Result;
-                    DrawFamiliarStatus(stats, preview.Name, result, result.Hp, result.MaxHp,
-                        result.CurrentAttack, result.CurrentDefense);
-                    DrawFusionResultStatsChart(new Rect(stats.x + 5f, stats.y + 142f, stats.width - 10f, 58f), result);
-                    DrawInventoryText(new Rect(panel.x + 10f, panel.y + 93f, panel.width - 20f, 38f),
-                        DescribeTalents(result), _messageStyle);
-                    if (DrawInventoryButton(new Rect(panel.x + 10f, panel.yMax - 69f, panel.width - 20f, 26f),
+                    DrawFusionResultHeader(new Rect(stats.x + 10f, stats.y + 8f, stats.width - 20f, 44f), preview);
+                    DrawFusionResultStatsChart(new Rect(stats.x + 10f, stats.y + 58f, stats.width - 20f, 100f), result);
+                    DrawInventoryParagraph(new Rect(stats.x + 10f, stats.y + 163f, stats.width - 20f, 51f),
+                        DescribeTalents(result), 3);
+                    if (DrawInventoryFittedButton(new Rect(panel.x + 10f, panel.yMax - 69f, panel.width - 20f, 26f),
                         T("Confirm fusion", "Confirmar fusão")))
                         ConfirmFamiliarFusion();
                 }
@@ -491,7 +421,7 @@ namespace AzureDreamsReimagined
                     i == _familiarOrderChoice))
                 {
                     _familiarOrderChoice = i;
-                    OpenFamiliarOrderPicker(orders);
+                    if (!IsFamiliarLost(actor)) OpenFamiliarOrderPicker(actor);
                 }
             }
             DrawInventoryText(new Rect(panel.x + 10f, panel.y + 44f + orderCount * 30f, panel.width - 20f, 38f),

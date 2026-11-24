@@ -74,8 +74,6 @@ namespace AzureDreamsReimagined
         }
 
         private static readonly Dictionary<string, Texture2D> CommunitySourceAtlases = new(StringComparer.Ordinal);
-        // The manifest is the same for every monster: parse it once, not once per spawned instance.
-        private static CommunityManifest s_communityManifest;
 
         private void Awake()
         {
@@ -232,24 +230,20 @@ namespace AzureDreamsReimagined
         private IEnumerator LoadCommunityActions()
         {
             const string relativeRoot = "Monsters/Community/";
-            CommunityManifest manifest = s_communityManifest;
-            if (manifest == null)
+            using var manifestRequest = UnityWebRequest.Get(StreamingUrl(relativeRoot + "manifest.json"));
+            yield return manifestRequest.SendWebRequest();
+            if (manifestRequest.result != UnityWebRequest.Result.Success)
             {
-                using var manifestRequest = UnityWebRequest.Get(StreamingUrl(relativeRoot + "manifest.json"));
-                yield return manifestRequest.SendWebRequest();
-                if (manifestRequest.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogWarning($"Could not load community monster animation manifest: {manifestRequest.error}", this);
-                    yield break;
-                }
+                Debug.LogWarning($"Could not load community monster animation manifest: {manifestRequest.error}", this);
+                yield break;
+            }
 
-                try { manifest = JsonUtility.FromJson<CommunityManifest>(manifestRequest.downloadHandler.text); }
-                catch (Exception exception)
-                {
-                    Debug.LogWarning($"Community monster animation manifest is invalid: {exception.Message}", this);
-                    yield break;
-                }
-                s_communityManifest = manifest;
+            CommunityManifest manifest;
+            try { manifest = JsonUtility.FromJson<CommunityManifest>(manifestRequest.downloadHandler.text); }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"Community monster animation manifest is invalid: {exception.Message}", this);
+                yield break;
             }
             CommunityMonster monster = null;
             if (manifest?.monsters != null)
@@ -431,6 +425,7 @@ namespace AzureDreamsReimagined
         }
 
         private bool _paralyzed;
+        private bool _reportedFrameMismatch;
 
         private void LateUpdate()
         {
@@ -490,7 +485,19 @@ namespace AzureDreamsReimagined
                     row = Mathf.Abs(4 - spin);
                     _renderer.flipX = spin is >= 1 and <= 3;
                 }
-                _renderer.sprite = _frames[row * _columns + column];
+                int frame = row * _columns + column;
+                if ((uint)frame >= (uint)_frames.Length)
+                {
+                    // The frame table was built for a different atlas layout than _columns describes.
+                    // Hold the first frame instead of throwing every LateUpdate.
+                    if (!_reportedFrameMismatch)
+                    {
+                        _reportedFrameMismatch = true;
+                        Debug.LogWarning($"{name}: frame {frame} outside {_frames.Length} frames (columns {_columns}, atlas {(_atlas ? _atlas.name : "none")}).", this);
+                    }
+                    frame = 0;
+                }
+                _renderer.sprite = _frames[frame];
             }
             PresentCycloneWhirl();
 

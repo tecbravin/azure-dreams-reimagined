@@ -240,6 +240,64 @@ public class TowerActorActionsIntegrationTests
     }
 
     [UnityTest]
+    public IEnumerator TowerFusionUsesTheSummonedRedFamiliarAndRetainsTheConfirmedPreview()
+    {
+        const string collarPref = "ad_town_tower.blue_collar_acquired";
+        bool hadCollarPref = PlayerPrefs.HasKey(collarPref);
+        int previousCollarPref = PlayerPrefs.GetInt(collarPref);
+        var definition = ScriptableObject.CreateInstance<ActorDefinition>();
+        definition.Configure("Test familiar", ActorKind.Familiar, 20, 5, 0.16f, Color.white, null);
+        try
+        {
+            PlayerPrefs.SetInt(collarPref, 1);
+            Call("StopTowerEntrance");
+            Creatures.Clear();
+            var red = new CoreActor { Level = 5, Hp = 20, MaxHp = 20, MaxMp = 40, MpRaw = 40 << 8,
+                Flags14 = AzureDreams.Core.Element.Fire };
+            var blue = new CoreActor { Level = 3, Hp = 20, MaxHp = 20, MaxMp = 40, MpRaw = 40 << 8,
+                Flags14 = AzureDreams.Core.Element.Water };
+            var reserve = new TowerGameController.BagFamiliar();
+            reserve.GetType().GetField("Definition", Flags).SetValue(reserve, definition);
+            reserve.GetType().GetField("Actor", Flags).SetValue(reserve, blue);
+            var bag = Get<IList>("_bagFamiliars");
+            bag.Clear();
+            bag.Add(reserve);
+            var cell = Get<Vector2Int>("_playerCell");
+            var redCell = cell + Vector2Int.left;
+            var redView = new GameObject("Red collar familiar");
+            redView.transform.SetParent(_root.transform);
+            redView.transform.position = new Vector3(redCell.x, 0.55f, redCell.y);
+            Set("_familiar", redView);
+            Set("_familiarCell", redCell);
+            Set("_familiarDefinition", definition);
+            Set("_familiarActor", red);
+            Set("_familiarHealth", (int)red.Hp);
+            Set("_familiarInBag", false);
+            Call("SpawnBlueCollarFamiliar", reserve, cell + Vector2Int.right, false);
+
+            Call("OpenInventoryRoot");
+            Set("_inventoryActorSlot", 1);
+            Call("SelectInventoryMenuRow", 2);
+            var preview = Get<object>("_fusionPreview");
+            Assert.That(preview, Is.Not.Null);
+            var result = (CoreActor)preview.GetType().GetField("Result", Flags).GetValue(preview);
+            Assert.That(result.Flags14 & 7, Is.EqualTo(AzureDreams.Core.Element.Water));
+            Call("ConfirmFamiliarFusion");
+            Assert.That(Get<object>("_inventoryMenu").ToString(), Is.EqualTo("Closed"));
+            Assert.That(Get<object>("_fusionPreview"), Is.Null);
+            _controller.TickTurnPresentation(float.MaxValue);
+            Assert.That(Get<bool>("_fusionPlaying"), Is.True, "The turn should start fusion with the confirmed preview.");
+        }
+        finally
+        {
+            if (hadCollarPref) PlayerPrefs.SetInt(collarPref, previousCollarPref);
+            else PlayerPrefs.DeleteKey(collarPref);
+            UnityEngine.Object.Destroy(definition);
+        }
+        yield break;
+    }
+
+    [UnityTest]
     public IEnumerator Controller_PermanentFamiliarKeepsExperienceWhenReturningWithATemporaryFamiliar()
     {
         var townPrefs = typeof(TownSaveVariables);

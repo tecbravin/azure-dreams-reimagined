@@ -49,6 +49,11 @@ namespace AzureDreamsReimagined
         private static readonly Rect HutFootprint = Rect.MinMaxRect(20f, 8f, 29f, 17f);
         private readonly List<GameObject> _hutViews = new();
         private int _homePanel;
+        private const float HutFusionRowHeight = 30f;
+        private const float HutFusionListHeight = 118f;
+        private readonly List<(int Slot, BagFamiliar Familiar)> _hutFusionCandidates = new();
+        private BagFamiliar _hutFusionSource;
+        private FusionPreview _hutFusionPreview;
         private int _hutFusionTarget = -1;
         private Vector2 _hutFusionScroll;
         private int HutIndex => _interior ? Array.IndexOf(HutScenes, _interior.interiorId) : -1;
@@ -384,6 +389,18 @@ namespace AzureDreamsReimagined
             var keys = Keyboard.current;
             if (_homePanel != 0 && keys != null && (_cancel?.WasPressedThisFrame() == true))
             { _homePanel = _homePanel == 3 ? 2 : 0; return true; }
+            if (_homePanel == 3)
+            {
+                int delta = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+                if (delta != 0 && _hutFusionCandidates.Count > 0)
+                    SelectHutFusionTarget(Mathf.Clamp(_hutFusionTarget + delta, 0, _hutFusionCandidates.Count - 1));
+                else if (_interact?.WasPressedThisFrame() == true && _hutFusionCandidates.Count > 0)
+                {
+                    if (_hutFusionTarget < 0) SelectHutFusionTarget(0);
+                    else ConfirmHutFusion();
+                }
+                return true;
+            }
             if (InHomeHut && keys != null && keys.mKey.wasPressedThisFrame && !_activeTownNpc && !_interiorMenu)
             { _homePanel = _homePanel == 1 ? 0 : 1; return true; }
             return _homePanel != 0;
@@ -449,11 +466,11 @@ namespace AzureDreamsReimagined
             }
         }
 
-        private void DrawKohHomePanel()
+        private void DrawKohHomePanel(float width, float height)
         {
             if (_homePanel == 1) { DrawHomeFloorPlan(); return; }
             if (!InHomeHut) return;
-            if (_homePanel == 3) { DrawHutFusion(); return; }
+            if (_homePanel == 3) { DrawHutFusion(width, height); return; }
             if (_homePanel != 2) return;
             var roster = ReadHutRoster();
             string slot = roster[_hutSlot];
@@ -523,64 +540,118 @@ namespace AzureDreamsReimagined
             if (changed) SaveHutRoster(roster);
         }
 
-        private void DrawHutFusion()
+        private void OpenHutFusion(List<string> roster)
         {
-            var roster = ReadHutRoster();
-            var first = HutFusionFamiliar(roster[_hutSlot]);
-            BeginHudMenu(new Rect(128, 72, 384, 336));
-            GUILayout.Label(T("Choose a stored familiar", "Escolha um familiar guardado"));
-            _hutFusionScroll = GUILayout.BeginScrollView(_hutFusionScroll, GUILayout.MaxHeight(102f));
-            for (int i = 0; i < roster.Count; i++)
+            _hutFusionSource = HutFusionFamiliar(roster[_hutSlot]);
+            if (_hutFusionSource == null) return;
+            _hutFusionCandidates.Clear();
+            for (int i = 0; i < HutPads.Length; i++)
             {
                 if (i == _hutSlot) continue;
                 var candidate = HutFusionFamiliar(roster[i]);
-                if (candidate != null && GUILayout.Button($"{i + 1}. {candidate.Name}"))
-                    _hutFusionTarget = i;
+                if (candidate != null) _hutFusionCandidates.Add((i, candidate));
             }
-            GUILayout.EndScrollView();
+            _hutFusionTarget = -1;
+            _hutFusionPreview = null;
+            _hutFusionScroll = Vector2.zero;
+            _homePanel = 3;
+            PlayRetailSound(RetailSfx.Confirm);
+        }
 
-            if (first != null && _hutFusionTarget >= 0 && _hutFusionTarget < roster.Count)
+        private void SelectHutFusionTarget(int index)
+        {
+            if (index == _hutFusionTarget) return;
+            _hutFusionTarget = index;
+            float top = index * HutFusionRowHeight;
+            _hutFusionScroll.y = Mathf.Clamp(_hutFusionScroll.y, top + HutFusionRowHeight - HutFusionListHeight, top);
+            var target = _hutFusionCandidates[index].Familiar;
+            _hutFusionPreview = BuildFusionPreview(_hutFusionSource.Actor, _hutFusionSource.Name, target.Actor, target.Name);
+            PlayRetailSound(RetailSfx.Cursor);
+        }
+
+        private void ConfirmHutFusion()
+        {
+            var preview = _hutFusionPreview;
+            if (preview == null) return;
+            var (slot, second) = _hutFusionCandidates[_hutFusionTarget];
+            var first = _hutFusionSource;
+            var survivor = preview.BlueSurvives ? second : first;
+            var roster = ReadHutRoster();
+            RestoreTownFamiliarVitals(preview.Result);
+            roster[_hutSlot] = EncodeFamiliar(survivor.Definition, survivor.Species, preview.Result, survivor.Nickname);
+            roster[slot] = EmptyHutSlot;
+            _hutStatusActor = null;
+            _hutFusionPreview = null;
+            _homePanel = 0;
+            SaveHutRoster(roster);
+            PlayHutFusionCue();
+            _message = T($"{first.Name} was fused with {second.Name}.\nResult: {preview.Name}.",
+                $"{first.Name} foi fundido com {second.Name}.\nResultado: {preview.Name}.");
+        }
+
+        private void DrawHutFusion(float width, float height)
+        {
+            float panelWidth = Mathf.Min(420f, width - 24f);
+            const float panelHeight = 422f;
+            var panel = new Rect((width - panelWidth) * 0.5f, (height - panelHeight) * 0.5f, panelWidth, panelHeight);
+            DrawDialogueFrame(panel);
+            float x = panel.x + 12f, innerWidth = panel.width - 24f;
+            DrawInventoryFittedText(new Rect(x, panel.y + 9f, innerWidth - 24f, 24f),
+                T("Choose a stored familiar", "Escolha um familiar guardado"), _bodyStyle);
+            DrawHutCloseButton(panel);
+            DrawInventoryFittedText(new Rect(x, panel.y + 37f, innerWidth, 22f),
+                T($"First familiar: {_hutFusionSource.Name}", $"Primeiro familiar: {_hutFusionSource.Name}"), _messageStyle);
+
+            var list = new Rect(x, panel.y + 65f, innerWidth, HutFusionListHeight);
+            if (_hutFusionCandidates.Count == 0)
+                DrawInventoryParagraph(list, T("There are no other familiars in the hut.", "Não há outro familiar no alojamento."));
+            else
             {
-                var second = HutFusionFamiliar(roster[_hutFusionTarget]);
-                var preview = second == null ? null : BuildFusionPreview(first, second, first.Name);
-                if (preview == null)
-                    GUILayout.Label(T("These familiars cannot fuse.", "Esses familiares não podem se fundir."));
-                else
+                float rowWidth = list.width - 18f;
+                _hutFusionScroll = GUI.BeginScrollView(list, _hutFusionScroll,
+                    new Rect(0f, 0f, rowWidth, _hutFusionCandidates.Count * HutFusionRowHeight));
+                for (int i = 0; i < _hutFusionCandidates.Count; i++)
                 {
-                    var survivor = preview.BlueSurvives ? second : first;
-                    GUILayout.Label($"{preview.Name} ({survivor.Definition.DisplayName})  Lv. {preview.Result.Level}");
-                    GUILayout.Label($"HP {preview.Result.MaxHp}   MP {preview.Result.MaxMp}   {DescribeTalents(preview.Result)}");
-                    DrawFusionResultStatsChart(GUILayoutUtility.GetRect(342f, 66f, GUILayout.ExpandWidth(true)), preview.Result);
-                    if (GUILayout.Button(T("Confirm fusion", "Confirmar fusão")))
-                    {
-                        roster[_hutSlot] = EncodeFamiliar(survivor.Definition, survivor.Species, preview.Result, survivor.Nickname);
-                        roster[_hutFusionTarget] = EmptyHutSlot;
-                        _hutStatusActor = null;
-                        // The hut has no ritual: only the MERGE.STR cue and the result.
-                        _homePanel = 0;
-                        SaveHutRoster(roster);
-                        PlayHutFusionCue();
-                        string result = preview.Name == survivor.Definition.DisplayName
-                            ? preview.Name : $"{preview.Name} ({survivor.Definition.DisplayName})";
-                        _message = T($"{first.Name} was fused with {second.Name}.\nResult: {result}.",
-                            $"{first.Name} foi fundido com {second.Name}.\nResultado: {result}.");
-                    }
+                    var (slot, familiar) = _hutFusionCandidates[i];
+                    if (DrawInventoryFittedButton(new Rect(0f, i * HutFusionRowHeight, rowWidth, HutFusionRowHeight - 2f),
+                        $"{slot + 1}. {familiar.Name}", i == _hutFusionTarget))
+                        SelectHutFusionTarget(i);
                 }
+                GUI.EndScrollView();
             }
 
-            if (GUILayout.Button(WithCancelHint("Back", "Voltar"))) _homePanel = 2;
-            GUILayout.EndArea();
+            var preview = _hutFusionPreview;
+            if (preview != null)
+            {
+                DrawFusionResultHeader(new Rect(x, panel.y + 192f, innerWidth, 44f), preview);
+                DrawFusionResultStatsChart(new Rect(x, panel.y + 242f, innerWidth, 98f), preview.Result);
+                DrawInventoryParagraph(new Rect(x, panel.y + 345f, innerWidth, 36f),
+                    DescribeTalents(preview.Result), 2);
+                if (DrawInventoryFittedButton(new Rect(x, panel.yMax - 36f, (innerWidth - 8f) * 0.5f, 26f),
+                    WithInteractHint("Confirm fusion", "Confirmar fusão")))
+                    ConfirmHutFusion();
+            }
+            else if (_hutFusionTarget >= 0)
+            {
+                DrawInventoryParagraph(new Rect(x, panel.y + 192f, innerWidth, 60f),
+                    T("These familiars cannot fuse.", "Esses familiares não podem se fundir."));
+            }
+            if (DrawInventoryFittedButton(new Rect(panel.center.x + 4f, panel.yMax - 36f, (innerWidth - 8f) * 0.5f, 26f),
+                WithCancelHint("Back", "Voltar")))
+                _homePanel = 2;
         }
 
         private BagFamiliar HutFusionFamiliar(string slot)
         {
             var definition = HutDefinition(slot);
             if (!definition) return null;
+            var actor = ReadStoredFamiliarActor(slot, definition);
+            RestoreTownFamiliarVitals(actor);
             return new BagFamiliar
             {
                 Definition = definition,
                 Species = ReadHatchedSlot(slot),
-                Actor = ReadStoredFamiliarActor(slot, definition),
+                Actor = actor,
                 Nickname = HutFamiliarNickname(slot)
             };
         }
@@ -605,11 +676,8 @@ namespace AzureDreamsReimagined
             DrawHudText(new Rect(panel.x + 10f, panel.y + 208f, panel.width - 20f, 46f),
                 T("Talents: ", "Talentos: ") + DescribeTalents(stored), _messageStyle);
 
-            if (GUI.Button(new Rect(panel.x + 115f, panel.yMax - 32f, 80f, 24f), T("Fuse", "Fundir")))
-            {
-                _hutFusionTarget = -1;
-                _homePanel = 3;
-            }
+            if (DrawInventoryFittedButton(new Rect(panel.x + 115f, panel.yMax - 32f, 80f, 24f), T("Fuse", "Fundir")))
+                OpenHutFusion(roster);
 
             if (GUI.Button(new Rect(panel.x + 10f, panel.yMax - 32f, 100f, 24f), T("Take", "Retirar")))
             {

@@ -11,19 +11,31 @@ namespace AzureDreamsReimagined
         {
             public ActorRecord Red, Blue, Result;
             public bool BlueSurvives;
-            public string Name;
+            public string RedName, BlueName;
+            public string Name => BlueSurvives ? BlueName : RedName;
         }
 
         private FusionPreview _fusionPreview;
         private bool _fusionPlaying;
 
-        private bool FusionBlockedByFrog =>
-            (_fusionFirst != null && IsFrog(_fusionFirst.Actor)) ||
-            (_fusionSecond != null && IsFrog(_fusionSecond.Actor));
-
         private static string FrogFusionMessage() => T(
             "A familiar is a frog. Wait for the effect to wear off before fusing.",
             "Um familiar está em forma de sapo. Espere o efeito passar para fundir.");
+
+        private void DrawFusionResultHeader(Rect rect, FusionPreview preview)
+        {
+            var result = preview.Result;
+            const float portraitSize = 44f;
+            if (Event.current.type == EventType.Repaint)
+                DrawFamiliarStatusPortrait(new Rect(rect.x, rect.y, portraitSize, portraitSize), result,
+                    FindEggSpecies(result.Species)?.name ?? preview.Name);
+            float x = rect.x + portraitSize + 7f;
+            DrawInventoryFittedText(new Rect(x, rect.y, rect.xMax - x, 23f),
+                T($"Result: {preview.Name}", $"Resultado: {preview.Name}"), _bodyStyle);
+            DrawFamiliarStatusIcon(new Rect(x, rect.y + 25f, 16f, 16f), FamiliarGenusIcon(UnitElement(result)));
+            DrawInventoryFittedText(new Rect(x + 21f, rect.y + 23f, rect.xMax - x - 21f, 20f),
+                T($"Lv. {result.Level}", $"Nív. {result.Level}"), _messageStyle);
+        }
 
         // Fusion previews show the actual record that will be kept, so this
         // chart must read from the calculated result rather than either input.
@@ -34,7 +46,7 @@ namespace AzureDreamsReimagined
             if (result == null) return;
 
             DrawDialogueFrame(rect);
-            DrawInventoryText(new Rect(rect.x + 6f, rect.y + 2f, rect.width - 12f, 13f),
+            DrawInventoryFittedText(new Rect(rect.x + 6f, rect.y + 2f, rect.width - 12f, 18f),
                 T("Resulting stats", "Atributos resultantes"), _messageStyle);
 
             int hp = Mathf.Max(1, result.MaxHp);
@@ -44,7 +56,7 @@ namespace AzureDreamsReimagined
             int ceiling = Mathf.Max(20, hp, mp, attack, defense);
             ceiling = Mathf.CeilToInt(ceiling / 10f) * 10;
 
-            float rowHeight = (rect.height - 18f) * 0.25f;
+            float rowHeight = (rect.height - 24f) * 0.25f;
             float labelWidth = 28f;
             float valueWidth = 31f;
             DrawFusionStatChartBar(0, "HP", hp, new Color(0.37f, 0.79f, 0.94f));
@@ -54,32 +66,37 @@ namespace AzureDreamsReimagined
 
             void DrawFusionStatChartBar(int row, string label, int value, Color color)
             {
-                float y = rect.y + 17f + row * rowHeight;
+                float y = rect.y + 21f + row * rowHeight;
                 var labelRect = new Rect(rect.x + 6f, y - 1f, labelWidth, rowHeight);
                 var valueRect = new Rect(rect.xMax - valueWidth - 5f, y - 1f, valueWidth, rowHeight);
                 var track = Rect.MinMaxRect(labelRect.xMax + 2f, y + 2f, valueRect.x - 3f, y + rowHeight - 2f);
-                DrawInventoryText(labelRect, label, _messageStyle);
+                DrawInventoryFittedText(labelRect, label, _messageStyle);
                 DrawHudFill(track, new Color(0.10f, 0.15f, 0.27f, 0.9f));
                 DrawHudFill(new Rect(track.x, track.y, track.width * Mathf.Clamp01(value / (float)ceiling), track.height), color);
-                DrawInventoryText(valueRect, value.ToString(), _messageStyle);
+                DrawInventoryFittedText(valueRect, value.ToString(), _messageStyle);
             }
         }
 
-        private FusionPreview BuildFusionPreview(BagFamiliar redFamiliar, BagFamiliar blueFamiliar)
+        private bool CanFuseTowerPair(ActorRecord red, ActorRecord blue) =>
+            _area == Area.Tower && HasBlueCollar && _familiar && _blueCollarAlly?.View &&
+            red != null && blue != null && red == _familiarActor &&
+            blue == _blueCollarAlly.Actor && blue == _blueCollarFamiliar?.Actor &&
+            !IsFamiliarLost(red) && !IsFamiliarLost(blue) && red.Hp > 0 && blue.Hp > 0 &&
+            !IsFrog(red) && !IsFrog(blue);
+
+        private void OpenTowerFusion()
         {
-            if (_area != Area.Tower || !HasBlueCollar || redFamiliar == null || blueFamiliar == null ||
-                redFamiliar.Actor.Hp <= 0 || blueFamiliar.Actor.Hp <= 0 ||
-                IsFamiliarLost(redFamiliar.Actor) || IsFamiliarLost(blueFamiliar.Actor) ||
-                (IsFrog(redFamiliar.Actor) && IsFrog(blueFamiliar.Actor))) return null;
-            return BuildFusionPreview(redFamiliar, blueFamiliar, FamiliarDisplayName);
+            var blue = _blueCollarAlly?.Actor;
+            _fusionPreview = CanFuseTowerPair(_familiarActor, blue)
+                ? BuildFusionPreview(_familiarActor, FamiliarDisplayName, blue, _blueCollarFamiliar.Name)
+                : null;
+            _familiarOrderPicker = FamiliarOrderPicker.Fusion;
         }
 
-        private FusionPreview BuildFusionPreview(BagFamiliar redFamiliar, BagFamiliar blueFamiliar, string redName)
+        private FusionPreview BuildFusionPreview(ActorRecord red, string redName, ActorRecord blue, string blueName)
         {
-            if (redFamiliar.Actor.Hp <= 0 || blueFamiliar.Actor.Hp <= 0 ||
-                IsFrog(redFamiliar.Actor) || IsFrog(blueFamiliar.Actor)) return null;
-            var red = redFamiliar.Actor;
-            var blue = blueFamiliar.Actor;
+            if (red == null || blue == null || red == blue || red.Hp <= 0 || blue.Hp <= 0 ||
+                IsFrog(red) || IsFrog(blue)) return null;
             int Priority(ActorRecord actor) => actor.Species switch
             {
                 (byte)MonsterSpecies.KEWNE => 2,
@@ -94,7 +111,7 @@ namespace AzureDreamsReimagined
             var survivor = blueSurvives ? blue : red;
             var donor = blueSurvives ? red : blue;
             return new FusionPreview { Red = red, Blue = blue, Result = ComputeFusionResult(survivor, donor),
-                BlueSurvives = blueSurvives, Name = blueSurvives ? blueFamiliar.Name : redName };
+                BlueSurvives = blueSurvives, RedName = redName, BlueName = blueName };
         }
 
         private ActorRecord ComputeFusionResult(ActorRecord survivor, ActorRecord donor)
@@ -202,29 +219,17 @@ namespace AzureDreamsReimagined
         private void ConfirmFamiliarFusion()
         {
             var preview = _fusionPreview;
-            if (preview == null || _fusionPlaying || _turnBusy || _fusionFirst == null || _fusionSecond == null ||
-                IsFamiliarLost(_fusionFirst.Actor) || IsFamiliarLost(_fusionSecond.Actor) ||
-                KohSkipsAction || ItemImmobilized(_playerActor) || SlowBlocksAction(_playerActor)) return;
-            if (FusionBlockedByFrog)
-            {
-                _fusionPreview = null;
-                _fusionFirst = null;
-                _fusionSecond = null;
-                _fusionPendingSecond = false;
-                return;
-            }
+            if (preview == null || _fusionPlaying || _turnBusy || KohSkipsAction ||
+                !CanFuseTowerPair(preview.Red, preview.Blue)) return;
             if (ScheduleInventoryAction(() => _finishFamiliarAction = () =>
             {
-                if (_fusionFirst == null || _fusionSecond == null || _fusionPreview == null) return;
-                if (_familiarHealth <= 0 || _fusionPreview.Result.Hp <= 0 || _health <= 0) return;
-                StartCoroutine(PresentFamiliarFusion(_fusionPreview));
+                if (_health > 0 && CanFuseTowerPair(preview.Red, preview.Blue))
+                    StartCoroutine(PresentFamiliarFusion(preview));
             }))
             {
+                _inventoryMenu = InventoryMenu.Closed;
                 _familiarOrderPicker = FamiliarOrderPicker.None;
                 _fusionPreview = null;
-                _fusionFirst = null;
-                _fusionSecond = null;
-                _fusionPendingSecond = false;
             }
         }
 
@@ -233,14 +238,6 @@ namespace AzureDreamsReimagined
             var winner = preview.BlueSurvives ? preview.Blue : preview.Red;
             var donor = preview.BlueSurvives ? preview.Red : preview.Blue;
             var blue = _blueCollarFamiliar;
-            var blueAlly = _blueCollarFamiliar;  // default to blue collar familiar
-            BagFamiliar allyFamiliar = blue;
-            if (_blueCollarAlly != null && _blueCollarAlly.View is GameObject blueViewObj && blueViewObj != blueView)
-            {
-                // Blue collar ally is a ThrownEggAlly; use its cell for the familiar cell
-                // (The blue collar familiar is the one being fused, so use its view.)
-                allyFamiliar = blue;
-            }
             if (preview.BlueSurvives)
             {
                 if (_parkedFamiliarDefinition) ExposeParkedFamiliar();

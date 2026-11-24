@@ -96,7 +96,10 @@ namespace AzureDreamsReimagined.Rendering
                 string shaderName=ShaderName(source.shader);
                 if(shaderName!="AzureDreams/ActorSpriteDepth")
                 {
-                    if(shaderName!="Sprites/Default" && shaderName!="AzureDreams/KohColorKey") continue;
+                    // A SpriteRenderer created at runtime gets the pipeline's default sprite material:
+                    // Sprites/Default in Built-in, the 2D Sprite-Unlit/Lit-Default shaders in URP.
+                    if(shaderName!="Sprites/Default" && shaderName!="AzureDreams/KohColorKey" &&
+                       !shaderName.StartsWith("Universal Render Pipeline/2D/Sprite-",System.StringComparison.Ordinal)) continue;
                     if(!Materials.TryGetValue(source,out var material) || !material)
                     {
                         var shader=Resources.Load<Shader>("Shaders/ActorSpriteDepth");

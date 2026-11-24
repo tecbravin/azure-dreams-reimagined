@@ -13,6 +13,95 @@ namespace AzureDreamsReimagined
         private bool _debugItemPickerOpen, _debugItemPlacementFailed;
         private int _debugItemSelection;
         private Vector2 _debugItemScroll;
+        private static readonly TowerTrapEffect[] DebugTrapEffects =
+            (TowerTrapEffect[])System.Enum.GetValues(typeof(TowerTrapEffect));
+        private bool _debugTrapPickerOpen, _debugTrapPlacementFailed;
+        private int _debugTrapSelection;
+        private Vector2 _debugTrapScroll;
+
+        private bool TryOpenDebugTrapPicker()
+        {
+            if (_area != Area.Tower || !_player || _turnBusy || _inventoryOpen ||
+                _inventoryMenu != InventoryMenu.Closed ||
+                _towerRun?.CurrentState != TowerRunManager.State.InTower ||
+                Keyboard.current?.numpad2Key.wasPressedThisFrame != true) return false;
+            _debugTrapSelection = 0;
+            _debugTrapScroll = Vector2.zero;
+            _debugTrapPlacementFailed = false;
+            _debugTrapPickerOpen = true;
+            return true;
+        }
+
+        private void HandleDebugTrapPickerInput()
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard?.numpad2Key.wasPressedThisFrame == true || _cancel?.WasPressedThisFrame() == true)
+            {
+                _debugTrapPickerOpen = false;
+                return;
+            }
+            int step = MenuDirectionPressed(1) ? -1 : MenuDirectionPressed(2) ? 1 : 0;
+            if (step != 0)
+            {
+                _debugTrapSelection = Mathf.Clamp(_debugTrapSelection + step, 0, DebugTrapEffects.Length - 1);
+                float top = _debugTrapSelection * DebugItemRowHeight;
+                _debugTrapScroll.y = Mathf.Clamp(_debugTrapScroll.y, top - DebugItemViewportHeight + DebugItemRowHeight, top);
+            }
+            if (_interact?.WasPressedThisFrame() == true || keyboard?.enterKey.wasPressedThisFrame == true ||
+                keyboard?.numpadEnterKey.wasPressedThisFrame == true)
+                SpawnDebugTrap(_debugTrapSelection);
+        }
+
+        private void DrawDebugTrapPicker(float width, float height)
+        {
+            float panelWidth = Mathf.Min(424f, width - 20f);
+            float listHeight = DebugItemViewportHeight;
+            var panel = new Rect((width - panelWidth) * .5f, (height - listHeight - 72f) * .5f, panelWidth, listHeight + 72f);
+            DrawHudPanel(panel);
+            GUI.Label(new Rect(panel.x + 12f, panel.y + 6f, panel.width - 106f, 24f),
+                T("Spawn inactive trap [Num 2]", "Gerar armadilha desativada [Num 2]"));
+            if (GUI.Button(new Rect(panel.xMax - 90f, panel.y + 6f, 78f, 24f), T("Close", "Fechar")))
+                _debugTrapPickerOpen = false;
+            var viewport = new Rect(panel.x + 12f, panel.y + 34f, panel.width - 24f, listHeight);
+            float rowWidth = viewport.width - 17f;
+            _debugTrapScroll = GUI.BeginScrollView(viewport, _debugTrapScroll,
+                new Rect(0f, 0f, rowWidth, DebugTrapEffects.Length * DebugItemRowHeight));
+            int clicked = -1;
+            for (int i = 0; i < DebugTrapEffects.Length; i++)
+                if (GUI.Button(new Rect(0f, i * DebugItemRowHeight, rowWidth, DebugItemRowHeight - 2f),
+                    (i == _debugTrapSelection ? "> " : "") + DebugTrapEffects[i])) clicked = i;
+            GUI.EndScrollView();
+            GUI.Label(new Rect(panel.x + 12f, viewport.yMax + 4f, panel.width - 24f, 26f),
+                _debugTrapPlacementFailed ? T("Cannot place a trap here.", "Não é possível colocar uma armadilha aqui.") :
+                T("Click a trap or use the arrows and Enter.", "Clique em uma armadilha ou use as setas e Enter."));
+            if (clicked >= 0) SpawnDebugTrap(clicked);
+        }
+
+        private void SpawnDebugTrap(int index)
+        {
+            if (_area != Area.Tower || !_player || (uint)index >= (uint)DebugTrapEffects.Length) return;
+            Vector2Int cell = _playerCell;
+            var effect = DebugTrapEffects[index];
+            if (_towerItemTraps != null)
+            {
+                if (!_towerItemTraps.PlaceDebugDisarmedTrap(cell, effect)) { _debugTrapPlacementFailed = true; return; }
+            }
+            else
+            {
+                var trap = new TowerTrapState { Effect = effect };
+                trap.Reveal();
+                trap.Disarm(out _);
+                _demoTraps[cell] = trap;
+            }
+            if (_trapMarkers.TryGetValue(cell, out var marker))
+            {
+                _trapMarkers.Remove(cell);
+                if (marker) RemoveGenerated(marker);
+            }
+            _sprungGoUpTraps.Remove(cell);
+            CreateTrapMarker(cell);
+            _debugTrapPickerOpen = false;
+        }
 
         private bool TryOpenDebugItemPicker()
         {

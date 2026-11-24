@@ -9,6 +9,8 @@ namespace AzureDreamsReimagined
         [SerializeField] private bool _showTitleOnStart;
         [SerializeField] private string[] _openingFiles;
         [SerializeField] private Texture2D _titleBackground;
+        private Texture2D _streamedTitleBackground;
+        private bool _titleBackgroundLoading;
         [SerializeField] private Texture2D _titleMenuCrystal;
         private GUIStyle _titleOptionStyle;
 
@@ -51,6 +53,7 @@ namespace AzureDreamsReimagined
             _titleSelection = _titleHasSave ? 1 : 0;
             if (_openingFiles == null || _openingFiles.Length == 0)
             {
+                EnsureTitleBackground();
                 _titlePage = TitlePage.Main;
                 _titleMainStarted = Time.unscaledTime;
                 return;
@@ -82,7 +85,36 @@ namespace AzureDreamsReimagined
         private void PlayOpeningClip(VideoPlayer source)
         {
             if (_titlePage != TitlePage.Opening || source != _openingPlayer) return;
+            if (_openingIndex < _openingFiles.Length &&
+                string.Equals(_openingFiles[_openingIndex], "LOP1_WS.mp4", System.StringComparison.OrdinalIgnoreCase))
+                EnsureTitleBackground();
             PlayCinematic(source);
+        }
+
+        private void EnsureTitleBackground()
+        {
+            if (!_streamedTitleBackground && !_titleBackgroundLoading)
+                StartCoroutine(LoadTitleBackground());
+        }
+
+        private System.Collections.IEnumerator LoadTitleBackground()
+        {
+            _titleBackgroundLoading = true;
+            string root = Application.streamingAssetsPath.TrimEnd('/');
+            string path = root + "/Title/title_screen.jpg";
+            if (!root.Contains("://")) path = new System.Uri(path).AbsoluteUri;
+            using var request = UnityEngine.Networking.UnityWebRequestTexture.GetTexture(path, nonReadable: true);
+            request.timeout = 30;
+            yield return request.SendWebRequest();
+            _titleBackgroundLoading = false;
+            if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Could not load the title background: {request.error}", this);
+                yield break;
+            }
+            _streamedTitleBackground = UnityEngine.Networking.DownloadHandlerTexture.GetContent(request);
+            _streamedTitleBackground.filterMode = FilterMode.Bilinear;
+            _streamedTitleBackground.wrapMode = TextureWrapMode.Clamp;
         }
 
         private void ConfigureCinematicAudio(VideoPlayer video)
@@ -130,6 +162,7 @@ namespace AzureDreamsReimagined
 
         private void EndOpening()
         {
+            EnsureTitleBackground();
             _titlePage = TitlePage.Main;
             _titleMainStarted = Time.unscaledTime;
             ReleaseOpeningPlayer();
@@ -336,15 +369,16 @@ namespace AzureDreamsReimagined
                 return;
             }
             bool main = _titlePage == TitlePage.Main;
-            if (_titleBackground)
+            var titleBackground = _streamedTitleBackground ? _streamedTitleBackground : _titleBackground;
+            if (titleBackground)
             {
                 // The original 320x480 title art contains the town beneath the
                 // tower. Travel upward through it before settling on the logo.
-                float artAspect = (float)_titleBackground.width / _titleBackground.height;
+                float artAspect = (float)titleBackground.width / titleBackground.height;
                 float visibleHeight = Mathf.Clamp(height / width * artAspect, 0.49f, 1f);
                 float ascent = main ? Mathf.Clamp01((Time.unscaledTime - _titleMainStarted) / TitleAscentSeconds) : 1f;
                 ascent = 1f - Mathf.Pow(1f - ascent, 3f);
-                GUI.DrawTextureWithTexCoords(screen, _titleBackground,
+                GUI.DrawTextureWithTexCoords(screen, titleBackground,
                     new Rect(0f, (1f - visibleHeight) * ascent, 1f, visibleHeight));
                 if (main) DrawTitleFlare(screen, ascent);
                 if (!main || _settingsOpen)
@@ -420,7 +454,7 @@ namespace AzureDreamsReimagined
             float lowestTop = screen.height - 4f * rowHeight - 21f;
             float top = Mathf.Lerp(lowestTop, Mathf.Min(lowestTop, screen.height * 0.59f), arrival);
 
-            if (!_titleBackground)
+            if (!_streamedTitleBackground && !_titleBackground)
                 GUI.Label(new Rect(0f, screen.height * 0.30f, screen.width, rowHeight * 2f),
                     "Azure Dreams", _titleOptionStyle);
 

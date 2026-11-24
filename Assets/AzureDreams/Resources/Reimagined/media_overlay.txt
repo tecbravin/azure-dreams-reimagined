@@ -34,8 +34,10 @@ Music/TowerFinale.ogg
 Music/Town.mp3
 Music/VeiledGenuine.ogg
 Music/VivianTheme.ogg
-Portraits/Dialogue/Aunt_variant0_frame0.png
-Portraits/Dialogue/Aunt_variant1_frame0.png
+Portraits/Dialogue/Aunt_variant0_frame0.png	*
+Portraits/Dialogue/Aunt_variant1_frame0.png	*
+Portraits/Dialogue/Bet_variant0_frame0.png	*
+Portraits/Dialogue/Butler_variant0_frame0.png	*
 Portraits/Dialogue/Chero_variant0_frame0.png	*
 Portraits/Dialogue/Cherrl_variant1_frame0.png
 Portraits/Dialogue/Cherrl_variant1_frame1.png
@@ -65,48 +67,50 @@ Portraits/Dialogue/Fur_variant4_frame1.png
 Portraits/Dialogue/Fur_variant4_frame2.png
 Portraits/Dialogue/Fur_variant4_frame3.png
 Portraits/Dialogue/GhoshSwimsuitHD.png	*
-Portraits/Dialogue/Ghosh_variant0_frame0.png
-Portraits/Dialogue/Ghosh_variant1_frame0.png
-Portraits/Dialogue/Grandpa_variant0_frame0.png
+Portraits/Dialogue/Ghosh_variant0_frame0.png	*
+Portraits/Dialogue/Ghosh_variant1_frame0.png	*
+Portraits/Dialogue/Grandpa_variant0_frame0.png	*
 Portraits/Dialogue/Grandpa_variant1_frame0.png	*
 Portraits/Dialogue/GuyKneelingHD.png	*
 Portraits/Dialogue/GuyStartledHD.png	*
-Portraits/Dialogue/Guy_variant0_frame0.png
-Portraits/Dialogue/Jorda_variant0_frame0.png
-Portraits/Dialogue/Jorda_variant0_frame1.png
+Portraits/Dialogue/Guy_variant0_frame0.png	*
+Portraits/Dialogue/Jorda_variant0_frame0.png	*
+Portraits/Dialogue/Jorda_variant0_frame1.png	*
 Portraits/Dialogue/Jorda_variant0_frame3.png
 Portraits/Dialogue/Kewne_variant0_frame0.png
 Portraits/Dialogue/Koh.png	*
 Portraits/Dialogue/Koh_variant0_frame0.png	*
-Portraits/Dialogue/Miya_variant0_frame0.png
-Portraits/Dialogue/Miya_variant1_frame0.png
-Portraits/Dialogue/Miya_variant2_frame0.png
-Portraits/Dialogue/Miya_variant3_frame0.png
-Portraits/Dialogue/Miya_variant4_frame0.png
-Portraits/Dialogue/Miya_variant5_frame0.png
-Portraits/Dialogue/Miya_variant6_frame0.png
-Portraits/Dialogue/Nico_variant0_frame0.png
-Portraits/Dialogue/Nico_variant0_frame1.png
-Portraits/Dialogue/Nico_variant0_frame2.png
+Portraits/Dialogue/Koh_variant1_frame0.png	*
+Portraits/Dialogue/Koh_variant2_frame0.png	*
+Portraits/Dialogue/Miya_variant0_frame0.png	*
+Portraits/Dialogue/Miya_variant1_frame0.png	*
+Portraits/Dialogue/Miya_variant2_frame0.png	*
+Portraits/Dialogue/Miya_variant3_frame0.png	*
+Portraits/Dialogue/Miya_variant4_frame0.png	*
+Portraits/Dialogue/Miya_variant5_frame0.png	*
+Portraits/Dialogue/Miya_variant6_frame0.png	*
+Portraits/Dialogue/Nico_variant0_frame0.png	*
+Portraits/Dialogue/Nico_variant0_frame1.png	*
+Portraits/Dialogue/Nico_variant0_frame2.png	*
 Portraits/Dialogue/Nico_variant0_frame3.png
-Portraits/Dialogue/Nico_variant1_frame0.png
-Portraits/Dialogue/Nico_variant1_frame1.png
-Portraits/Dialogue/Nico_variant1_frame2.png
-Portraits/Dialogue/Nico_variant1_frame3.png
-Portraits/Dialogue/Nico_variant2_frame1.png
-Portraits/Dialogue/Nico_variant2_frame3.png
-Portraits/Dialogue/Nico_variant3_frame0.png
-Portraits/Dialogue/Nico_variant3_frame1.png
-Portraits/Dialogue/Nico_variant4_frame0.png
-Portraits/Dialogue/Nico_variant4_frame1.png
-Portraits/Dialogue/Nico_variant4_frame2.png
-Portraits/Dialogue/Nico_variant4_frame3.png
-Portraits/Dialogue/Nico_variant5_frame0.png
-Portraits/Dialogue/Nico_variant5_frame1.png
-Portraits/Dialogue/Nico_variant5_frame3.png
-Portraits/Dialogue/Nico_variant6_frame0.png
-Portraits/Dialogue/Nico_variant6_frame1.png
-Portraits/Dialogue/Nico_variant6_frame2.png
+Portraits/Dialogue/Nico_variant1_frame0.png	*
+Portraits/Dialogue/Nico_variant1_frame1.png	*
+Portraits/Dialogue/Nico_variant1_frame2.png	*
+Portraits/Dialogue/Nico_variant1_frame3.png	*
+Portraits/Dialogue/Nico_variant2_frame1.png	*
+Portraits/Dialogue/Nico_variant2_frame3.png	*
+Portraits/Dialogue/Nico_variant3_frame0.png	*
+Portraits/Dialogue/Nico_variant3_frame1.png	*
+Portraits/Dialogue/Nico_variant4_frame0.png	*
+Portraits/Dialogue/Nico_variant4_frame1.png	*
+Portraits/Dialogue/Nico_variant4_frame2.png	*
+Portraits/Dialogue/Nico_variant4_frame3.png	*
+Portraits/Dialogue/Nico_variant5_frame0.png	*
+Portraits/Dialogue/Nico_variant5_frame1.png	*
+Portraits/Dialogue/Nico_variant5_frame3.png	*
+Portraits/Dialogue/Nico_variant6_frame0.png	*
+Portraits/Dialogue/Nico_variant6_frame1.png	*
+Portraits/Dialogue/Nico_variant6_frame2.png	*
 Portraits/Dialogue/SelfiRetail_variant0_frame0.png
 Portraits/Dialogue/Selfi_variant0_frame0.png
 Portraits/Dialogue/Selfi_variant0_frame1.png	*
@@ -127,10 +131,12 @@ Portraits/Dialogue/Vivian_variant1_frame0.png
 Portraits/Dialogue/Vivian_variant1_frame1.png
 Portraits/Dialogue/Vivian_variant1_frame2.png
 Portraits/Dialogue/Vivian_variant1_frame3.png
-Portraits/Dialogue/Weedy_variant0_frame0.png
-Portraits/Dialogue/Weedy_variant1_frame0.png
-Portraits/Dialogue/Weedy_variant1_frame1.png
+Portraits/Dialogue/Weedy_variant0_frame0.png	*
+Portraits/Dialogue/Weedy_variant1_frame0.png	*
+Portraits/Dialogue/Weedy_variant1_frame1.png	*
 Portraits/Dialogue/Weedy_variant1_frame3.png
 Portraits/Dialogue/WreathBrokenAmulet.png	*
-Portraits/Dialogue/Wreath_variant0_frame0.png
-Portraits/Dialogue/Wreath_variant3_frame0.png
+Portraits/Dialogue/Wreath_variant0_frame0.png	*
+Portraits/Dialogue/Wreath_variant3_frame0.png	*
+Portraits/Dialogue/comedy_variant0_frame0.png	*
+Portraits/Dialogue/drhal_variant0_frame0.png	*

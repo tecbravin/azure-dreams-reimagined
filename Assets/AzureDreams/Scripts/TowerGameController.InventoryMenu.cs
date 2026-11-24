@@ -64,6 +64,7 @@ namespace AzureDreamsReimagined
                 {
                     PlayRetailSound(RetailSfx.Cancel);
                     _familiarOrderPicker = FamiliarOrderPicker.None;
+                    _fusionPreview = null;
                 }
                 else BackInventoryMenu();
                 return true;
@@ -184,14 +185,8 @@ namespace AzureDreamsReimagined
                     }
                     else if (row == 3)
                         OpenFamiliarFormation(selected);
-                    else if (row == 2 && HasBlueCollar && _familiar && _blueCollarAlly?.View &&
-                        !IsFamiliarLost(_familiarActor) && !IsFamiliarLost(_blueCollarAlly.Actor))
-                    {
-                        _fusionFirst = FindBagFamiliar(_familiarActor);
-                        _fusionSecond = _blueCollarFamiliar;
-                        _fusionPreview = BuildFusionPreview(_fusionFirst, _fusionSecond);
-                        _familiarOrderPicker = FamiliarOrderPicker.Fusion;
-                    }
+                    else if (row == 2 && HasBlueCollar)
+                        OpenTowerFusion();
                     break;
                 case InventoryMenu.Main:
                     if (row == 0)
@@ -241,7 +236,7 @@ namespace AzureDreamsReimagined
                         {
                             var actor = InventoryCollarActor(1);
                             if (actor != null && !IsFamiliarLost(actor))
-                                OpenFamiliarOrderPicker(OrdersFor(actor));
+                                OpenFamiliarOrderPicker(actor);
                         }
                     }
                     break;
@@ -311,7 +306,8 @@ namespace AzureDreamsReimagined
             }
             int count = InventoryMenuRowCount();
             var panel = new Rect(18f, height * 0.25f, 185f, count == 0 ? 62f : 16f + count * 30f);
-            if (_familiarOrderPicker == FamiliarOrderPicker.Formation) panel.height = Mathf.Max(panel.height, 190f);
+            if (_familiarOrderPicker is FamiliarOrderPicker.Formation or FamiliarOrderPicker.Fusion)
+                panel.height = Mathf.Max(panel.height, 190f);
             DrawDialogueFrame(panel);
             float statusWidth = Mathf.Min(228f, width - panel.xMax - 36f);
             if (statusWidth >= 140f)

@@ -105,7 +105,8 @@ namespace AzureDreamsReimagined.URP
         {
             var resources = frameData.Get<UniversalResourceData>();
             if (resources.isActiveTargetBackBuffer) return;
-            TextureHandle color = resources.activeColorTexture;
+            TextureHandle cameraColor = resources.activeColorTexture;
+            TextureHandle color = cameraColor;
             TextureDesc desc = renderGraph.GetTextureDesc(color);
             desc.clearBuffer = false;
             desc.depthBufferBits = DepthBits.None;
@@ -147,7 +148,11 @@ namespace AzureDreamsReimagined.URP
                 color = upscaled;
             }
 
-            resources.cameraColor = color;
+            // Copy the result back into the camera target instead of swapping resources.cameraColor:
+            // overlay cameras in the stack (the fusion glow) keep drawing into the camera's own
+            // target, and a swapped handle would drop the effect as soon as an overlay renders.
+            if (!color.Equals(cameraColor))
+                Draw(renderGraph, "AzureDreams Copy Back", color, cameraColor, null, width, height, TextureHandle.nullHandle, false);
         }
 
         static TextureHandle Target(RenderGraph renderGraph, TextureDesc desc, string name, int width, int height, FilterMode filter)

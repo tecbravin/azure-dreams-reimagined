@@ -31,6 +31,5 @@ __pycache__/
 *.pyc
 # Unity Test Runner temp scenes
 InitTestScene*.unity*
-*.meta
 *.unitypackage
 graphify-out/

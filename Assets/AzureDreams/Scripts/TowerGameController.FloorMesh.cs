@@ -182,6 +182,7 @@ namespace AzureDreamsReimagined
 
         private void OnDestroy()
         {
+            if (_streamedTitleBackground) Destroy(_streamedTitleBackground);
             if (_retailTitleLensMaterial) Destroy(_retailTitleLensMaterial);
             if (_windowSkin) Destroy(_windowSkin);
             ReleaseAreaMusic();

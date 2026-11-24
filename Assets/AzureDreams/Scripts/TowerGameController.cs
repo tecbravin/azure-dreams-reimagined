@@ -505,6 +505,7 @@ namespace AzureDreamsReimagined
             }
             if (_townDoorOpening || _towerArrivalPlaying || _pullingFamiliarFromBag || _pickupView || _fusionPlaying || _familiarEvolutionsPlaying > 0) return;
             if (TickLevelUpCelebration(Time.unscaledDeltaTime)) return;
+            if (_debugTrapPickerOpen) { HandleDebugTrapPickerInput(); return; }
             if (_debugItemPickerOpen) { HandleDebugItemPickerInput(); return; }
             if (_debugQuestPickerOpen) { HandleDebugQuestPickerInput(); return; }
             if (HandleTheaterAct() || HandleArcadeInput() || HandleGymInput() || HandleBowlingInput() || HandleRacetrackInput() || HandleCasinoInput() || HandleSettingsInput()) return;
@@ -572,7 +573,7 @@ namespace AzureDreamsReimagined
                 TryTowerAction(Vector2Int.zero);
                 return;
             }
-            if (TryOpenDebugQuestPicker() || TryOpenDebugItemPicker()) return;
+            if (TryOpenDebugTrapPicker() || TryOpenDebugQuestPicker() || TryOpenDebugItemPicker()) return;
             if (_area==Area.Town && Keyboard.current?.tKey.wasPressedThisFrame==true && SummonAuraBike()) return;
             ReadCameraControls();
             Vector2 direction = ReadMovementDirection();
@@ -1336,6 +1337,7 @@ namespace AzureDreamsReimagined
             _elevatorDeclined = false;
             ResetInventoryCommands();
             _debugItemPickerOpen = false;
+            _debugTrapPickerOpen = false;
             _debugQuestPickerOpen = false;
             _heldTownPot = null;
             _townPots.Clear();
@@ -1515,6 +1517,12 @@ namespace AzureDreamsReimagined
                 GUI.matrix = previousMatrix;
                 return;
             }
+            if (_debugTrapPickerOpen)
+            {
+                DrawDebugTrapPicker(width, height);
+                GUI.matrix = previousMatrix;
+                return;
+            }
             if (_debugItemPickerOpen)
             {
                 DrawDebugItemPicker(width, height);
@@ -1564,7 +1572,7 @@ namespace AzureDreamsReimagined
             }
             DrawTowerInventory(width, height);
             DrawInteriorMenu();
-            DrawKohHomePanel();
+            DrawKohHomePanel(width, height);
             DrawWeedyBook();
             DrawMonsterShop();
             DrawBarryShop();

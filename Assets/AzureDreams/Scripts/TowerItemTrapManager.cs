@@ -405,6 +405,21 @@ namespace AzureDreamsReimagined
             return trap;
         }
 
+        internal bool PlaceDebugDisarmedTrap(Vector2Int cell, TowerTrapEffect effect)
+        {
+            EnsureFloor();
+            if (_floor.Dungeon == null || !_floor.IsWalkable(cell.x, cell.y)) return false;
+            if (TrapAt(cell) != null) RemoveTrapAt(cell);
+            _trapTerrain[cell] = _floor.Dungeon.Grid[cell.y, cell.x];
+            var trap = new TowerTrapState { Effect = effect };
+            trap.Reveal();
+            trap.Disarm(out _);
+            _traps[cell] = trap;
+            _floor.Dungeon.Grid[cell.y, cell.x] = CoreDungeon.TileType.Trap;
+            _floor.Dungeon.SetFlag(cell.x, cell.y, CoreDungeon.TileFlag.HasTrap);
+            return true;
+        }
+
         public void RemoveTrapAt(Vector2Int cell)
         {
             EnsureFloor();
